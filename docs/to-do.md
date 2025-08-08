@@ -14,7 +14,7 @@
 - [ ] Create **shareable link** functionality for palettes (like Coolors) - This is already implemented but it's too basic and doesn't share all the palette data, only the colors.
 - [ ] Implement Color Naming using color name libraries or large JSON dataset.
 - [ ] Implement Color Roles (Primary-light, Secondary-dark, Accent, Warning, etc.)
-
+- [ ] Implement **Layout components** with their own directory.
 ---
 
 ## 📂 User Features
