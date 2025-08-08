@@ -1,9 +1,13 @@
-import { useState, useEffect } from 'react';
-import { HexColorPicker, HexColorInput } from 'react-colorful';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
-import { Button } from './ui/button';
-import { Label } from './ui/label';
-import { generateShades, getColorName, getContrastRatio } from '@/lib/color-utils';
+import { useState, useEffect } from "react";
+import { HexColorPicker, HexColorInput } from "react-colorful";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
+import { Button } from "./ui/button";
+import { Label } from "./ui/label";
+import {
+  generateShades,
+  getColorName,
+  getContrastRatio,
+} from "@/lib/color-utils";
 
 interface ColorPickerProps {
   isOpen: boolean;
@@ -12,7 +16,12 @@ interface ColorPickerProps {
   onColorChange: (color: string) => void;
 }
 
-export function ColorPicker({ isOpen, onClose, color, onColorChange }: ColorPickerProps) {
+export function ColorPicker({
+  isOpen,
+  onClose,
+  color,
+  onColorChange,
+}: ColorPickerProps) {
   const [tempColor, setTempColor] = useState(color);
   const [shades, setShades] = useState<string[]>([]);
 
@@ -33,8 +42,8 @@ export function ColorPicker({ isOpen, onClose, color, onColorChange }: ColorPick
   };
 
   const colorName = getColorName(tempColor);
-  const contrastWhite = getContrastRatio(tempColor, '#ffffff');
-  const contrastBlack = getContrastRatio(tempColor, '#000000');
+  const contrastWhite = getContrastRatio(tempColor, "#ffffff");
+  const contrastBlack = getContrastRatio(tempColor, "#000000");
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -42,25 +51,25 @@ export function ColorPicker({ isOpen, onClose, color, onColorChange }: ColorPick
         <DialogHeader>
           <DialogTitle>Color Picker</DialogTitle>
         </DialogHeader>
-        
+
         <div className="space-y-6">
           {/* Color Preview */}
           <div
             className="h-20 rounded-lg border"
             style={{ backgroundColor: tempColor }}
           />
-          
+
           {/* Color Picker */}
           <div className="space-y-4">
             <HexColorPicker color={tempColor} onChange={setTempColor} />
-            
+
             <div>
               <Label htmlFor="hex-input">Hex Code</Label>
               <HexColorInput
                 id="hex-input"
                 color={tempColor}
                 onChange={setTempColor}
-                className="w-full px-3 py-2 border rounded-md font-mono"
+                className="w-full rounded-md border px-3 py-2 font-mono"
                 prefixed
               />
             </div>
@@ -84,12 +93,12 @@ export function ColorPicker({ isOpen, onClose, color, onColorChange }: ColorPick
 
           {/* Shades */}
           <div>
-            <Label className="text-sm font-medium mb-2 block">Shades</Label>
+            <Label className="mb-2 block text-sm font-medium">Shades</Label>
             <div className="grid grid-cols-9 gap-1">
               {shades.map((shade, index) => (
                 <button
                   key={index}
-                  className="h-8 rounded border hover:scale-110 transition-transform"
+                  className="h-8 rounded border transition-transform hover:scale-110"
                   style={{ backgroundColor: shade }}
                   onClick={() => setTempColor(shade)}
                   title={shade}
@@ -103,9 +112,7 @@ export function ColorPicker({ isOpen, onClose, color, onColorChange }: ColorPick
             <Button variant="outline" onClick={onClose}>
               Cancel
             </Button>
-            <Button onClick={handleSave}>
-              Apply Color
-            </Button>
+            <Button onClick={handleSave}>Apply Color</Button>
           </div>
         </div>
       </DialogContent>

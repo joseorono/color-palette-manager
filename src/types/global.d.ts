@@ -13,4 +13,3 @@ type ValuesOf<T extends readonly any[]> = T[number];
 type Prettify<T> = {
   [K in keyof T]: T[K];
 } & {};
-

@@ -1,25 +1,27 @@
-import { useState } from 'react';
-import { usePaletteStore } from '@/stores/palette-store';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { Label } from './ui/label';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
-import { Slider } from './ui/slider';
-import { Save, Share, Upload, Palette } from 'lucide-react';
-import { toast } from 'sonner';
-import { ImageUploader } from './image-uploader';
+import { useState } from "react";
+import { usePaletteStore } from "@/stores/palette-store";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./ui/dialog";
+import { Slider } from "./ui/slider";
+import { Save, Share, Upload, Palette } from "lucide-react";
+import { toast } from "sonner";
+import { ImageUploader } from "./image-uploader";
 
 export function PaletteControls() {
   const [paletteSize, setPaletteSize] = useState([5]);
-  const [paletteName, setPaletteName] = useState('');
+  const [paletteName, setPaletteName] = useState("");
   const [isSaveOpen, setIsSaveOpen] = useState(false);
   const [isUploadOpen, setIsUploadOpen] = useState(false);
-  
-  const { 
-    currentPalette, 
-    generateNewPalette, 
-    savePalette 
-  } = usePaletteStore();
+
+  const { currentPalette, generateNewPalette, savePalette } = usePaletteStore();
 
   const handleSizChange = (value: number[]) => {
     setPaletteSize(value);
@@ -28,37 +30,37 @@ export function PaletteControls() {
 
   const handleSave = async () => {
     if (!paletteName.trim()) {
-      toast.error('Please enter a palette name');
+      toast.error("Please enter a palette name");
       return;
     }
-    
+
     try {
       await savePalette(paletteName.trim());
-      toast.success('Palette saved successfully!');
+      toast.success("Palette saved successfully!");
       setIsSaveOpen(false);
-      setPaletteName('');
+      setPaletteName("");
     } catch (error) {
-      toast.error('Failed to save palette');
+      toast.error("Failed to save palette");
     }
   };
 
   const handleShare = async () => {
-    const colors = currentPalette.map(c => c.hex.replace('#', ''));
-    const url = `${window.location.origin}?colors=${colors.join(',')}`;
-    
+    const colors = currentPalette.map((c) => c.hex.replace("#", ""));
+    const url = `${window.location.origin}?colors=${colors.join(",")}`;
+
     try {
       await navigator.clipboard.writeText(url);
-      toast.success('Palette URL copied to clipboard!');
+      toast.success("Palette URL copied to clipboard!");
     } catch (error) {
-      toast.error('Failed to copy URL');
+      toast.error("Failed to copy URL");
     }
   };
 
   return (
-    <div className="flex flex-wrap justify-center gap-4 mb-8">
+    <div className="mb-8 flex flex-wrap justify-center gap-4">
       {/* Palette Size Control */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
-        <Label className="text-sm font-medium mb-2 block">
+      <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-gray-800">
+        <Label className="mb-2 block text-sm font-medium">
           Palette Size: {paletteSize[0]} colors
         </Label>
         <Slider
@@ -75,7 +77,7 @@ export function PaletteControls() {
       <Dialog open={isSaveOpen} onOpenChange={setIsSaveOpen}>
         <DialogTrigger asChild>
           <Button variant="outline" className="gap-2">
-            <Save className="w-4 h-4" />
+            <Save className="h-4 w-4" />
             Save Palette
           </Button>
         </DialogTrigger>
@@ -97,9 +99,7 @@ export function PaletteControls() {
               <Button variant="outline" onClick={() => setIsSaveOpen(false)}>
                 Cancel
               </Button>
-              <Button onClick={handleSave}>
-                Save
-              </Button>
+              <Button onClick={handleSave}>Save</Button>
             </div>
           </div>
         </DialogContent>
@@ -107,7 +107,7 @@ export function PaletteControls() {
 
       {/* Share Palette */}
       <Button onClick={handleShare} variant="outline" className="gap-2">
-        <Share className="w-4 h-4" />
+        <Share className="h-4 w-4" />
         Share
       </Button>
 
@@ -115,7 +115,7 @@ export function PaletteControls() {
       <Dialog open={isUploadOpen} onOpenChange={setIsUploadOpen}>
         <DialogTrigger asChild>
           <Button variant="outline" className="gap-2">
-            <Upload className="w-4 h-4" />
+            <Upload className="h-4 w-4" />
             Extract from Image
           </Button>
         </DialogTrigger>

@@ -1,12 +1,15 @@
-import { create } from 'zustand';
-import { Color, Palette } from '@/types/palette';
-import { generateHarmoniousPalette, generateRandomColor } from '@/lib/color-utils';
+import { create } from "zustand";
+import { Color, Palette } from "@/types/palette";
+import {
+  generateHarmoniousPalette,
+  generateRandomColor,
+} from "@/lib/color-utils";
 
 interface PaletteStore {
   currentPalette: Color[];
   savedPalettes: Palette[];
   isGenerating: boolean;
-  
+
   // Actions
   generateNewPalette: (count?: number) => void;
   regenerateUnlocked: () => void;
@@ -26,7 +29,7 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
 
   generateNewPalette: (count = 5) => {
     set({ isGenerating: true });
-    
+
     setTimeout(() => {
       const colors = generateHarmoniousPalette(undefined, count);
       const palette: Color[] = colors.map((hex, index) => ({
@@ -34,7 +37,7 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
         hex,
         locked: false,
       }));
-      
+
       set({ currentPalette: palette, isGenerating: false });
     }, 300); // Add slight delay for UX
   },
@@ -42,20 +45,20 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
   regenerateUnlocked: () => {
     const { currentPalette } = get();
     set({ isGenerating: true });
-    
+
     setTimeout(() => {
-      const newPalette = currentPalette.map(color => {
+      const newPalette = currentPalette.map((color) => {
         if (color.locked) return color;
         return { ...color, hex: generateRandomColor() };
       });
-      
+
       set({ currentPalette: newPalette, isGenerating: false });
     }, 300);
   },
 
   toggleColorLock: (colorId: string) => {
     const { currentPalette } = get();
-    const newPalette = currentPalette.map(color =>
+    const newPalette = currentPalette.map((color) =>
       color.id === colorId ? { ...color, locked: !color.locked } : color
     );
     set({ currentPalette: newPalette });
@@ -63,7 +66,7 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
 
   updateColor: (colorId: string, hex: string) => {
     const { currentPalette } = get();
-    const newPalette = currentPalette.map(color =>
+    const newPalette = currentPalette.map((color) =>
       color.id === colorId ? { ...color, hex } : color
     );
     set({ currentPalette: newPalette });
@@ -72,42 +75,42 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
   addColor: () => {
     const { currentPalette } = get();
     if (currentPalette.length >= 16) return;
-    
+
     const newColor: Color = {
       id: `color-${currentPalette.length}-${Date.now()}`,
       hex: generateRandomColor(),
       locked: false,
     };
-    
+
     set({ currentPalette: [...currentPalette, newColor] });
   },
 
   removeColor: (colorId: string) => {
     const { currentPalette } = get();
     if (currentPalette.length <= 2) return;
-    
-    const newPalette = currentPalette.filter(color => color.id !== colorId);
+
+    const newPalette = currentPalette.filter((color) => color.id !== colorId);
     set({ currentPalette: newPalette });
   },
 
   savePalette: async (name: string, isPublic = false) => {
     // TODO: Implement Supabase integration
     const { currentPalette } = get();
-    console.log('Saving palette:', { name, colors: currentPalette, isPublic });
+    console.log("Saving palette:", { name, colors: currentPalette, isPublic });
   },
 
   loadSavedPalettes: async () => {
     // TODO: Implement Supabase integration
-    console.log('Loading saved palettes...');
+    console.log("Loading saved palettes...");
   },
 
   setPaletteFromUrl: (colors: string[]) => {
     const palette: Color[] = colors.map((hex, index) => ({
       id: `color-${index}-${Date.now()}`,
-      hex: hex.startsWith('#') ? hex : `#${hex}`,
+      hex: hex.startsWith("#") ? hex : `#${hex}`,
       locked: false,
     }));
-    
+
     set({ currentPalette: palette });
   },
 }));

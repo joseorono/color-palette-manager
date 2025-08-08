@@ -1,26 +1,32 @@
-import { useState } from 'react';
-import { usePaletteStore } from '@/stores/palette-store';
-import { Button } from './ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
-import { Label } from './ui/label';
-import { RadioGroup, RadioGroupItem } from './ui/radio-group';
-import { Download } from 'lucide-react';
-import { toast } from 'sonner';
-import html2canvas from 'html2canvas';
-import { saveAs } from 'file-saver';
+import { useState } from "react";
+import { usePaletteStore } from "@/stores/palette-store";
+import { Button } from "./ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./ui/dialog";
+import { Label } from "./ui/label";
+import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
+import { Download } from "lucide-react";
+import { toast } from "sonner";
+import html2canvas from "html2canvas";
+import { saveAs } from "file-saver";
 
-type ExportFormat = 'png' | 'svg' | 'css' | 'json';
+type ExportFormat = "png" | "svg" | "css" | "json";
 
 export function ExportModal() {
   const [isOpen, setIsOpen] = useState(false);
-  const [format, setFormat] = useState<ExportFormat>('png');
+  const [format, setFormat] = useState<ExportFormat>("png");
   const [isExporting, setIsExporting] = useState(false);
-  
+
   const { currentPalette } = usePaletteStore();
 
   const exportPNG = async () => {
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     const width = 800;
@@ -37,7 +43,7 @@ export function ExportModal() {
 
     canvas.toBlob((blob) => {
       if (blob) {
-        saveAs(blob, 'color-palette.png');
+        saveAs(blob, "color-palette.png");
       }
     });
   };
@@ -48,73 +54,75 @@ export function ExportModal() {
     const colorWidth = width / currentPalette.length;
 
     let svgContent = `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">`;
-    
+
     currentPalette.forEach((color, index) => {
       svgContent += `<rect x="${index * colorWidth}" y="0" width="${colorWidth}" height="${height}" fill="${color.hex}"/>`;
     });
-    
-    svgContent += '</svg>';
 
-    const blob = new Blob([svgContent], { type: 'image/svg+xml' });
-    saveAs(blob, 'color-palette.svg');
+    svgContent += "</svg>";
+
+    const blob = new Blob([svgContent], { type: "image/svg+xml" });
+    saveAs(blob, "color-palette.svg");
   };
 
   const exportCSS = () => {
-    let cssContent = '/* Color Palette CSS Variables */\n:root {\n';
-    
+    let cssContent = "/* Color Palette CSS Variables */\n:root {\n";
+
     currentPalette.forEach((color, index) => {
       cssContent += `  --color-${index + 1}: ${color.hex};\n`;
     });
-    
-    cssContent += '}\n\n/* Color Classes */\n';
-    
+
+    cssContent += "}\n\n/* Color Classes */\n";
+
     currentPalette.forEach((color, index) => {
       cssContent += `.color-${index + 1} { color: ${color.hex}; }\n`;
       cssContent += `.bg-color-${index + 1} { background-color: ${color.hex}; }\n`;
     });
 
-    const blob = new Blob([cssContent], { type: 'text/css' });
-    saveAs(blob, 'color-palette.css');
+    const blob = new Blob([cssContent], { type: "text/css" });
+    saveAs(blob, "color-palette.css");
   };
 
   const exportJSON = () => {
     const paletteData = {
-      name: 'Color Palette',
+      name: "Color Palette",
       colors: currentPalette.map((color, index) => ({
         name: `Color ${index + 1}`,
         hex: color.hex,
-        index: index + 1
+        index: index + 1,
       })),
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
     };
 
-    const blob = new Blob([JSON.stringify(paletteData, null, 2)], { type: 'application/json' });
-    saveAs(blob, 'color-palette.json');
+    const blob = new Blob([JSON.stringify(paletteData, null, 2)], {
+      type: "application/json",
+    });
+    saveAs(blob, "color-palette.json");
   };
 
   const handleExport = async () => {
     setIsExporting(true);
-    
+
     try {
       switch (format) {
-        case 'png':
+        case "png":
           await exportPNG();
           break;
-        case 'svg':
+        case "svg":
           exportSVG();
           break;
-        case 'css':
+        case "css":
           exportCSS();
           break;
-        case 'json':
+        case "json":
           exportJSON();
           break;
       }
-      
-      toast.success('Palette exported successfully!');
+
+      toast.success("Palette exported successfully!");
       setIsOpen(false);
     } catch (error) {
-      toast.error('Failed to export palette');
+      toast.error("Failed to export palette");
     } finally {
       setIsExporting(false);
     }
@@ -124,21 +132,26 @@ export function ExportModal() {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button className="gap-2">
-          <Download className="w-4 h-4" />
+          <Download className="h-4 w-4" />
           Export Palette
         </Button>
       </DialogTrigger>
-      
+
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Export Palette</DialogTitle>
         </DialogHeader>
-        
+
         <div className="space-y-6">
           {/* Format Selection */}
           <div>
-            <Label className="text-sm font-medium mb-3 block">Export Format</Label>
-            <RadioGroup value={format} onValueChange={(value) => setFormat(value as ExportFormat)}>
+            <Label className="mb-3 block text-sm font-medium">
+              Export Format
+            </Label>
+            <RadioGroup
+              value={format}
+              onValueChange={(value) => setFormat(value as ExportFormat)}
+            >
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="png" id="png" />
                 <Label htmlFor="png">PNG Image</Label>
@@ -160,8 +173,8 @@ export function ExportModal() {
 
           {/* Preview */}
           <div>
-            <Label className="text-sm font-medium mb-2 block">Preview</Label>
-            <div className="grid grid-cols-5 h-16 rounded-lg overflow-hidden border">
+            <Label className="mb-2 block text-sm font-medium">Preview</Label>
+            <div className="grid h-16 grid-cols-5 overflow-hidden rounded-lg border">
               {currentPalette.map((color, index) => (
                 <div
                   key={index}
@@ -179,7 +192,7 @@ export function ExportModal() {
               Cancel
             </Button>
             <Button onClick={handleExport} disabled={isExporting}>
-              {isExporting ? 'Exporting...' : 'Export'}
+              {isExporting ? "Exporting..." : "Export"}
             </Button>
           </div>
         </div>

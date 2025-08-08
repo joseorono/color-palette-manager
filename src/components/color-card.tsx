@@ -1,12 +1,12 @@
-import { useState } from 'react';
-import { Color } from '@/types/palette';
-import { usePaletteStore } from '@/stores/palette-store';
-import { ColorPicker } from './color-picker';
-import { Button } from './ui/button';
-import { toast } from 'sonner';
-import { Lock, Unlock, Trash2, Copy, Eye } from 'lucide-react';
-import { getColorName, getContrastRatio } from '@/lib/color-utils';
-import { cn } from '@/lib/utils';
+import { useState } from "react";
+import { Color } from "@/types/palette";
+import { usePaletteStore } from "@/stores/palette-store";
+import { ColorPicker } from "./color-picker";
+import { Button } from "./ui/button";
+import { toast } from "sonner";
+import { Lock, Unlock, Trash2, Copy, Eye } from "lucide-react";
+import { getColorName, getContrastRatio } from "@/lib/color-utils";
+import { cn } from "@/lib/utils";
 
 interface ColorCardProps {
   color: Color;
@@ -15,42 +15,44 @@ interface ColorCardProps {
 export function ColorCard({ color }: ColorCardProps) {
   const [isPickerOpen, setIsPickerOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-  const { toggleColorLock, updateColor, removeColor, currentPalette } = usePaletteStore();
+  const { toggleColorLock, updateColor, removeColor, currentPalette } =
+    usePaletteStore();
 
   const copyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(color.hex);
-      toast.success('Color copied to clipboard!');
+      toast.success("Color copied to clipboard!");
     } catch (err) {
-      toast.error('Failed to copy color');
+      toast.error("Failed to copy color");
     }
   };
 
-  const textColor = getContrastRatio(color.hex, '#ffffff') > 3 ? '#ffffff' : '#000000';
+  const textColor =
+    getContrastRatio(color.hex, "#ffffff") > 3 ? "#ffffff" : "#000000";
   const colorName = getColorName(color.hex);
 
   return (
     <>
       <div
-        className="relative group cursor-pointer transition-all duration-300 transform hover:scale-105"
+        className="group relative transform cursor-pointer transition-all duration-300 hover:scale-105"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
         {/* Main Color Area */}
         <div
-          className="h-32 md:h-48 lg:h-64 rounded-lg shadow-lg overflow-hidden"
+          className="h-32 overflow-hidden rounded-lg shadow-lg md:h-48 lg:h-64"
           style={{ backgroundColor: color.hex }}
           onClick={() => setIsPickerOpen(true)}
         >
           {/* Color Info Overlay */}
           <div
             className={cn(
-              "absolute inset-0 bg-black bg-opacity-20 opacity-0 transition-opacity duration-200 flex flex-col justify-between p-4",
+              "absolute inset-0 flex flex-col justify-between bg-black bg-opacity-20 p-4 opacity-0 transition-opacity duration-200",
               isHovered && "opacity-100"
             )}
           >
             {/* Top Controls */}
-            <div className="flex justify-between items-start">
+            <div className="flex items-start justify-between">
               <Button
                 size="sm"
                 variant="ghost"
@@ -61,12 +63,12 @@ export function ColorCard({ color }: ColorCardProps) {
                 className="text-white hover:bg-white hover:bg-opacity-20"
               >
                 {color.locked ? (
-                  <Lock className="w-4 h-4" />
+                  <Lock className="h-4 w-4" />
                 ) : (
-                  <Unlock className="w-4 h-4" />
+                  <Unlock className="h-4 w-4" />
                 )}
               </Button>
-              
+
               {currentPalette.length > 2 && (
                 <Button
                   size="sm"
@@ -77,21 +79,21 @@ export function ColorCard({ color }: ColorCardProps) {
                   }}
                   className="text-white hover:bg-red-500 hover:bg-opacity-50"
                 >
-                  <Trash2 className="w-4 h-4" />
+                  <Trash2 className="h-4 w-4" />
                 </Button>
               )}
             </div>
 
             {/* Bottom Info */}
             <div className="text-center">
-              <p className="text-white text-sm font-medium mb-1">{colorName}</p>
-              <p className="text-white text-xs opacity-80">{color.hex}</p>
+              <p className="mb-1 text-sm font-medium text-white">{colorName}</p>
+              <p className="text-xs text-white opacity-80">{color.hex}</p>
             </div>
           </div>
         </div>
 
         {/* Color Info Bar */}
-        <div className="mt-2 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+        <div className="mt-2 rounded-lg bg-white p-3 shadow-sm dark:bg-gray-800">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-900 dark:text-white">
@@ -101,7 +103,7 @@ export function ColorCard({ color }: ColorCardProps) {
                 {colorName}
               </p>
             </div>
-            
+
             <div className="flex gap-1">
               <Button
                 size="sm"
@@ -109,16 +111,16 @@ export function ColorCard({ color }: ColorCardProps) {
                 onClick={copyToClipboard}
                 className="h-8 w-8 p-0"
               >
-                <Copy className="w-3 h-3" />
+                <Copy className="h-3 w-3" />
               </Button>
-              
+
               <Button
                 size="sm"
                 variant="ghost"
                 onClick={() => setIsPickerOpen(true)}
                 className="h-8 w-8 p-0"
               >
-                <Eye className="w-3 h-3" />
+                <Eye className="h-3 w-3" />
               </Button>
             </div>
           </div>
@@ -126,8 +128,8 @@ export function ColorCard({ color }: ColorCardProps) {
 
         {/* Lock Indicator */}
         {color.locked && (
-          <div className="absolute top-2 left-2 bg-black bg-opacity-50 rounded-full p-1">
-            <Lock className="w-3 h-3 text-white" />
+          <div className="absolute left-2 top-2 rounded-full bg-black bg-opacity-50 p-1">
+            <Lock className="h-3 w-3 text-white" />
           </div>
         )}
       </div>

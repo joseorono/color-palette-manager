@@ -17,11 +17,11 @@ export interface Palette {
 }
 
 export interface PaletteExport {
-  format: 'png' | 'svg' | 'css' | 'json';
+  format: "png" | "svg" | "css" | "json";
   palette: Palette;
 }
 
 export interface ContrastResult {
   ratio: number;
-  level: 'fail' | 'aa' | 'aaa';
+  level: "fail" | "aa" | "aaa";
 }
