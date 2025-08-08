@@ -2,6 +2,8 @@
 - Follow React Router patterns and use the File-Based Router.
 - This is a front-end, offline-first app, not a full-stack application.
 - No server needed, no database needed, no auth.
+- Use Electron for desktop app.
+- This is also a Progressive Web App (PWA).
 
 # General Code Style & Formatting
 - Use kebab-case for React component file names (e.g., user-card.tsx, not UserCard.tsx).
@@ -9,7 +11,6 @@
 - Use camelCase for variables, functions, and props
 - Prefer const assertions and explicit typing where beneficial
 - Use meaningful variable names that describe color operations (e.g., `lockedColors`, `paletteHex`, `colorHarmony`)
-
 
 # Project Structure & Architecture
 - Follow React Router patterns and use the File-Based Router.
@@ -20,6 +21,7 @@
 - Implement smooth transitions for color changes using Tailwind transition classes
 - Implement smooth color transitions and animations
 - Use Tailwind CSS for layout and spacing
+- Use icons from lucide-react for logos.
 
 # Data Fetching & Forms
 - Use TanStack Query (react-query) for data fetching if needed.
