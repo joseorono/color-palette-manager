@@ -15,12 +15,12 @@ import { toast } from "sonner";
 import { saveAs } from "file-saver";
 import { exportPalette } from "@/lib/palette-export";
 import { ExportFormat } from "@/constants/export";
-import type { ExportFormatType } from "@/types/export";
+
 import { PalettePreview } from "./palette-preview";
 
 export function ExportModal() {
   const [isOpen, setIsOpen] = useState(false);
-  const [format, setFormat] = useState<ExportFormatType>("png");
+  const [format, setFormat] = useState<ExportFormat>(ExportFormat.PNG);
   const [isExporting, setIsExporting] = useState(false);
 
   const { currentPalette } = usePaletteStore();
@@ -29,15 +29,7 @@ export function ExportModal() {
     setIsExporting(true);
 
     try {
-      // Map local format types to library ExportFormat enum
-      const formatMap: Record<ExportFormatType, ExportFormat> = {
-        png: ExportFormat.PNG,
-        svg: ExportFormat.SVG,
-        css: ExportFormat.CSS,
-        json: ExportFormat.JSON,
-      };
-
-      const result = await exportPalette(currentPalette, formatMap[format]);
+      const result = await exportPalette(currentPalette, format);
 
       // Create and download the file
       if (result.content instanceof Blob) {
@@ -82,20 +74,36 @@ export function ExportModal() {
               onValueChange={(value) => setFormat(value as ExportFormat)}
             >
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="png" id="png" />
+                <RadioGroupItem value={ExportFormat.PNG} id="png" />
                 <Label htmlFor="png">PNG Image</Label>
               </div>
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="svg" id="svg" />
+                <RadioGroupItem value={ExportFormat.SVG} id="svg" />
                 <Label htmlFor="svg">SVG Vector</Label>
               </div>
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="css" id="css" />
+                <RadioGroupItem value={ExportFormat.CSS} id="css" />
                 <Label htmlFor="css">CSS Variables</Label>
               </div>
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="json" id="json" />
+                <RadioGroupItem value={ExportFormat.JSON} id="json" />
                 <Label htmlFor="json">JSON Data</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value={ExportFormat.SCSS} id="scss" />
+                <Label htmlFor="scss">SCSS Variables</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value={ExportFormat.TAILWIND} id="tailwind" />
+                <Label htmlFor="tailwind">Tailwind Config</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value={ExportFormat.DAISYUI} id="daisyui" />
+                <Label htmlFor="daisyui">DaisyUI Theme</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value={ExportFormat.SHADCN} id="shadcn" />
+                <Label htmlFor="shadcn">Shadcn/UI Variables</Label>
               </div>
             </RadioGroup>
           </div>
