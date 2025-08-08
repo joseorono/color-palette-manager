@@ -2,12 +2,14 @@
 
 # First of All
 - [ ] Fix Existing Functionality
+- [ ] Enable PWA features
+- [ ] Implement IndexedDB with Dexie.js (https://dexie.org/)
 
 ## 🏗 Core Functionality
 - [ ] Implement **spacebar** trigger to generate random palettes
 - [x] Add **lock color** feature to preserve selected colors while regenerating others
 - [x] Ensure harmonization of newly generated colors with locked selections
-- [x] Implement **export in multiple formats** (CSS, JSON, SVG, PNG, ~~SCSS, Tailwind, DaisyUI, Shadcn/UI~~)
+- [x] Implement **export in multiple formats** (CSS, JSON, SVG, PNG, SCSS, Tailwind, DaisyUI, Shadcn/UI)
 - [ ] Implement **import palettes** from supported formats
 - [ ] Create **shareable link** functionality for palettes (like Coolors)
 
