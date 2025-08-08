@@ -1,3 +1,8 @@
+# Architecture
+- Follow React Router patterns and use the File-Based Router.
+- This is a front-end, offline-first app, not a full-stack application.
+- No server needed, no database needed, no auth.
+
 # General Code Style & Formatting
 - Use kebab-case for React component file names (e.g., user-card.tsx, not UserCard.tsx).
 - Use PascalCase for component names in code (e.g., `UserCard`)
@@ -21,7 +26,6 @@
 - Use React Hook Form for form handling.
 - Use Zod for validation.
 - Use React Hook Form for form handling (export settings, color input forms)
-
 
 ## Performance
 - Debounce rapid palette generation requests
