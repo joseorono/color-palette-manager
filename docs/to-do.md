@@ -1,10 +1,13 @@
 # 🎨 Color Palette Generator – ToDo List
 
+# First of All
+- [ ] Fix Existing Functionality
+
 ## 🏗 Core Functionality
 - [ ] Implement **spacebar** trigger to generate random palettes
-- [ ] Add **lock color** feature to preserve selected colors while regenerating others
-- [ ] Ensure harmonization of newly generated colors with locked selections
-- [ ] Implement **export in multiple formats** (CSS, JSON, SVG, PNG, SCSS, Tailwind, DaisyUI, Shadcn/UI)
+- [x] Add **lock color** feature to preserve selected colors while regenerating others
+- [x] Ensure harmonization of newly generated colors with locked selections
+- [x] Implement **export in multiple formats** (CSS, JSON, SVG, PNG, ~~SCSS, Tailwind, DaisyUI, Shadcn/UI~~)
 - [ ] Implement **import palettes** from supported formats
 - [ ] Create **shareable link** functionality for palettes (like Coolors)
 
@@ -12,21 +15,21 @@
 
 ## 📂 User Features
 - [ ] **Galería de paletas** (user dashboard)
-- [ ] **Generate Palette**
-  - [ ] From scratch
-  - [ ] Based on a specific color
+- [x] **Generate Palette**
+  - [x] From scratch
+  - [x] Based on a specific color
 - [ ] **Assign roles** to colors (Primary-light, Secondary-dark, Accent, Warning, etc.)
-- [ ] **Color naming** using color name libraries or large JSON dataset
-- [ ] **Contrast Checker** for accessibility compliance
+- [x] **Color naming** using color name libraries or large JSON dataset
+- [x] **Contrast Checker** for accessibility compliance
 
 ---
 
 ## 🎨 Palette & Color Editing
-- [ ] **Palette Editor**
+- [x] **Palette Editor**
   - [ ] Drag-and-drop colors to reorder
-  - [ ] Lock/unlock colors
-- [ ] **Color Editor Modal**
-  - [ ] Fields for brightness, contrast, hue, saturation, etc.
+  - [x] Lock/unlock colors
+- [x] **Color Editor Modal**
+  - [x] Fields for brightness, contrast, hue, saturation, etc.
 - [ ] **Palette Playground**
   - [ ] Static landing page
   - [ ] Component playground using the user’s palette
@@ -36,11 +39,11 @@
 ## 📤 Export / 📥 Import
 - [ ] Create export previews with format icons
 - [ ] Implement download button for each format
-- [ ] Export formats:
-  - [ ] CSS
-  - [ ] JSON
-  - [ ] SVG
-  - [ ] PNG
+- [x] Export formats:
+  - [x] CSS
+  - [x] JSON
+  - [x] SVG
+  - [x] PNG
   - [ ] SCSS
   - [ ] Tailwind config
   - [ ] DaisyUI config
@@ -49,9 +52,9 @@
 ---
 
 ## ⚙️ `/lib` Functions
-- [ ] Generate shades
+- [x] Generate shades
 - [ ] Generate gradients
-- [ ] Accessibility utilities (contrast checker, WCAG compliance)
+- [x] Accessibility utilities (contrast checker, WCAG compliance)
 - [ ] Abstract palette preview generation (currently tied to a modal)
 - [ ] Abstract export functions for all formats
 
