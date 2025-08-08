@@ -4,6 +4,9 @@
 - [ ] Fix Existing Functionality
 - [ ] Enable PWA features
 - [ ] Implement IndexedDB with Dexie.js (https://dexie.org/)
+- [ ] The root `/app` directory should only contain route files. All other components should be moved to a separate `/components` directory, with layout components in their own `/layout` subdirectory.
+- [ ] Implement Them Switcher in the Layout component (remember we're using Shadcn/UI's default theme system) - https://ui.shadcn.com/docs/dark-mode/vite
+- [ ] The index page should be a static landing page with marketing content, not the palette generator itself. The app itself should be moved to a separate route like `localhost:5173/app/`.
 
 ## 🏗 Core Functionality
 - [ ] Implement **spacebar** trigger to generate random palettes
@@ -41,8 +44,7 @@
 ---
 
 ## 📤 Export / 📥 Import
-- [ ] Create export previews with format icons
-- [ ] Implement download button for each format
+- [ ] Add a Side-Pane to the Export Modal with a preview of the palette in the selected format.
 - [x] Implement Export formats:
   - [x] CSS
   - [x] JSON
@@ -71,7 +73,7 @@
 - [ ] **Palette Editor View**
 - [ ] **Color Editor Modal**
 - [ ] **Export Modal** (icons, preview, download)
-- [ ] **Landing Page** (trial/demo)
+- [ ] **Landing Page** (static, marketing)
 - [ ] **Palette Playground**
 - [ ] **Layout component**
 
