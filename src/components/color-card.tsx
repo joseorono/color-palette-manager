@@ -40,7 +40,7 @@ export function ColorCard({ color }: ColorCardProps) {
       >
         {/* Main Color Area */}
         <div
-          className="h-32 overflow-hidden rounded-lg shadow-lg md:h-48 lg:h-64"
+          className="relative h-32 overflow-hidden rounded-lg shadow-lg md:h-48 lg:h-64"
           style={{ backgroundColor: color.hex }}
           onClick={() => setIsPickerOpen(true)}
         >
@@ -85,10 +85,10 @@ export function ColorCard({ color }: ColorCardProps) {
             </div>
 
             {/* Bottom Info */}
-            <div className="text-center">
+            {/* <div className="text-center">
               <p className="mb-1 text-sm font-medium text-white">{colorName}</p>
               <p className="text-xs text-white opacity-80">{color.hex}</p>
-            </div>
+            </div> */}
           </div>
         </div>
 
