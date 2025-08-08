@@ -47,12 +47,13 @@ export function ColorCard({ color }: ColorCardProps) {
           {/* Color Info Overlay */}
           <div
             className={cn(
-              "absolute inset-0 flex flex-col justify-between bg-black bg-opacity-20 p-4 opacity-0 transition-opacity duration-200",
+              "absolute inset-0 flex flex-col justify-between bg-black bg-opacity-20 p-4 opacity-100 transition-opacity duration-200",
               isHovered && "opacity-100"
             )}
           >
             {/* Top Controls */}
             <div className="flex items-start justify-between">
+              <div className="flex flex-col items-start gap-1">
               <Button
                 size="sm"
                 variant="ghost"
@@ -68,6 +69,15 @@ export function ColorCard({ color }: ColorCardProps) {
                   <Unlock className="h-4 w-4" />
                 )}
               </Button>
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={copyToClipboard}
+                className="text-white hover:bg-white hover:bg-opacity-20"
+              >
+                <Copy className="h-4 w-4" />
+              </Button>
+              </div>
 
               {currentPalette.length > 2 && (
                 <Button
@@ -104,7 +114,7 @@ export function ColorCard({ color }: ColorCardProps) {
               </p>
             </div>
 
-            <div className="flex gap-1">
+            {/* <div className="flex gap-1">
               <Button
                 size="sm"
                 variant="ghost"
@@ -122,7 +132,7 @@ export function ColorCard({ color }: ColorCardProps) {
               >
                 <Eye className="h-3 w-3" />
               </Button>
-            </div>
+            </div> */}
           </div>
         </div>
 
