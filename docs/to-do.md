@@ -31,7 +31,7 @@
 - [x] **Color Editor Modal**
   - [x] Fields for brightness, contrast, hue, saturation, etc.
 - [ ] **Palette Playground**
-  - [ ] Static landing page
+  - [ ] Static landing page to be used as a demo
   - [ ] Component playground using the user’s palette
 
 ---
@@ -39,15 +39,16 @@
 ## 📤 Export / 📥 Import
 - [ ] Create export previews with format icons
 - [ ] Implement download button for each format
-- [ ] Implement Export formats:
+- [x] Implement Export formats:
   - [x] CSS
   - [x] JSON
   - [x] SVG
   - [x] PNG
-  - [ ] SCSS
-  - [ ] Tailwind config
-  - [ ] DaisyUI config
-  - [ ] Shadcn/UI config
+  - [x] SCSS
+  - [x] Tailwind config
+  - [x] DaisyUI config
+  - [x] Shadcn/UI config
+- Test Export formats (don't spend too much time on this)
 
 ---
 
@@ -55,7 +56,7 @@
 - [ ] Generate shades
 - [ ] Generate gradients
 - [ ] Accessibility utilities (contrast checker, WCAG compliance)
-- [ ] Abstract palette preview generation (currently tied to a modal)
+- [x] Abstract palette preview generation (currently tied to a modal)
 - [x] Abstract export functions for all formats
 
 ---
