@@ -8,19 +8,30 @@ export interface Color {
 }
 
 export interface Palette {
-  id: string;
-  name: string;
-  colors: Color[];
-  createdAt: Date;
-  updatedAt: Date;
-  userId?: string;
-  isPublic: boolean;
-  tags?: string[];
+  id: string
+  name: string
+  description?: string
+  colors: Color[]
+  createdAt: Date
+  updatedAt: Date
+  isPublic: boolean
+  tags: string[]
+  userId: string
+  favoriteCount?: number
+  isFavorite?: boolean
 }
 
 export interface PaletteExport {
   format: ExportFormat;
   palette: Palette;
+}
+
+export interface PaletteFilters {
+  search: string
+  tags: string[]
+  sortBy: 'name' | 'createdAt' | 'updatedAt' | 'favoriteCount'
+  sortOrder: 'asc' | 'desc'
+  showFavoritesOnly: boolean
 }
 
 /*

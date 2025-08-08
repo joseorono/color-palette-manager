@@ -11,4 +11,4 @@ export interface ExportResult {
   mimeType: string;
 }
 
-export type ExportFormatType = "png" | "svg" | "css" | "json" | "scss" | "tailwind" | "daisyui" | "shadcn";
+

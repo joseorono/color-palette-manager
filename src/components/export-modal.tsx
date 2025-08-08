@@ -14,7 +14,7 @@ import { Download } from "lucide-react";
 import { toast } from "sonner";
 import { saveAs } from "file-saver";
 import { exportPalette } from "@/lib/palette-export";
-import { ExportFormat } from "@/constants/export";
+import { ExportFormat, exportFormatConfig } from "@/constants/export";
 
 import { PalettePreview } from "./palette-preview";
 
@@ -73,38 +73,12 @@ export function ExportModal() {
               value={format}
               onValueChange={(value) => setFormat(value as ExportFormat)}
             >
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value={ExportFormat.PNG} id="png" />
-                <Label htmlFor="png">PNG Image</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value={ExportFormat.SVG} id="svg" />
-                <Label htmlFor="svg">SVG Vector</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value={ExportFormat.CSS} id="css" />
-                <Label htmlFor="css">CSS Variables</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value={ExportFormat.JSON} id="json" />
-                <Label htmlFor="json">JSON Data</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value={ExportFormat.SCSS} id="scss" />
-                <Label htmlFor="scss">SCSS Variables</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value={ExportFormat.TAILWIND} id="tailwind" />
-                <Label htmlFor="tailwind">Tailwind Config</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value={ExportFormat.DAISYUI} id="daisyui" />
-                <Label htmlFor="daisyui">DaisyUI Theme</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value={ExportFormat.SHADCN} id="shadcn" />
-                <Label htmlFor="shadcn">Shadcn/UI Variables</Label>
-              </div>
+              {Object.entries(exportFormatConfig).map(([formatValue, config]) => (
+                <div key={formatValue} className="flex items-center space-x-2">
+                  <RadioGroupItem value={formatValue} id={formatValue} />
+                  <Label htmlFor={formatValue}>{config.label}</Label>
+                </div>
+              ))}
             </RadioGroup>
           </div>
 
