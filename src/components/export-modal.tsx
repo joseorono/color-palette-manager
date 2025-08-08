@@ -14,6 +14,7 @@ import { Download } from "lucide-react";
 import { toast } from "sonner";
 import { saveAs } from "file-saver";
 import { exportPalette, ExportFormat } from "@/lib/palette-export";
+import { PalettePreview } from "./palette-preview";
 
 type ExportFormatType = "png" | "svg" | "css" | "json";
 
@@ -102,16 +103,13 @@ export function ExportModal() {
           {/* Preview */}
           <div>
             <Label className="mb-2 block text-sm font-medium">Preview</Label>
-            <div className="grid h-16 grid-cols-5 overflow-hidden rounded-lg border">
-              {currentPalette.map((color, index) => (
-                <div
-                  key={index}
-                  className="flex-1"
-                  style={{ backgroundColor: color.hex }}
-                  title={color.hex}
-                />
-              ))}
-            </div>
+            <PalettePreview 
+              colors={currentPalette}
+              height="4rem"
+              showTooltips={true}
+              borderRadius="lg"
+              showBorder={true}
+            />
           </div>
 
           {/* Actions */}
