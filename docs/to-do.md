@@ -66,7 +66,7 @@
 ---
 
 ## 🖥 Components / Views
-- [ ] **Galería de paletas** (dashboard view)
+- [x] **Galería de paletas** (dashboard view)
 - [ ] **Palette View** (read-only)
 - [ ] **Palette Editor View**
 - [ ] **Color Editor Modal**

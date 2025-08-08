@@ -69,7 +69,7 @@ export function ColorPicker({
                 id="hex-input"
                 color={tempColor}
                 onChange={setTempColor}
-                className="w-full rounded-md border px-3 py-2 font-mono"
+                className="w-full rounded-md border bg-background px-3 py-2 font-mono text-foreground"
                 prefixed
               />
             </div>
