@@ -1,0 +1,198 @@
+"use client"
+
+import { useState } from "react"
+import { Search, Filter, SortAsc, SortDesc, Heart, X } from 'lucide-react'
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import { Checkbox } from "@/components/ui/checkbox"
+import type { PaletteFilters } from "@/types/palette"
+
+interface PaletteFiltersProps {
+  filters: PaletteFilters
+  onFiltersChange: (filters: PaletteFilters) => void
+  availableTags: string[]
+}
+
+export function PaletteFilters({ filters, onFiltersChange, availableTags }: PaletteFiltersProps) {
+  const [tagSearch, setTagSearch] = useState("")
+
+  const filteredTags = availableTags.filter(tag =>
+    tag.toLowerCase().includes(tagSearch.toLowerCase()) &&
+    !filters.tags.includes(tag)
+  )
+
+  const handleSearchChange = (value: string) => {
+    onFiltersChange({ ...filters, search: value })
+  }
+
+  const handleSortChange = (value: string) => {
+    const [sortBy, sortOrder] = value.split('-') as [PaletteFilters['sortBy'], PaletteFilters['sortOrder']]
+    onFiltersChange({ ...filters, sortBy, sortOrder })
+  }
+
+  const handleTagToggle = (tag: string) => {
+    const newTags = filters.tags.includes(tag)
+      ? filters.tags.filter(t => t !== tag)
+      : [...filters.tags, tag]
+    onFiltersChange({ ...filters, tags: newTags })
+  }
+
+  const handleRemoveTag = (tag: string) => {
+    onFiltersChange({ ...filters, tags: filters.tags.filter(t => t !== tag) })
+  }
+
+  const handleFavoritesToggle = () => {
+    onFiltersChange({ ...filters, showFavoritesOnly: !filters.showFavoritesOnly })
+  }
+
+  const clearAllFilters = () => {
+    onFiltersChange({
+      search: "",
+      tags: [],
+      sortBy: "updatedAt",
+      sortOrder: "desc",
+      showFavoritesOnly: false,
+    })
+  }
+
+  const hasActiveFilters = filters.search || filters.tags.length > 0 || filters.showFavoritesOnly
+
+  return (
+    <div className="space-y-4">
+      <div className="flex flex-col sm:flex-row gap-4">
+        {/* Search */}
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+          <Input
+            placeholder="Search palettes..."
+            value={filters.search}
+            onChange={(e) => handleSearchChange(e.target.value)}
+            className="pl-10"
+          />
+        </div>
+
+        {/* Sort */}
+        <Select value={`${filters.sortBy}-${filters.sortOrder}`} onValueChange={handleSortChange}>
+          <SelectTrigger className="w-full sm:w-[200px]">
+            <div className="flex items-center">
+              {filters.sortOrder === 'asc' ? (
+                <SortAsc className="mr-2 h-4 w-4" />
+              ) : (
+                <SortDesc className="mr-2 h-4 w-4" />
+              )}
+              <SelectValue />
+            </div>
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="updatedAt-desc">Recently Updated</SelectItem>
+            <SelectItem value="updatedAt-asc">Oldest Updated</SelectItem>
+            <SelectItem value="createdAt-desc">Recently Created</SelectItem>
+            <SelectItem value="createdAt-asc">Oldest Created</SelectItem>
+            <SelectItem value="name-asc">Name A-Z</SelectItem>
+            <SelectItem value="name-desc">Name Z-A</SelectItem>
+            <SelectItem value="favoriteCount-desc">Most Popular</SelectItem>
+            <SelectItem value="favoriteCount-asc">Least Popular</SelectItem>
+          </SelectContent>
+        </Select>
+
+        {/* Filters */}
+        <div className="flex gap-2">
+          <Button
+            variant={filters.showFavoritesOnly ? "default" : "outline"}
+            size="sm"
+            onClick={handleFavoritesToggle}
+          >
+            <Heart className={`mr-2 h-4 w-4 ${filters.showFavoritesOnly ? 'fill-current' : ''}`} />
+            Favorites
+          </Button>
+
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" size="sm">
+                <Filter className="mr-2 h-4 w-4" />
+                Tags
+                {filters.tags.length > 0 && (
+                  <Badge variant="secondary" className="ml-2 h-5 w-5 p-0 text-xs">
+                    {filters.tags.length}
+                  </Badge>
+                )}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-80" align="end">
+              <div className="space-y-4">
+                <div>
+                  <h4 className="font-medium mb-2">Filter by Tags</h4>
+                  <Input
+                    placeholder="Search tags..."
+                    value={tagSearch}
+                    onChange={(e) => setTagSearch(e.target.value)}
+                  />
+                </div>
+                
+                <div className="max-h-40 overflow-y-auto space-y-2">
+                  {filteredTags.map((tag) => (
+                    <div key={tag} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={tag}
+                        checked={filters.tags.includes(tag)}
+                        onCheckedChange={() => handleTagToggle(tag)}
+                      />
+                      <label htmlFor={tag} className="text-sm cursor-pointer flex-1">
+                        {tag}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </PopoverContent>
+          </Popover>
+        </div>
+      </div>
+
+      {/* Active Filters */}
+      {hasActiveFilters && (
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-sm text-muted-foreground">Active filters:</span>
+          
+          {filters.showFavoritesOnly && (
+            <Badge variant="secondary" className="flex items-center gap-1">
+              <Heart className="h-3 w-3 fill-current" />
+              Favorites
+              <X 
+                className="h-3 w-3 cursor-pointer" 
+                onClick={handleFavoritesToggle}
+              />
+            </Badge>
+          )}
+          
+          {filters.tags.map((tag) => (
+            <Badge key={tag} variant="secondary" className="flex items-center gap-1">
+              {tag}
+              <X 
+                className="h-3 w-3 cursor-pointer" 
+                onClick={() => handleRemoveTag(tag)}
+              />
+            </Badge>
+          ))}
+          
+          <Button variant="ghost" size="sm" onClick={clearAllFilters}>
+            Clear all
+          </Button>
+        </div>
+      )}
+    </div>
+  )
+}
