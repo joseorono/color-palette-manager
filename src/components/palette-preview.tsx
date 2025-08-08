@@ -1,5 +1,7 @@
 import { Color } from "@/types/palette";
 import { cn } from "@/lib/utils";
+import { borderRadiusClassesMap } from "@/constants/ui";
+import LoaderAnim from "./loader-anim";
 
 export interface PalettePreviewProps {
   /** Array of colors to display in the palette */
@@ -34,15 +36,6 @@ export interface PalettePreviewProps {
   equalSegments?: boolean;
 }
 
-const borderRadiusMap = {
-  none: "rounded-none",
-  sm: "rounded-sm",
-  md: "rounded-md",
-  lg: "rounded-lg",
-  xl: "rounded-xl",
-  full: "rounded-full",
-};
-
 export function PalettePreview({
   colors,
   height = "4rem", // 16 in Tailwind (h-16)
@@ -57,7 +50,7 @@ export function PalettePreview({
   onColorClick,
   onColorHover,
   isLoading = false,
-  loadingComponent,
+  loadingComponent = <LoaderAnim />,
   equalSegments = true,
 }: PalettePreviewProps) {
   // Handle loading state
@@ -69,7 +62,7 @@ export function PalettePreview({
       <div
         className={cn(
           "animate-pulse bg-gray-200 dark:bg-gray-700",
-          borderRadiusMap[borderRadius],
+          borderRadiusClassesMap[borderRadius],
           showBorder && "border border-gray-300 dark:border-gray-600",
           className
         )}
@@ -84,7 +77,7 @@ export function PalettePreview({
       <div
         className={cn(
           "flex items-center justify-center bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400",
-          borderRadiusMap[borderRadius],
+          borderRadiusClassesMap[borderRadius],
           showBorder && "border border-gray-300 dark:border-gray-600",
           className
         )}
@@ -99,7 +92,7 @@ export function PalettePreview({
   const containerClasses = cn(
     isHorizontal ? "flex" : "flex flex-col",
     "overflow-hidden",
-    borderRadiusMap[borderRadius],
+    borderRadiusClassesMap[borderRadius],
     showBorder && "border border-gray-300 dark:border-gray-600",
     className
   );
@@ -118,15 +111,15 @@ export function PalettePreview({
 
   const getTooltipText = (color: Color): string => {
     const parts: string[] = [];
-    
+
     if (showColorNames && color.name) {
       parts.push(color.name);
     }
-    
+
     if (showTooltips) {
       parts.push(color.hex.toUpperCase());
     }
-    
+
     return parts.join(" - ") || color.hex.toUpperCase();
   };
 
@@ -176,14 +169,14 @@ export const PalettePreviewPresets = {
     borderRadius: "md" as const,
     showTooltips: false,
   },
-  
+
   /** Medium preview for modals or forms */
   medium: {
     height: "4rem",
     borderRadius: "lg" as const,
     showTooltips: true,
   },
-  
+
   /** Large preview for main displays */
   large: {
     height: "6rem",
@@ -191,7 +184,7 @@ export const PalettePreviewPresets = {
     showTooltips: true,
     showColorNames: true,
   },
-  
+
   /** Compact horizontal strip */
   strip: {
     height: "1rem",
@@ -199,7 +192,7 @@ export const PalettePreviewPresets = {
     showBorder: false,
     showTooltips: false,
   },
-  
+
   /** Vertical tower layout */
   tower: {
     height: "12rem",
