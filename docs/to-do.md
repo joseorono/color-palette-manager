@@ -73,5 +73,6 @@
 - [ ] **Export Modal** (icons, preview, download)
 - [ ] **Landing Page** (trial/demo)
 - [ ] **Palette Playground**
+- [ ] **Layout component**
 
 ---
