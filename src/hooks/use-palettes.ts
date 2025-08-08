@@ -20,7 +20,6 @@ const mockPalettes: Palette[] = [
     updatedAt: new Date("2024-01-20"),
     isPublic: true,
     tags: ["blue", "ocean", "calm", "nature"],
-    userId: "user1",
     favoriteCount: 24,
     isFavorite: true,
   },
@@ -38,7 +37,6 @@ const mockPalettes: Palette[] = [
     updatedAt: new Date("2024-01-18"),
     isPublic: false,
     tags: ["warm", "sunset", "vibrant"],
-    userId: "user1",
     favoriteCount: 12,
     isFavorite: false,
   },
@@ -57,7 +55,6 @@ const mockPalettes: Palette[] = [
     updatedAt: new Date("2024-01-15"),
     isPublic: true,
     tags: ["green", "nature", "earth", "forest"],
-    userId: "user1",
     favoriteCount: 8,
     isFavorite: true,
   },
@@ -76,7 +73,6 @@ const mockPalettes: Palette[] = [
     updatedAt: new Date("2024-01-22"),
     isPublic: true,
     tags: ["dark", "neon", "city", "modern"],
-    userId: "user1",
     favoriteCount: 31,
     isFavorite: false,
   },
@@ -99,8 +95,8 @@ export function usePalettes() {
   }, [])
 
   const toggleFavorite = (paletteId: string) => {
-    setPalettes(prev => prev.map(palette => 
-      palette.id === paletteId 
+    setPalettes(prev => prev.map(palette =>
+      palette.id === paletteId
         ? { ...palette, isFavorite: !palette.isFavorite }
         : palette
     ))

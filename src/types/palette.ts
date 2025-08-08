@@ -33,9 +33,9 @@ export const ColorRoles = [
   "card-foreground",
   "muted-foreground",
 ] as const;
-export type ColorRole = typeof ColorRoles[number];
 
-export type CSSColorVariables = Record<ColorRole, string>;
+export type ColorRole = typeof ColorRoles[number];
+export type CSSColorVariablesObject = Record<ColorRole, string>;
 
 export interface Color {
   id: string;
@@ -46,17 +46,16 @@ export interface Color {
 }
 
 export interface Palette {
-  id: string
-  name: string
-  description?: string
-  colors: Color[]
-  createdAt: Date
-  updatedAt: Date
-  isPublic: boolean
-  tags: string[]
-  userId: string
-  favoriteCount?: number
-  isFavorite?: boolean
+  id: string;
+  name: string;
+  description?: string;
+  colors: Color[];
+  createdAt: Date;
+  updatedAt: Date;
+  isPublic: boolean;
+  tags: string[];
+  favoriteCount?: number;
+  isFavorite?: boolean;
 }
 
 export interface PaletteExport {
