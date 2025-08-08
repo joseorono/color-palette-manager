@@ -1,5 +1,3 @@
-'use client';
-
 import { useState, useEffect } from 'react';
 import { HexColorPicker, HexColorInput } from 'react-colorful';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';

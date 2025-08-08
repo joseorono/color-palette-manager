@@ -1,13 +1,11 @@
-'use client';
-
 import { useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'react-router-dom';
 import { PaletteGenerator } from '@/components/palette-generator';
 import { usePaletteStore } from '@/stores/palette-store';
 import { Toaster } from '@/components/ui/sonner';
 
 export default function HomePage() {
-  const searchParams = useSearchParams();
+  const [searchParams] = useSearchParams();
   const { setPaletteFromUrl } = usePaletteStore();
 
   useEffect(() => {

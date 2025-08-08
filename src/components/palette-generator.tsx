@@ -1,5 +1,3 @@
-'use client';
-
 import { useEffect, useCallback } from 'react';
 import { usePaletteStore } from '@/stores/palette-store';
 import { ColorCard } from './color-card';

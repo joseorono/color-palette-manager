@@ -1,5 +1,3 @@
-'use client';
-
 import { useState } from 'react';
 import { Color } from '@/types/palette';
 import { usePaletteStore } from '@/stores/palette-store';

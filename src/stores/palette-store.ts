@@ -1,5 +1,3 @@
-'use client';
-
 import { create } from 'zustand';
 import { Color, Palette } from '@/types/palette';
 import { generateHarmoniousPalette, generateRandomColor } from '@/lib/color-utils';
