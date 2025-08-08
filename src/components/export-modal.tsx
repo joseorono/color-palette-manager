@@ -12,117 +12,45 @@ import { Label } from "./ui/label";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { Download } from "lucide-react";
 import { toast } from "sonner";
-import html2canvas from "html2canvas";
 import { saveAs } from "file-saver";
+import { exportPalette, ExportFormat } from "@/lib/palette-export";
 
-type ExportFormat = "png" | "svg" | "css" | "json";
+type ExportFormatType = "png" | "svg" | "css" | "json";
 
 export function ExportModal() {
   const [isOpen, setIsOpen] = useState(false);
-  const [format, setFormat] = useState<ExportFormat>("png");
+  const [format, setFormat] = useState<ExportFormatType>("png");
   const [isExporting, setIsExporting] = useState(false);
 
   const { currentPalette } = usePaletteStore();
-
-  const exportPNG = async () => {
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    const width = 800;
-    const height = 200;
-    const colorWidth = width / currentPalette.length;
-
-    canvas.width = width;
-    canvas.height = height;
-
-    currentPalette.forEach((color, index) => {
-      ctx.fillStyle = color.hex;
-      ctx.fillRect(index * colorWidth, 0, colorWidth, height);
-    });
-
-    canvas.toBlob((blob) => {
-      if (blob) {
-        saveAs(blob, "color-palette.png");
-      }
-    });
-  };
-
-  const exportSVG = () => {
-    const width = 800;
-    const height = 200;
-    const colorWidth = width / currentPalette.length;
-
-    let svgContent = `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">`;
-
-    currentPalette.forEach((color, index) => {
-      svgContent += `<rect x="${index * colorWidth}" y="0" width="${colorWidth}" height="${height}" fill="${color.hex}"/>`;
-    });
-
-    svgContent += "</svg>";
-
-    const blob = new Blob([svgContent], { type: "image/svg+xml" });
-    saveAs(blob, "color-palette.svg");
-  };
-
-  const exportCSS = () => {
-    let cssContent = "/* Color Palette CSS Variables */\n:root {\n";
-
-    currentPalette.forEach((color, index) => {
-      cssContent += `  --color-${index + 1}: ${color.hex};\n`;
-    });
-
-    cssContent += "}\n\n/* Color Classes */\n";
-
-    currentPalette.forEach((color, index) => {
-      cssContent += `.color-${index + 1} { color: ${color.hex}; }\n`;
-      cssContent += `.bg-color-${index + 1} { background-color: ${color.hex}; }\n`;
-    });
-
-    const blob = new Blob([cssContent], { type: "text/css" });
-    saveAs(blob, "color-palette.css");
-  };
-
-  const exportJSON = () => {
-    const paletteData = {
-      name: "Color Palette",
-      colors: currentPalette.map((color, index) => ({
-        name: `Color ${index + 1}`,
-        hex: color.hex,
-        index: index + 1,
-      })),
-      createdAt: new Date().toISOString(),
-    };
-
-    const blob = new Blob([JSON.stringify(paletteData, null, 2)], {
-      type: "application/json",
-    });
-    saveAs(blob, "color-palette.json");
-  };
 
   const handleExport = async () => {
     setIsExporting(true);
 
     try {
-      switch (format) {
-        case "png":
-          await exportPNG();
-          break;
-        case "svg":
-          exportSVG();
-          break;
-        case "css":
-          exportCSS();
-          break;
-        case "json":
-          exportJSON();
-          break;
+      // Map local format types to library ExportFormat enum
+      const formatMap: Record<ExportFormatType, ExportFormat> = {
+        png: ExportFormat.PNG,
+        svg: ExportFormat.SVG,
+        css: ExportFormat.CSS,
+        json: ExportFormat.JSON,
+      };
+
+      const result = await exportPalette(currentPalette, formatMap[format]);
+
+      // Create and download the file
+      if (result.content instanceof Blob) {
+        saveAs(result.content, result.filename);
+      } else {
+        const blob = new Blob([result.content], { type: result.mimeType });
+        saveAs(blob, result.filename);
       }
 
       toast.success("Palette exported successfully!");
       setIsOpen(false);
     } catch (error) {
       toast.error("Failed to export palette");
+      console.error("Export error:", error);
     } finally {
       setIsExporting(false);
     }

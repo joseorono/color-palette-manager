@@ -39,7 +39,7 @@
 ## 📤 Export / 📥 Import
 - [ ] Create export previews with format icons
 - [ ] Implement download button for each format
-- [x] Export formats:
+- [ ] Implement Export formats:
   - [x] CSS
   - [x] JSON
   - [x] SVG
@@ -52,11 +52,11 @@
 ---
 
 ## ⚙️ `/lib` Functions
-- [x] Generate shades
+- [ ] Generate shades
 - [ ] Generate gradients
-- [x] Accessibility utilities (contrast checker, WCAG compliance)
+- [ ] Accessibility utilities (contrast checker, WCAG compliance)
 - [ ] Abstract palette preview generation (currently tied to a modal)
-- [ ] Abstract export functions for all formats
+- [x] Abstract export functions for all formats
 
 ---
 
