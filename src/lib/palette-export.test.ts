@@ -8,10 +8,10 @@ import {
   exportToTailwind,
   exportToDaisyUI,
   exportToShadcnUI,
-  exportPalette,
-  ExportFormat,
-  type ExportOptions
+  exportPalette
 } from './palette-export';
+import { ExportFormat } from '@/constants/export';
+import type { ExportOptions } from '@/types/export';
 
 // Mock color palette for testing
 const mockColors: Color[] = [

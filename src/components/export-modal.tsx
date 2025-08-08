@@ -13,10 +13,10 @@ import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { Download } from "lucide-react";
 import { toast } from "sonner";
 import { saveAs } from "file-saver";
-import { exportPalette, ExportFormat } from "@/lib/palette-export";
+import { exportPalette } from "@/lib/palette-export";
+import { ExportFormat } from "@/constants/export";
+import type { ExportFormatType } from "@/types/export";
 import { PalettePreview } from "./palette-preview";
-
-type ExportFormatType = "png" | "svg" | "css" | "json";
 
 export function ExportModal() {
   const [isOpen, setIsOpen] = useState(false);
