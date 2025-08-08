@@ -52,7 +52,7 @@ export function generateShades(color: string, count: number = 9): string[] {
   const shades: string[] = [];
 
   for (let i = 0; i < count; i++) {
-    const lightness = 0.1 + (i / (count - 1)) * 0.8; // Range from 10% to 90%
+    const lightness = (0.2 + (i / (count - 1)) * 0.7) * 100; // Range from 10% to 90%
     const newColor = colord({ h: hsl.h, s: hsl.s, l: lightness });
     shades.push(newColor.toHex());
   }
