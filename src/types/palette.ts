@@ -1,3 +1,5 @@
+import { ExportFormat } from "@/constants/export";
+
 export interface Color {
   id: string;
   hex: string;
@@ -17,11 +19,26 @@ export interface Palette {
 }
 
 export interface PaletteExport {
-  format: "png" | "svg" | "css" | "json";
+  format: ExportFormat;
   palette: Palette;
 }
 
-export interface ContrastResult {
+/*
+=========================
+   Accessibility
+=========================
+*/
+
+// WCAGContrastLevel, with array for validation
+export enum WCAGContrastLevel {
+  FAIL = "fail",
+  AA = "aa",
+  AAA = "aaa",
+}
+
+export const WCAGContrastLevels = Object.values(WCAGContrastLevel);
+
+export interface WCAGContrastResult {
   ratio: number;
-  level: "fail" | "aa" | "aaa";
+  level: WCAGContrastLevel;
 }

@@ -11,3 +11,5 @@ export enum ExportFormat {
   DAISYUI = 'daisyui',
   SHADCN = 'shadcn'
 }
+
+export const exportFormats = Object.values(ExportFormat);
