@@ -9,9 +9,6 @@ import { Palette as PaletteIcon, Copy, Heart, Star, ArrowRight } from 'lucide-re
 import { Palette, Color, ColorRole, CSSColorVariablesObject, ColorRoles } from '@/types/palette';
 
 // Types
-
-
-// Utility types for the playground
 interface PlaygroundProps {
   palette?: Palette;
   className?: string;
