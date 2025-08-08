@@ -34,9 +34,9 @@
   - [x] Lock/unlock colors
 - [x] **Color Editor Modal**
   - [x] Fields for brightness, contrast, hue, saturation, etc.
-- [ ] **Palette Playground**
-  - [ ] Static landing page to be used as a demo
-  - [ ] Component playground using the user’s palette
+- [ ] **Palette Playground** (WIP)
+  - [ ] Static landing page to be used as a demo - WIP
+  - [x] Component playground using the user’s palette - WIP
 
 ---
 
@@ -52,7 +52,7 @@
   - [x] Tailwind config
   - [x] DaisyUI config
   - [x] Shadcn/UI config
-- Test Export formats (don't spend too much time on this)
+- [ ] Test Export formats (don't spend too much time on this)
 
 ---
 
