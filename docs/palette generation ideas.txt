@@ -47,10 +47,22 @@ https://chatgpt.com/share/6897a72e-9080-8000-9806-bbe295eb819e
 
 If you want perceptual accuracy → Use LAB + ΔE (via culori, color-difference, or color-diff).
 
-José Oroño, [8/9/2025 2:53 PM]
 If you want perceptual accuracy → Use LAB + ΔE (via culori, color-difference, or color-diff).
 
-# Algorythm
+# Assumptions
+
+- We're currently assuming that we're putting together a complementary palette.
+- To break this assumption, We would need to create priority lists for all the different types of palettes:
+    - Analogous
+    - Monochromatic
+    - Complementary
+    - Triadic
+    - Tetradic
+    - Split Complementary
+    - Square
+    - Compound
+
+# Algorithm
 
 - Crear paletteUtil.getBaseColor(Color[] colors): Color[],
     - it gets the primary color, or the first color.
@@ -72,7 +84,8 @@ If you want perceptual accuracy → Use LAB + ΔE (via culori, color-difference,
 
 - Declare priorityColorsDuringGeneration: string[] = ["white", "black", "complementary", "analogous", "variations"]
 
-Do all the follow inside a loop that iterates through priorityColorsDuringGeneration, using a switch case:
+Do all the follow inside a loop that iterates through priorityColorsDuringGeneration, using a switch case.
+Break whenever we reach countToGenerate == 0.
 
 - Check if existingColors already has a variant of white within a threshold
     - If it does, skip it
@@ -85,5 +98,5 @@ Do all the follow inside a loop that iterates through priorityColorsDuringGenera
 - Generate the variations color, fuzzy-check if it's in existingColors
     - If it is, skip it
 
-
+Then, if countToGenerate is still greater than 0, generate variations of baseColor until we reach countToGenerate.
 
