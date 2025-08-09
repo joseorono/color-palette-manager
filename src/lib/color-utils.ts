@@ -6,27 +6,27 @@ export function generateRandomColor(): string {
 }
 
 export function generateHarmoniousPalette(
-  baseColor?: string,
+  baseColorArg?: string,
   count: number = 5
 ): string[] {
-  const base = baseColor ? chroma(baseColor) : chroma.random();
-  const colors: string[] = [base.hex()];
+  const baseColor = baseColorArg ? chroma(baseColorArg) : chroma.random();
+  const colors: string[] = [baseColor.hex()];
 
   // Generate complementary, triadic, and analogous colors
   const schemes = [
     // Analogous colors
-    base.set("hsl.h", "+30").hex(),
-    base.set("hsl.h", "-30").hex(),
+    baseColor.set("hsl.h", "+30").hex(),
+    baseColor.set("hsl.h", "-30").hex(),
     // Complementary
-    base.set("hsl.h", "+180").hex(),
+    baseColor.set("hsl.h", "+180").hex(),
     // Triadic
-    base.set("hsl.h", "+120").hex(),
-    base.set("hsl.h", "-120").hex(),
+    baseColor.set("hsl.h", "+120").hex(),
+    baseColor.set("hsl.h", "-120").hex(),
     // Variations
-    base.set("hsl.l", "*0.8").hex(),
-    base.set("hsl.l", "*1.2").hex(),
-    base.set("hsl.s", "*0.7").hex(),
-    base.set("hsl.s", "*1.3").hex(),
+    baseColor.set("hsl.l", "*0.8").hex(),
+    baseColor.set("hsl.l", "*1.2").hex(),
+    baseColor.set("hsl.s", "*0.7").hex(),
+    baseColor.set("hsl.s", "*1.3").hex(),
   ];
 
   // Shuffle and take required count
