@@ -51,6 +51,7 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
         if (color.locked) return color;
         return { ...color, hex: generateRandomColor() };
       });
+      
 
       set({ currentPalette: newPalette, isGenerating: false });
     }, 300);

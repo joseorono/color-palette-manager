@@ -72,7 +72,10 @@ export function ColorCard({ color }: ColorCardProps) {
               <Button
                 size="sm"
                 variant="ghost"
-                onClick={copyToClipboard}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  copyToClipboard();
+                }}  
                 className="text-white hover:bg-white hover:bg-opacity-20"
               >
                 <Copy className="h-4 w-4" />
@@ -94,11 +97,6 @@ export function ColorCard({ color }: ColorCardProps) {
               )}
             </div>
 
-            {/* Bottom Info */}
-            {/* <div className="text-center">
-              <p className="mb-1 text-sm font-medium text-white">{colorName}</p>
-              <p className="text-xs text-white opacity-80">{color.hex}</p>
-            </div> */}
           </div>
         </div>
 

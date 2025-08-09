@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usePaletteStore } from "@/stores/palette-store";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -10,23 +10,29 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
-import { Slider } from "./ui/slider";
-import { Save, Share, Upload, Palette } from "lucide-react";
+
+import { Save, Share, Upload } from "lucide-react";
 import { toast } from "sonner";
 import { ImageUploader } from "./image-uploader";
+import { DebouncedSlider } from "./ui/debounced-slider";
 
 export function PaletteControls() {
-  const [paletteSize, setPaletteSize] = useState([5]);
+  const { currentPalette, generateNewPalette, savePalette } = usePaletteStore();
+  const [paletteSize, setPaletteSize] = useState(currentPalette.length);
   const [paletteName, setPaletteName] = useState("");
   const [isSaveOpen, setIsSaveOpen] = useState(false);
   const [isUploadOpen, setIsUploadOpen] = useState(false);
 
-  const { currentPalette, generateNewPalette, savePalette } = usePaletteStore();
 
-  const handleSizChange = (value: number[]) => {
-    setPaletteSize(value);
+  const handleSizeChange = (value: number[]) => {
     generateNewPalette(value[0]);
+    setPaletteSize(value[0]); // so the change looks immediate, without waiting for the useEffect
   };
+
+  useEffect(() => {
+    console.log('yooo change in controls');
+    setPaletteSize(currentPalette.length);
+  }, [currentPalette]);
 
   const handleSave = async () => {
     if (!paletteName.trim()) {
@@ -60,12 +66,10 @@ export function PaletteControls() {
     <div className="mb-8 flex flex-wrap justify-center gap-4">
       {/* Palette Size Control */}
       <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-gray-800">
-        <Label className="mb-2 block text-sm font-medium">
-          Palette Size: {paletteSize[0]} colors
-        </Label>
-        <Slider
-          value={paletteSize}
-          onValueChange={handleSizChange}
+        <DebouncedSlider
+          value={[paletteSize]}
+          onChange={handleSizeChange}
+          debounce={500}
           max={16}
           min={2}
           step={1}

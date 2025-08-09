@@ -31,8 +31,9 @@ export function generateHarmoniousPalette(
 
   // Shuffle and take required count
   const shuffled = schemes.sort(() => Math.random() - 0.5);
+  console.log(count, shuffled.length);
   colors.push(...shuffled.slice(0, count - 1));
-
+  console.log(colors);
   return colors.slice(0, count);
 }
 
