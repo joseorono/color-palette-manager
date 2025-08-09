@@ -51,7 +51,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <main className="container py-8">
+    <section className="container py-8">
       <PaletteDashboard
         palettes={palettes}
         isLoading={isLoading}
@@ -61,6 +61,6 @@ export default function DashboardPage() {
         onToggleFavorite={handleToggleFavorite}
         onViewPalette={handleViewPalette}
       />
-    </main>
+    </section>
   )
 }
