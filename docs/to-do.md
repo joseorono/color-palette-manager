@@ -11,14 +11,14 @@
 - [ ] Look for a way to improve generateHarminousPalette() so that it actually takes into account the existing colors and the desired count (it's currently only using 'count' as a maximum, but caps at 10). - Taken by Carlos and Jose
 
 ## 🏗 Core Functionality
-- [ ] Implement **spacebar** trigger to generate random palettes
+- [x] Implement **spacebar** trigger to generate random palettes
 - [x] Add **lock color** feature to preserve selected colors while regenerating others
 - [x] Ensure harmonization of newly generated colors with locked selections
 - [x] Implement **export in multiple formats** (CSS, JSON, SVG, PNG, SCSS, Tailwind, DaisyUI, Shadcn/UI)
 - [ ] Implement **import palettes** from supported formats
 - [ ] Create **shareable link** functionality for palettes (like Coolors) - This is already implemented but it's too basic and doesn't share all the palette data, only the colors.
 - [ ] Implement Color Naming using color name libraries or large JSON dataset.
-- [ ] Implement Color Roles (Primary-light, Secondary-dark, Accent, Warning, etc.)
+- [x] Implement Color Roles (Primary-light, Secondary-dark, Accent, Warning, etc.)
 - [ ] Implement **Layout components** with their own directory.
 ---
 
@@ -41,7 +41,7 @@
   - [x] Fields for brightness, contrast, hue, saturation, etc.
 - [ ] **Palette Playground** (WIP)
   - [x] Component playground using the user’s palette - WIP
-- [ ] **Color Roles in Palette Editor** (Primary-light, Secondary-dark, Accent, Warning, etc.)
+- [x] **Color Roles in Palette Editor** (Primary-light, Secondary-dark, Accent, Warning, etc.) //why does this show up like three times?
 
 ---
 
