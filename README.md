@@ -36,8 +36,10 @@ Export your palettes in multiple formats for different use cases:
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js 18+ 
+- Node.js 18+
 - npm or yarn
+- A reasonably up-to-date browser that supports ES6 features, CSS variables, SVG images, and IndexedDB. Pretty much any modern browser or Android device meets these requirements. [See Compatibility Chart for IndexedDB](https://caniuse.com/indexeddb).
+
 
 ### Installation
 
@@ -81,6 +83,7 @@ npm run electron-build-all
 - **Zustand** - Lightweight state management
 - **React Hook Form** - Performant form handling
 - **Zod** - Schema validation
+- **Dexie.js** - IndexedDB wrapper for offline storage.
 
 ### Testing
 - **Vitest** - Fast unit testing framework
@@ -89,7 +92,6 @@ npm run electron-build-all
 ### Development Tools
 - **ESLint** - Code linting
 - **Prettier** - Code formatting
-- **TypeScript** - Static type checking
 
 ## 📁 Project Structure
 
@@ -164,11 +166,7 @@ npm run electron-build   # Build Electron app
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+We're open to contributions! Please open an issue or submit a pull request.
 
 ### Development Guidelines
 - Write tests for new features
@@ -194,4 +192,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-Made with ❤️ for designers and developers who love beautiful colors.
+Made with ❤️.

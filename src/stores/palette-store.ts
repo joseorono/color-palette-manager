@@ -95,13 +95,13 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
   },
 
   savePalette: async (name: string, isPublic = false) => {
-    // TODO: Implement Supabase integration
+    // ToDo: Save palette in DB
     const { currentPalette } = get();
     console.log("Saving palette:", { name, colors: currentPalette, isPublic });
   },
 
   loadSavedPalettes: async () => {
-    // TODO: Implement Supabase integration
+    // ToDo: Load palettes from DB
     console.log("Loading saved palettes...");
   },
 

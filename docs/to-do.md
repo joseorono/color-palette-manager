@@ -4,6 +4,9 @@
 - [ ] Fix Existing Functionality
 - [ ] Enable PWA features
 - [ ] Implement IndexedDB with Dexie.js (https://dexie.org/)
+- [ ] The root `/app` directory should only contain route files. All other components should be moved to a separate `/components` directory, with layout components in their own `/layout` subdirectory.
+- [ ] Implement Them Switcher in the Layout component (remember we're using Shadcn/UI's default theme system) - https://ui.shadcn.com/docs/dark-mode/vite
+- [ ] The index page should be a static landing page with marketing content, not the palette generator itself. The app itself should be moved to a separate route like `localhost:5173/app/`.
 
 ## 🏗 Core Functionality
 - [ ] Implement **spacebar** trigger to generate random palettes
@@ -34,15 +37,15 @@
   - [x] Lock/unlock colors
 - [x] **Color Editor Modal**
   - [x] Fields for brightness, contrast, hue, saturation, etc.
-- [ ] **Palette Playground**
-  - [ ] Static landing page to be used as a demo
-  - [ ] Component playground using the user’s palette
+- [ ] **Palette Playground** (WIP)
+  - [ ] Static landing page to be used as a demo - WIP
+  - [x] Component playground using the user’s palette - WIP
+- [ ] **Color Roles in Palette Editor** (Primary-light, Secondary-dark, Accent, Warning, etc.)
 
 ---
 
 ## 📤 Export / 📥 Import
-- [ ] Create export previews with format icons
-- [ ] Implement download button for each format
+- [ ] Add a Side-Pane to the Export Modal with a preview of the palette in the selected format. - Taken by Jose
 - [x] Implement Export formats:
   - [x] CSS
   - [x] JSON
@@ -52,7 +55,7 @@
   - [x] Tailwind config
   - [x] DaisyUI config
   - [x] Shadcn/UI config
-- Test Export formats (don't spend too much time on this)
+- [ ] Test Export formats (don't spend too much time on this)
 
 ---
 
@@ -62,17 +65,26 @@
 - [ ] Accessibility utilities (contrast checker, WCAG compliance)
 - [x] Abstract palette preview generation (currently tied to a modal)
 - [x] Abstract export functions for all formats
+- [ ] Move color conversion functions to use color-conversion.ts and add tests (there are some inside components).
 
 ---
 
 ## 🖥 Components / Views
-- [ ] **Galería de paletas** (dashboard view)
+
+Only mark once it's feature-complet and prepared for beta-testing.
+
+- [ ] **Galería de paletas** (dashboard view) - Taken by Mauricio
 - [ ] **Palette View** (read-only)
-- [ ] **Palette Editor View**
-- [ ] **Color Editor Modal**
-- [ ] **Export Modal** (icons, preview, download)
-- [ ] **Landing Page** (trial/demo)
-- [ ] **Palette Playground**
-- [ ] **Layout component**
+- [ ] **Palette Editor View** - Taken by Jose
+- [ ] **Color Editor Modal** - Taken by Carlos
+- [ ] **Palette Export Modal** - Taken by Jose
+- [ ] **Palette Import Modal**
+- [ ] **Landing Page** (static, marketing)
+- [ ] **Palette Playground** - Taken by Jose
+- [ ] **Layout component** - Taken by Mauricio
 
 ---
+
+## Future Features
+- [ ] **Gradient Generation**
+- [ ] **Shade Generation**, with 9 or 10 shades for each color so it's usable for Tailwind Colors.

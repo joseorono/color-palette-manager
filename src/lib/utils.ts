@@ -5,7 +5,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-// Helper function for debounce
 export function debounce<T extends (...args: any[]) => any>(
   func: T,
   wait: number
@@ -16,4 +15,8 @@ export function debounce<T extends (...args: any[]) => any>(
     if (timeout) clearTimeout(timeout);
     timeout = setTimeout(() => func(...args), wait);
   };
+}
+
+export function bin2bool(value: number): boolean {
+  return value === 1;
 }

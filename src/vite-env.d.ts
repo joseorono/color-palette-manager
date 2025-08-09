@@ -2,8 +2,7 @@
 /// <reference types="vite-plugin-svgr/client" />
 
 interface ImportMetaEnv {
-  readonly VITE_SUPABASE_URL: string;
-  readonly VITE_SUPABASE_ANON_KEY: string;
+  // Supabase environment variables removed - app is now offline-first
 }
 
 interface ImportMeta {
