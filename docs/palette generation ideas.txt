@@ -1,0 +1,89 @@
+
+ideas for generateHarmoniousPalette():
+
+# Current Code
+
+```ts
+export function generateHarmoniousPalette(
+  baseColor?: string,
+  count: number = 5
+): string[] {
+  const base = baseColor ? chroma(baseColor) : chroma.random();
+  const colors: string[] = [base.hex()];
+
+  // Generate complementary, triadic, and analogous colors
+  const schemes = [
+    // Analogous colors
+    base.set("hsl.h", "+30").hex(),
+    base.set("hsl.h", "-30").hex(),
+    // Complementary
+    base.set("hsl.h", "+180").hex(),
+    // Triadic
+    base.set("hsl.h", "+120").hex(),
+    base.set("hsl.h", "-120").hex(),
+    // Variations
+    base.set("hsl.l", "*0.8").hex(),
+    base.set("hsl.l", "*1.2").hex(),
+    base.set("hsl.s", "*0.7").hex(),
+    base.set("hsl.s", "*1.3").hex(),
+  ];
+
+  // Shuffle and take required count
+  const shuffled = schemes.sort(() => Math.random() - 0.5);
+  console.log(count, shuffled.length);
+  colors.push(...shuffled.slice(0, count - 1));
+  console.log(colors);
+  return colors.slice(0, count);
+}
+
+```
+
+# Fuzzy Checking
+
+fuzzy-check = Verificar en base a la diferencia perceptual o distancia euclidiana entre colores. Hacen falta funciones para esto.
+https://culorijs.org/api/#differenceEuclidean
+
+https://chatgpt.com/share/6897a72e-9080-8000-9806-bbe295eb819e
+
+If you want perceptual accuracy → Use LAB + ΔE (via culori, color-difference, or color-diff).
+
+José Oroño, [8/9/2025 2:53 PM]
+If you want perceptual accuracy → Use LAB + ΔE (via culori, color-difference, or color-diff).
+
+# Algorythm
+
+- Crear paletteUtil.getBaseColor(Color[] colors): Color[],
+    - it gets the primary color, or the first color.
+
+- Agregar argumento de existingColors: Color[]
+- If no baseColorArg, generate random color.
+- Calculate colorsToGenerate
+    - Check if baseColor is in existingColors
+        - If it isn't, add it to existingColors
+    - Check count is equal than existingColors.length
+        - If count == existingColors.length, return existingColors early
+        - if count < existingColors.length, return existingColors.slice(0, count) early
+
+- By this Point, we know count is greater than existingColors.length
+
+- Convert existingColors to RBG colors using .map() for easier fuzzy checking
+
+- Calculate how many more colors are needed to reach count, save it in countToGenerate
+
+- Declare priorityColorsDuringGeneration: string[] = ["white", "black", "complementary", "analogous", "variations"]
+
+Do all the follow inside a loop that iterates through priorityColorsDuringGeneration, using a switch case:
+
+- Check if existingColors already has a variant of white within a threshold
+    - If it does, skip it
+- Check if existingColors already has a variant of black within a threshold
+    - If it does, skip it
+- Generate the complementary color, fuzzy-check if it's in existingColors
+    - If it is, skip it
+- Generate the analogous color, fuzzy-check if it's in existingColors
+    - If it is, skip it
+- Generate the variations color, fuzzy-check if it's in existingColors
+    - If it is, skip it
+
+
+
