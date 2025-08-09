@@ -40,7 +40,7 @@ export function generateHarmoniousPalette(
 
 # Fuzzy Checking
 
-fuzzy-check = Verificar en base a la diferencia perceptual o distancia euclidiana entre colores. Hacen falta funciones para esto.
+fuzzy-check = Verify based on perceptual difference or Euclidean distance between colors. Functions are needed for this.
 https://culorijs.org/api/#differenceEuclidean
 
 https://chatgpt.com/share/6897a72e-9080-8000-9806-bbe295eb819e
@@ -64,10 +64,10 @@ If you want perceptual accuracy → Use LAB + ΔE (via culori, color-difference,
 
 # Algorithm
 
-- Crear paletteUtil.getBaseColor(Color[] colors): Color[],
+- Create paletteUtil.getBaseColor(Color[] colors): Color[],
     - it gets the primary color, or the first color.
 
-- Agregar argumento de existingColors: Color[]
+- Add function argument existingColors: Color[]
 - If no baseColorArg, generate random color.
 - Calculate colorsToGenerate
     - Check if baseColor is in existingColors
