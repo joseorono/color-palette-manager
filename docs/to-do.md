@@ -40,11 +40,12 @@
 - [ ] **Palette Playground** (WIP)
   - [ ] Static landing page to be used as a demo - WIP
   - [x] Component playground using the user’s palette - WIP
+- [ ] **Color Roles in Palette Editor** (Primary-light, Secondary-dark, Accent, Warning, etc.)
 
 ---
 
 ## 📤 Export / 📥 Import
-- [ ] Add a Side-Pane to the Export Modal with a preview of the palette in the selected format.
+- [ ] Add a Side-Pane to the Export Modal with a preview of the palette in the selected format. - Taken by Jose
 - [x] Implement Export formats:
   - [x] CSS
   - [x] JSON
@@ -64,17 +65,26 @@
 - [ ] Accessibility utilities (contrast checker, WCAG compliance)
 - [x] Abstract palette preview generation (currently tied to a modal)
 - [x] Abstract export functions for all formats
+- [ ] Move color conversion functions to use color-conversion.ts and add tests (there are some inside components).
 
 ---
 
 ## 🖥 Components / Views
-- [x] **Galería de paletas** (dashboard view)
+
+Only mark once it's feature-complet and prepared for beta-testing.
+
+- [ ] **Galería de paletas** (dashboard view) - Taken by Mauricio
 - [ ] **Palette View** (read-only)
-- [ ] **Palette Editor View**
-- [ ] **Color Editor Modal**
-- [ ] **Export Modal** (icons, preview, download)
+- [ ] **Palette Editor View** - Taken by Jose
+- [ ] **Color Editor Modal** - Taken by Carlos
+- [ ] **Palette Export Modal** - Taken by Jose
+- [ ] **Palette Import Modal**
 - [ ] **Landing Page** (static, marketing)
-- [ ] **Palette Playground**
-- [ ] **Layout component**
+- [ ] **Palette Playground** - Taken by Jose
+- [ ] **Layout component** - Taken by Mauricio
 
 ---
+
+## Future Features
+- [ ] **Gradient Generation**
+- [ ] **Shade Generation**, with 9 or 10 shades for each color so it's usable for Tailwind Colors.
