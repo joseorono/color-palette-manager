@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Color } from "@/types/palette";
+import { Color, ColorRole } from "@/types/palette";
 import { usePaletteStore } from "@/stores/palette-store";
 import { ColorPicker } from "./color-picker";
+import { RoleAssigner } from "./role-assigner";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
-import { Lock, Unlock, Trash2, Copy, Eye } from "lucide-react";
-import { getColorName, getContrastRatio } from "@/lib/color-utils";
+import { Lock, Unlock, Trash2, Copy } from "lucide-react";
+import { getColorName } from "@/lib/color-utils";
 import { cn } from "@/lib/utils";
 
 interface ColorCardProps {
@@ -15,7 +16,7 @@ interface ColorCardProps {
 export function ColorCard({ color }: ColorCardProps) {
   const [isPickerOpen, setIsPickerOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-  const { toggleColorLock, updateColor, removeColor, currentPalette } =
+  const { toggleColorLock, updateColor, removeColor, assignColorRole, getAssignedRoles, currentPalette } =
     usePaletteStore();
 
   const copyToClipboard = async () => {
@@ -27,8 +28,8 @@ export function ColorCard({ color }: ColorCardProps) {
     }
   };
 
-  const textColor =
-    getContrastRatio(color.hex, "#ffffff") > 3 ? "#ffffff" : "#000000";
+  // const textColor =
+  //   getContrastRatio(color.hex, "#ffffff") > 3 ? "#ffffff" : "#000000";
   const colorName = getColorName(color.hex);
 
   return (
@@ -103,34 +104,29 @@ export function ColorCard({ color }: ColorCardProps) {
         {/* Color Info Bar */}
         <div className="mt-2 rounded-lg bg-white p-3 shadow-sm dark:bg-gray-800">
           <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-900 dark:text-white">
-                {color.hex}
-              </p>
+            <div className="flex-1">
+              <div className="flex items-center gap-2">
+                <p className="text-sm font-medium text-gray-900 dark:text-white">
+                  {color.hex}
+                </p>
+                {color.role && (
+                  <span className="inline-flex items-center rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                    {color.role}
+                  </span>
+                )}
+              </div>
               <p className="text-xs text-gray-500 dark:text-gray-400">
                 {colorName}
               </p>
             </div>
 
-            {/* <div className="flex gap-1">
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={copyToClipboard}
-                className="h-8 w-8 p-0"
-              >
-                <Copy className="h-3 w-3" />
-              </Button>
-
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={() => setIsPickerOpen(true)}
-                className="h-8 w-8 p-0"
-              >
-                <Eye className="h-3 w-3" />
-              </Button>
-            </div> */}
+            <div className="flex items-center gap-1">
+              <RoleAssigner
+                currentRole={color.role}
+                onRoleAssign={(role: ColorRole | undefined) => assignColorRole(color.id, role)}
+                assignedRoles={getAssignedRoles()}
+              />
+            </div>
           </div>
         </div>
 

@@ -1,9 +1,10 @@
 import { create } from "zustand";
-import { Color, Palette } from "@/types/palette";
+import { Color, Palette, ColorRole } from "@/types/palette";
 import {
   generateHarmoniousPalette,
   generateRandomColor,
 } from "@/lib/color-utils";
+import { toast } from "sonner";
 
 interface PaletteStore {
   currentPalette: Color[];
@@ -15,6 +16,8 @@ interface PaletteStore {
   regenerateUnlocked: () => void;
   toggleColorLock: (colorId: string) => void;
   updateColor: (colorId: string, hex: string) => void;
+  assignColorRole: (colorId: string, role: ColorRole | undefined) => void;
+  getAssignedRoles: () => Set<ColorRole>;
   addColor: () => void;
   removeColor: (colorId: string) => void;
   savePalette: (name: string, isPublic?: boolean) => Promise<void>;
@@ -71,6 +74,39 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
       color.id === colorId ? { ...color, hex } : color
     );
     set({ currentPalette: newPalette });
+  },
+
+  assignColorRole: (colorId: string, role: ColorRole | undefined) => {
+    const { currentPalette } = get();
+    
+    // If assigning a role (not removing), check if it's already assigned to another color
+    if (role) {
+      const existingColorWithRole = currentPalette.find(
+        (color) => color.role === role && color.id !== colorId
+      );
+      
+      if (existingColorWithRole) {
+        toast.warning(`The role "${role}" is already assigned to another color. Please remove it first or choose a different role.`);
+        return;
+      }
+    }
+    
+    // Update only the target color with the new role
+    const newPalette = currentPalette.map((color) =>
+      color.id === colorId ? { ...color, role } : color
+    );
+    set({ currentPalette: newPalette });
+  },
+
+  getAssignedRoles: () => {
+    const { currentPalette } = get();
+    const assignedRoles = new Set<ColorRole>();
+    currentPalette.forEach((color) => {
+      if (color.role) {
+        assignedRoles.add(color.role);
+      }
+    });
+    return assignedRoles;
   },
 
   addColor: () => {
