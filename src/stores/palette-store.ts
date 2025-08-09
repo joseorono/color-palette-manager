@@ -14,7 +14,7 @@ interface PaletteStore {
   generateNewPalette: (count?: number) => void;
   regenerateUnlocked: () => void;
   toggleColorLock: (colorId: string) => void;
-  updateColor: (colorId: string, hex: string) => void;
+  updateColor: (colorId: string, updates: Partial<Pick<Color, 'hex' | 'role' | 'name'>>) => void;
   addColor: () => void;
   removeColor: (colorId: string) => void;
   savePalette: (name: string, isPublic?: boolean) => Promise<void>;
@@ -51,6 +51,7 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
         if (color.locked) return color;
         return { ...color, hex: generateRandomColor() };
       });
+      
 
       set({ currentPalette: newPalette, isGenerating: false });
     }, 300);
@@ -64,13 +65,31 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
     set({ currentPalette: newPalette });
   },
 
-  updateColor: (colorId: string, hex: string) => {
+  updateColor: (colorId: string, updates: Partial<Pick<Color, 'hex' | 'role' | 'name'>>) => {
     const { currentPalette } = get();
+    
+    // If updating role (not removing), check if it's already assigned to another color
+    if (updates.role !== undefined && updates.role !== null) {
+      const existingColorWithRole = currentPalette.find(
+        (color) => color.role === updates.role && color.id !== colorId
+      );
+      
+      if (existingColorWithRole) {
+        //TOOD: instead of a console.error(), show a toast.
+        // toast.warning(`The role "${updates.role}" is already assigned to another color. Please remove it first or choose a different role.`);
+        console.error(`The role "${updates.role}" is already assigned to another color. Please remove it first or choose a different role.`);
+        return;
+      }
+    }
+    
+    // Update the target color with the provided updates
     const newPalette = currentPalette.map((color) =>
-      color.id === colorId ? { ...color, hex } : color
+      color.id === colorId ? { ...color, ...updates } : color
     );
     set({ currentPalette: newPalette });
   },
+
+
 
   addColor: () => {
     const { currentPalette } = get();

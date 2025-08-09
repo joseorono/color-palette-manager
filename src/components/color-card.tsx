@@ -1,12 +1,13 @@
 import { useState } from "react";
-import { Color } from "@/types/palette";
+import { Color, ColorRole } from "@/types/palette";
 import { usePaletteStore } from "@/stores/palette-store";
 import { ColorPicker } from "./color-picker";
+import { RoleAssigner } from "./role-assigner";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
-import { Lock, Unlock, Trash2, Copy, Eye } from "lucide-react";
-import { getColorName, getContrastRatio } from "@/lib/color-utils";
-import { cn } from "@/lib/utils";
+import { Lock, Unlock, Trash2, Copy } from "lucide-react";
+import { getColorName } from "@/lib/color-utils";
+import { cn, getAssignedRoles } from "@/lib/utils";
 
 interface ColorCardProps {
   color: Color;
@@ -27,8 +28,8 @@ export function ColorCard({ color }: ColorCardProps) {
     }
   };
 
-  const textColor =
-    getContrastRatio(color.hex, "#ffffff") > 3 ? "#ffffff" : "#000000";
+  // const textColor =
+  //   getContrastRatio(color.hex, "#ffffff") > 3 ? "#ffffff" : "#000000";
   const colorName = getColorName(color.hex);
 
   return (
@@ -72,7 +73,10 @@ export function ColorCard({ color }: ColorCardProps) {
               <Button
                 size="sm"
                 variant="ghost"
-                onClick={copyToClipboard}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  copyToClipboard();
+                }}  
                 className="text-white hover:bg-white hover:bg-opacity-20"
               >
                 <Copy className="h-4 w-4" />
@@ -94,45 +98,35 @@ export function ColorCard({ color }: ColorCardProps) {
               )}
             </div>
 
-            {/* Bottom Info */}
-            {/* <div className="text-center">
-              <p className="mb-1 text-sm font-medium text-white">{colorName}</p>
-              <p className="text-xs text-white opacity-80">{color.hex}</p>
-            </div> */}
           </div>
         </div>
 
         {/* Color Info Bar */}
         <div className="mt-2 rounded-lg bg-white p-3 shadow-sm dark:bg-gray-800">
           <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-900 dark:text-white">
-                {color.hex}
-              </p>
+            <div className="flex-1">
+              <div className="flex items-center gap-2">
+                <p className="text-sm font-medium text-gray-900 dark:text-white">
+                  {color.hex}
+                </p>
+                {color.role && (
+                  <span className="inline-flex items-center rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                    {color.role}
+                  </span>
+                )}
+              </div>
               <p className="text-xs text-gray-500 dark:text-gray-400">
                 {colorName}
               </p>
             </div>
 
-            {/* <div className="flex gap-1">
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={copyToClipboard}
-                className="h-8 w-8 p-0"
-              >
-                <Copy className="h-3 w-3" />
-              </Button>
-
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={() => setIsPickerOpen(true)}
-                className="h-8 w-8 p-0"
-              >
-                <Eye className="h-3 w-3" />
-              </Button>
-            </div> */}
+            <div className="flex items-center gap-1">
+              <RoleAssigner
+                currentRole={color.role}
+                onRoleAssign={(role: ColorRole | undefined) => updateColor(color.id, { role })}
+                assignedRoles={getAssignedRoles(currentPalette)}
+              />
+            </div>
           </div>
         </div>
 
@@ -149,7 +143,7 @@ export function ColorCard({ color }: ColorCardProps) {
         isOpen={isPickerOpen}
         onClose={() => setIsPickerOpen(false)}
         color={color.hex}
-        onColorChange={(newColor) => updateColor(color.id, newColor)}
+        onColorChange={(newColor) => updateColor(color.id, { hex: newColor })}
       />
     </>
   );
