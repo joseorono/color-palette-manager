@@ -1,10 +1,9 @@
 import { create } from "zustand";
-import { Color, Palette, ColorRole } from "@/types/palette";
+import { Color, Palette } from "@/types/palette";
 import {
   generateHarmoniousPalette,
   generateRandomColor,
 } from "@/lib/color-utils";
-import { toast } from "sonner";
 
 interface PaletteStore {
   currentPalette: Color[];
@@ -15,9 +14,7 @@ interface PaletteStore {
   generateNewPalette: (count?: number) => void;
   regenerateUnlocked: () => void;
   toggleColorLock: (colorId: string) => void;
-  updateColor: (colorId: string, hex: string) => void;
-  assignColorRole: (colorId: string, role: ColorRole | undefined) => void;
-  getAssignedRoles: () => Set<ColorRole>;
+  updateColor: (colorId: string, updates: Partial<Pick<Color, 'hex' | 'role' | 'name'>>) => void;
   addColor: () => void;
   removeColor: (colorId: string) => void;
   savePalette: (name: string, isPublic?: boolean) => Promise<void>;
@@ -68,46 +65,30 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
     set({ currentPalette: newPalette });
   },
 
-  updateColor: (colorId: string, hex: string) => {
-    const { currentPalette } = get();
-    const newPalette = currentPalette.map((color) =>
-      color.id === colorId ? { ...color, hex } : color
-    );
-    set({ currentPalette: newPalette });
-  },
-
-  assignColorRole: (colorId: string, role: ColorRole | undefined) => {
+  updateColor: (colorId: string, updates: Partial<Pick<Color, 'hex' | 'role' | 'name'>>) => {
     const { currentPalette } = get();
     
-    // If assigning a role (not removing), check if it's already assigned to another color
-    if (role) {
+    // If updating role (not removing), check if it's already assigned to another color
+    if (updates.role !== undefined && updates.role !== null) {
       const existingColorWithRole = currentPalette.find(
-        (color) => color.role === role && color.id !== colorId
+        (color) => color.role === updates.role && color.id !== colorId
       );
       
       if (existingColorWithRole) {
-        toast.warning(`The role "${role}" is already assigned to another color. Please remove it first or choose a different role.`);
+        console.error(`The role "${updates.role}" is already assigned to another color. Please remove it first or choose a different role.`);
+        // toast.warning(`The role "${updates.role}" is already assigned to another color. Please remove it first or choose a different role.`);
         return;
       }
     }
     
-    // Update only the target color with the new role
+    // Update the target color with the provided updates
     const newPalette = currentPalette.map((color) =>
-      color.id === colorId ? { ...color, role } : color
+      color.id === colorId ? { ...color, ...updates } : color
     );
     set({ currentPalette: newPalette });
   },
 
-  getAssignedRoles: () => {
-    const { currentPalette } = get();
-    const assignedRoles = new Set<ColorRole>();
-    currentPalette.forEach((color) => {
-      if (color.role) {
-        assignedRoles.add(color.role);
-      }
-    });
-    return assignedRoles;
-  },
+
 
   addColor: () => {
     const { currentPalette } = get();

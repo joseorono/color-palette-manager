@@ -7,7 +7,7 @@ import { Button } from "./ui/button";
 import { toast } from "sonner";
 import { Lock, Unlock, Trash2, Copy } from "lucide-react";
 import { getColorName } from "@/lib/color-utils";
-import { cn } from "@/lib/utils";
+import { cn, getAssignedRoles } from "@/lib/utils";
 
 interface ColorCardProps {
   color: Color;
@@ -16,7 +16,7 @@ interface ColorCardProps {
 export function ColorCard({ color }: ColorCardProps) {
   const [isPickerOpen, setIsPickerOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-  const { toggleColorLock, updateColor, removeColor, assignColorRole, getAssignedRoles, currentPalette } =
+  const { toggleColorLock, updateColor, removeColor, currentPalette } =
     usePaletteStore();
 
   const copyToClipboard = async () => {
@@ -123,8 +123,8 @@ export function ColorCard({ color }: ColorCardProps) {
             <div className="flex items-center gap-1">
               <RoleAssigner
                 currentRole={color.role}
-                onRoleAssign={(role: ColorRole | undefined) => assignColorRole(color.id, role)}
-                assignedRoles={getAssignedRoles()}
+                onRoleAssign={(role: ColorRole | undefined) => updateColor(color.id, { role })}
+                assignedRoles={getAssignedRoles(currentPalette)}
               />
             </div>
           </div>
@@ -143,7 +143,7 @@ export function ColorCard({ color }: ColorCardProps) {
         isOpen={isPickerOpen}
         onClose={() => setIsPickerOpen(false)}
         color={color.hex}
-        onColorChange={(newColor) => updateColor(color.id, newColor)}
+        onColorChange={(newColor) => updateColor(color.id, { hex: newColor })}
       />
     </>
   );
