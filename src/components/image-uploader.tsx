@@ -4,7 +4,7 @@ import { usePaletteStore } from "@/stores/palette-store";
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { Slider } from "./ui/slider";
-import { extractColorsFromImage } from "@/lib/color-utils";
+import { ColorUtils } from "@/lib/color-utils";
 import { Upload, X } from "lucide-react";
 import { toast } from "sonner";
 
@@ -40,7 +40,7 @@ export function ImageUploader({ onClose }: ImageUploaderProps) {
             canvas.height
           );
           if (imageData) {
-            const colors = await extractColorsFromImage(
+            const colors = await ColorUtils.extractColorsFromImage(
               imageData,
               colorCount[0]
             );

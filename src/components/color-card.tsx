@@ -6,7 +6,7 @@ import { RoleAssigner } from "./role-assigner";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
 import { Lock, Unlock, Trash2, Copy } from "lucide-react";
-import { getColorName } from "@/lib/color-utils";
+import { ColorUtils } from "@/lib/color-utils";
 import { cn, getAssignedRoles } from "@/lib/utils";
 
 interface ColorCardProps {
@@ -30,7 +30,7 @@ export function ColorCard({ color }: ColorCardProps) {
 
   // const textColor =
   //   getContrastRatio(color.hex, "#ffffff") > 3 ? "#ffffff" : "#000000";
-  const colorName = getColorName(color.hex);
+  const colorName = ColorUtils.getColorName(color.hex);
 
   return (
     <>
@@ -76,7 +76,7 @@ export function ColorCard({ color }: ColorCardProps) {
                 onClick={(e) => {
                   e.stopPropagation();
                   copyToClipboard();
-                }}  
+                }}
                 className="text-white hover:bg-white hover:bg-opacity-20"
               >
                 <Copy className="h-4 w-4" />

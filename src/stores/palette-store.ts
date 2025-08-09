@@ -1,9 +1,6 @@
 import { create } from "zustand";
 import { Color, Palette } from "@/types/palette";
-import {
-  generateHarmoniousPalette,
-  generateRandomColor,
-} from "@/lib/color-utils";
+import { ColorUtils } from "@/lib/color-utils";
 
 interface PaletteStore {
   currentPalette: Color[];
@@ -31,7 +28,7 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
     set({ isGenerating: true });
 
     setTimeout(() => {
-      const colors = generateHarmoniousPalette(undefined, count);
+      const colors = ColorUtils.generateHarmoniousPalette(undefined, count);
       const palette: Color[] = colors.map((hex, index) => ({
         id: `color-${index}-${Date.now()}`,
         hex,
@@ -49,9 +46,9 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
     setTimeout(() => {
       const newPalette = currentPalette.map((color) => {
         if (color.locked) return color;
-        return { ...color, hex: generateRandomColor() };
+        return { ...color, hex: ColorUtils.generateRandomColor() };
       });
-      
+
 
       set({ currentPalette: newPalette, isGenerating: false });
     }, 300);
@@ -67,13 +64,13 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
 
   updateColor: (colorId: string, updates: Partial<Pick<Color, 'hex' | 'role' | 'name'>>) => {
     const { currentPalette } = get();
-    
+
     // If updating role (not removing), check if it's already assigned to another color
     if (updates.role !== undefined && updates.role !== null) {
       const existingColorWithRole = currentPalette.find(
         (color) => color.role === updates.role && color.id !== colorId
       );
-      
+
       if (existingColorWithRole) {
         //TOOD: instead of a console.error(), show a toast.
         // toast.warning(`The role "${updates.role}" is already assigned to another color. Please remove it first or choose a different role.`);
@@ -81,7 +78,7 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
         return;
       }
     }
-    
+
     // Update the target color with the provided updates
     const newPalette = currentPalette.map((color) =>
       color.id === colorId ? { ...color, ...updates } : color
@@ -97,7 +94,7 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
 
     const newColor: Color = {
       id: `color-${currentPalette.length}-${Date.now()}`,
-      hex: generateRandomColor(),
+      hex: ColorUtils.generateRandomColor(),
       locked: false,
     };
 

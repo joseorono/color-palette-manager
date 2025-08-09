@@ -3,11 +3,7 @@ import { HexColorPicker, HexColorInput } from "react-colorful";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
-import {
-  generateShades,
-  getColorName,
-  getContrastRatio,
-} from "@/lib/color-utils";
+import { ColorUtils } from "@/lib/color-utils";
 
 interface ColorPickerProps {
   isOpen: boolean;
@@ -28,12 +24,12 @@ export function ColorPicker({
   useEffect(() => {
     if (isOpen) {
       setTempColor(color);
-      setShades(generateShades(color));
+      setShades(ColorUtils.generateShades(color));
     }
   }, [isOpen, color]);
 
   useEffect(() => {
-    setShades(generateShades(tempColor));
+    setShades(ColorUtils.generateShades(tempColor));
   }, [tempColor]);
 
   const handleSave = () => {
@@ -41,9 +37,9 @@ export function ColorPicker({
     onClose();
   };
 
-  const colorName = getColorName(tempColor);
-  const contrastWhite = getContrastRatio(tempColor, "#ffffff");
-  const contrastBlack = getContrastRatio(tempColor, "#000000");
+  const colorName = ColorUtils.getColorName(tempColor);
+  const contrastWhite = ColorUtils.getContrastRatio(tempColor, "#ffffff");
+  const contrastBlack = ColorUtils.getContrastRatio(tempColor, "#000000");
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
