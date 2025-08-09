@@ -7,6 +7,7 @@
 - [ ] The root `/app` directory should only contain route files. All other components should be moved to a separate `/components` directory, with layout components in their own `/layout` subdirectory.
 - [ ] Implement Them Switcher in the Layout component (remember we're using Shadcn/UI's default theme system) - https://ui.shadcn.com/docs/dark-mode/vite
 - [ ] The index page should be a static landing page with marketing content, not the palette generator itself. The app itself should be moved to a separate route like `localhost:5173/app/`.
+- [ ] Resizing a palette (changing its number of colors) should not regenerate all colors. It should preserve existing colors and only add or remove colors as needed. - Taken by Carlos
 
 ## 🏗 Core Functionality
 - [x] Implement **spacebar** trigger to generate random palettes
@@ -33,12 +34,11 @@
 
 ## 🎨 Palette & Color Editing
 - [x] **Palette Editor**
-  - [ ] Drag-and-drop colors to reorder
+  - [ ] Drag-and-drop colors to reorder - Taken by Carlos
   - [x] Lock/unlock colors
 - [x] **Color Editor Modal**
   - [x] Fields for brightness, contrast, hue, saturation, etc.
 - [ ] **Palette Playground** (WIP)
-  - [ ] Static landing page to be used as a demo - WIP
   - [x] Component playground using the user’s palette - WIP
 - [x] **Color Roles in Palette Editor** (Primary-light, Secondary-dark, Accent, Warning, etc.) //why does this show up like three times?
 
@@ -71,7 +71,7 @@
 
 ## 🖥 Components / Views
 
-Only mark once it's feature-complet and prepared for beta-testing.
+Only mark once it's feature-complete and prepared for beta-testing.
 
 - [ ] **Galería de paletas** (dashboard view) - Taken by Mauricio
 - [ ] **Palette View** (read-only)
