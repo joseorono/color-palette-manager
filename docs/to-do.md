@@ -8,6 +8,7 @@
 - [ ] Implement Them Switcher in the Layout component (remember we're using Shadcn/UI's default theme system) - https://ui.shadcn.com/docs/dark-mode/vite
 - [ ] The index page should be a static landing page with marketing content, not the palette generator itself. The app itself should be moved to a separate route like `localhost:5173/app/`.
 - [ ] Resizing a palette (changing its number of colors) should not regenerate all colors. It should preserve existing colors and only add or remove colors as needed. - Taken by Carlos
+- [ ] Look for a way to improve generateHarminousPalette() so that it actually takes into account the existing colors and the desired count (it's currently only using 'count' as a maximum, but caps at 10). - Taken by Carlos and Jose
 
 ## 🏗 Core Functionality
 - [x] Implement **spacebar** trigger to generate random palettes
