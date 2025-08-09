@@ -7,4 +7,6 @@ export const borderRadiusClassesMap = {
     lg: "rounded-lg",
     xl: "rounded-xl",
     full: "rounded-full",
-  };
+};
+
+export const MOBILE_BREAKPOINT = 768;
