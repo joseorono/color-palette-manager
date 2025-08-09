@@ -75,8 +75,9 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
       );
       
       if (existingColorWithRole) {
-        console.error(`The role "${updates.role}" is already assigned to another color. Please remove it first or choose a different role.`);
+        //TOOD: instead of a console.error(), show a toast.
         // toast.warning(`The role "${updates.role}" is already assigned to another color. Please remove it first or choose a different role.`);
+        console.error(`The role "${updates.role}" is already assigned to another color. Please remove it first or choose a different role.`);
         return;
       }
     }
