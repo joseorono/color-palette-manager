@@ -38,7 +38,6 @@
 - [x] **Color Editor Modal**
   - [x] Fields for brightness, contrast, hue, saturation, etc.
 - [ ] **Palette Playground** (WIP)
-  - [ ] Static landing page to be used as a demo - WIP
   - [x] Component playground using the user’s palette - WIP
 - [ ] **Color Roles in Palette Editor** (Primary-light, Secondary-dark, Accent, Warning, etc.)
 
