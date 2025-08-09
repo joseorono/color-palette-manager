@@ -18,7 +18,7 @@ function createWindow() {
       enableRemoteModule: false,
       webSecurity: true
     },
-    icon: path.join(__dirname, '../assets/icon.png'), // Add icon if available
+    icon: path.join(__dirname, '../public/icon.png'), // Add icon if available
     show: false, // Don't show until ready-to-show
     titleBarStyle: process.platform === 'darwin' ? 'hiddenInset' : 'default'
   });
