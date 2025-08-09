@@ -10,14 +10,14 @@ export async function exportToPNG(
   options: ExportOptions = {}
 ): Promise<ExportResult> {
   const { width = 800, height = 200, filename = "color-palette.png" } = options;
-  
+
   if (typeof document === 'undefined') {
     throw new Error('PNG export requires DOM environment');
   }
 
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
-  
+
   if (!ctx) {
     throw new Error('Failed to get canvas context');
   }
@@ -79,7 +79,7 @@ export function exportToCSS(
   options: ExportOptions = {}
 ): ExportResult {
   const { filename = "color-palette.css" } = options;
-  
+
   let cssContent = "/* Color Palette CSS Variables */\n:root {\n";
 
   colors.forEach((color, index) => {
@@ -108,7 +108,7 @@ export function exportToJSON(
   options: ExportOptions = {}
 ): ExportResult {
   const { filename = "color-palette.json", paletteName = "Color Palette" } = options;
-  
+
   const paletteData = {
     name: paletteName,
     colors: colors.map((color, index) => ({
@@ -137,7 +137,7 @@ export function exportToSCSS(
   options: ExportOptions = {}
 ): ExportResult {
   const { filename = "color-palette.scss" } = options;
-  
+
   let scssContent = "// Color Palette SCSS Variables\n";
 
   colors.forEach((color, index) => {
@@ -146,12 +146,12 @@ export function exportToSCSS(
 
   scssContent += "\n// Color Map\n";
   scssContent += "$colors: (\n";
-  
+
   colors.forEach((color, index) => {
     const comma = index < colors.length - 1 ? "," : "";
     scssContent += `  "color-${index + 1}": ${color.hex}${comma}\n`;
   });
-  
+
   scssContent += ");\n";
 
   return {
@@ -169,18 +169,18 @@ export function exportToTailwind(
   options: ExportOptions = {}
 ): ExportResult {
   const { filename = "tailwind-colors.js" } = options;
-  
+
   let tailwindContent = "// Tailwind CSS Color Configuration\n";
   tailwindContent += "module.exports = {\n";
   tailwindContent += "  theme: {\n";
   tailwindContent += "    extend: {\n";
   tailwindContent += "      colors: {\n";
-  
+
   colors.forEach((color, index) => {
     const comma = index < colors.length - 1 ? "," : "";
     tailwindContent += `        'palette-${index + 1}': '${color.hex}'${comma}\n`;
   });
-  
+
   tailwindContent += "      }\n";
   tailwindContent += "    }\n";
   tailwindContent += "  }\n";
@@ -201,23 +201,23 @@ export function exportToDaisyUI(
   options: ExportOptions = {}
 ): ExportResult {
   const { filename = "daisyui-theme.js", paletteName = "custom" } = options;
-  
+
   const colorNames = ["primary", "secondary", "accent", "neutral", "base-100"];
-  
+
   let daisyContent = "// DaisyUI Theme Configuration\n";
   daisyContent += "module.exports = {\n";
   daisyContent += "  daisyui: {\n";
   daisyContent += "    themes: [\n";
   daisyContent += "      {\n";
   daisyContent += `        "${paletteName}": {\n`;
-  
+
   colors.forEach((color, index) => {
     if (index < colorNames.length) {
       const comma = index < Math.min(colors.length, colorNames.length) - 1 ? "," : "";
       daisyContent += `          "${colorNames[index]}": "${color.hex}"${comma}\n`;
     }
   });
-  
+
   daisyContent += "        }\n";
   daisyContent += "      }\n";
   daisyContent += "    ]\n";
@@ -239,13 +239,13 @@ export function exportToShadcnUI(
   options: ExportOptions = {}
 ): ExportResult {
   const { filename = "shadcn-colors.css" } = options;
-  
+
   let shadcnContent = "/* Shadcn/UI Color Variables */\n";
   shadcnContent += "@layer base {\n";
   shadcnContent += "  :root {\n";
-  
+
   const shadcnNames = ["primary", "secondary", "accent", "muted", "card"];
-  
+
   colors.forEach((color, index) => {
     if (index < shadcnNames.length) {
       // Convert hex to HSL for Shadcn/UI format
@@ -253,7 +253,7 @@ export function exportToShadcnUI(
       shadcnContent += `    --${shadcnNames[index]}: ${hsl.h} ${hsl.s}% ${hsl.l}%;\n`;
     }
   });
-  
+
   shadcnContent += "  }\n";
   shadcnContent += "}\n";
 
@@ -270,22 +270,22 @@ export function exportToShadcnUI(
 function hexToHSL(hex: string): { h: number; s: number; l: number } {
   // Remove # if present
   hex = hex.replace('#', '');
-  
+
   // Parse RGB
   const r = parseInt(hex.substr(0, 2), 16) / 255;
   const g = parseInt(hex.substr(2, 2), 16) / 255;
   const b = parseInt(hex.substr(4, 2), 16) / 255;
-  
+
   const max = Math.max(r, g, b);
   const min = Math.min(r, g, b);
   let h = 0;
   let s = 0;
   const l = (max + min) / 2;
-  
+
   if (max !== min) {
     const d = max - min;
     s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-    
+
     switch (max) {
       case r: h = (g - b) / d + (g < b ? 6 : 0); break;
       case g: h = (b - r) / d + 2; break;
@@ -293,7 +293,7 @@ function hexToHSL(hex: string): { h: number; s: number; l: number } {
     }
     h /= 6;
   }
-  
+
   return {
     h: Math.round(h * 360),
     s: Math.round(s * 100),
