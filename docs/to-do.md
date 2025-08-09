@@ -25,7 +25,7 @@
 - [x] **Generate Palette**
   - [x] From scratch
   - [x] Based on a specific color
-- [ ] **Assign roles** to colors (Primary-light, Secondary-dark, Accent, Warning, etc.)
+- [X] **Assign roles** to colors (Primary-light, Secondary-dark, Accent, Warning, etc.)
 - [x] **Color naming** using color name libraries or large JSON dataset
 - [x] **Contrast Checker** for accessibility compliance
 
