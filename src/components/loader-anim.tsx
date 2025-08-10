@@ -1,5 +1,5 @@
 import React from 'react';
-import BlocksScaleLoader from '@/assets/blocks-scale-loader.svg';
+import BlocksScaleLoader from '@/assets/blocks-scale-loader.svg?react';
 
 interface LoaderAnimProps {
   size?: number;
@@ -15,7 +15,7 @@ const LoaderAnim: React.FC<LoaderAnimProps> = ({
       <BlocksScaleLoader
         width={size}
         height={size}
-    />
+      />
     </div>
   );
 };
