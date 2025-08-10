@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { Color } from '@/types/palette';
 import {
   exportToSVG,
@@ -15,11 +15,11 @@ import type { ExportOptions } from '@/types/export';
 
 // Mock color palette for testing
 const mockColors: Color[] = [
-  { id: '1', hex: '#FF5733', locked: false },
-  { id: '2', hex: '#33FF57', locked: true },
-  { id: '3', hex: '#3357FF', locked: false },
-  { id: '4', hex: '#FF33F5', locked: false },
-  { id: '5', hex: '#F5FF33', locked: true }
+  { hex: '#FF5733', locked: false },
+  { hex: '#33FF57', locked: true },
+  { hex: '#3357FF', locked: false },
+  { hex: '#FF33F5', locked: false },
+  { hex: '#F5FF33', locked: true }
 ];
 
 describe('Palette Export Functions', () => {
@@ -106,7 +106,6 @@ describe('Palette Export Functions', () => {
         expect(color.name).toBe(`Color ${index + 1}`);
         expect(color.hex).toBe(mockColors[index].hex);
         expect(color.index).toBe(index + 1);
-        expect(color.id).toBe(mockColors[index].id);
         expect(color.locked).toBe(mockColors[index].locked);
       });
     });
@@ -209,7 +208,7 @@ describe('Palette Export Functions', () => {
     });
 
     it('should convert hex to HSL format', () => {
-      const result = exportToShadcnUI([{ id: '1', hex: '#FF0000', locked: false }]);
+      const result = exportToShadcnUI([{ hex: '#FF0000', locked: false }]);
 
       // Red should convert to approximately 0 360% 50%
       expect(result.content).toContain('--primary: 0 100% 50%');
@@ -245,7 +244,7 @@ describe('Palette Export Functions', () => {
 
   describe('Edge Cases', () => {
     it('should handle single color', () => {
-      const singleColor: Color[] = [{ id: '1', hex: '#FF0000', locked: false }];
+      const singleColor: Color[] = [{ hex: '#FF0000', locked: false }];
 
       const svgResult = exportToSVG(singleColor);
       expect(svgResult.content).toContain('width="800"');
@@ -256,9 +255,9 @@ describe('Palette Export Functions', () => {
 
     it('should handle colors with different hex formats', () => {
       const mixedColors: Color[] = [
-        { id: '1', hex: '#FF0000', locked: false },
-        { id: '2', hex: '#00ff00', locked: false }, // lowercase
-        { id: '3', hex: '#0000FF', locked: false }
+        { hex: '#FF0000', locked: false },
+        { hex: '#00ff00', locked: false }, // lowercase
+        { hex: '#0000FF', locked: false }
       ];
 
       const result = exportToJSON(mixedColors);
@@ -285,15 +284,15 @@ describe('Palette Export Functions', () => {
   describe('HSL Conversion', () => {
     it('should correctly convert common hex colors to HSL', () => {
       // Test with known color conversions
-      const redColor: Color[] = [{ id: '1', hex: '#FF0000', locked: false }];
+      const redColor: Color[] = [{ hex: '#FF0000', locked: false }];
       const result = exportToShadcnUI(redColor);
       expect(result.content).toContain('--primary: 0 100% 50%');
 
-      const whiteColor: Color[] = [{ id: '1', hex: '#FFFFFF', locked: false }];
+      const whiteColor: Color[] = [{ hex: '#FFFFFF', locked: false }];
       const whiteResult = exportToShadcnUI(whiteColor);
       expect(whiteResult.content).toContain('--primary: 0 0% 100%');
 
-      const blackColor: Color[] = [{ id: '1', hex: '#000000', locked: false }];
+      const blackColor: Color[] = [{ hex: '#000000', locked: false }];
       const blackResult = exportToShadcnUI(blackColor);
       expect(blackResult.content).toContain('--primary: 0 0% 0%');
     });

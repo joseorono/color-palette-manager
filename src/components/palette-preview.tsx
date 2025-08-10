@@ -132,7 +132,7 @@ export function PalettePreview({
     >
       {colors.map((color, index) => (
         <div
-          key={color.id || index}
+          key={index}
           className={cn(
             "transition-all duration-200",
             onColorClick && "cursor-pointer hover:scale-105 hover:z-10",

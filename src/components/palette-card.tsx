@@ -138,7 +138,7 @@ export function PaletteCard({ palette, onEdit, onDelete, onToggleFavorite, onVie
         <div className="flex rounded-lg overflow-hidden h-20 mb-3 border">
           {palette.colors.map((color, index) => (
             <div
-              key={color.id}
+              key={index}
               className="flex-1 relative group/color transition-all duration-200"
               style={{ backgroundColor: color.hex }}
               title={`${color.name || 'Untitled'} - ${color.hex}`}
