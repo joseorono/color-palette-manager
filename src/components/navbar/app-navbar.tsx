@@ -13,7 +13,7 @@ const navigationLinks = [
   { name: 'Company', href: '#' },
 ];
 
-export default function Navbar() {
+export default function AppNavbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
