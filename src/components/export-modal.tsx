@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { usePaletteStore } from "@/stores/palette-store";
+import { useMobile } from "@/hooks/use-mobile";
 import { Button } from "./ui/button";
 import {
   Dialog,
@@ -17,6 +18,7 @@ import { exportPalette } from "@/lib/palette-export";
 import { ExportFormat, exportFormatConfig } from "@/constants/export";
 
 import { PalettePreview } from "./palette-preview";
+import { ExportPreview } from "./export-preview";
 
 export function ExportModal() {
   const [isOpen, setIsOpen] = useState(false);
@@ -58,50 +60,63 @@ export function ExportModal() {
         </Button>
       </DialogTrigger>
 
-      <DialogContent>
+      <DialogContent className="max-w-5xl">
         <DialogHeader>
           <DialogTitle>Export Palette</DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-6">
-          {/* Format Selection */}
-          <div>
-            <Label className="mb-3 block text-sm font-medium">
-              Export Format
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Left Column - Controls */}
+          <div className="space-y-6">
+            {/* Format Selection */}
+            <div>
+              <Label className="mb-3 block text-sm font-medium">
+                Export Format
+              </Label>
+              <RadioGroup
+                value={format}
+                onValueChange={(value) => setFormat(value as ExportFormat)}
+              >
+                {Object.entries(exportFormatConfig).map(([formatValue, config]) => (
+                  <div key={formatValue} className="flex items-center space-x-2">
+                    <RadioGroupItem value={formatValue} id={formatValue} />
+                    <Label htmlFor={formatValue}>{config.label}</Label>
+                  </div>
+                ))}
+              </RadioGroup>
+            </div>
+
+            {/* Color Preview */}
+            <div>
+              <Label className="mb-2 block text-sm font-medium">Color Preview</Label>
+              <PalettePreview
+                colors={currentPalette}
+                height="4rem"
+                showTooltips={true}
+                borderRadius="lg"
+                showBorder={true}
+              />
+            </div>
+
+            {/* Actions */}
+            <div className="flex justify-end gap-3">
+              <Button variant="outline" onClick={() => setIsOpen(false)}>
+                Cancel
+              </Button>
+              <Button onClick={handleExport} disabled={isExporting}>
+                {isExporting ? "Exporting..." : "Export"}
+              </Button>
+            </div>
+          </div>
+
+          {/* Right Column - Export Preview */}
+          <div className="space-y-3">
+            <Label className="block text-sm font-medium">
+              Export Preview
             </Label>
-            <RadioGroup
-              value={format}
-              onValueChange={(value) => setFormat(value as ExportFormat)}
-            >
-              {Object.entries(exportFormatConfig).map(([formatValue, config]) => (
-                <div key={formatValue} className="flex items-center space-x-2">
-                  <RadioGroupItem value={formatValue} id={formatValue} />
-                  <Label htmlFor={formatValue}>{config.label}</Label>
-                </div>
-              ))}
-            </RadioGroup>
-          </div>
-
-          {/* Preview */}
-          <div>
-            <Label className="mb-2 block text-sm font-medium">Preview</Label>
-            <PalettePreview 
-              colors={currentPalette}
-              height="4rem"
-              showTooltips={true}
-              borderRadius="lg"
-              showBorder={true}
-            />
-          </div>
-
-          {/* Actions */}
-          <div className="flex justify-end gap-3">
-            <Button variant="outline" onClick={() => setIsOpen(false)}>
-              Cancel
-            </Button>
-            <Button onClick={handleExport} disabled={isExporting}>
-              {isExporting ? "Exporting..." : "Export"}
-            </Button>
+            <div className="border rounded-lg p-4 bg-gray-50 dark:bg-gray-900 overflow-auto max-h-96">
+              <ExportPreview colors={currentPalette} format={format} />
+            </div>
           </div>
         </div>
       </DialogContent>
