@@ -2,8 +2,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import HomePage from "./pages/home-page";
 import { Routes, Route } from "react-router-dom";
 import DashboardPage from "./pages/dashboard-page";
-import ThemeTest from "./pages/theme-test";
-import LandingPage from "./pages/landing-page";
+import AppLayout from "./layouts/app-layout";
 function App() {
   return (
     <ThemeProvider
@@ -13,11 +12,12 @@ function App() {
       disableTransitionOnChange
     >
        <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/theme-test" element={<ThemeTest />} />
-        <Route path="/landing" element={<LandingPage />} />
-      </Routes>
+        <Route element={<AppLayout />}>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
+            {/* other routes... */}
+        </Route>
+    </Routes>
     </ThemeProvider>
   );
 }
