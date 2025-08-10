@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { usePaletteStore } from "@/stores/palette-store";
-import { useMobile } from "@/hooks/use-mobile";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { Button } from "./ui/button";
 import {
   Dialog,
@@ -24,6 +24,7 @@ export function ExportModal() {
   const [isOpen, setIsOpen] = useState(false);
   const [format, setFormat] = useState<ExportFormat>(ExportFormat.PNG);
   const [isExporting, setIsExporting] = useState(false);
+  const isMobile = useIsMobile();
 
   const { currentPalette } = usePaletteStore();
 
@@ -60,14 +61,14 @@ export function ExportModal() {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="max-w-5xl">
+      <DialogContent className={`${isMobile ? 'max-w-[95vw] max-h-[90vh]' : 'max-w-5xl'} overflow-hidden`}>
         <DialogHeader>
           <DialogTitle>Export Palette</DialogTitle>
         </DialogHeader>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className={`grid gap-6 ${isMobile ? 'grid-cols-1' : 'grid-cols-1 lg:grid-cols-2'} ${isMobile ? 'overflow-auto max-h-[70vh]' : ''}`}>
           {/* Left Column - Controls */}
-          <div className="space-y-6">
+          <div id="export-controls-column" className="space-y-6">
             {/* Format Selection */}
             <div>
               <Label className="mb-3 block text-sm font-medium">
@@ -89,7 +90,7 @@ export function ExportModal() {
             {/* Color Preview */}
             <div>
               <Label className="mb-2 block text-sm font-medium">Color Preview</Label>
-              <PalettePreview
+              <PalettePreview 
                 colors={currentPalette}
                 height="4rem"
                 showTooltips={true}
@@ -109,15 +110,17 @@ export function ExportModal() {
             </div>
           </div>
 
-          {/* Right Column - Export Preview */}
-          <div className="space-y-3">
-            <Label className="block text-sm font-medium">
-              Export Preview
-            </Label>
-            <div className="border rounded-lg p-4 bg-gray-50 dark:bg-gray-900 overflow-auto max-h-96">
-              <ExportPreview colors={currentPalette} format={format} />
+          {/* Right Column - Export Preview (Hidden on Mobile) */}
+          {!isMobile && (
+            <div id="export-preview-column" className="space-y-3">
+              <Label className="block text-sm font-medium">
+                Export Preview
+              </Label>
+              <div className="border rounded-lg p-4 bg-gray-50 dark:bg-gray-900 overflow-auto max-h-96">
+                <ExportPreview colors={currentPalette} format={format} />
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </DialogContent>
     </Dialog>
