@@ -1,8 +1,9 @@
 import { ThemeProvider } from "@/components/theme-provider";
-import HomePage from "./pages/HomePage";
+import HomePage from "./pages/home-page";
 import { Routes, Route } from "react-router-dom";
-import DashboardPage from "./pages/DashboardPage";
-import ThemeTest from "./app/routes/theme-test";
+import DashboardPage from "./pages/dashboard-page";
+import ThemeTest from "./pages/theme-test";
+import LandingPage from "./pages/landing-page";
 function App() {
   return (
     <ThemeProvider
@@ -15,6 +16,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/theme-test" element={<ThemeTest />} />
+        <Route path="/landing" element={<LandingPage />} />
       </Routes>
     </ThemeProvider>
   );
