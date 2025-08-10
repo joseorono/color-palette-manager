@@ -1,9 +1,9 @@
-import Navbar from "@/components/nav-bar";
+import AppNavbar from "@/components/navbar/app-navbar";
 import { Outlet } from "react-router-dom";
 
 export default function AppLayout() {
     return <main>
-        <Navbar />
+        <AppNavbar />
         <Outlet />
     </main>;
 }
