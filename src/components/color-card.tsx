@@ -11,9 +11,10 @@ import { cn, getAssignedRoles } from "@/lib/utils";
 
 interface ColorCardProps {
   color: Color;
+  index: number;
 }
 
-export function ColorCard({ color }: ColorCardProps) {
+export function ColorCard({ color, index }: ColorCardProps) {
   const [isPickerOpen, setIsPickerOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const { toggleColorLock, updateColor, removeColor, currentPalette } =
@@ -60,7 +61,7 @@ export function ColorCard({ color }: ColorCardProps) {
                 variant="ghost"
                 onClick={(e) => {
                   e.stopPropagation();
-                  toggleColorLock(color.id);
+                  toggleColorLock(index);
                 }}
                 className="text-white hover:bg-white hover:bg-opacity-20"
               >
@@ -89,7 +90,7 @@ export function ColorCard({ color }: ColorCardProps) {
                   variant="ghost"
                   onClick={(e) => {
                     e.stopPropagation();
-                    removeColor(color.id);
+                    removeColor(index);
                   }}
                   className="text-white hover:bg-red-500 hover:bg-opacity-50"
                 >
@@ -123,7 +124,7 @@ export function ColorCard({ color }: ColorCardProps) {
             <div className="flex items-center gap-1">
               <RoleAssigner
                 currentRole={color.role}
-                onRoleAssign={(role: ColorRole | undefined) => updateColor(color.id, { role })}
+                onRoleAssign={(role: ColorRole | undefined) => updateColor(index, { role })}
                 assignedRoles={getAssignedRoles(currentPalette)}
               />
             </div>
@@ -143,7 +144,7 @@ export function ColorCard({ color }: ColorCardProps) {
         isOpen={isPickerOpen}
         onClose={() => setIsPickerOpen(false)}
         color={color.hex}
-        onColorChange={(newColor) => updateColor(color.id, { hex: newColor })}
+        onColorChange={(newColor) => updateColor(index, { hex: newColor })}
       />
     </>
   );

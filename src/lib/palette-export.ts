@@ -115,7 +115,6 @@ export function exportToJSON(
       name: `Color ${index + 1}`,
       hex: color.hex,
       index: index + 1,
-      id: color.id,
       locked: color.locked
     })),
     createdAt: new Date().toISOString(),

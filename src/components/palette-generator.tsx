@@ -74,8 +74,8 @@ export function PaletteGenerator() {
         {/* Palette Display */}
         <div className="mx-auto mb-8 max-w-6xl">
           <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5 lg:gap-2">
-            {currentPalette.map((color) => (
-              <ColorCard key={color.id} color={color} />
+            {currentPalette.map((color, index) => (
+              <ColorCard key={index} color={color} index={index} />
             ))}
           </div>
         </div>

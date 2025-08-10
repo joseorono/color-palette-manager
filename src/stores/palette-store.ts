@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { Color, Palette } from "@/types/palette";
 import { ColorUtils } from "@/lib/color-utils";
+import { PaletteUtils } from "@/lib/palette-utils";
 
 interface PaletteStore {
   currentPalette: Color[];
@@ -10,10 +11,10 @@ interface PaletteStore {
   // Actions
   generateNewPalette: (count?: number) => void;
   regenerateUnlocked: () => void;
-  toggleColorLock: (colorId: string) => void;
-  updateColor: (colorId: string, updates: Partial<Pick<Color, 'hex' | 'role' | 'name'>>) => void;
+  toggleColorLock: (index: number) => void;
+  updateColor: (index: number, updates: Partial<Pick<Color, 'hex' | 'role' | 'name'>>) => void;
   addColor: () => void;
-  removeColor: (colorId: string) => void;
+  removeColor: (index: number) => void;
   savePalette: (name: string, isPublic?: boolean) => Promise<void>;
   loadSavedPalettes: () => Promise<void>;
   setPaletteFromUrl: (colors: string[]) => void;
@@ -28,9 +29,8 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
     set({ isGenerating: true });
 
     setTimeout(() => {
-      const colors = ColorUtils.generateHarmoniousPalette(undefined, count);
-      const palette: Color[] = colors.map((hex, index) => ({
-        id: `color-${index}-${Date.now()}`,
+      const colors = PaletteUtils.generateHarmoniousPalette(undefined, count);
+      const palette: Color[] = colors.map((hex) => ({
         hex,
         locked: false,
       }));
@@ -54,24 +54,23 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
     }, 300);
   },
 
-  toggleColorLock: (colorId: string) => {
+  toggleColorLock: (index: number) => {
     const { currentPalette } = get();
-    const newPalette = currentPalette.map((color) =>
-      color.id === colorId ? { ...color, locked: !color.locked } : color
-    );
+    const newPalette = [...currentPalette];
+    newPalette[index] = { ...newPalette[index], locked: !newPalette[index].locked };
     set({ currentPalette: newPalette });
   },
 
-  updateColor: (colorId: string, updates: Partial<Pick<Color, 'hex' | 'role' | 'name'>>) => {
+  updateColor: (index: number, updates: Partial<Pick<Color, 'hex' | 'role' | 'name'>>) => {
     const { currentPalette } = get();
 
     // If updating role (not removing), check if it's already assigned to another color
     if (updates.role !== undefined && updates.role !== null) {
-      const existingColorWithRole = currentPalette.find(
-        (color) => color.role === updates.role && color.id !== colorId
+      const existingColorIndex = currentPalette.findIndex(
+        (color, i) => color.role === updates.role && i !== index
       );
 
-      if (existingColorWithRole) {
+      if (existingColorIndex !== -1) {
         //TOOD: instead of a console.error(), show a toast.
         // toast.warning(`The role "${updates.role}" is already assigned to another color. Please remove it first or choose a different role.`);
         console.error(`The role "${updates.role}" is already assigned to another color. Please remove it first or choose a different role.`);
@@ -80,9 +79,8 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
     }
 
     // Update the target color with the provided updates
-    const newPalette = currentPalette.map((color) =>
-      color.id === colorId ? { ...color, ...updates } : color
-    );
+    const newPalette = [...currentPalette];
+    newPalette[index] = { ...newPalette[index], ...updates };
     set({ currentPalette: newPalette });
   },
 
@@ -93,7 +91,6 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
     if (currentPalette.length >= 16) return;
 
     const newColor: Color = {
-      id: `color-${currentPalette.length}-${Date.now()}`,
       hex: ColorUtils.generateRandomColor(),
       locked: false,
     };
@@ -101,11 +98,11 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
     set({ currentPalette: [...currentPalette, newColor] });
   },
 
-  removeColor: (colorId: string) => {
+  removeColor: (index: number) => {
     const { currentPalette } = get();
     if (currentPalette.length <= 2) return;
 
-    const newPalette = currentPalette.filter((color) => color.id !== colorId);
+    const newPalette = currentPalette.filter((_, i) => i !== index);
     set({ currentPalette: newPalette });
   },
 

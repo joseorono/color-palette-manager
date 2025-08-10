@@ -38,7 +38,6 @@ export type ColorRole = typeof ColorRoles[number];
 export type CSSColorVariablesObject = Record<ColorRole, string>;
 
 export interface Color {
-  id: string;
   hex: string;
   locked: boolean;
   name?: string;
