@@ -1,21 +1,21 @@
 import React from 'react';
-import BlocksScaleLoader from '../../public/blocks-scale-loader.svg?react';
+import BlocksScaleLoader from '@/assets/blocks-scale-loader.svg';
 
 interface LoaderAnimProps {
   size?: number;
   className?: string;
 }
 
-const LoaderAnim: React.FC<LoaderAnimProps> = ({ 
-  size = 24, 
-  className = '' 
+const LoaderAnim: React.FC<LoaderAnimProps> = ({
+  size = 24,
+  className = ''
 }) => {
   return (
     <div className={`inline-flex items-center justify-center ${className}`}>
-      <BlocksScaleLoader 
+      <BlocksScaleLoader
         width={size}
         height={size}
-      />
+    />
     </div>
   );
 };
