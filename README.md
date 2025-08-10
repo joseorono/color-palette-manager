@@ -2,6 +2,10 @@
 
 A modern, offline-first color palette management application built with React, TypeScript, and Tailwind CSS. Create, edit, and export beautiful color palettes for your design projects.
 
+This project is currently in development and is not yet ready for production use.
+
+
+![Version Badge](https://img.shields.io/badge/version-0.0.1-green)
 ![Color Palette Manager](https://img.shields.io/badge/React-18.x-blue?logo=react)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?logo=typescript)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.x-blue?logo=tailwindcss)
@@ -32,6 +36,7 @@ Export your palettes in multiple formats for different use cases:
 - **Web Application** - Modern browser support
 - **Desktop App** - Cross-platform Electron application (Windows, macOS, Linux)
 - **Offline-First** - No server required, works completely offline
+- **PWA (Progressive Web App)** - Installable on mobile devices
 
 ## 🚀 Quick Start
 
@@ -45,7 +50,7 @@ Export your palettes in multiple formats for different use cases:
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/color-palette-manager.git
+git clone https://github.com/joseorono/color-palette-manager.git
 cd color-palette-manager
 
 # Install dependencies
@@ -97,18 +102,16 @@ npm run electron-build-all
 
 ```
 src/
-├── components/          # React components
+├── components/         # React components
 │   ├── ui/             # Shadcn/UI components
-│   ├── color-card.tsx  # Individual color display
-│   ├── color-picker.tsx # Color selection interface
-│   ├── export-modal.tsx # Export functionality
-│   └── palette-*.tsx   # Palette-related components
+│   ├── landing/        # Landing page components
+│   └── palette/        # Palette-related components
 ├── lib/                # Utility functions
-│   ├── palette-export.ts # Export format implementations
-│   └── color-utils.ts  # Color manipulation utilities
 ├── stores/             # Zustand state stores
 ├── types/              # TypeScript type definitions
 ├── constants/          # Application constants
+├── pages/              # Page components
+├── layouts/            # Layout components
 └── hooks/              # Custom React hooks
 ```
 
@@ -176,18 +179,12 @@ We're open to contributions! Please open an issue or submit a pull request.
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- [Shadcn/UI](https://ui.shadcn.com/) for the beautiful component library
-- [Tailwind CSS](https://tailwindcss.com/) for the utility-first CSS framework
-- [Radix UI](https://www.radix-ui.com/) for accessible component primitives
+This project is licensed under the GPL v3 License - see the [LICENSE.md](LICENSE.md) file for details.
 
 ## 🔗 Links
-
+- WIP, not real links yet.
 - [Demo](https://your-demo-url.com) - Live demo
-- [Documentation](./docs/) - Detailed documentation
+- [Documentation](./docs/) - Detailed documentation, development notes, roadmap, etc.
 - [Issues](https://github.com/yourusername/color-palette-manager/issues) - Bug reports and feature requests
 
 ---

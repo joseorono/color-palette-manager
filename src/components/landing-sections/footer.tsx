@@ -38,7 +38,7 @@ export default function Footer() {
               Contributing
             </a>
             <a href="/license" className="text-gray-300 hover:text-white transition-colors duration-200">
-              MIT License
+              GPL v3 License
             </a>
           </div>
         </div>
