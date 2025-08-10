@@ -1,15 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Color } from '@/types/palette';
-import {
-  exportToSVG,
-  exportToCSS,
-  exportToJSON,
-  exportToSCSS,
-  exportToTailwind,
-  exportToDaisyUI,
-  exportToShadcnUI,
-  exportPalette
-} from './palette-export';
+import { PaletteExport } from './palette-export';
 import { ExportFormat } from '@/constants/export';
 import type { ExportOptions } from '@/types/export';
 
@@ -23,9 +14,9 @@ const mockColors: Color[] = [
 ];
 
 describe('Palette Export Functions', () => {
-  describe('exportToSVG', () => {
+  describe('PaletteExport.toSVG', () => {
     it('should generate valid SVG content', () => {
-      const result = exportToSVG(mockColors);
+      const result = PaletteExport.toSVG(mockColors);
 
       expect(result.filename).toBe('color-palette.svg');
       expect(result.mimeType).toBe('image/svg+xml');
@@ -41,29 +32,29 @@ describe('Palette Export Functions', () => {
 
     it('should respect custom dimensions', () => {
       const options: ExportOptions = { width: 1000, height: 300 };
-      const result = exportToSVG(mockColors, options);
+      const result = PaletteExport.toSVG(mockColors, options);
 
       expect(result.content).toContain('<svg width="1000" height="300"');
     });
 
     it('should use custom filename', () => {
       const options: ExportOptions = { filename: 'custom-palette.svg' };
-      const result = exportToSVG(mockColors, options);
+      const result = PaletteExport.toSVG(mockColors, options);
 
       expect(result.filename).toBe('custom-palette.svg');
     });
 
     it('should handle empty color array', () => {
-      const result = exportToSVG([]);
+      const result = PaletteExport.toSVG([]);
 
       expect(result.content).toContain('<svg width="800" height="200"');
       expect(result.content).toContain('</svg>');
     });
   });
 
-  describe('exportToCSS', () => {
+  describe('PaletteExport.toCSS', () => {
     it('should generate valid CSS with variables and classes', () => {
-      const result = exportToCSS(mockColors);
+      const result = PaletteExport.toCSS(mockColors);
 
       expect(result.filename).toBe('color-palette.css');
       expect(result.mimeType).toBe('text/css');
@@ -81,15 +72,15 @@ describe('Palette Export Functions', () => {
 
     it('should use custom filename', () => {
       const options: ExportOptions = { filename: 'my-colors.css' };
-      const result = exportToCSS(mockColors, options);
+      const result = PaletteExport.toCSS(mockColors, options);
 
       expect(result.filename).toBe('my-colors.css');
     });
   });
 
-  describe('exportToJSON', () => {
+  describe('PaletteExport.toJSON', () => {
     it('should generate valid JSON with palette data', () => {
-      const result = exportToJSON(mockColors);
+      const result = PaletteExport.toJSON(mockColors);
 
       expect(result.filename).toBe('color-palette.json');
       expect(result.mimeType).toBe('application/json');
@@ -112,14 +103,14 @@ describe('Palette Export Functions', () => {
 
     it('should use custom palette name', () => {
       const options: ExportOptions = { paletteName: 'My Custom Palette' };
-      const result = exportToJSON(mockColors, options);
+      const result = PaletteExport.toJSON(mockColors, options);
 
       const parsedData = JSON.parse(result.content as string);
       expect(parsedData.name).toBe('My Custom Palette');
     });
 
     it('should generate valid JSON for empty array', () => {
-      const result = exportToJSON([]);
+      const result = PaletteExport.toJSON([]);
 
       const parsedData = JSON.parse(result.content as string);
       expect(parsedData.colors).toHaveLength(0);
@@ -127,9 +118,9 @@ describe('Palette Export Functions', () => {
     });
   });
 
-  describe('exportToSCSS', () => {
+  describe('PaletteExport.toSCSS', () => {
     it('should generate valid SCSS variables and map', () => {
-      const result = exportToSCSS(mockColors);
+      const result = PaletteExport.toSCSS(mockColors);
 
       expect(result.filename).toBe('color-palette.scss');
       expect(result.mimeType).toBe('text/scss');
@@ -145,9 +136,9 @@ describe('Palette Export Functions', () => {
     });
   });
 
-  describe('exportToTailwind', () => {
+  describe('PaletteExport.toTailwind', () => {
     it('should generate valid Tailwind config', () => {
-      const result = exportToTailwind(mockColors);
+      const result = PaletteExport.toTailwind(mockColors);
 
       expect(result.filename).toBe('tailwind-colors.js');
       expect(result.mimeType).toBe('application/javascript');
@@ -164,9 +155,9 @@ describe('Palette Export Functions', () => {
     });
   });
 
-  describe('exportToDaisyUI', () => {
+  describe('PaletteExport.toDaisyUI', () => {
     it('should generate valid DaisyUI theme config', () => {
-      const result = exportToDaisyUI(mockColors);
+      const result = PaletteExport.toDaisyUI(mockColors);
 
       expect(result.filename).toBe('daisyui-theme.js');
       expect(result.mimeType).toBe('application/javascript');
@@ -186,15 +177,15 @@ describe('Palette Export Functions', () => {
 
     it('should use custom theme name', () => {
       const options: ExportOptions = { paletteName: 'sunset' };
-      const result = exportToDaisyUI(mockColors, options);
+      const result = PaletteExport.toDaisyUI(mockColors, options);
 
       expect(result.content).toContain('"sunset": {');
     });
   });
 
-  describe('exportToShadcnUI', () => {
+  describe('PaletteExport.toShadcnUI', () => {
     it('should generate valid Shadcn/UI CSS variables', () => {
-      const result = exportToShadcnUI(mockColors);
+      const result = PaletteExport.toShadcnUI(mockColors);
 
       expect(result.filename).toBe('shadcn-colors.css');
       expect(result.mimeType).toBe('text/css');
@@ -208,34 +199,34 @@ describe('Palette Export Functions', () => {
     });
 
     it('should convert hex to HSL format', () => {
-      const result = exportToShadcnUI([{ hex: '#FF0000', locked: false }]);
+      const result = PaletteExport.toShadcnUI([{ hex: '#FF0000', locked: false }]);
 
       // Red should convert to approximately 0 360% 50%
       expect(result.content).toContain('--primary: 0 100% 50%');
     });
   });
 
-  describe('exportPalette', () => {
+  describe('PaletteExport.export', () => {
     it('should route to correct export function based on format', async () => {
-      const svgResult = await exportPalette(mockColors, ExportFormat.SVG);
+      const svgResult = await PaletteExport.export(mockColors, ExportFormat.SVG);
       expect(svgResult.mimeType).toBe('image/svg+xml');
 
-      const cssResult = await exportPalette(mockColors, ExportFormat.CSS);
+      const cssResult = await PaletteExport.export(mockColors, ExportFormat.CSS);
       expect(cssResult.mimeType).toBe('text/css');
 
-      const jsonResult = await exportPalette(mockColors, ExportFormat.JSON);
+      const jsonResult = await PaletteExport.export(mockColors, ExportFormat.JSON);
       expect(jsonResult.mimeType).toBe('application/json');
     });
 
     it('should throw error for unsupported format', async () => {
       await expect(
-        exportPalette(mockColors, 'invalid' as ExportFormat)
+        PaletteExport.export(mockColors, 'INVALID' as ExportFormat)
       ).rejects.toThrow('Unsupported export format: invalid');
     });
 
     it('should pass options to underlying export functions', async () => {
       const options: ExportOptions = { filename: 'test.svg', width: 1000 };
-      const result = await exportPalette(mockColors, ExportFormat.SVG, options);
+      const result = await PaletteExport.export(mockColors, ExportFormat.SVG, options);
 
       expect(result.filename).toBe('test.svg');
       expect(result.content).toContain('width="1000"');
@@ -246,10 +237,10 @@ describe('Palette Export Functions', () => {
     it('should handle single color', () => {
       const singleColor: Color[] = [{ hex: '#FF0000', locked: false }];
 
-      const svgResult = exportToSVG(singleColor);
+      const svgResult = PaletteExport.toSVG(singleColor);
       expect(svgResult.content).toContain('width="800"');
 
-      const cssResult = exportToCSS(singleColor);
+      const cssResult = PaletteExport.toCSS(singleColor);
       expect(cssResult.content).toContain('--color-1: #FF0000;');
     });
 
@@ -260,7 +251,7 @@ describe('Palette Export Functions', () => {
         { hex: '#0000FF', locked: false }
       ];
 
-      const result = exportToJSON(mixedColors);
+      const result = PaletteExport.toJSON(mixedColors);
       const parsedData = JSON.parse(result.content as string);
 
       expect(parsedData.colors[0].hex).toBe('#FF0000');
@@ -270,12 +261,11 @@ describe('Palette Export Functions', () => {
 
     it('should handle very long color arrays', () => {
       const manyColors: Color[] = Array.from({ length: 50 }, (_, i) => ({
-        id: `${i}`,
         hex: `#${i.toString(16).padStart(6, '0')}`,
         locked: false
       }));
 
-      const result = exportToCSS(manyColors);
+      const result = PaletteExport.toCSS(manyColors);
       expect(result.content).toContain('--color-50:');
       expect(result.content).toContain('.bg-color-50 {');
     });
@@ -285,15 +275,15 @@ describe('Palette Export Functions', () => {
     it('should correctly convert common hex colors to HSL', () => {
       // Test with known color conversions
       const redColor: Color[] = [{ hex: '#FF0000', locked: false }];
-      const result = exportToShadcnUI(redColor);
+      const result = PaletteExport.toShadcnUI(redColor);
       expect(result.content).toContain('--primary: 0 100% 50%');
 
       const whiteColor: Color[] = [{ hex: '#FFFFFF', locked: false }];
-      const whiteResult = exportToShadcnUI(whiteColor);
+      const whiteResult = PaletteExport.toShadcnUI(whiteColor);
       expect(whiteResult.content).toContain('--primary: 0 0% 100%');
 
       const blackColor: Color[] = [{ hex: '#000000', locked: false }];
-      const blackResult = exportToShadcnUI(blackColor);
+      const blackResult = PaletteExport.toShadcnUI(blackColor);
       expect(blackResult.content).toContain('--primary: 0 0% 0%');
     });
   });

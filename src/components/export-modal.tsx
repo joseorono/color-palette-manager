@@ -14,7 +14,7 @@ import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { Download } from "lucide-react";
 import { toast } from "sonner";
 import { saveAs } from "file-saver";
-import { exportPalette } from "@/lib/palette-export";
+import { PaletteExport } from "@/lib/palette-export";
 import { ExportFormat, exportFormatConfig } from "@/constants/export";
 
 import { PalettePreview } from "./palette-preview";
@@ -32,7 +32,7 @@ export function ExportModal() {
     setIsExporting(true);
 
     try {
-      const result = await exportPalette(currentPalette, format);
+      const result = await PaletteExport.export(currentPalette, format);
 
       // Create and download the file
       if (result.content instanceof Blob) {
