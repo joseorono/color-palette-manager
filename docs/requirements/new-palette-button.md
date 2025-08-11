@@ -1,5 +1,5 @@
 
-# New Palette Button
+# New Palette Modal
 
 # File Location
 
