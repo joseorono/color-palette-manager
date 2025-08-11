@@ -7,10 +7,8 @@ import { cn } from '@/lib/utils'; // Assumes you have a utility for class mergin
 
 // Define the navigation links
 const navigationLinks = [
-  { name: 'Home', href: '#' },
-  { name: 'Features', href: '#' },
-  { name: 'Pricing', href: '#' },
-  { name: 'Company', href: '#' },
+  { name: 'Home', href: '/' },
+  { name: 'Dashboard', href: '/dashboard' },
 ];
 
 export default function AppNavbar() {
