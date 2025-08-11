@@ -5,6 +5,20 @@ import { db } from "./main";
 // Palettes
 /////////**************
 
+export async function insertPalette(palette: Omit<Palette, 'id' | 'createdAt' | 'updatedAt'>) {
+  const now = new Date();
+  const id = crypto.randomUUID();
+
+  await db.palettes.add({
+    ...palette,
+    id,
+    createdAt: now,
+    updatedAt: now
+  });
+
+  return id;
+}
+
 // Helper function to get all palettes
 export async function getAllPalettes(): Promise<Palette[]> {
     return await db.palettes.toArray();
@@ -29,26 +43,13 @@ export async function updatePalette(id: string, updates: Partial<Omit<Palette, '
     return await db.palettes.delete(id);
   }
 
-  /////////**************
-  // Colors
-  /////////**************
-
-  // Helper function to get all colors
-  export async function getAllColors(): Promise<Color[]> {
-    return await db.colors.toArray();
-  }
-
-  // Helper function to get color by id
-  export async function getColorById(id: string): Promise<Color | undefined> {
-    return await db.colors.get(id);
-  }
-
-  // Helper function to update a color
-  export async function updateColor(id: string, updates: Partial<Omit<Color, 'id'>>) {
-    return await db.colors.update(id, updates);
-  }
-
-  // Helper function to delete a color
-  export async function deleteColor(id: string) {
-    return await db.colors.delete(id);
+  export async function addColorToPalette(id: string, color: Color) {
+    const queriedColors = await db.palettes.get(id);
+    if (!queriedColors) {
+      return false;
+    }
+    const colors = queriedColors.colors;
+    return await db.palettes.update(id,
+      { colors: [...colors, color] }
+    );
   }

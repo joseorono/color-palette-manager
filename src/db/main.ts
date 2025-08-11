@@ -7,26 +7,10 @@ const db = new Dexie('ColorPaletteManager') as Dexie & {
     Palette,
     'id'
   >;
-  colors: Table<Color>; // Changed to Table since we're using auto-increment
 };
 
 db.version(1).stores({
-  palettes: '++id, name, createdAt, updatedAt, isPublic, isFavorite, *tags',
-  colors: '++id, hex, locked, name, role' // ++id means auto-increment
+  palettes: '++id, name, description, *colors, createdAt, updatedAt, isPublic, isFavorite, *tags',
 });
-
-export async function createPalette(palette: Omit<Palette, 'id' | 'createdAt' | 'updatedAt'>) {
-  const now = new Date();
-  const id = crypto.randomUUID();
-  
-  await db.palettes.add({
-    ...palette,
-    id,
-    createdAt: now,
-    updatedAt: now
-  });
-  
-  return id;
-}
 
 export { db };
