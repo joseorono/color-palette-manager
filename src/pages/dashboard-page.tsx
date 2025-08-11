@@ -51,7 +51,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <section className="container py-8">
+    <section className="container py-8 mx-auto max-w-screen-lg">
       <PaletteDashboard
         palettes={palettes}
         isLoading={isLoading}

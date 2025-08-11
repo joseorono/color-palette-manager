@@ -16,11 +16,11 @@ function App() {
        <Routes>
         <Route element={<AppLayout />}>
             <Route path="/" element={<HomePage />} />
-        </Route>
-        
-        <Route element={<LandingLayout />}>
             <Route path="/dashboard" element={<DashboardPage />} />
         </Route>
+{/*         
+        <Route element={<LandingLayout />}>
+        </Route> */}
 
         <Route path="/db-seeder" element={<DatabaseSeeder />} />
     </Routes>
