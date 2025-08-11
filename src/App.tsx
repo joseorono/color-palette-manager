@@ -4,6 +4,7 @@ import { Routes, Route } from "react-router-dom";
 import DashboardPage from "./pages/dashboard-page";
 import AppLayout from "./layouts/app-layout";
 import LandingLayout from "./layouts/landing-page-layout";
+import { DatabaseSeeder } from "./db/seeder";
 function App() {
   return (
     <ThemeProvider
@@ -20,6 +21,8 @@ function App() {
         <Route element={<LandingLayout />}>
             <Route path="/dashboard" element={<DashboardPage />} />
         </Route>
+
+        <Route path="/db-seeder" element={<DatabaseSeeder />} />
     </Routes>
     </ThemeProvider>
   );
