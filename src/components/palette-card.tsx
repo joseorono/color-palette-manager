@@ -60,6 +60,8 @@ export function PaletteCard({ palette, onEdit, onDelete, onToggleFavorite, onVie
     })
   }
 
+  
+
   return (
     <Card 
       className="group transition-all duration-200 hover:shadow-lg hover:scale-[1.02] cursor-pointer"
@@ -136,7 +138,7 @@ export function PaletteCard({ palette, onEdit, onDelete, onToggleFavorite, onVie
       <CardContent className="pb-3">
         {/* Color Preview */}
         <div className="flex rounded-lg overflow-hidden h-20 mb-3 border">
-          {palette.colors.map((color, index) => (
+          {palette?.colors?.map((color, index) => (
             <div
               key={index}
               className="flex-1 relative group/color transition-all duration-200"
@@ -173,7 +175,7 @@ export function PaletteCard({ palette, onEdit, onDelete, onToggleFavorite, onVie
 
       <CardFooter className="pt-0 flex items-center justify-between text-sm text-muted-foreground">
         <div className="flex items-center space-x-4">
-          <span>{palette.colors.length} colors</span>
+          <span>{palette.colors?.length} colors</span>
           {palette.favoriteCount && palette.favoriteCount > 0 && (
             <span className="flex items-center">
               <Heart className="h-3 w-3 mr-1" />
