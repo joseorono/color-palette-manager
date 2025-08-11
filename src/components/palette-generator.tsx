@@ -2,7 +2,7 @@ import { useEffect, useCallback } from "react";
 import { usePaletteStore } from "@/stores/palette-store";
 import { ColorCard } from "./color-card";
 import { PaletteControls } from "./palette-controls";
-import { ExportModal } from "./export-modal";
+import { ExportModal } from "./dialogs/export-modal";
 import { Button } from "./ui/button";
 import { Shuffle, Plus } from "lucide-react";
 

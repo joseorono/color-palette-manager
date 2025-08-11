@@ -1,24 +1,24 @@
 import { useState } from "react";
 import { usePaletteStore } from "@/stores/palette-store";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "./ui/dialog";
-import { Label } from "./ui/label";
-import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
+} from "../ui/dialog";
+import { Label } from "../ui/label";
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Download } from "lucide-react";
 import { toast } from "sonner";
 import { saveAs } from "file-saver";
 import { PaletteExport } from "@/lib/palette-export";
 import { ExportFormat, exportFormatConfig } from "@/constants/export";
 
-import { PalettePreview } from "./palette-preview";
-import { ExportPreview } from "./export-preview";
+import { PalettePreview } from "../palette-preview";
+import { ExportPreview } from "../export-preview";
 
 export function ExportModal() {
   const [isOpen, setIsOpen] = useState(false);
@@ -90,7 +90,7 @@ export function ExportModal() {
             {/* Color Preview */}
             <div>
               <Label className="mb-2 block text-sm font-medium">Color Preview</Label>
-              <PalettePreview 
+              <PalettePreview
                 colors={currentPalette}
                 height="4rem"
                 showTooltips={true}
