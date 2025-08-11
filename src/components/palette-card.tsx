@@ -48,22 +48,22 @@ export function PaletteCard({ palette, onEdit, onDelete, onToggleFavorite, onVie
     const dataStr = JSON.stringify(palette, null, 2)
     const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr)
     const exportFileDefaultName = `${palette.name.replace(/\s+/g, '-').toLowerCase()}-palette.json`
-    
+
     const linkElement = document.createElement('a')
     linkElement.setAttribute('href', dataUri)
     linkElement.setAttribute('download', exportFileDefaultName)
     linkElement.click()
-    
+
     toast({
       title: "Palette exported!",
       description: "Your palette has been downloaded as a JSON file.",
     })
   }
 
-  
+
 
   return (
-    <Card 
+    <Card
       className="group transition-all duration-200 hover:shadow-lg hover:scale-[1.02] cursor-pointer"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -91,9 +91,9 @@ export function PaletteCard({ palette, onEdit, onDelete, onToggleFavorite, onVie
             </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
+                <Button
+                  variant="ghost"
+                  size="icon"
                   className="h-8 w-8"
                   onClick={(e) => e.stopPropagation()}
                 >
@@ -122,7 +122,7 @@ export function PaletteCard({ palette, onEdit, onDelete, onToggleFavorite, onVie
                   Export JSON
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem 
+                <DropdownMenuItem
                   className="text-red-600"
                   onClick={(e) => { e.stopPropagation(); onDelete?.(palette.id) }}
                 >
@@ -184,11 +184,9 @@ export function PaletteCard({ palette, onEdit, onDelete, onToggleFavorite, onVie
           )}
         </div>
         <div className="flex items-center space-x-2">
-          {palette.isPublic && (
-            <Badge variant="outline" className="text-xs">
-              Public
-            </Badge>
-          )}
+          <Badge variant={palette.isPublic ? 'default' : 'outline'} className="text-xs">
+            {palette.isPublic ? 'Public' : 'Private'}
+          </Badge>
           <span>{new Date(palette.updatedAt).toLocaleDateString()}</span>
         </div>
       </CardFooter>

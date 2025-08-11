@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
-import { db } from './main'; // Asegúrate de que esta ruta sea correcta para tu proyecto
+import { db } from './main';
 import { Palette } from '@/types';
 import { PaletteDBQueries } from './queries';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 
-// Datos de ejemplo
+// Sample data
 const samplePalettes = [
   {
     name: "Material Design",
@@ -32,6 +35,23 @@ const samplePalettes = [
     ],
     isPublic: true,
     tags: ["tailwind", "modern", "web"],
+    favoriteCount: 38,
+    isFavorite: true,
+  },
+  {
+    name: "Super Secret Palette",
+    description: "A secret palette that only you know about (actually the one used by the app).",
+    colors: [
+      { hex: "#1F1F1F", locked: false, name: "Black", role: "primary" },
+      { hex: "#E9FCFF", locked: false, name: "Azure Web", role: "secondary" },
+      { hex: "#F5F6FA", locked: false, name: "White", role: "accent" },
+      { hex: "#93E6EF", locked: false, name: "Electric Blue", role: "muted" },
+      { hex: "#46CEE6", locked: false, name: "Vivid Sky Blue", role: "card" },
+      { hex: "#1A8499", locked: false, name: "Blue Munsell", role: "card" },
+      { hex: "#095764", locked: false, name: "Midnight Green", role: "card" },
+    ],
+    isPublic: false,
+    tags: ["secret", "own"],
     favoriteCount: 38,
     isFavorite: true,
   },
@@ -73,11 +93,11 @@ const samplePalettes = [
 const seedDatabase = async () => {
     try {
       const paletteCount = await db.palettes.count();
-  
+
       if (paletteCount === 0) {
         console.log('Seeding palettes...');
         const now = new Date();
-        
+
         // Create properly formatted palettes array
         const palettesWithTimestamps = samplePalettes.map(palette => ({
           id: crypto.randomUUID(),
@@ -85,16 +105,16 @@ const seedDatabase = async () => {
           createdAt: now,
           updatedAt: now,
         }));
-        
+
         // Insert all palettes at once using bulkAdd
         await db.palettes.bulkAdd(palettesWithTimestamps);
-        
+
         console.log(`Added ${palettesWithTimestamps.length} palettes`);
         console.log(await PaletteDBQueries.getAllPalettes());
       } else {
         console.log(`Database already has ${paletteCount} palettes, skipping palette seed`);
       }
-      
+
       return { success: true };
     } catch (error) {
       console.error('Error seeding database:', error);
@@ -165,42 +185,68 @@ export const DatabaseSeeder = () => {
   };
 
   return (
-    <div style={{ padding: '20px', fontFamily: 'sans-serif' }}>
-      <h1>Utilidad de Base de Datos Dexie.js</h1>
-      <p>
-        Esta herramienta te permite gestionar la base de datos de IndexedDB directamente desde el navegador.
-      </p>
-      <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
-        <button
-          onClick={() => runCommand('seed')}
-          disabled={isProcessing}
-          style={{ padding: '10px 15px', cursor: 'pointer' }}
-        >
-          {isProcessing ? 'Seeding...' : 'Seed Database'}
-        </button>
-        <button
-          onClick={() => runCommand('clear')}
-          disabled={isProcessing}
-          style={{ padding: '10px 15px', cursor: 'pointer' }}
-        >
-          {isProcessing ? 'Clearing...' : 'Clear Database'}
-        </button>
-        <button
-          onClick={() => runCommand('reset')}
-          disabled={isProcessing}
-          style={{ padding: '10px 15px', cursor: 'pointer' }}
-        >
-          {isProcessing ? 'Resetting...' : 'Reset Database'}
-        </button>
-      </div>
-      
+    <div className="container mx-auto max-w-4xl p-6 space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-2xl font-bold">Database Management Tool</CardTitle>
+          <CardDescription>
+            This tool allows you to manage the IndexedDB database directly from the browser.
+            Use these utilities to seed, clear, or reset your palette database.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex flex-wrap gap-3">
+            <Button
+              onClick={() => runCommand('seed')}
+              disabled={isProcessing}
+              variant="default"
+              className="min-w-[120px]"
+            >
+              {isProcessing ? 'Seeding...' : 'Seed Database'}
+            </Button>
+            <Button
+              onClick={() => runCommand('clear')}
+              disabled={isProcessing}
+              variant="destructive"
+              className="min-w-[120px]"
+            >
+              {isProcessing ? 'Clearing...' : 'Clear Database'}
+            </Button>
+            <Button
+              onClick={() => runCommand('reset')}
+              disabled={isProcessing}
+              variant="outline"
+              className="min-w-[120px]"
+            >
+              {isProcessing ? 'Resetting...' : 'Reset Database'}
+            </Button>
+          </div>
+
+          {isProcessing && (
+            <div className="flex items-center space-x-2">
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
+              <Badge variant="secondary">Processing...</Badge>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
       {log.length > 0 && (
-        <div style={{ marginTop: '20px', padding: '15px', border: '1px solid #ccc', backgroundColor: '#f9f9f9', whiteSpace: 'pre-wrap' }}>
-          <h2>Registro de Comandos:</h2>
-          {log.map((line, index) => (
-            <p key={index} style={{ margin: '0' }}>{line}</p>
-          ))}
-        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">Command Log</CardTitle>
+            <CardDescription>Output from database operations</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="bg-muted p-4 rounded-md font-mono text-sm max-h-96 overflow-y-auto">
+              {log.map((line, index) => (
+                <div key={index} className="mb-1 text-muted-foreground">
+                  {line}
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
       )}
     </div>
   );
