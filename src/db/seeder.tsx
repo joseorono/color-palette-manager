@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { db } from './main'; // Asegúrate de que esta ruta sea correcta para tu proyecto
 import { Palette } from '@/types';
+import { PaletteDBQueries } from './queries';
 
 // Datos de ejemplo
 const samplePalettes = [
@@ -65,56 +66,41 @@ const samplePalettes = [
     isFavorite: false,
   },
 ];
-
-const sampleColors = [
-  { hex: "#1976D2", locked: false, name: "Blue 700", role: "primary" },
-  { hex: "#388E3C", locked: false, name: "Green 700", role: "secondary" },
-  { hex: "#D32F2F", locked: false, name: "Red 700", role: "accent" },
-  { hex: "#FFA000", locked: false, name: "Amber 700", role: "muted" },
-  { hex: "#7B1FA2", locked: false, name: "Purple 700", role: "secondary" },
-  { hex: "#455A64", locked: false, name: "Blue Grey 700", role: "background" },
-  { hex: "#5D4037", locked: false, name: "Brown 700", role: "border" },
-  { hex: "#00796B", locked: false, name: "Teal 700", role: "card" },
-];
-
 /**
  * Seeds the database with sample data
  * @returns Promise that resolves when seeding is complete
  */
 const seedDatabase = async () => {
-  try {
-    const paletteCount = await db.palettes.count();
-    const colorCount = await db.colors.count();
-    
-    if (paletteCount === 0) {
-      console.log('Seeding palettes...');
-      const now = new Date();
-      const palettesWithTimestamps = samplePalettes.map(palette => ({
-        ...palette,
-        createdAt: now,
-        updatedAt: now,
-      }));
+    try {
+      const paletteCount = await db.palettes.count();
+  
+      if (paletteCount === 0) {
+        console.log('Seeding palettes...');
+        const now = new Date();
+        
+        // Create properly formatted palettes array
+        const palettesWithTimestamps = samplePalettes.map(palette => ({
+          id: crypto.randomUUID(),
+          ...palette,
+          createdAt: now,
+          updatedAt: now,
+        }));
+        
+        // Insert all palettes at once using bulkAdd
+        await db.palettes.bulkAdd(palettesWithTimestamps);
+        
+        console.log(`Added ${palettesWithTimestamps.length} palettes`);
+        console.log(await PaletteDBQueries.getAllPalettes());
+      } else {
+        console.log(`Database already has ${paletteCount} palettes, skipping palette seed`);
+      }
       
-      await db.palettes.bulkAdd(palettesWithTimestamps);
-      console.log(`Added ${palettesWithTimestamps.length} palettes`);
-    } else {
-      console.log(`Database already has ${paletteCount} palettes, skipping palette seed`);
+      return { success: true };
+    } catch (error) {
+      console.error('Error seeding database:', error);
+      return { success: false, error };
     }
-    
-    if (colorCount === 0) {
-      console.log('Seeding colors...');
-      await db.colors.bulkAdd(sampleColors);
-      console.log(`Added ${sampleColors.length} colors`);
-    } else {
-      console.log(`Database already has ${colorCount} colors, skipping color seed`);
-    }
-    
-    return { success: true };
-  } catch (error) {
-    console.error('Error seeding database:', error);
-    return { success: false, error };
-  }
-};
+  };
 
 /**
  * Clears all data from the database
@@ -123,7 +109,6 @@ const seedDatabase = async () => {
 const clearDatabase = async () => {
   try {
     await db.palettes.clear();
-    await db.colors.clear();
     console.log('Database cleared');
     return { success: true };
   } catch (error) {
