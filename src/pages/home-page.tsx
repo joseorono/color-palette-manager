@@ -4,8 +4,8 @@ import { PaletteGenerator } from "@/components/palette-generator";
 import { usePaletteStore } from "@/stores/palette-store";
 import { Toaster } from "@/components/ui/sonner";
 import { db } from "@/db/main";
-import { Palette } from "@/types";
-import { getAllPalettes } from "@/db/utils";
+import { Color, Palette } from "@/types";
+import { getAllColors, getAllPalettes } from "@/db/utils";
 
 export default function HomePage() {
   const [searchParams] = useSearchParams();
@@ -25,10 +25,30 @@ export default function HomePage() {
     });
     console.log(id);
   }
+
+
+  async function addColor() {
+    const id = await db.colors.add({
+      hex: "#FF0000",
+      locked: false,
+      name: "Red",
+      role: "primary",
+    });
+    console.log(id);
+  }
   
-  useEffect(() => {
-    getAllPalettes().then((palettes: Palette[]) => console.log(palettes))
-    // Check for shared palette in URL
+  useEffect( () => {
+    try {
+      const fetchedData = async () => {
+        const colors = await getAllColors()
+        const palettes = await getAllPalettes()
+        console.log(colors)
+        console.log(palettes)
+      }
+      fetchedData()
+    } catch (error) {
+      console.log(`Error fetching data: ${error}`)
+    }
     const colorsParam = searchParams.get("colors");
     if (colorsParam) {
       const colors = colorsParam
