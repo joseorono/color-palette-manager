@@ -5,7 +5,7 @@ import { usePaletteStore } from "@/stores/palette-store";
 import { Toaster } from "@/components/ui/sonner";
 import { db } from "@/db/main";
 import { Color, Palette } from "@/types";
-import { getAllColors, getAllPalettes } from "@/db/utils";
+import { PaletteDBQueries } from "@/db/queries";
 
 export default function HomePage() {
   const [searchParams] = useSearchParams();
@@ -36,13 +36,13 @@ export default function HomePage() {
     });
     console.log(id);
   }
-  
+
   useEffect( () => {
     try {
       const fetchedData = async () => {
-        const colors = await getAllColors()
-        const palettes = await getAllPalettes()
-        console.log(colors)
+        // const colors = await getAllColors() // TODO: Implement color queries in PaletteDBQueries
+        const palettes = await PaletteDBQueries.getAllPalettes()
+        // console.log(colors)
         console.log(palettes)
       }
       fetchedData()

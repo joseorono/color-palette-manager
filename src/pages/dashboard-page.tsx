@@ -21,10 +21,10 @@ export default function DashboardPage() {
     })
   }
 
-  const handleDeletePalette = (paletteId: string) => {
+  const handleDeletePalette = async (paletteId: string) => {
     const palette = palettes.find((p: { id: string }) => p.id === paletteId)
     if (palette) {
-      deletePalette(paletteId)
+      await deletePalette(paletteId)
       toast({
         title: "Palette Deleted",
         description: `"${palette.name}" has been deleted.`,
