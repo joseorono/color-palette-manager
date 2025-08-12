@@ -1,7 +1,7 @@
 import { Color } from "@/types/palette";
 import { cn } from "@/lib/utils";
 import { borderRadiusClassesMap } from "@/constants/ui";
-import LoaderAnim from "./loader-anim";
+import LoaderAnim from "./loaders/loader-anim";
 
 export interface PalettePreviewProps {
   /** Array of colors to display in the palette */

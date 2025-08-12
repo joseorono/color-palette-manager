@@ -2,7 +2,7 @@ import { Suspense, useState, useEffect } from "react";
 import { Color } from "@/types/palette";
 import { ExportFormat } from "@/constants/export";
 import { PaletteExport } from "@/lib/palette-export";
-import LoaderAnim from "./loader-anim";
+import LoaderAnim from "./loaders/loader-anim";
 
 interface ExportPreviewProps {
   colors: Color[];
@@ -23,7 +23,7 @@ function ExportContent({ colors, format }: ExportContentProps) {
       setIsLoading(true);
       try {
         const result = await PaletteExport.export(colors, format);
-        
+
         if (typeof result.content === 'string') {
           setContent(result.content);
         } else {

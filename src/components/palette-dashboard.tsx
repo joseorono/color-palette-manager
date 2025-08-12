@@ -5,7 +5,7 @@ import { Plus, Grid3X3, List, LayoutGrid } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { PaletteCard } from "./palette-card"
 import { PaletteFilters } from "./palette-filters"
-import { LoadingCard } from "@/components/ui/loading-card"
+import { LoadingCard } from "@/components/loaders/loading-card"
 import type { Palette, PaletteFilters as PaletteFiltersType } from "@/types/palette"
 
 interface PaletteDashboardProps {
@@ -76,7 +76,7 @@ export function PaletteDashboard({
     // Apply sorting
     filtered.sort((a, b) => {
       let comparison = 0
-      
+
       switch (filters.sortBy) {
         case 'name':
           comparison = a.name.localeCompare(b.name)
@@ -111,16 +111,8 @@ export function PaletteDashboard({
 
   if (isLoading) {
     return (
-      <div className="space-y-6">
-        <div className="flex justify-between items-center">
-          <div className="h-8 w-48 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
-          <div className="h-10 w-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <LoadingCard key={i} />
-          ))}
-        </div>
+      <div className="flex items-center justify-center min-h-[400px]">
+        <LoadingCard />
       </div>
     )
   }
@@ -135,7 +127,7 @@ export function PaletteDashboard({
             {filteredPalettes.length} of {palettes.length} palettes
           </p>
         </div>
-        
+
         <div className="flex items-center gap-2">
           {/* View Mode Toggle */}
           <div className="flex border rounded-lg p-1">
@@ -161,7 +153,7 @@ export function PaletteDashboard({
               <List className="h-4 w-4" />
             </Button>
           </div>
-          
+
           <Button onClick={onCreateNew}>
             <Plus className="mr-2 h-4 w-4" />
             New Palette
