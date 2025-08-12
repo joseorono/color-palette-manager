@@ -54,15 +54,15 @@ export class PaletteUtils {
   ): string[] {
     // Get or generate base color
     const baseColor = baseColorHex || (existingColorHexArray.length > 0 ? ColorUtils.getBaseColorHex(existingColorHexArray) : formatHex(random()));
-    
+
     // Initialize with existing colors
     let colors = [...existingColorHexArray];
-    
+
     // Add base color if not already present
     if (!colors.includes(baseColor)) {
       colors.unshift(baseColor);
     }
-    
+
     // Early returns
     if (count === colors.length) {
       return colors;
@@ -70,17 +70,17 @@ export class PaletteUtils {
     if (count < colors.length) {
       return colors.slice(0, count);
     }
-    
+
     // Calculate how many more colors we need
     let countToGenerate = count - colors.length;
-    
+
     // Priority order for color generation
     const priorityColorsDuringGeneration = ["white", "black", "complementary", "analogous", "variations"];
-    
+
     // Generate colors by priority
     for (const priority of priorityColorsDuringGeneration) {
       if (countToGenerate <= 0) break;
-      
+
       switch (priority) {
         case "white": {
           const whiteVariant = ColorUtils.generateWhite(baseColor);
@@ -90,7 +90,7 @@ export class PaletteUtils {
           }
           break;
         }
-        
+
         case "black": {
           if (countToGenerate <= 0) break;
           const blackVariant = ColorUtils.generateBlack(baseColor);
@@ -100,7 +100,7 @@ export class PaletteUtils {
           }
           break;
         }
-        
+
         case "complementary": {
           if (countToGenerate <= 0) break;
           const complementary = ColorUtils.generateComplementary(baseColor);
@@ -110,7 +110,7 @@ export class PaletteUtils {
           }
           break;
         }
-        
+
         case "analogous": {
           if (countToGenerate <= 0) break;
           const analogousColors = ColorUtils.generateAnalogous(baseColor);
@@ -123,7 +123,7 @@ export class PaletteUtils {
           }
           break;
         }
-        
+
         case "variations": {
           if (countToGenerate <= 0) break;
           const variations = ColorUtils.generateVariations(baseColor);
@@ -138,16 +138,27 @@ export class PaletteUtils {
         }
       }
     }
-    
-    // If we still need more colors, generate random ones
-    while (countToGenerate > 0) {
+
+    // If we still need more colors, generate random ones with safety limit
+    let attempts = 0;
+    const maxAttempts = 100; // Prevent infinite loops
+
+    while (countToGenerate > 0 && attempts < maxAttempts) {
       const randomColor = formatHex(random());
       if (!ColorUtils.isColorSimilar(randomColor, colors)) {
         colors.push(randomColor);
         countToGenerate--;
       }
+      attempts++;
     }
-    
+
+    // If we still need colors after max attempts, just add random ones
+    while (countToGenerate > 0) {
+      console.warn("Adding random color bc we ran out of attempts. This is unlikely and signals a serious performance issue. Optimize palette generation!");
+      colors.push(formatHex(random()));
+      countToGenerate--;
+    }
+
     return colors.slice(0, count);
   }
 

@@ -1,11 +1,10 @@
 import chroma, { Color as ChromaColor } from "chroma-js";
 import { colord } from "colord";
-import { hsl, lab, differenceEuclidean, random, formatHex } from "culori";
+import { hsl, rgb, random, formatHex } from "culori";
 import { Color } from "@/types/palette";
 import { nanoidColorId } from "@/constants";
 
 // Constants for color generation and comparison
-const PERCEPTUAL_DIFFERENCE_THRESHOLD = 15; // ΔE threshold for fuzzy checking
 const ANALOGOUS_HUE_OFFSET = 30; // degrees
 const COMPLEMENTARY_HUE_OFFSET = 180; // degrees
 const LIGHTNESS_VARIATION_FACTOR = 0.2; // 20% variation
@@ -152,28 +151,44 @@ export class ColorUtils {
   static getBaseColorHex(colorHexArray: string[]): string {
     return colorHexArray.length > 0 ? colorHexArray[0] : formatHex(random());
   }
+  /**
+   * Get the RGB distance between two colors
+   * @param color1Hex - First color in hexadecimal format
+   * @param color2Hex - Second color in hexadecimal format
+   * @returns RGB distance between the two colors
+   */
+  static getDistanceBetweenColors(color1Hex: string, color2Hex: string): number {
+    const color1Rgb = rgb(color1Hex);
+    const color2Rgb = rgb(color2Hex);
+
+    if (!color1Rgb || !color2Rgb) return 0;
+
+    const rDiff = (color1Rgb.r || 0) - (color2Rgb.r || 0);
+    const gDiff = (color1Rgb.g || 0) - (color2Rgb.g || 0);
+    const bDiff = (color1Rgb.b || 0) - (color2Rgb.b || 0);
+
+    return Math.sqrt(rDiff * rDiff + gDiff * gDiff + bDiff * bDiff) * 255;
+  }
 
   /**
-   * Check if a color is perceptually similar to any existing colors using LAB color space
+   * Check if a color is perceptually similar to any existing colors using RGB distance
    * @param newColorHex - New color to check in hexadecimal format
    * @param existingColorHexArray - Array of existing colors in hexadecimal format
-   * @param threshold - Perceptual difference threshold (default: 15)
+   * @param threshold - RGB distance threshold (default: 50)
    * @returns True if the new color is too similar to any existing color
    */
   static isColorSimilar(
     newColorHex: string,
     existingColorHexArray: string[],
-    threshold: number = PERCEPTUAL_DIFFERENCE_THRESHOLD
+    threshold: number = 50
   ): boolean {
-    const newColorLab = lab(newColorHex);
-    if (!newColorLab) return false;
+    if (existingColorHexArray.length === 0) return false;
 
+    // Use .some() to return early if we find a color that's too similar.
+    // If no existing color is too similar, .some() will return false
     return existingColorHexArray.some(existingColorHex => {
-      const existingColorLab = lab(existingColorHex);
-      if (!existingColorLab) return false;
-      
-      const difference = differenceEuclidean()(newColorLab, existingColorLab);
-      return difference < threshold;
+      const distance = ColorUtils.getDistanceBetweenColors(newColorHex, existingColorHex);
+      return distance < threshold;
     });
   }
 
@@ -185,7 +200,7 @@ export class ColorUtils {
   static generateWhite(baseColorHex: string): string {
     const baseHsl = hsl(baseColorHex);
     if (!baseHsl) return "#ffffff";
-    
+
     return formatHex({
       mode: "hsl",
       h: baseHsl.h || 0,
@@ -202,7 +217,7 @@ export class ColorUtils {
   static generateBlack(baseColorHex: string): string {
     const baseHsl = hsl(baseColorHex);
     if (!baseHsl) return "#000000";
-    
+
     return formatHex({
       mode: "hsl",
       h: baseHsl.h || 0,
@@ -219,7 +234,7 @@ export class ColorUtils {
   static generateComplementary(baseColorHex: string): string {
     const baseHsl = hsl(baseColorHex);
     if (!baseHsl) return baseColorHex;
-    
+
     return formatHex({
       mode: "hsl",
       h: ((baseHsl.h || 0) + COMPLEMENTARY_HUE_OFFSET) % 360,
@@ -236,7 +251,7 @@ export class ColorUtils {
   static generateAnalogous(baseColorHex: string): string[] {
     const baseHsl = hsl(baseColorHex);
     if (!baseHsl) return [];
-    
+
     return [
       formatHex({
         mode: "hsl",
@@ -261,15 +276,15 @@ export class ColorUtils {
   static generateVariations(baseColorHex: string): string[] {
     const baseHsl = hsl(baseColorHex);
     if (!baseHsl) return [];
-    
+
     const variations: string[] = [];
     const baseLightness = baseHsl.l || 0.5;
     const baseSaturation = baseHsl.s || 0.5;
-    
+
     // Lightness variations
     const lighterL = Math.min(1, baseLightness + LIGHTNESS_VARIATION_FACTOR);
     const darkerL = Math.max(0, baseLightness - LIGHTNESS_VARIATION_FACTOR);
-    
+
     variations.push(
       formatHex({
         mode: "hsl",
@@ -284,11 +299,11 @@ export class ColorUtils {
         l: darkerL
       })
     );
-    
+
     // Saturation variations
     const higherS = Math.min(1, baseSaturation + SATURATION_VARIATION_FACTOR);
     const lowerS = Math.max(0, baseSaturation - SATURATION_VARIATION_FACTOR);
-    
+
     variations.push(
       formatHex({
         mode: "hsl",
@@ -303,7 +318,7 @@ export class ColorUtils {
         l: baseLightness
       })
     );
-    
+
     return variations;
   }
 }
