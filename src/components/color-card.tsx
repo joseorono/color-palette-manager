@@ -55,16 +55,15 @@ export function ColorCard({ color, index }: ColorCardProps) {
           "group relative transform transition-all duration-300 ease-out",
           // Base hover effects
           "hover:scale-105 hover:shadow-xl hover:shadow-black/20",
-          // Dragging state
-          isDragging && [
-            "rotate-3 scale-105 shadow-2xl shadow-black/30",
-            "z-50 cursor-grabbing opacity-90",
-            "z-10 rounded-lg border-4 border-dashed border-blue-500 bg-blue-500 bg-opacity-20",
-          ],
           // Non-dragging state
           !isDragging && [
             "hover:shadow-lg hover:shadow-black/10",
             "cursor-grab active:cursor-grabbing",
+          ],
+          // Dragging state
+          isDragging && [
+            "z-50 cursor-grabbing opacity-90",
+            "z-10 rounded-lg border-4 border-dashed border-blue-500 bg-blue-500 bg-opacity-20",
           ],
           // Smooth transitions for all states
           "transition-[transform,box-shadow,opacity,filter] duration-300"
@@ -84,9 +83,9 @@ export function ColorCard({ color, index }: ColorCardProps) {
             // Hover effects for the color area
             "hover:rounded-xl hover:shadow-xl",
             // Dragging state effects
-            isDragging && "contrast-105 brightness-110",
+            "cursor-pointer hover:cursor-pointer",
             // Interactive cursor
-            "cursor-pointer hover:cursor-pointer"
+            isDragging && "contrast-105 brightness-110 cursor-grabbing hover:cursor-grabbing",
           )}
           style={{ backgroundColor: color.hex }}
           onClick={() => setIsPickerOpen(true)}

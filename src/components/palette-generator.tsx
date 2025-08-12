@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback, useState } from "react";
 import { usePaletteStore } from "@/stores/palette-store";
 import { ColorCard } from "./color-card";
 import { PaletteControls } from "./palette-controls";
@@ -7,7 +7,6 @@ import { Button } from "./ui/button";
 import { Shuffle, Plus } from "lucide-react";
 import {
   rectSortingStrategy,
-  rectSwappingStrategy,
   SortableContext,
   sortableKeyboardCoordinates,
 } from "@dnd-kit/sortable";
@@ -17,7 +16,8 @@ import {
   PointerSensor,
   KeyboardSensor,
   DndContext,
-  closestCenter,
+  closestCorners,
+  DragOverlay,
 } from "@dnd-kit/core";
 
 export function PaletteGenerator() {
@@ -29,6 +29,8 @@ export function PaletteGenerator() {
     addColor,
     reorderColors,
   } = usePaletteStore();
+  
+  const [activeId, setActiveId] = useState<string | null>(null);
 
   const handleKeyPress = useCallback(
     (event: KeyboardEvent) => {
@@ -51,23 +53,32 @@ export function PaletteGenerator() {
     return () => window.removeEventListener("keydown", handleKeyPress);
   }, [handleKeyPress, generateNewPalette, currentPalette.length]);
 
+  function handleDragStart(event: any) {
+    setActiveId(event.active.id);
+  }
+
   function handleDragEnd(event: any) {
-    console.log('handleDragEnd', event);
-    console.log('currentPalette', currentPalette);
     const { active, over } = event;
-    const activeIndex = currentPalette.findIndex(
-      (color) => color.id === active.id
-    );
-    const overIndex = currentPalette.findIndex(
-      (color) => color.id === over.id
-    );
-    if (active.id !== over.id) {
+    
+    if (over && active.id !== over.id) {
+      const activeIndex = currentPalette.findIndex(
+        (color) => color.id === active.id
+      );
+      const overIndex = currentPalette.findIndex(
+        (color) => color.id === over.id
+      );
       reorderColors(activeIndex, overIndex);
     }
+    
+    setActiveId(null);
   }
 
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
@@ -113,7 +124,8 @@ export function PaletteGenerator() {
           <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5 lg:gap-2">
             <DndContext
               sensors={sensors}
-              collisionDetection={closestCenter}
+              collisionDetection={closestCorners}
+              onDragStart={handleDragStart}
               onDragEnd={handleDragEnd}
             >
               <SortableContext items={currentPalette} strategy={rectSortingStrategy} >
@@ -121,6 +133,17 @@ export function PaletteGenerator() {
                   <ColorCard key={color.id} color={color} index={index} />
                 ))}
               </SortableContext>
+              
+              <DragOverlay>
+                {activeId ? (
+                  <div className="transform rotate-3 scale-105 opacity-95">
+                    <ColorCard 
+                      color={currentPalette.find(c => c.id === activeId)!} 
+                      index={currentPalette.findIndex(c => c.id === activeId)} 
+                    />
+                  </div>
+                ) : null}
+              </DragOverlay>
             </DndContext>
           </div>
         </div>
