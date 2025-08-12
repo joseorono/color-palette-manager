@@ -5,6 +5,7 @@ import DashboardPage from "./pages/dashboard-page";
 import AppLayout from "./layouts/app-layout";
 import LandingLayout from "./layouts/landing-page-layout";
 import { DatabaseSeeder } from "./db/seeder";
+
 function App() {
   return (
     <ThemeProvider

@@ -30,7 +30,6 @@ export function PaletteControls() {
   };
 
   useEffect(() => {
-    console.log('yooo change in controls');
     setPaletteSize(currentPalette.length);
   }, [currentPalette]);
 

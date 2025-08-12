@@ -12,13 +12,23 @@ import { cn, getAssignedRoles } from "@/lib/utils";
 interface ColorCardProps {
   color: Color;
   index: number;
+  isDragging?: boolean;
+  isOver?: boolean;
+  dragRef?: (node: HTMLDivElement | null) => void;
+  dropRef?: (node: HTMLDivElement | null) => void;
 }
 
-export function ColorCard({ color, index }: ColorCardProps) {
+export function ColorCard({ 
+  color, 
+  index, 
+  isDragging = false, 
+  isOver = false, 
+  dragRef, 
+  dropRef 
+}: ColorCardProps) {
   const [isPickerOpen, setIsPickerOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-  const { toggleColorLock, updateColor, removeColor, currentPalette } =
-    usePaletteStore();
+  const { toggleColorLock, updateColor, removeColor, currentPalette } = usePaletteStore();
 
   const copyToClipboard = async () => {
     try {
@@ -33,55 +43,64 @@ export function ColorCard({ color, index }: ColorCardProps) {
   //   getContrastRatio(color.hex, "#ffffff") > 3 ? "#ffffff" : "#000000";
   const colorName = ColorUtils.getColorName(color.hex);
 
+  
   return (
     <>
       <div
-        className="group relative transform cursor-pointer transition-all duration-300 hover:scale-105"
+        ref={(node) => {
+          if (dragRef) dragRef(node);
+          if (dropRef) dropRef(node);
+        }}
+        className={cn(
+          "group relative transform transition-all duration-300 hover:scale-105",
+          isDragging && "opacity-50 cursor-move scale-105 rotate-2 z-20 shadow-2xl",
+          isOver && "bg-blue-500 bg-opacity-20 border-2 border-blue-500 border-dashed rounded-lg z-10"
+        )}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
         {/* Main Color Area */}
         <div
-          className="relative h-32 overflow-hidden rounded-lg shadow-lg md:h-48 lg:h-64"
+          className={`relative h-32 overflow-hidden rounded-lg shadow-lg md:h-48 lg:h-64 ${isOver && 'opacity-50 scale-95'}`}
           style={{ backgroundColor: color.hex }}
           onClick={() => setIsPickerOpen(true)}
         >
           {/* Color Info Overlay */}
           <div
             className={cn(
-              "absolute inset-0 flex flex-col justify-between bg-black bg-opacity-20 p-4 opacity-100 transition-opacity duration-200",
+              "absolute inset-0 flex flex-col justify-between bg-black bg-opacity-20 p-4 opacity-0 transition-opacity duration-200",
               isHovered && "opacity-100"
             )}
           >
             {/* Top Controls */}
             <div className="flex items-start justify-between">
               <div className="flex flex-col items-start gap-1">
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  toggleColorLock(index);
-                }}
-                className="text-white hover:bg-white hover:bg-opacity-20"
-              >
-                {color.locked ? (
-                  <Lock className="h-4 w-4" />
-                ) : (
-                  <Unlock className="h-4 w-4" />
-                )}
-              </Button>
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  copyToClipboard();
-                }}
-                className="text-white hover:bg-white hover:bg-opacity-20"
-              >
-                <Copy className="h-4 w-4" />
-              </Button>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleColorLock(index);
+                  }}
+                  className="text-white hover:bg-white hover:bg-opacity-20"
+                >
+                  {color.locked ? (
+                    <Lock className="h-4 w-4" />
+                  ) : (
+                    <Unlock className="h-4 w-4" />
+                  )}
+                </Button>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    copyToClipboard();
+                  }}
+                  className="text-white hover:bg-white hover:bg-opacity-20"
+                >
+                  <Copy className="h-4 w-4" />
+                </Button>
               </div>
 
               {currentPalette.length > 2 && (
