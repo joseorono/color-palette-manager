@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { ColorRole, ColorRoles } from "@/types/palette";
+import { ColorRole } from "@/types/palette";
+import { PaletteUtils } from "@/lib/palette-utils";
 import { Button } from "./ui/button";
 import {
   DropdownMenu,
@@ -36,9 +37,7 @@ export function RoleAssigner({
     onRoleAssign(undefined);
   };
 
-  const availableRoles = ColorRoles.filter(
-    (role) => !assignedRoles.has(role) || role === currentRole
-  );
+  const availableRoles = PaletteUtils.getAvailableRoles(assignedRoles, currentRole);
 
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>

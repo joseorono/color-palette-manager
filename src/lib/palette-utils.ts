@@ -1,5 +1,5 @@
 import chroma from "chroma-js";
-import { Color, Palette } from "@/types/palette";
+import { ColorRole, ColorRoles } from "@/types/palette";
 
 export class PaletteUtils {
 
@@ -114,5 +114,21 @@ export class PaletteUtils {
     }
 
     return centroids;
+  }
+
+  /**
+   * Get available color roles for assignment, excluding already assigned roles
+   * except for the current role (which can be reassigned)
+   * @param assignedRoles - Set of roles already assigned to other colors
+   * @param currentRole - The current role of the color being edited (optional)
+   * @returns Array of available ColorRole values
+   */
+  static getAvailableRoles(
+    assignedRoles: Set<ColorRole>,
+    currentRole?: ColorRole
+  ): ColorRole[] {
+    return ColorRoles.filter(
+      (role) => !assignedRoles.has(role) || role === currentRole
+    );
   }
 }
