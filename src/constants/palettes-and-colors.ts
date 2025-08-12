@@ -1,0 +1,8 @@
+import { Color } from "@/types/palette";
+
+export const DEFAULT_COLORS: Color[] = [
+    { hex: "#1F1F1F", locked: false, name: "Black", role: "foreground" },
+    { hex: "#F5F6FA", locked: false, name: "White", role: "background" },
+    { hex: "#46CEE6", locked: false, name: "Vivid Sky Blue", role: "primary" },
+    { hex: "#1A8499", locked: false, name: "Blue Munsell", role: "secondary" },
+]
