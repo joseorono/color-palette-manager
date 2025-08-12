@@ -3,12 +3,16 @@ import { nanoidColorId } from "@/constants/nanoid";
 import { Color, Palette } from "@/types/palette";
 import { ColorUtils } from "@/lib/color-utils";
 import { PaletteUtils } from "@/lib/palette-utils";
+import { PaletteDBQueries } from "@/db/queries";
 import { arrayMove } from "@dnd-kit/sortable";
 
 interface PaletteStore {
   currentPalette: Color[];
   savedPalettes: Palette[];
   isGenerating: boolean;
+  currentPaletteId: string | null; // Track if editing existing palette
+  isSaved: boolean; // Track if current palette has been saved
+  hasUnsavedChanges: boolean; // Track if there are unsaved changes
 
   // Actions
   generateNewPalette: (count?: number) => void;
@@ -21,15 +25,21 @@ interface PaletteStore {
   addColor: () => void;
   removeColor: (index: number) => void;
   reorderColors: (dragIndex: number, hoverIndex: number) => void;
-  savePalette: (name: string, isPublic?: boolean) => Promise<void>;
+  savePalette: (name: string, isPublic?: boolean) => Promise<string>;
   loadSavedPalettes: () => Promise<void>;
+  loadPaletteForEditing: (paletteId: string) => Promise<void>;
   setPaletteFromUrl: (colors: string[]) => void;
+  markAsSaved: () => void;
+  resetUnsavedChanges: () => void;
 }
 
 export const usePaletteStore = create<PaletteStore>((set, get) => ({
   currentPalette: [],
   savedPalettes: [],
   isGenerating: false,
+  currentPaletteId: null,
+  isSaved: false,
+  hasUnsavedChanges: false,
 
   generateNewPalette: (count = 5) => {
     set({ isGenerating: true });
@@ -42,7 +52,13 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
         locked: false,
       }));
 
-      set({ currentPalette: palette, isGenerating: false });
+      set({ 
+        currentPalette: palette, 
+        isGenerating: false,
+        currentPaletteId: null,
+        isSaved: false,
+        hasUnsavedChanges: true
+      });
     }, 300); // Add slight delay for UX
   },
 
@@ -126,14 +142,41 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
   },
 
   savePalette: async (name: string, isPublic = false) => {
-    // ToDo: Save palette in DB
-    const { currentPalette } = get();
-    console.log("Saving palette:", { name, colors: currentPalette, isPublic });
+    const { currentPalette, currentPaletteId } = get();
+    
+    try {
+      const paletteData = {
+        name,
+        colors: currentPalette,
+        isPublic,
+        tags: []
+      };
+      
+      const savedId = await PaletteDBQueries.savePalette(paletteData, currentPaletteId || undefined);
+      
+      set({ 
+        currentPaletteId: savedId,
+        isSaved: true,
+        hasUnsavedChanges: false
+      });
+      
+      // Refresh saved palettes list
+      await get().loadSavedPalettes();
+      
+      return savedId;
+    } catch (error) {
+      console.error('Failed to save palette:', error);
+      throw error;
+    }
   },
 
   loadSavedPalettes: async () => {
-    // ToDo: Load palettes from DB
-    console.log("Loading saved palettes...");
+    try {
+      const palettes = await PaletteDBQueries.getAllPalettes();
+      set({ savedPalettes: palettes });
+    } catch (error) {
+      console.error('Failed to load saved palettes:', error);
+    }
   },
 
   setPaletteFromUrl: (colors: string[]) => {
@@ -143,6 +186,35 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
       locked: false,
     }));
 
-    set({ currentPalette: palette });
+    set({ 
+      currentPalette: palette,
+      currentPaletteId: null,
+      isSaved: false,
+      hasUnsavedChanges: true
+    });
+  },
+
+  loadPaletteForEditing: async (paletteId: string) => {
+    try {
+      const palette = await PaletteDBQueries.getPaletteById(paletteId);
+      if (palette) {
+        set({
+          currentPalette: palette.colors,
+          currentPaletteId: paletteId,
+          isSaved: true,
+          hasUnsavedChanges: false
+        });
+      }
+    } catch (error) {
+      console.error('Failed to load palette for editing:', error);
+    }
+  },
+
+  markAsSaved: () => {
+    set({ isSaved: true, hasUnsavedChanges: false });
+  },
+
+  resetUnsavedChanges: () => {
+    set({ hasUnsavedChanges: false });
   },
 }));
