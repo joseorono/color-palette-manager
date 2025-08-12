@@ -5,6 +5,7 @@ import { PaletteDBQueries } from './queries';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { nanoidColorId, nanoidPaletteId } from '@/constants';
 
 // Sample data
 const samplePalettes: Omit<Palette, 'id' | 'createdAt' | 'updatedAt'>[] = [
@@ -12,11 +13,11 @@ const samplePalettes: Omit<Palette, 'id' | 'createdAt' | 'updatedAt'>[] = [
     name: "Material Design",
     description: "Google's Material Design color palette",
     colors: [
-      { hex: "#F44336", locked: false, name: "Red", role: "accent" },
-      { hex: "#2196F3", locked: false, name: "Blue", role: "primary" },
-      { hex: "#4CAF50", locked: false, name: "Green", role: "secondary" },
-      { hex: "#FFC107", locked: false, name: "Amber", role: "muted" },
-      { hex: "#9C27B0", locked: false, name: "Purple", role: "card" },
+      { id: nanoidColorId(), hex: "#F44336", locked: false, name: "Red", role: "accent" },
+      { id: nanoidColorId(), hex: "#2196F3", locked: false, name: "Blue", role: "primary" },
+      { id: nanoidColorId(), hex: "#4CAF50", locked: false, name: "Green", role: "secondary" },
+      { id: nanoidColorId(), hex: "#FFC107", locked: false, name: "Amber", role: "muted" },
+      { id: nanoidColorId(), hex: "#9C27B0", locked: false, name: "Purple", role: "card" },
     ],
     isPublic: true,
     tags: ["material", "google", "popular"],
@@ -27,11 +28,11 @@ const samplePalettes: Omit<Palette, 'id' | 'createdAt' | 'updatedAt'>[] = [
     name: "Tailwind CSS",
     description: "Default color palette from Tailwind CSS",
     colors: [
-      { hex: "#3B82F6", locked: false, name: "Blue", role: "primary" },
-      { hex: "#10B981", locked: false, name: "Emerald", role: "secondary" },
-      { hex: "#EF4444", locked: false, name: "Red", role: "accent" },
-      { hex: "#F59E0B", locked: false, name: "Amber", role: "muted" },
-      { hex: "#8B5CF6", locked: false, name: "Violet", role: "card" },
+      { id: nanoidColorId(), hex: "#3B82F6", locked: false, name: "Blue", role: "primary" },
+      { id: nanoidColorId(), hex: "#10B981", locked: false, name: "Emerald", role: "secondary" },
+      { id: nanoidColorId(), hex: "#EF4444", locked: false, name: "Red", role: "accent" },
+      { id: nanoidColorId(), hex: "#F59E0B", locked: false, name: "Amber", role: "muted" },
+      { id: nanoidColorId(), hex: "#8B5CF6", locked: false, name: "Violet", role: "card" },
     ],
     isPublic: true,
     tags: ["tailwind", "modern", "web"],
@@ -42,13 +43,13 @@ const samplePalettes: Omit<Palette, 'id' | 'createdAt' | 'updatedAt'>[] = [
     name: "Super Secret Palette",
     description: "A secret palette that only you know about (actually the one used by the app).",
     colors: [
-      { hex: "#1F1F1F", locked: false, name: "Black", role: "primary" },
-      { hex: "#E9FCFF", locked: false, name: "Azure Web", role: "secondary" },
-      { hex: "#F5F6FA", locked: false, name: "White", role: "accent" },
-      { hex: "#93E6EF", locked: false, name: "Electric Blue", role: "muted" },
-      { hex: "#46CEE6", locked: false, name: "Vivid Sky Blue", role: "card" },
-      { hex: "#1A8499", locked: false, name: "Blue Munsell", role: "card" },
-      { hex: "#095764", locked: false, name: "Midnight Green", role: "card" },
+      { id: nanoidColorId(), hex: "#1F1F1F", locked: false, name: "Black", role: "primary" },
+      { id: nanoidColorId(), hex: "#E9FCFF", locked: false, name: "Azure Web", role: "secondary" },
+      { id: nanoidColorId(), hex: "#F5F6FA", locked: false, name: "White", role: "accent" },
+      { id: nanoidColorId(), hex: "#93E6EF", locked: false, name: "Electric Blue", role: "muted" },
+      { id: nanoidColorId(), hex: "#46CEE6", locked: false, name: "Vivid Sky Blue", role: "card" },
+      { id: nanoidColorId(), hex: "#1A8499", locked: false, name: "Blue Munsell", role: "card" },
+      { id: nanoidColorId(), hex: "#095764", locked: false, name: "Midnight Green", role: "card" },
     ],
     isPublic: false,
     tags: ["secret", "own"],
@@ -59,11 +60,11 @@ const samplePalettes: Omit<Palette, 'id' | 'createdAt' | 'updatedAt'>[] = [
     name: "Nord Theme",
     description: "Arctic, north-bluish color palette",
     colors: [
-      { hex: "#8FBCBB", locked: false, name: "Nord 7", role: "primary" },
-      { hex: "#88C0D0", locked: false, name: "Nord 8", role: "secondary" },
-      { hex: "#81A1C1", locked: false, name: "Nord 9", role: "accent" },
-      { hex: "#5E81AC", locked: false, name: "Nord 10", role: "background" },
-      { hex: "#BF616A", locked: false, name: "Nord 11", role: "border" },
+      { id: nanoidColorId(), hex: "#8FBCBB", locked: false, name: "Nord 7", role: "primary" },
+      { id: nanoidColorId(), hex: "#88C0D0", locked: false, name: "Nord 8", role: "secondary" },
+      { id: nanoidColorId(), hex: "#81A1C1", locked: false, name: "Nord 9", role: "accent" },
+      { id: nanoidColorId(), hex: "#5E81AC", locked: false, name: "Nord 10", role: "background" },
+      { id: nanoidColorId(), hex: "#BF616A", locked: false, name: "Nord 11", role: "border" },
     ],
     isPublic: true,
     tags: ["nord", "arctic", "cool"],
@@ -74,11 +75,11 @@ const samplePalettes: Omit<Palette, 'id' | 'createdAt' | 'updatedAt'>[] = [
     name: "Solarized",
     description: "Precision colors for machines and people",
     colors: [
-      { hex: "#268BD2", locked: false, name: "Blue", role: "primary" },
-      { hex: "#859900", locked: false, name: "Green", role: "secondary" },
-      { hex: "#D33682", locked: false, name: "Magenta", role: "accent" },
-      { hex: "#CB4B16", locked: false, name: "Orange", role: "foreground" },
-      { hex: "#DC322F", locked: false, name: "Red", role: "muted" },
+      { id: nanoidColorId(), hex: "#268BD2", locked: false, name: "Blue", role: "primary" },
+      { id: nanoidColorId(), hex: "#859900", locked: false, name: "Green", role: "secondary" },
+      { id: nanoidColorId(), hex: "#D33682", locked: false, name: "Magenta", role: "accent" },
+      { id: nanoidColorId(), hex: "#CB4B16", locked: false, name: "Orange", role: "foreground" },
+      { id: nanoidColorId(), hex: "#DC322F", locked: false, name: "Red", role: "muted" },
     ],
     isPublic: true,
     tags: ["solarized", "ethan schoonover", "popular"],
@@ -100,7 +101,7 @@ const seedDatabase = async () => {
 
         // Create properly formatted palettes array
         const palettesWithTimestamps = samplePalettes.map(palette => ({
-          id: crypto.randomUUID(),
+          id: nanoidPaletteId(),
           ...palette,
           createdAt: now,
           updatedAt: now,

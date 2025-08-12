@@ -1,7 +1,6 @@
 import { z } from "zod";
-import { nanoid } from "nanoid";
 import { ExportFormat } from "@/constants/export";
-import { COLOR_ID_LENGTH } from "@/constants";
+import { COLOR_ID_LENGTH, PALETTE_ID_LENGTH } from "@/constants";
 
 /*
 =====================================
@@ -44,7 +43,7 @@ export const colorSchema = z.object({
 export type Color = z.infer<typeof colorSchema>;
 
 export const paletteSchema = z.object({
-  id: z.string(),
+  id: z.string().length(PALETTE_ID_LENGTH),
   name: z.string().min(1).max(48),
   description: z.string().min(1).max(256).optional(),
   colors: z.array(colorSchema),
