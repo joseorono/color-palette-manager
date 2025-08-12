@@ -9,7 +9,26 @@ import { PaletteDBQueries } from "@/db/queries";
 
 export default function HomePage() {
   const [searchParams] = useSearchParams();
-  const { setPaletteFromUrl } = usePaletteStore();
+  const { setPaletteFromUrl, hasUnsavedChanges } = usePaletteStore();
+
+  // Handle exit warning for unsaved changes
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      if (hasUnsavedChanges) {
+        event.preventDefault();
+        // Deprecated, but doesn't hurt and aids legacy browser support
+        // @ts-ignore
+        event.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
+        return 'You have unsaved changes. Are you sure you want to leave?';
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [hasUnsavedChanges]);
 
   useEffect( () => {
     try {
