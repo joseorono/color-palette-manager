@@ -1,9 +1,10 @@
 import chroma, { Color as ChromaColor } from "chroma-js";
 import { colord } from "colord";
 import { Color } from "@/types/palette";
+import { nanoidColorId } from "@/constants";
 
 export class ColorUtils {
-  static generateRandomColor(): string {
+  static generateRandomColorHex(): string {
     return chroma.random().hex();
   }
 
@@ -19,6 +20,8 @@ export class ColorUtils {
 
   static HexToColor(hex: string): Color {
     return {
+      id: nanoidColorId(),
+      name: ColorUtils.getColorName(hex),
       hex,
       locked: false,
     };
@@ -75,4 +78,28 @@ export class ColorUtils {
 
     return name;
   }
+
+   /**
+   * Get the base color from an array of colors.
+   * Returns the primary color (if one exists with "primary" role) or the first color.
+   * @param colors - Array of colors to get the base color from
+   * @returns The base color, or undefined if the array is empty
+   */
+    static getBaseColor(colors: Color[]): Color {
+      if (colors.length === 0) {
+        // Return random color.
+        return ColorUtils.HexToColor(ColorUtils.generateRandomColorHex());
+      }
+
+      // Look for a color with "primary" role first
+      const primaryColor = colors.find(color => color.role === "primary");
+      if (primaryColor) {
+        return primaryColor;
+      }
+
+      // ToDo: If no primary color found, return the first color with some saturation (not black or white)
+
+      // If no color found, return the first color
+      return colors[0];
+    }
 }

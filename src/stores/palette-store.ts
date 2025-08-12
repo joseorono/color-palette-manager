@@ -53,7 +53,7 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
     setTimeout(() => {
       const newPalette = currentPalette.map((color) => {
         if (color.locked) return color;
-        return { ...color, hex: ColorUtils.generateRandomColor() };
+        return { ...color, hex: ColorUtils.generateRandomColorHex() };
       });
 
       set({ currentPalette: newPalette, isGenerating: false });
@@ -104,7 +104,7 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
 
     const newColor: Color = {
       id: nanoidColorId(),
-      hex: ColorUtils.generateRandomColor(),
+      hex: ColorUtils.generateRandomColorHex(),
       locked: false,
     };
 

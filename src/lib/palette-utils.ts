@@ -1,5 +1,5 @@
 import chroma from "chroma-js";
-import { ColorRole, ColorRoles } from "@/types/palette";
+import { Color, ColorRole, ColorRoles } from "@/types/palette";
 
 export class PaletteUtils {
 
