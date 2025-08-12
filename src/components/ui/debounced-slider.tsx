@@ -19,7 +19,6 @@ export function DebouncedSlider({
   const [internalValue, setInternalValue] = useState(initialValue);
 
   useEffect(() => {
-    console.log('initialValueChanged');
     setValue(initialValue);
     setInternalValue(initialValue);
   }, [initialValue]);

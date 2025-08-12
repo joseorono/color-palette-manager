@@ -24,7 +24,7 @@ interface PaletteCardProps {
 }
 
 export function PaletteCard({ palette, onEdit, onDelete, onToggleFavorite, onView }: PaletteCardProps) {
-  const [isHovered, setIsHovered] = useState(false)
+  const [isHovered, setIsHovered] = useState(false);
 
   const handleCopyColors = () => {
     const colorString = palette.colors.map(color => color.hex).join(', ')

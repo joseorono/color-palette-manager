@@ -15,6 +15,7 @@ interface PaletteStore {
   updateColor: (index: number, updates: Partial<Pick<Color, 'hex' | 'role' | 'name'>>) => void;
   addColor: () => void;
   removeColor: (index: number) => void;
+  reorderColors: (dragIndex: number, hoverIndex: number) => void;
   savePalette: (name: string, isPublic?: boolean) => Promise<void>;
   loadSavedPalettes: () => Promise<void>;
   setPaletteFromUrl: (colors: string[]) => void;
@@ -103,6 +104,15 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
     if (currentPalette.length <= 2) return;
 
     const newPalette = currentPalette.filter((_, i) => i !== index);
+    set({ currentPalette: newPalette });
+  },
+
+  reorderColors: (dragIndex: number, hoverIndex: number) => {
+    const { currentPalette } = get();
+    const newPalette = [...currentPalette];
+    const draggedColor = newPalette[dragIndex];
+    newPalette.splice(dragIndex, 1);
+    newPalette.splice(hoverIndex, 0, draggedColor);
     set({ currentPalette: newPalette });
   },
 
