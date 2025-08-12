@@ -1,11 +1,14 @@
 import chroma from "chroma-js";
+import { formatHex, random } from "culori";
 import { Color, ColorRole, ColorRoles } from "@/types/palette";
+import { ColorUtils } from "@/lib/color-utils";
 
 export class PaletteUtils {
 
-  static generateHarmoniousPalette(
+  static generateHarmoniousPalette_legacy(
     baseColorArg?: string,
-    count: number = 5
+    count: number = 5,
+    existingColors?: Color[]
   ): string[] {
     const baseColor = baseColorArg ? chroma(baseColorArg) : chroma.random();
     const colors: string[] = [baseColor.hex()];
@@ -32,6 +35,119 @@ export class PaletteUtils {
     console.log(count, shuffled.length);
     colors.push(...shuffled.slice(0, count - 1));
     console.log(colors);
+    return colors.slice(0, count);
+  }
+
+
+
+  /**
+   * Generate a harmonious color palette based on color theory principles
+   * @param baseColorHex - Optional base color in hexadecimal format
+   * @param count - Number of colors to generate (default: 5)
+   * @param existingColorHexArray - Array of existing colors in hexadecimal format
+   * @returns Array of hex color strings forming a harmonious palette
+   */
+  static generateHarmoniousPalette(
+    baseColorHex?: string,
+    count: number = 5,
+    existingColorHexArray: string[] = []
+  ): string[] {
+    // Get or generate base color
+    const baseColor = baseColorHex || (existingColorHexArray.length > 0 ? ColorUtils.getBaseColorHex(existingColorHexArray) : formatHex(random()));
+    
+    // Initialize with existing colors
+    let colors = [...existingColorHexArray];
+    
+    // Add base color if not already present
+    if (!colors.includes(baseColor)) {
+      colors.unshift(baseColor);
+    }
+    
+    // Early returns
+    if (count === colors.length) {
+      return colors;
+    }
+    if (count < colors.length) {
+      return colors.slice(0, count);
+    }
+    
+    // Calculate how many more colors we need
+    let countToGenerate = count - colors.length;
+    
+    // Priority order for color generation
+    const priorityColorsDuringGeneration = ["white", "black", "complementary", "analogous", "variations"];
+    
+    // Generate colors by priority
+    for (const priority of priorityColorsDuringGeneration) {
+      if (countToGenerate <= 0) break;
+      
+      switch (priority) {
+        case "white": {
+          const whiteVariant = ColorUtils.generateWhite(baseColor);
+          if (!ColorUtils.isColorSimilar(whiteVariant, colors)) {
+            colors.push(whiteVariant);
+            countToGenerate--;
+          }
+          break;
+        }
+        
+        case "black": {
+          if (countToGenerate <= 0) break;
+          const blackVariant = ColorUtils.generateBlack(baseColor);
+          if (!ColorUtils.isColorSimilar(blackVariant, colors)) {
+            colors.push(blackVariant);
+            countToGenerate--;
+          }
+          break;
+        }
+        
+        case "complementary": {
+          if (countToGenerate <= 0) break;
+          const complementary = ColorUtils.generateComplementary(baseColor);
+          if (!ColorUtils.isColorSimilar(complementary, colors)) {
+            colors.push(complementary);
+            countToGenerate--;
+          }
+          break;
+        }
+        
+        case "analogous": {
+          if (countToGenerate <= 0) break;
+          const analogousColors = ColorUtils.generateAnalogous(baseColor);
+          for (const analogousColor of analogousColors) {
+            if (countToGenerate <= 0) break;
+            if (!ColorUtils.isColorSimilar(analogousColor, colors)) {
+              colors.push(analogousColor);
+              countToGenerate--;
+            }
+          }
+          break;
+        }
+        
+        case "variations": {
+          if (countToGenerate <= 0) break;
+          const variations = ColorUtils.generateVariations(baseColor);
+          for (const variation of variations) {
+            if (countToGenerate <= 0) break;
+            if (!ColorUtils.isColorSimilar(variation, colors)) {
+              colors.push(variation);
+              countToGenerate--;
+            }
+          }
+          break;
+        }
+      }
+    }
+    
+    // If we still need more colors, generate random ones
+    while (countToGenerate > 0) {
+      const randomColor = formatHex(random());
+      if (!ColorUtils.isColorSimilar(randomColor, colors)) {
+        colors.push(randomColor);
+        countToGenerate--;
+      }
+    }
+    
     return colors.slice(0, count);
   }
 
