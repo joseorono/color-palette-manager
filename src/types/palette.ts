@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { nanoid } from "nanoid";
 import { ExportFormat } from "@/constants/export";
+import { COLOR_ID_LENGTH } from "@/constants";
 
 /*
 =====================================
@@ -34,7 +35,7 @@ export type CSSColorVariablesObject = Record<ColorRole, string>;
 */
 
 export const colorSchema = z.object({
-  id: z.string().default(() => nanoid()),
+  id: z.string().length(COLOR_ID_LENGTH),
   hex: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/),
   locked: z.boolean().default(false),
   name: z.string().min(1).max(48).optional(),

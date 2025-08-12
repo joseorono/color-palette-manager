@@ -3,6 +3,7 @@ import { nanoid } from "nanoid";
 import { Color, Palette } from "@/types/palette";
 import { ColorUtils } from "@/lib/color-utils";
 import { PaletteUtils } from "@/lib/palette-utils";
+import { COLOR_ID_LENGTH } from "@/constants";
 
 interface PaletteStore {
   currentPalette: Color[];
@@ -33,7 +34,7 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
     setTimeout(() => {
       const colors = PaletteUtils.generateHarmoniousPalette(undefined, count);
       const palette: Color[] = colors.map((hex) => ({
-        id: nanoid(),
+        id: nanoid(COLOR_ID_LENGTH),
         hex,
         locked: false,
       }));
@@ -94,7 +95,7 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
     if (currentPalette.length >= 16) return;
 
     const newColor: Color = {
-      id: nanoid(),
+      id: nanoid(COLOR_ID_LENGTH),
       hex: ColorUtils.generateRandomColor(),
       locked: false,
     };
