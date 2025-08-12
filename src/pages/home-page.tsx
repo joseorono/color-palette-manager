@@ -11,32 +11,6 @@ export default function HomePage() {
   const [searchParams] = useSearchParams();
   const { setPaletteFromUrl } = usePaletteStore();
 
-  async function addPalette() {
-    const id = await db.palettes.add({
-      name: "New Palette",
-      description: "Description",
-      colors: [{ hex: "#FF0000", locked: false }, { hex: "#00FF00", locked: false }, { hex: "#0000FF", locked: false }],
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      isPublic: false,
-      tags: [],
-      favoriteCount: 0,
-      isFavorite: false,
-    });
-    console.log(id);
-  }
-
-
-  async function addColor() {
-    const id = await db.colors.add({
-      hex: "#FF0000",
-      locked: false,
-      name: "Red",
-      role: "primary",
-    });
-    console.log(id);
-  }
-
   useEffect( () => {
     try {
       const fetchedData = async () => {

@@ -6,29 +6,6 @@ import { db } from "./main";
  * Provides a clean API for CRUD operations with proper type safety.
  */
 export class PaletteDBQueries {
-  /////////**************
-  // Palettes
-  /////////**************
-
-  /**
-   * Insert a new palette into the database
-   * @param palette - Palette data without id, createdAt, and updatedAt
-   * @returns Promise<string> - The generated palette ID
-   */
-  static async insertPalette(palette: Omit<Palette, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
-    const now = new Date();
-    const id = crypto.randomUUID();
-
-    await db.palettes.add({
-      ...palette,
-      id,
-      createdAt: now,
-      updatedAt: now
-    });
-
-    return id;
-  }
-
   /**
    * Get all palettes from the database
    * @returns Promise<Palette[]> - Array of all palettes
@@ -54,6 +31,7 @@ export class PaletteDBQueries {
    */
   static async updatePalette(id: string, updates: Partial<Omit<Palette, 'id' | 'createdAt'| 'updatedAt'>>): Promise<number> {
     const now = new Date();
+
     return await db.palettes.update(id, {
       ...updates,
       updatedAt: now
@@ -70,17 +48,52 @@ export class PaletteDBQueries {
   }
 
   /**
+   * Insert a new palette into the database
+   * @param palette - Palette data without id, createdAt, and updatedAt
+   * @returns Promise<string> - The generated palette ID
+   */
+  static async insertPalette(palette: Omit<Palette, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
+    const now = new Date();
+    const id = crypto.randomUUID();
+
+    await db.palettes.add({
+      ...palette,
+      id,
+      createdAt: now,
+      updatedAt: now
+    });
+
+    return id;
+  }
+
+  /**
+   * Update the color array of a palette
+   * @param id - The palette ID
+   * @param colors - The new color array
+   * @returns Promise<number | false> - Number of updated records or false if palette not found
+   */
+  static async updateColors(id: string, colors: Color[]): Promise<number | false> {
+    const queriedPalette = await db.palettes.get(id);
+    if (!queriedPalette) {
+      return false;
+    }
+    return await db.palettes.update(id, {
+      colors
+    });
+  }
+
+  /**
    * Add a color to an existing palette
    * @param id - The palette ID
    * @param color - The color to add
    * @returns Promise<number | false> - Number of updated records or false if palette not found
    */
   static async addColorToPalette(id: string, color: Color): Promise<number | false> {
-    const queriedColors = await db.palettes.get(id);
-    if (!queriedColors) {
+    const queriedPalette = await db.palettes.get(id);
+    if (!queriedPalette) {
       return false;
     }
-    const colors = queriedColors.colors;
+    const colors = queriedPalette.colors;
     return await db.palettes.update(id, {
       colors: [...colors, color]
     });
