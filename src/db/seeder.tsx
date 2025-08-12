@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 
 // Sample data
-const samplePalettes = [
+const samplePalettes: Omit<Palette, 'id' | 'createdAt' | 'updatedAt'>[] = [
   {
     name: "Material Design",
     description: "Google's Material Design color palette",

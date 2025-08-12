@@ -1,23 +1,12 @@
+import { z } from "zod";
 import { ExportFormat } from "@/constants/export";
 
-// Roles for colors, like primary, secondary, etc.
 /*
-  const containerStyle = {
-      '--primary': palette.primary,
-      '--secondary': palette.secondary,
-      '--accent': palette.accent,
-      '--background': palette.background,
-      '--foreground': palette.foreground,
-      '--card': palette.card,
-      '--border': palette.border,
-      '--muted': palette.muted,
-      '--primary-foreground': '0 0% 98%',
-      '--secondary-foreground': palette.foreground,
-      '--accent-foreground': palette.foreground,
-      '--card-foreground': palette.foreground,
-      '--muted-foreground': '220 5.9% 57.9%',
-    };
+=====================================
+    Color Roles and CSS Variables
+=====================================
 */
+
 export const ColorRoles = [
   "primary",
   "secondary",
@@ -37,25 +26,39 @@ export const ColorRoles = [
 export type ColorRole = typeof ColorRoles[number];
 export type CSSColorVariablesObject = Record<ColorRole, string>;
 
-export interface Color {
-  hex: string;
-  locked: boolean;
-  name?: string;
-  role?: ColorRole;
-}
+/*
+=====================================
+    Main Types with Zod Schemas
+=====================================
+*/
 
-export interface Palette {
-  id: string;
-  name: string;
-  description?: string;
-  colors: Color[];
-  createdAt: Date;
-  updatedAt: Date;
-  isPublic: boolean;
-  tags: string[];
-  favoriteCount?: number;
-  isFavorite?: boolean;
-}
+export const colorSchema = z.object({
+  hex: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/),
+  locked: z.boolean().default(false),
+  name: z.string().min(1).max(48).optional(),
+  role: z.enum(ColorRoles).optional(),
+});
+export type Color = z.infer<typeof colorSchema>;
+
+export const paletteSchema = z.object({
+  id: z.string(),
+  name: z.string().min(1).max(48),
+  description: z.string().min(1).max(256).optional(),
+  colors: z.array(colorSchema),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+  isPublic: z.boolean().default(false),
+  tags: z.array(z.string().min(1).max(48)).default([]),
+  favoriteCount: z.number().default(0).optional(),
+  isFavorite: z.boolean().default(false).optional(),
+});
+export type Palette = z.infer<typeof paletteSchema>;
+
+/*
+=====================================
+    Misc Interfaces
+=====================================
+*/
 
 export interface PaletteExport {
   format: ExportFormat;
@@ -71,9 +74,9 @@ export interface PaletteFilters {
 }
 
 /*
-=========================
-   Accessibility
-=========================
+=====================================
+    Accessibility-Related Types
+=====================================
 */
 
 // WCAGContrastLevel, with array for validation

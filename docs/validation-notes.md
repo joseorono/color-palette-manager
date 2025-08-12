@@ -8,3 +8,4 @@
 - Is Public is optional
 - Is Favorite is optional
 - Favorite Count is optional
+- Zod Schemas can be found in src/types/palette.ts
