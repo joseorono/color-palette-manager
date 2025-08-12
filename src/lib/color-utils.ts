@@ -13,6 +13,36 @@ const WHITE_LIGHTNESS_THRESHOLD = 0.9;
 const BLACK_LIGHTNESS_THRESHOLD = 0.1;
 
 export class ColorUtils {
+
+  /**
+   * Validate if a string is a valid hex color
+   * @param hex - Color string to validate
+   * @returns boolean - True if valid hex color
+   */
+  static isValidHex(hex: string): boolean {
+    // Remove # if present
+    const cleanHex = hex.replace('#', '');
+
+    // Check if it's 3 or 6 characters and all hex digits
+    return /^([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})$/.test(cleanHex);
+  }
+
+  /**
+   * Normalize hex color to full 6-digit format with #
+   * @param hex - Hex color string
+   * @returns string - Normalized hex color
+   */
+  static normalizeHex(hex: string): string {
+    let cleanHex = hex.replace('#', '').toUpperCase();
+
+    // Expand 3-digit hex to 6-digit
+    if (cleanHex.length === 3) {
+      cleanHex = cleanHex.split('').map(char => char + char).join('');
+    }
+
+    return `#${cleanHex}`;
+  }
+
   /**
    * Generate a random color in hexadecimal format
    * @returns A random hex color string (e.g., "#ff5733")
