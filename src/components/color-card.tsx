@@ -7,7 +7,8 @@ import { Button } from "./ui/button";
 import { toast } from "sonner";
 import { Lock, Unlock, Trash2, Copy } from "lucide-react";
 import { ColorUtils } from "@/lib/color-utils";
-import { cn, getAssignedRoles } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import { PaletteUtils } from "@/lib/palette-utils";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
@@ -198,7 +199,7 @@ export function ColorCard({ color, index }: ColorCardProps) {
                 onRoleAssign={(role: ColorRole | undefined) =>
                   updateColor(index, { role })
                 }
-                assignedRoles={getAssignedRoles(currentPalette)}
+                assignedRoles={PaletteUtils.getAssignedRoles(currentPalette)}
               />
             </div>
           </div>

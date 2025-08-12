@@ -258,4 +258,19 @@ export class PaletteUtils {
       (role) => !assignedRoles.has(role) || role === currentRole
     );
   }
+
+  /**
+   * Get all assigned roles from an array of colors
+   * @param colors - Array of Color objects to check for assigned roles
+   * @returns Set of ColorRole values that are currently assigned
+   */
+  static getAssignedRoles(colors: Color[]): Set<ColorRole> {
+    const assignedRoles = new Set<ColorRole>();
+    colors.forEach((color) => {
+      if (color.role) {
+        assignedRoles.add(color.role);
+      }
+    });
+    return assignedRoles;
+  }
 }
