@@ -105,12 +105,12 @@ export class PaletteUrlUtils {
    */
   static async paletteFromPaletteId(paletteId: string): Promise<Palette | null> {
     try {
-      const trimmedPaletteId = paletteId.trim();
-      if (!paletteId || trimmedPaletteId === '') {
+      const trimmedId = paletteId.trim();
+      if (!paletteId || trimmedId === '') {
         return null;
       }
 
-      const palette = await PaletteDBQueries.getPaletteById(trimmedPaletteId);
+      const palette = await PaletteDBQueries.getPaletteById(trimmedId);
       return palette || null;
     } catch (error) {
       console.error('Error loading palette by ID:', error);
