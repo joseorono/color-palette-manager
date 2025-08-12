@@ -77,10 +77,10 @@ export class ColorUtils {
    * @param hexColor - Hex color string (e.g., "#ff5733")
    * @returns Color object with generated ID and name
    */
-  static HexToColor(hexColor: string): Color {
+  static HexToColor(hexColor: string, name?: string): Color {
     return {
       id: nanoidColorId(),
-      name: ColorUtils.getColorName(hexColor),
+      name: name || ColorUtils.getColorName(hexColor),
       hex: hexColor,
       locked: false,
     };
