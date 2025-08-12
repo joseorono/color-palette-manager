@@ -1,5 +1,6 @@
 import { Color, Palette } from '@/types/palette';
 import { db } from "./main";
+import { nanoidPaletteId } from '@/constants/nanoid';
 
 /**
  * Database query operations for palettes and colors.
@@ -54,7 +55,7 @@ export class PaletteDBQueries {
    */
   static async insertPalette(palette: Omit<Palette, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
     const now = new Date();
-    const id = crypto.randomUUID();
+    const id = nanoidPaletteId();
 
     await db.palettes.add({
       ...palette,

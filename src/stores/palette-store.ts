@@ -1,9 +1,8 @@
 import { create } from "zustand";
-import { nanoid } from "nanoid";
+import { nanoidColorId } from "@/constants/nanoid";
 import { Color, Palette } from "@/types/palette";
 import { ColorUtils } from "@/lib/color-utils";
 import { PaletteUtils } from "@/lib/palette-utils";
-import { COLOR_ID_LENGTH } from "@/constants";
 import { arrayMove } from "@dnd-kit/sortable";
 
 interface PaletteStore {
@@ -15,7 +14,10 @@ interface PaletteStore {
   generateNewPalette: (count?: number) => void;
   regenerateUnlocked: () => void;
   toggleColorLock: (index: number) => void;
-  updateColor: (index: number, updates: Partial<Pick<Color, 'hex' | 'role' | 'name'>>) => void;
+  updateColor: (
+    index: number,
+    updates: Partial<Pick<Color, "hex" | "role" | "name">>
+  ) => void;
   addColor: () => void;
   removeColor: (index: number) => void;
   reorderColors: (dragIndex: number, hoverIndex: number) => void;
@@ -35,7 +37,7 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
     setTimeout(() => {
       const colors = PaletteUtils.generateHarmoniousPalette(undefined, count);
       const palette: Color[] = colors.map((hex) => ({
-        id: nanoid(COLOR_ID_LENGTH),
+        id: nanoidColorId(),
         hex,
         locked: false,
       }));
@@ -54,7 +56,6 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
         return { ...color, hex: ColorUtils.generateRandomColor() };
       });
 
-
       set({ currentPalette: newPalette, isGenerating: false });
     }, 300);
   },
@@ -62,11 +63,17 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
   toggleColorLock: (index: number) => {
     const { currentPalette } = get();
     const newPalette = [...currentPalette];
-    newPalette[index] = { ...newPalette[index], locked: !newPalette[index].locked };
+    newPalette[index] = {
+      ...newPalette[index],
+      locked: !newPalette[index].locked,
+    };
     set({ currentPalette: newPalette });
   },
 
-  updateColor: (index: number, updates: Partial<Pick<Color, 'hex' | 'role' | 'name'>>) => {
+  updateColor: (
+    index: number,
+    updates: Partial<Pick<Color, "hex" | "role" | "name">>
+  ) => {
     const { currentPalette } = get();
 
     // If updating role (not removing), check if it's already assigned to another color
@@ -78,7 +85,9 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
       if (existingColorIndex !== -1) {
         //TOOD: instead of a console.error(), show a toast.
         // toast.warning(`The role "${updates.role}" is already assigned to another color. Please remove it first or choose a different role.`);
-        console.error(`The role "${updates.role}" is already assigned to another color. Please remove it first or choose a different role.`);
+        console.error(
+          `The role "${updates.role}" is already assigned to another color. Please remove it first or choose a different role.`
+        );
         return;
       }
     }
@@ -89,14 +98,12 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
     set({ currentPalette: newPalette });
   },
 
-
-
   addColor: () => {
     const { currentPalette } = get();
     if (currentPalette.length >= 16) return;
 
     const newColor: Color = {
-      id: nanoid(COLOR_ID_LENGTH),
+      id: nanoidColorId(),
       hex: ColorUtils.generateRandomColor(),
       locked: false,
     };
