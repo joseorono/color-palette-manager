@@ -6,10 +6,10 @@ import { ExportModal } from "./dialogs/export-modal";
 import { Button } from "./ui/button";
 import { Shuffle, Plus } from "lucide-react";
 import {
-  arrayMove,
+  rectSortingStrategy,
+  rectSwappingStrategy,
   SortableContext,
   sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import {
   useSensors,
@@ -52,12 +52,14 @@ export function PaletteGenerator() {
   }, [handleKeyPress, generateNewPalette, currentPalette.length]);
 
   function handleDragEnd(event: any) {
+    console.log('handleDragEnd', event);
+    console.log('currentPalette', currentPalette);
     const { active, over } = event;
     const activeIndex = currentPalette.findIndex(
-      (color) => color.hex === active.id
+      (color) => color.id === active.id
     );
     const overIndex = currentPalette.findIndex(
-      (color) => color.hex === over.id
+      (color) => color.id === over.id
     );
     if (active.id !== over.id) {
       reorderColors(activeIndex, overIndex);
@@ -114,17 +116,9 @@ export function PaletteGenerator() {
               collisionDetection={closestCenter}
               onDragEnd={handleDragEnd}
             >
-              <SortableContext
-                items={currentPalette}
-                strategy={verticalListSortingStrategy}
-              >
-                {/* {items.map(id => <SortableItem key={id} id={id} />)} */}
+              <SortableContext items={currentPalette} strategy={rectSortingStrategy} >
                 {currentPalette.map((color, index) => (
-                  <ColorCard
-                    key={color.id}
-                    color={color}
-                    index={index}
-                  />
+                  <ColorCard key={color.id} color={color} index={index} />
                 ))}
               </SortableContext>
             </DndContext>

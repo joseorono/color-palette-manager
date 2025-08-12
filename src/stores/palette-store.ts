@@ -4,6 +4,7 @@ import { Color, Palette } from "@/types/palette";
 import { ColorUtils } from "@/lib/color-utils";
 import { PaletteUtils } from "@/lib/palette-utils";
 import { COLOR_ID_LENGTH } from "@/constants";
+import { arrayMove } from "@dnd-kit/sortable";
 
 interface PaletteStore {
   currentPalette: Color[];
@@ -113,10 +114,7 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
 
   reorderColors: (dragIndex: number, hoverIndex: number) => {
     const { currentPalette } = get();
-    const newPalette = [...currentPalette];
-    const draggedColor = newPalette[dragIndex];
-    newPalette.splice(dragIndex, 1);
-    newPalette.splice(hoverIndex, 0, draggedColor);
+    const newPalette = arrayMove(currentPalette, dragIndex, hoverIndex);
     set({ currentPalette: newPalette });
   },
 
