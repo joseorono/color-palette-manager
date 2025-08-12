@@ -1,7 +1,7 @@
 import chroma, { Color as ChromaColor } from "chroma-js";
 import { colord } from "colord";
 import { hsl, rgb, random, formatHex } from "culori";
-import { Color } from "@/types/palette";
+import { Color, WCAGContrastLevel } from "@/types/palette";
 import { nanoidColorId } from "@/constants";
 
 // Constants for color generation and comparison
@@ -34,12 +34,12 @@ export class ColorUtils {
   /**
    * Determine WCAG accessibility level based on contrast ratio
    * @param contrastRatio - The contrast ratio to evaluate
-   * @returns WCAG accessibility level: "aaa", "aa", or "fail"
+   * @returns WCAG accessibility level enum value
    */
-  static getAccessibilityLevel(contrastRatio: number): "fail" | "aa" | "aaa" {
-    if (contrastRatio >= 7) return "aaa";
-    if (contrastRatio >= 4.5) return "aa";
-    return "fail";
+  static getAccessibilityLevel(contrastRatio: number): WCAGContrastLevel {
+    if (contrastRatio >= 7) return WCAGContrastLevel.AAA;
+    if (contrastRatio >= 4.5) return WCAGContrastLevel.AA;
+    return WCAGContrastLevel.FAIL;
   }
 
   /**
