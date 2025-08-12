@@ -99,4 +99,24 @@ export class PaletteDBQueries {
       colors: [...colors, color]
     });
   }
+
+  /**
+   * Save a palette - either create new or update existing
+   * @param palette - Complete palette data
+   * @param existingId - Optional existing palette ID for updates
+   * @returns Promise<string> - The palette ID (new or existing)
+   */
+  static async savePalette(
+    palette: Omit<Palette, 'id' | 'createdAt' | 'updatedAt'>, 
+    existingId?: string
+  ): Promise<string> {
+    if (existingId) {
+      // Update existing palette
+      await this.updatePalette(existingId, palette);
+      return existingId;
+    } else {
+      // Create new palette
+      return await this.insertPalette(palette);
+    }
+  }
 }
