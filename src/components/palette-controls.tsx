@@ -10,20 +10,26 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
 
-import { Save, Share, Upload, Check } from "lucide-react";
+import { Save, Share, Upload, Check, Link, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 import { ImageUploader } from "./image-uploader";
 import { DebouncedSlider } from "./ui/debounced-slider";
 
 export function PaletteControls() {
-  const { 
-    currentPalette, 
-    generateNewPalette, 
-    savePalette, 
-    isSaved, 
-    hasUnsavedChanges, 
-    currentPaletteId 
+  const {
+    currentPalette,
+    generateNewPalette,
+    savePalette,
+    isSaved,
+    hasUnsavedChanges,
+    currentPaletteId
   } = usePaletteStore();
   const [paletteSize, setPaletteSize] = useState(currentPalette.length);
   const [paletteName, setPaletteName] = useState("");
@@ -56,15 +62,50 @@ export function PaletteControls() {
     }
   };
 
-  const handleShare = async () => {
+  const getShareUrl = () => {
     const colors = currentPalette.map((c) => c.hex.replace("#", ""));
-    const url = `${window.location.origin}?colors=${colors.join(",")}`;
+    return `${window.location.origin}/editor?colors=${colors.join(",")}`;
+  };
 
+  const copyUrlToClipboard = async (url:string, customMessage?: string) => {
     try {
       await navigator.clipboard.writeText(url);
-      toast.success("Palette URL copied to clipboard!");
+      toast.success(customMessage || "Palette URL copied to clipboard!");
     } catch (error) {
       toast.error("Failed to copy URL");
+    }
+  };
+
+  const handleCopyUrl = async () => {
+    const url = getShareUrl();
+
+    await copyUrlToClipboard(url, "Palette URL copied to clipboard!");
+  };
+
+  const handleShare = async () => {
+    const title = "Check out this color palette!";
+    const text = `I created this beautiful color palette with ${currentPalette.length} colors. Take a look!`;
+    const url = getShareUrl();
+
+    const fallbackMessage = "Device doesn't support sharing, copying URL instead!";
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title,
+          text,
+          url,
+        });
+        toast.success("Palette shared successfully!");
+      } catch (error) {
+        // User cancelled or sharing failed, fallback to copy URL
+        if (error instanceof Error && error.name !== 'AbortError') {
+          copyUrlToClipboard(url, fallbackMessage);
+        }
+      }
+    } else {
+      // Fallback to copy URL if Web Share API not supported
+      copyUrlToClipboard(url, fallbackMessage);
     }
   };
 
@@ -86,8 +127,8 @@ export function PaletteControls() {
       {/* Save Palette */}
       <Dialog open={isSaveOpen} onOpenChange={setIsSaveOpen}>
         <DialogTrigger asChild>
-          <Button 
-            variant={hasUnsavedChanges ? "default" : "outline"} 
+          <Button
+            variant={hasUnsavedChanges ? "default" : "outline"}
             className="gap-2"
           >
             {isSaved && !hasUnsavedChanges ? (
@@ -95,7 +136,7 @@ export function PaletteControls() {
             ) : (
               <Save className="h-4 w-4" />
             )}
-            {currentPaletteId ? "Update Palette" : "Save Palette"}
+            {currentPaletteId ? "Save Changes" : "Save Palette"}
             {hasUnsavedChanges && <span className="ml-1 text-xs">•</span>}
           </Button>
         </DialogTrigger>
@@ -124,10 +165,25 @@ export function PaletteControls() {
       </Dialog>
 
       {/* Share Palette */}
-      <Button onClick={handleShare} variant="outline" className="gap-2">
-        <Share className="h-4 w-4" />
-        Share
-      </Button>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="outline" className="gap-2">
+            <Share className="h-4 w-4" />
+            Share
+            <ChevronDown className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem onClick={handleShare}>
+            <Share className="mr-2 h-4 w-4" />
+            Share Palette via Apps
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={handleCopyUrl}>
+            <Link className="mr-2 h-4 w-4" />
+            Copy Shareable URL
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
 
       {/* Upload Image */}
       <Dialog open={isUploadOpen} onOpenChange={setIsUploadOpen}>
