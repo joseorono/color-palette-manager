@@ -11,13 +11,20 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 
-import { Save, Share, Upload } from "lucide-react";
+import { Save, Share, Upload, Check } from "lucide-react";
 import { toast } from "sonner";
 import { ImageUploader } from "./image-uploader";
 import { DebouncedSlider } from "./ui/debounced-slider";
 
 export function PaletteControls() {
-  const { currentPalette, generateNewPalette, savePalette } = usePaletteStore();
+  const { 
+    currentPalette, 
+    generateNewPalette, 
+    savePalette, 
+    isSaved, 
+    hasUnsavedChanges, 
+    currentPaletteId 
+  } = usePaletteStore();
   const [paletteSize, setPaletteSize] = useState(currentPalette.length);
   const [paletteName, setPaletteName] = useState("");
   const [isSaveOpen, setIsSaveOpen] = useState(false);
@@ -41,7 +48,7 @@ export function PaletteControls() {
 
     try {
       await savePalette(paletteName.trim());
-      toast.success("Palette saved successfully!");
+      toast.success(currentPaletteId ? "Palette updated successfully!" : "Palette saved successfully!");
       setIsSaveOpen(false);
       setPaletteName("");
     } catch (error) {
@@ -79,14 +86,22 @@ export function PaletteControls() {
       {/* Save Palette */}
       <Dialog open={isSaveOpen} onOpenChange={setIsSaveOpen}>
         <DialogTrigger asChild>
-          <Button variant="outline" className="gap-2">
-            <Save className="h-4 w-4" />
-            Save Palette
+          <Button 
+            variant={hasUnsavedChanges ? "default" : "outline"} 
+            className="gap-2"
+          >
+            {isSaved && !hasUnsavedChanges ? (
+              <Check className="h-4 w-4" />
+            ) : (
+              <Save className="h-4 w-4" />
+            )}
+            {currentPaletteId ? "Update Palette" : "Save Palette"}
+            {hasUnsavedChanges && <span className="ml-1 text-xs">•</span>}
           </Button>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Save Palette</DialogTitle>
+            <DialogTitle>{currentPaletteId ? "Update Palette" : "Save Palette"}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div>
@@ -102,7 +117,7 @@ export function PaletteControls() {
               <Button variant="outline" onClick={() => setIsSaveOpen(false)}>
                 Cancel
               </Button>
-              <Button onClick={handleSave}>Save</Button>
+              <Button onClick={handleSave}>{currentPaletteId ? "Update" : "Save"}</Button>
             </div>
           </div>
         </DialogContent>
