@@ -12,19 +12,11 @@ import { cn, getAssignedRoles } from "@/lib/utils";
 interface ColorCardProps {
   color: Color;
   index: number;
-  isDragging?: boolean;
-  isOver?: boolean;
-  dragRef?: (node: HTMLDivElement | null) => void;
-  dropRef?: (node: HTMLDivElement | null) => void;
 }
 
 export function ColorCard({ 
   color, 
   index, 
-  isDragging = false, 
-  isOver = false, 
-  dragRef, 
-  dropRef 
 }: ColorCardProps) {
   const [isPickerOpen, setIsPickerOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -47,21 +39,15 @@ export function ColorCard({
   return (
     <>
       <div
-        ref={(node) => {
-          if (dragRef) dragRef(node);
-          if (dropRef) dropRef(node);
-        }}
         className={cn(
           "group relative transform transition-all duration-300 hover:scale-105",
-          isDragging && "opacity-50 cursor-move scale-105 rotate-2 z-20 shadow-2xl",
-          isOver && "bg-blue-500 bg-opacity-20 border-2 border-blue-500 border-dashed rounded-lg z-10"
         )}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
         {/* Main Color Area */}
         <div
-          className={`relative h-32 overflow-hidden rounded-lg shadow-lg md:h-48 lg:h-64 ${isOver && 'opacity-50 scale-95'}`}
+          className={`relative h-32 overflow-hidden rounded-lg shadow-lg md:h-48 lg:h-64`}
           style={{ backgroundColor: color.hex }}
           onClick={() => setIsPickerOpen(true)}
         >

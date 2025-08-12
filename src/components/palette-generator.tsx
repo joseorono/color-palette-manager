@@ -1,71 +1,24 @@
-import React, { useEffect, useCallback, useMemo } from "react";
+import React, { useEffect, useCallback } from "react";
 import { usePaletteStore } from "@/stores/palette-store";
 import { ColorCard } from "./color-card";
 import { PaletteControls } from "./palette-controls";
 import { ExportModal } from "./dialogs/export-modal";
 import { Button } from "./ui/button";
 import { Shuffle, Plus } from "lucide-react";
-import { DndProvider, useDrag, useDrop } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import { Color } from "@/types/palette";
-import { getEmptyImage } from "react-dnd-html5-backend";
-
-interface DragItem {
-  type: string;
-  index: number;
-  color: Color;
-}
-
-interface DraggableColorCardProps {
-  color: Color;
-  index: number;
-  moveColor: (dragIndex: number, hoverIndex: number) => void;
-}
-
-const DraggableColorCard = React.memo(({ color, index, moveColor }: DraggableColorCardProps) => {
-  // Memoize drag configuration to prevent recreation on every render
-  const dragConfig = useMemo(() => ({
-    type: "color",
-    item: { type: "color", index, color },
-    collect: (monitor: any) => ({
-      isDragging: monitor.isDragging(),
-    }),
-  }), [index, color]);
-  
-  // Memoize drop configuration
-  const dropConfig = useMemo(() => ({
-    accept: "color",
-    drop: (item: DragItem) => {
-      // Only move the item when it's actually dropped
-      if (item.index !== index) {
-        moveColor(item.index, index);
-      }
-    },
-    collect: (monitor: any) => ({
-      isOver: monitor.isOver(),
-    }),
-  }), [index, moveColor]);
-  
-  const [{ isDragging }, drag, preview] = useDrag(dragConfig);
-  const [{ isOver }, drop] = useDrop(dropConfig);
-  useEffect(() => {
-    preview(getEmptyImage(), { captureDraggingState: true });
-  }, [preview]);
-  
-  return (
-    <ColorCard
-      color={color}
-      index={index}
-      isDragging={isDragging}
-      isOver={isOver}
-      dragRef={drag}
-      dropRef={drop}
-    />
-  );
-});
-
-// Add display name for better debugging
-DraggableColorCard.displayName = 'DraggableColorCard';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import {
+  useSensors,
+  useSensor,
+  PointerSensor,
+  KeyboardSensor,
+  DndContext,
+  closestCenter,
+} from "@dnd-kit/core";
 
 export function PaletteGenerator() {
   const {
@@ -76,13 +29,6 @@ export function PaletteGenerator() {
     addColor,
     reorderColors,
   } = usePaletteStore();
-
-  const moveColor = useCallback(
-    (dragIndex: number, hoverIndex: number) => {
-      reorderColors(dragIndex, hoverIndex);
-    },
-    [reorderColors]
-  );
 
   const handleKeyPress = useCallback(
     (event: KeyboardEvent) => {
@@ -105,63 +51,92 @@ export function PaletteGenerator() {
     return () => window.removeEventListener("keydown", handleKeyPress);
   }, [handleKeyPress, generateNewPalette, currentPalette.length]);
 
+  function handleDragEnd(event: any) {
+    const { active, over } = event;
+    const activeIndex = currentPalette.findIndex(
+      (color) => color.hex === active.id
+    );
+    const overIndex = currentPalette.findIndex(
+      (color) => color.hex === over.id
+    );
+    if (active.id !== over.id) {
+      reorderColors(activeIndex, overIndex);
+    }
+  }
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
   return (
-    <DndProvider backend={HTML5Backend}>
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
-        <div className="container mx-auto px-4 py-8">
-          {/* Header */}
-          <div className="mb-8 text-center">
-            <h1 className="mb-2 text-4xl font-bold text-gray-900 dark:text-white">
-              Color Palette Generator
-            </h1>
-            <p className="mb-6 text-gray-600 dark:text-gray-300">
-              Create beautiful color palettes with ease. Press spacebar to
-              generate new colors.
-            </p>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+      <div className="container mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="mb-8 text-center">
+          <h1 className="mb-2 text-4xl font-bold text-gray-900 dark:text-white">
+            Color Palette Generator
+          </h1>
+          <p className="mb-6 text-gray-600 dark:text-gray-300">
+            Create beautiful color palettes with ease. Press spacebar to
+            generate new colors.
+          </p>
 
-            <div className="mb-8 flex justify-center gap-4">
-              <Button
-                onClick={() => generateNewPalette()}
-                disabled={isGenerating}
-                className="gap-2"
-              >
-                <Shuffle className="h-4 w-4" />
-                Generate New
-              </Button>
+          <div className="mb-8 flex justify-center gap-4">
+            <Button
+              onClick={() => generateNewPalette()}
+              disabled={isGenerating}
+              className="gap-2"
+            >
+              <Shuffle className="h-4 w-4" />
+              Generate New
+            </Button>
 
-              <Button
-                onClick={addColor}
-                variant="outline"
-                disabled={currentPalette.length >= 16}
-                className="gap-2"
-              >
-                <Plus className="h-4 w-4" />
-                Add Color
-              </Button>
-            </div>
+            <Button
+              onClick={addColor}
+              variant="outline"
+              disabled={currentPalette.length >= 16}
+              className="gap-2"
+            >
+              <Plus className="h-4 w-4" />
+              Add Color
+            </Button>
           </div>
-
-          {/* Palette Display */}
-          <div className="mx-auto mb-8 max-w-6xl">
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5 lg:gap-2">
-              {currentPalette.map((color, index) => (
-                <DraggableColorCard
-                  key={`${color.hex}-${index}`}
-                  color={color}
-                  index={index}
-                  moveColor={moveColor}
-                />
-              ))}
-            </div>
-          </div>
-
-          {/* Controls */}
-          <PaletteControls />
-
-          {/* Export Modal */}
-          <ExportModal />
         </div>
+
+        {/* Palette Display */}
+        <div className="mx-auto mb-8 max-w-6xl">
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5 lg:gap-2">
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={handleDragEnd}
+            >
+              <SortableContext
+                items={currentPalette}
+                strategy={verticalListSortingStrategy}
+              >
+                {/* {items.map(id => <SortableItem key={id} id={id} />)} */}
+                {currentPalette.map((color, index) => (
+                  <ColorCard
+                    key={color.id}
+                    color={color}
+                    index={index}
+                  />
+                ))}
+              </SortableContext>
+            </DndContext>
+          </div>
+        </div>
+
+        {/* Controls */}
+        <PaletteControls />
+
+        {/* Export Modal */}
+        <ExportModal />
       </div>
-    </DndProvider>
+    </div>
   );
 }
