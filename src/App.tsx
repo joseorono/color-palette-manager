@@ -5,15 +5,20 @@ import DashboardPage from "./pages/dashboard-page";
 import AppLayout from "./layouts/app-layout";
 import LandingLayout from "./layouts/landing-page-layout";
 import { DatabaseSeeder } from "./db/seeder";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+// Create a client
+const queryClient = new QueryClient();
 
 function App() {
   return (
-    <ThemeProvider
-      attribute="class"
-      defaultTheme="system"
-      enableSystem
-      disableTransitionOnChange
-    >
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange
+      >
        <Routes>
         <Route element={<AppLayout />}>
             <Route path="/" element={<HomePage />} />
@@ -25,7 +30,8 @@ function App() {
 
         <Route path="/db-seeder" element={<DatabaseSeeder />} />
     </Routes>
-    </ThemeProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }
 

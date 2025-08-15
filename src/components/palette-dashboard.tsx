@@ -7,6 +7,7 @@ import { PaletteCard } from "./palette-card"
 import { PaletteFilters } from "./palette-filters"
 import { LoadingCard } from "@/components/loaders/loading-card"
 import type { Palette, PaletteFilters as PaletteFiltersType } from "@/types/palette"
+import { CreatePaletteTrigger } from "./create-palette-trigger"
 
 interface PaletteDashboardProps {
   palettes: Palette[]
@@ -154,10 +155,15 @@ export function PaletteDashboard({
             </Button>
           </div>
 
-          <Button onClick={onCreateNew}>
+          {/* <Button onClick={onCreateNew}>
             <Plus className="mr-2 h-4 w-4" />
             New Palette
-          </Button>
+          </Button> */}
+          {/* Replace the old create button with the new trigger */}
+        <CreatePaletteTrigger size="lg">
+          <span className="mr-2">🎨</span>
+          Create Palette
+        </CreatePaletteTrigger>
         </div>
       </div>
 
