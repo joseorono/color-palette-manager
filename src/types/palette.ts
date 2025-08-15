@@ -33,17 +33,18 @@ export type CSSColorVariablesObject = Record<ColorRole, string>;
 =====================================
 */
 
+export const colorHexRegexZod = z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/);
+
 export const colorSchema = z.object({
   id: z.string().length(COLOR_ID_LENGTH),
-  hex: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/),
+  hex: colorHexRegexZod,
   locked: z.boolean().default(false),
   name: z.string().min(1).max(48).optional(),
   role: z.enum(ColorRoles).optional(),
 });
 export type Color = z.infer<typeof colorSchema>;
 
-export const paletteSchema = z.object({
-  id: z.string().length(PALETTE_ID_LENGTH),
+export const paletteFieldsZod = {
   name: z.string().min(1).max(48),
   description: z.string().min(1).max(256).optional(),
   colors: z.array(colorSchema),
@@ -53,8 +54,25 @@ export const paletteSchema = z.object({
   tags: z.array(z.string().min(1).max(48)).default([]),
   favoriteCount: z.number().default(0).optional(),
   isFavorite: z.boolean().default(false).optional(),
+}
+
+export const paletteSchema = z.object({
+  id: z.string().length(PALETTE_ID_LENGTH),
+  ...paletteFieldsZod,
 });
+
 export type Palette = z.infer<typeof paletteSchema>;
+
+export const newPaletteFormSchema = z.object({
+  name: paletteFieldsZod.name,
+  description: paletteFieldsZod.description,
+  isPublic: paletteFieldsZod.isPublic,
+  tags: paletteFieldsZod.tags,
+  isFavorite: paletteFieldsZod.isFavorite,
+  baseColor: colorHexRegexZod.optional(),
+})
+
+export type NewPaletteFormValues = z.infer<typeof newPaletteFormSchema>
 
 /*
 =====================================
