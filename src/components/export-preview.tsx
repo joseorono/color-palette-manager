@@ -24,14 +24,14 @@ function ExportContent({ colors, format }: ExportContentProps) {
       try {
         const result = await PaletteExport.export(colors, format);
 
-        if (typeof result.content === 'string') {
+        if (typeof result.content === "string") {
           setContent(result.content);
         } else {
-          setContent('Binary content ready for download');
+          setContent("Binary content ready for download");
         }
       } catch (error) {
         console.error("Export preview error:", error);
-        setContent('Error generating preview');
+        setContent("Error generating preview");
       } finally {
         setIsLoading(false);
       }
@@ -42,7 +42,7 @@ function ExportContent({ colors, format }: ExportContentProps) {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-32">
+      <div className="flex h-32 items-center justify-center">
         <LoaderAnim size={32} />
       </div>
     );
@@ -51,9 +51,9 @@ function ExportContent({ colors, format }: ExportContentProps) {
   // For image formats, we'll show a placeholder since we can't easily preview blobs
   if (format === ExportFormat.PNG) {
     return (
-      <div className="flex flex-col items-center justify-center h-32 bg-gray-50 dark:bg-gray-800 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600">
+      <div className="flex h-32 flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-800">
         <div className="text-center">
-          <div className="text-sm font-medium text-gray-900 dark:text-white mb-1">
+          <div className="mb-1 text-sm font-medium text-gray-900 dark:text-white">
             Image Preview
           </div>
           <div className="text-xs text-gray-500 dark:text-gray-400">
@@ -70,8 +70,8 @@ function ExportContent({ colors, format }: ExportContentProps) {
       <div className="text-sm font-medium text-gray-900 dark:text-white">
         {format.toUpperCase()} Preview
       </div>
-      <div className="bg-gray-50 dark:bg-gray-900 rounded-lg border overflow-auto max-h-96">
-        <pre className="p-3 text-xs text-gray-800 dark:text-gray-200 whitespace-pre-wrap">
+      <div className="max-h-96 overflow-auto rounded-lg border bg-gray-50 dark:bg-gray-900">
+        <pre className="whitespace-pre-wrap p-3 text-xs text-gray-800 dark:text-gray-200">
           {content}
         </pre>
       </div>
@@ -84,7 +84,7 @@ export function ExportPreview({ colors, format }: ExportPreviewProps) {
     <div className="h-full">
       <Suspense
         fallback={
-          <div className="flex items-center justify-center h-32">
+          <div className="flex h-32 items-center justify-center">
             <LoaderAnim size={32} />
           </div>
         }

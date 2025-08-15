@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback } from 'react';
-import { Slider } from './slider';
-import { debounce as debounceUtil } from '@/lib/utils';
-import { Label } from './label';
+import { useState, useEffect, useCallback } from "react";
+import { Slider } from "./slider";
+import { debounce as debounceUtil } from "@/lib/utils";
+import { Label } from "./label";
 
 export function DebouncedSlider({
   value: initialValue,
@@ -14,7 +14,10 @@ export function DebouncedSlider({
   onChange: (value: number[]) => void;
   debounce?: number;
   className?: string;
-} & Omit<React.ComponentProps<typeof Slider>, 'value' | 'onValueChange' | 'onChange'>) {
+} & Omit<
+  React.ComponentProps<typeof Slider>,
+  "value" | "onValueChange" | "onChange"
+>) {
   const [value, setValue] = useState(initialValue);
   const [internalValue, setInternalValue] = useState(initialValue);
 
@@ -40,17 +43,15 @@ export function DebouncedSlider({
 
   return (
     <>
-    <Label className="mb-2 block text-sm font-medium">
-    Palette Size: {internalValue[0]} colors
-  </Label>
-    <Slider
-      {...props}
-      className={className}
-      value={internalValue}
-      onValueChange={(newValue) => handleInternalValue(newValue)}
-    />
+      <Label className="mb-2 block text-sm font-medium">
+        Palette Size: {internalValue[0]} colors
+      </Label>
+      <Slider
+        {...props}
+        className={className}
+        value={internalValue}
+        onValueChange={(newValue) => handleInternalValue(newValue)}
+      />
     </>
   );
 }
-
-

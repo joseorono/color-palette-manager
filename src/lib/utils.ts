@@ -20,5 +20,3 @@ export function debounce<T extends (...args: any[]) => any>(
 export function bin2bool(value: number): boolean {
   return value === 1;
 }
-
-

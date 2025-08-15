@@ -17,17 +17,21 @@ export class PaletteExport {
     colors: Color[],
     options: ExportOptions = {}
   ): Promise<ExportResult> {
-    const { width = 800, height = 200, filename = "color-palette.png" } = options;
+    const {
+      width = 800,
+      height = 200,
+      filename = "color-palette.png",
+    } = options;
 
-    if (typeof document === 'undefined') {
-      throw new Error('PNG export requires DOM environment');
+    if (typeof document === "undefined") {
+      throw new Error("PNG export requires DOM environment");
     }
 
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
 
     if (!ctx) {
-      throw new Error('Failed to get canvas context');
+      throw new Error("Failed to get canvas context");
     }
 
     const colorWidth = width / colors.length;
@@ -45,10 +49,10 @@ export class PaletteExport {
           resolve({
             content: blob,
             filename,
-            mimeType: "image/png"
+            mimeType: "image/png",
           });
         } else {
-          reject(new Error('Failed to create PNG blob'));
+          reject(new Error("Failed to create PNG blob"));
         }
       });
     });
@@ -60,11 +64,12 @@ export class PaletteExport {
    * @param options - Export options including width, height, and filename
    * @returns ExportResult with SVG string content
    */
-  static toSVG(
-    colors: Color[],
-    options: ExportOptions = {}
-  ): ExportResult {
-    const { width = 800, height = 200, filename = "color-palette.svg" } = options;
+  static toSVG(colors: Color[], options: ExportOptions = {}): ExportResult {
+    const {
+      width = 800,
+      height = 200,
+      filename = "color-palette.svg",
+    } = options;
     const colorWidth = width / colors.length;
 
     let svgContent = `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">`;
@@ -78,7 +83,7 @@ export class PaletteExport {
     return {
       content: svgContent,
       filename,
-      mimeType: "image/svg+xml"
+      mimeType: "image/svg+xml",
     };
   }
 
@@ -88,10 +93,7 @@ export class PaletteExport {
    * @param options - Export options including filename
    * @returns ExportResult with CSS string content including CSS custom properties and utility classes
    */
-  static toCSS(
-    colors: Color[],
-    options: ExportOptions = {}
-  ): ExportResult {
+  static toCSS(colors: Color[], options: ExportOptions = {}): ExportResult {
     const { filename = "color-palette.css" } = options;
 
     let cssContent = "/* Color Palette CSS Variables */\n:root {\n";
@@ -110,7 +112,7 @@ export class PaletteExport {
     return {
       content: cssContent,
       filename,
-      mimeType: "text/css"
+      mimeType: "text/css",
     };
   }
 
@@ -120,11 +122,9 @@ export class PaletteExport {
    * @param options - Export options including filename and palette name
    * @returns ExportResult with JSON string content containing palette metadata and color data
    */
-  static toJSON(
-    colors: Color[],
-    options: ExportOptions = {}
-  ): ExportResult {
-    const { filename = "color-palette.json", paletteName = "Color Palette" } = options;
+  static toJSON(colors: Color[], options: ExportOptions = {}): ExportResult {
+    const { filename = "color-palette.json", paletteName = "Color Palette" } =
+      options;
 
     const paletteData = {
       name: paletteName,
@@ -132,16 +132,16 @@ export class PaletteExport {
         name: `Color ${index + 1}`,
         hex: color.hex,
         index: index + 1,
-        locked: color.locked
+        locked: color.locked,
       })),
       createdAt: new Date().toISOString(),
-      totalColors: colors.length
+      totalColors: colors.length,
     };
 
     return {
       content: JSON.stringify(paletteData, null, 2),
       filename,
-      mimeType: "application/json"
+      mimeType: "application/json",
     };
   }
 
@@ -151,10 +151,7 @@ export class PaletteExport {
    * @param options - Export options including filename
    * @returns ExportResult with SCSS string content including variables and color map
    */
-  static toSCSS(
-    colors: Color[],
-    options: ExportOptions = {}
-  ): ExportResult {
+  static toSCSS(colors: Color[], options: ExportOptions = {}): ExportResult {
     const { filename = "color-palette.scss" } = options;
 
     let scssContent = "// Color Palette SCSS Variables\n";
@@ -176,7 +173,7 @@ export class PaletteExport {
     return {
       content: scssContent,
       filename,
-      mimeType: "text/scss"
+      mimeType: "text/scss",
     };
   }
 
@@ -211,7 +208,7 @@ export class PaletteExport {
     return {
       content: tailwindContent,
       filename,
-      mimeType: "application/javascript"
+      mimeType: "application/javascript",
     };
   }
 
@@ -221,13 +218,16 @@ export class PaletteExport {
    * @param options - Export options including filename and palette name
    * @returns ExportResult with JavaScript string content for DaisyUI theme configuration
    */
-  static toDaisyUI(
-    colors: Color[],
-    options: ExportOptions = {}
-  ): ExportResult {
+  static toDaisyUI(colors: Color[], options: ExportOptions = {}): ExportResult {
     const { filename = "daisyui-theme.js", paletteName = "custom" } = options;
 
-    const colorNames = ["primary", "secondary", "accent", "neutral", "base-100"];
+    const colorNames = [
+      "primary",
+      "secondary",
+      "accent",
+      "neutral",
+      "base-100",
+    ];
 
     let daisyContent = "// DaisyUI Theme Configuration\n";
     daisyContent += "module.exports = {\n";
@@ -238,7 +238,8 @@ export class PaletteExport {
 
     colors.forEach((color, index) => {
       if (index < colorNames.length) {
-        const comma = index < Math.min(colors.length, colorNames.length) - 1 ? "," : "";
+        const comma =
+          index < Math.min(colors.length, colorNames.length) - 1 ? "," : "";
         daisyContent += `          "${colorNames[index]}": "${color.hex}"${comma}\n`;
       }
     });
@@ -252,7 +253,7 @@ export class PaletteExport {
     return {
       content: daisyContent,
       filename,
-      mimeType: "application/javascript"
+      mimeType: "application/javascript",
     };
   }
 
@@ -288,7 +289,7 @@ export class PaletteExport {
     return {
       content: shadcnContent,
       filename,
-      mimeType: "text/css"
+      mimeType: "text/css",
     };
   }
 
@@ -300,7 +301,7 @@ export class PaletteExport {
    */
   private static hexToHSL(hex: string): { h: number; s: number; l: number } {
     // Remove # if present
-    hex = hex.replace('#', '');
+    hex = hex.replace("#", "");
 
     // Parse RGB
     const r = parseInt(hex.substr(0, 2), 16) / 255;
@@ -318,9 +319,15 @@ export class PaletteExport {
       s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
 
       switch (max) {
-        case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-        case g: h = (b - r) / d + 2; break;
-        case b: h = (r - g) / d + 4; break;
+        case r:
+          h = (g - b) / d + (g < b ? 6 : 0);
+          break;
+        case g:
+          h = (b - r) / d + 2;
+          break;
+        case b:
+          h = (r - g) / d + 4;
+          break;
       }
       h /= 6;
     }
@@ -328,7 +335,7 @@ export class PaletteExport {
     return {
       h: Math.round(h * 360),
       s: Math.round(s * 100),
-      l: Math.round(l * 100)
+      l: Math.round(l * 100),
     };
   }
 
@@ -367,4 +374,3 @@ export class PaletteExport {
     }
   }
 }
-

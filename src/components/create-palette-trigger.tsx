@@ -1,20 +1,24 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { Plus } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { CreatePaletteModal } from "./create-palette-modal"
+import { useState } from "react";
+import { Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { CreatePaletteModal } from "./create-palette-modal";
 
 interface CreatePaletteTriggerProps {
-  children?: React.ReactNode
-  variant?: "default" | "outline" | "ghost"
-  size?: "default" | "sm" | "lg"
+  children?: React.ReactNode;
+  variant?: "default" | "outline" | "ghost";
+  size?: "default" | "sm" | "lg";
 }
 
-export function CreatePaletteTrigger({ children, variant = "default", size = "default" }: CreatePaletteTriggerProps) {
-  const [open, setOpen] = useState(false)
+export function CreatePaletteTrigger({
+  children,
+  variant = "default",
+  size = "default",
+}: CreatePaletteTriggerProps) {
+  const [open, setOpen] = useState(false);
 
   return (
     <>
@@ -29,5 +33,5 @@ export function CreatePaletteTrigger({ children, variant = "default", size = "de
 
       <CreatePaletteModal open={open} onOpenChange={setOpen} />
     </>
-  )
+  );
 }

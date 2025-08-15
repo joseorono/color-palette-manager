@@ -1,9 +1,9 @@
-import Header from "@/components/landing-sections/header"
-import Hero from "@/components/landing-sections/hero"
-import Features from "@/components/landing-sections/features"
-import TechnicalHighlights from "@/components/technical-highlights"
-import CallToAction from "@/components/landing-sections/call-to-action"
-import Footer from "@/components/landing-sections/footer"
+import Header from "@/components/landing-sections/header";
+import Hero from "@/components/landing-sections/hero";
+import Features from "@/components/landing-sections/features";
+import TechnicalHighlights from "@/components/technical-highlights";
+import CallToAction from "@/components/landing-sections/call-to-action";
+import Footer from "@/components/landing-sections/footer";
 
 export default function LandingPage() {
   return (
@@ -17,5 +17,5 @@ export default function LandingPage() {
       </main>
       <Footer />
     </div>
-  )
+  );
 }

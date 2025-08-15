@@ -1,11 +1,16 @@
 import chroma from "chroma-js";
 import { formatHex, random } from "culori";
-import { Color, ColorRole, ColorRoles, NewPaletteFormValues, Palette } from "@/types/palette";
+import {
+  Color,
+  ColorRole,
+  ColorRoles,
+  NewPaletteFormValues,
+  Palette,
+} from "@/types/palette";
 import { ColorUtils } from "@/lib/color-utils";
 import { nanoidPaletteId } from "@/constants";
 
 export class PaletteUtils {
-
   static generateHarmoniousPalette_legacy(
     baseColorArg?: string,
     count: number = 5,
@@ -39,7 +44,9 @@ export class PaletteUtils {
     return colors.slice(0, count);
   }
 
-  static newPaletteFormValuesToPalette(newPaletteFormValues: NewPaletteFormValues): Palette {
+  static newPaletteFormValuesToPalette(
+    newPaletteFormValues: NewPaletteFormValues
+  ): Palette {
     return {
       id: nanoidPaletteId(),
       ...newPaletteFormValues,
@@ -47,10 +54,8 @@ export class PaletteUtils {
       createdAt: new Date(),
       updatedAt: new Date(),
       favoriteCount: 0,
-    }
+    };
   }
-
-
 
   /**
    * Generate a harmonious color palette based on color theory principles
@@ -65,7 +70,11 @@ export class PaletteUtils {
     existingColorHexArray: string[] = []
   ): string[] {
     // Get or generate base color
-    const baseColor = baseColorHex || (existingColorHexArray.length > 0 ? ColorUtils.getBaseColorHex(existingColorHexArray) : formatHex(random()));
+    const baseColor =
+      baseColorHex ||
+      (existingColorHexArray.length > 0
+        ? ColorUtils.getBaseColorHex(existingColorHexArray)
+        : formatHex(random()));
 
     // Initialize with existing colors
     let colors = [...existingColorHexArray];
@@ -87,7 +96,13 @@ export class PaletteUtils {
     let countToGenerate = count - colors.length;
 
     // Priority order for color generation
-    const priorityColorsDuringGeneration = ["white", "black", "complementary", "analogous", "variations"];
+    const priorityColorsDuringGeneration = [
+      "white",
+      "black",
+      "complementary",
+      "analogous",
+      "variations",
+    ];
 
     // Generate colors by priority
     for (const priority of priorityColorsDuringGeneration) {
@@ -166,7 +181,9 @@ export class PaletteUtils {
 
     // If we still need colors after max attempts, just add random ones
     while (countToGenerate > 0) {
-      console.warn("Adding random color bc we ran out of attempts. This is unlikely and signals a serious performance issue. Optimize palette generation!");
+      console.warn(
+        "Adding random color bc we ran out of attempts. This is unlikely and signals a serious performance issue. Optimize palette generation!"
+      );
       colors.push(formatHex(random()));
       countToGenerate--;
     }
@@ -196,7 +213,9 @@ export class PaletteUtils {
 
       // Simple k-means clustering for color extraction
       const colors = PaletteUtils.kMeansColors(pixels, count);
-      resolve(colors.map((color) => chroma.rgb(color[0], color[1], color[2]).hex()));
+      resolve(
+        colors.map((color) => chroma.rgb(color[0], color[1], color[2]).hex())
+      );
     });
   }
 

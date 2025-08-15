@@ -29,7 +29,7 @@ export function PaletteGenerator() {
     addColor,
     reorderColors,
   } = usePaletteStore();
-  
+
   const [activeId, setActiveId] = useState<string | null>(null);
 
   const handleKeyPress = useCallback(
@@ -59,7 +59,7 @@ export function PaletteGenerator() {
 
   function handleDragEnd(event: any) {
     const { active, over } = event;
-    
+
     if (over && active.id !== over.id) {
       const activeIndex = currentPalette.findIndex(
         (color) => color.id === active.id
@@ -69,7 +69,7 @@ export function PaletteGenerator() {
       );
       reorderColors(activeIndex, overIndex);
     }
-    
+
     setActiveId(null);
   }
 
@@ -128,18 +128,21 @@ export function PaletteGenerator() {
               onDragStart={handleDragStart}
               onDragEnd={handleDragEnd}
             >
-              <SortableContext items={currentPalette} strategy={rectSortingStrategy} >
+              <SortableContext
+                items={currentPalette}
+                strategy={rectSortingStrategy}
+              >
                 {currentPalette.map((color, index) => (
                   <ColorCard key={color.id} color={color} index={index} />
                 ))}
               </SortableContext>
-              
+
               <DragOverlay>
                 {activeId ? (
-                  <div className="transform rotate-3 scale-105 opacity-95">
-                    <ColorCard 
-                      color={currentPalette.find(c => c.id === activeId)!} 
-                      index={currentPalette.findIndex(c => c.id === activeId)} 
+                  <div className="rotate-3 scale-105 transform opacity-95">
+                    <ColorCard
+                      color={currentPalette.find((c) => c.id === activeId)!}
+                      index={currentPalette.findIndex((c) => c.id === activeId)}
                     />
                   </div>
                 ) : null}

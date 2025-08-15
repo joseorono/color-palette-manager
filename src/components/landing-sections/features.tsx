@@ -1,31 +1,43 @@
-import type React from "react"
+import type React from "react";
 interface FeatureProps {
-  icon: React.ReactNode
-  title: string
-  description: string
-  gradientFrom: string
-  gradientTo: string
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  gradientFrom: string;
+  gradientTo: string;
 }
 
-function FeatureCard({ icon, title, description, gradientFrom, gradientTo }: FeatureProps) {
+function FeatureCard({
+  icon,
+  title,
+  description,
+  gradientFrom,
+  gradientTo,
+}: FeatureProps) {
   return (
-    <div className="feature-card bg-white p-8 rounded-2xl border border-gray-100 text-center transition-all duration-300 hover:transform hover:-translate-y-1 hover:shadow-xl">
+    <div className="feature-card rounded-2xl border border-gray-100 bg-white p-8 text-center transition-all duration-300 hover:-translate-y-1 hover:transform hover:shadow-xl">
       <div
-        className={`w-16 h-16 bg-gradient-to-br ${gradientFrom} ${gradientTo} rounded-2xl flex items-center justify-center mx-auto mb-6`}
+        className={`h-16 w-16 bg-gradient-to-br ${gradientFrom} ${gradientTo} mx-auto mb-6 flex items-center justify-center rounded-2xl`}
       >
         {icon}
       </div>
-      <h3 className="text-xl font-semibold text-brand-dark mb-4">{title}</h3>
-      <p className="text-gray-600 leading-relaxed">{description}</p>
+      <h3 className="text-brand-dark mb-4 text-xl font-semibold">{title}</h3>
+      <p className="leading-relaxed text-gray-600">{description}</p>
     </div>
-  )
+  );
 }
 
 export default function Features() {
   const features = [
     {
       icon: (
-        <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <svg
+          className="h-8 w-8 text-white"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -42,7 +54,13 @@ export default function Features() {
     },
     {
       icon: (
-        <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <svg
+          className="h-8 w-8 text-white"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -59,7 +77,13 @@ export default function Features() {
     },
     {
       icon: (
-        <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <svg
+          className="h-8 w-8 text-white"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -76,14 +100,25 @@ export default function Features() {
     },
     {
       icon: (
-        <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <svg
+          className="h-8 w-8 text-white"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth="2"
             d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
           />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+          />
         </svg>
       ),
       title: "Professional Color Editing",
@@ -92,24 +127,27 @@ export default function Features() {
       gradientFrom: "from-teal-600",
       gradientTo: "to-gray-700",
     },
-  ]
+  ];
 
   return (
-    <section className="py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold text-brand-dark mb-4">Powerful Features for Every Designer</h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Everything you need to create, manage, and export professional color palettes
+    <section className="bg-white py-20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mb-16 text-center">
+          <h2 className="text-brand-dark mb-4 text-3xl font-bold sm:text-4xl">
+            Powerful Features for Every Designer
+          </h2>
+          <p className="mx-auto max-w-2xl text-xl text-gray-600">
+            Everything you need to create, manage, and export professional color
+            palettes
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           {features.map((feature, index) => (
             <FeatureCard key={index} {...feature} />
           ))}
         </div>
       </div>
     </section>
-  )
+  );
 }

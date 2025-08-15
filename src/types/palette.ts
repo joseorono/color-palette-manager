@@ -24,7 +24,7 @@ export const ColorRoles = [
   "muted-foreground",
 ] as const;
 
-export type ColorRole = typeof ColorRoles[number];
+export type ColorRole = (typeof ColorRoles)[number];
 export type CSSColorVariablesObject = Record<ColorRole, string>;
 
 /*
@@ -33,7 +33,9 @@ export type CSSColorVariablesObject = Record<ColorRole, string>;
 =====================================
 */
 
-export const colorHexRegexZod = z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/);
+export const colorHexRegexZod = z
+  .string()
+  .regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/);
 
 export const colorSchema = z.object({
   id: z.string().length(COLOR_ID_LENGTH),
@@ -54,7 +56,7 @@ export const paletteFieldsZod = {
   tags: z.array(z.string().min(1).max(48)).default([]),
   favoriteCount: z.number().default(0).optional(),
   isFavorite: z.boolean().default(false).optional(),
-}
+};
 
 export const paletteSchema = z.object({
   id: z.string().length(PALETTE_ID_LENGTH),
@@ -70,9 +72,9 @@ export const newPaletteFormSchema = z.object({
   tags: paletteFieldsZod.tags,
   isFavorite: paletteFieldsZod.isFavorite,
   baseColor: colorHexRegexZod.optional(),
-})
+});
 
-export type NewPaletteFormValues = z.infer<typeof newPaletteFormSchema>
+export type NewPaletteFormValues = z.infer<typeof newPaletteFormSchema>;
 
 /*
 =====================================
@@ -86,11 +88,11 @@ export interface PaletteExport {
 }
 
 export interface PaletteFilters {
-  search: string
-  tags: string[]
-  sortBy: 'name' | 'createdAt' | 'updatedAt' | 'favoriteCount'
-  sortOrder: 'asc' | 'desc'
-  showFavoritesOnly: boolean
+  search: string;
+  tags: string[];
+  sortBy: "name" | "createdAt" | "updatedAt" | "favoriteCount";
+  sortOrder: "asc" | "desc";
+  showFavoritesOnly: boolean;
 }
 
 /*

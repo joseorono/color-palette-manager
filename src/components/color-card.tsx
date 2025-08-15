@@ -86,7 +86,8 @@ export function ColorCard({ color, index }: ColorCardProps) {
             // Dragging state effects
             "cursor-pointer hover:cursor-pointer",
             // Interactive cursor
-            isDragging && "contrast-105 brightness-110 cursor-grabbing hover:cursor-grabbing",
+            isDragging &&
+              "contrast-105 cursor-grabbing brightness-110 hover:cursor-grabbing"
           )}
           style={{ backgroundColor: color.hex }}
           onClick={() => setIsPickerOpen(true)}
@@ -179,7 +180,9 @@ export function ColorCard({ color, index }: ColorCardProps) {
           <div className="flex items-center justify-between">
             <div className="flex-1">
               <div className="flex items-center gap-2">
-                <p className={`text-sm font-medium ${isDragging ? "text-gray-500 dark:text-gray-400" : "text-gray-900 dark:text-white"}`}>
+                <p
+                  className={`text-sm font-medium ${isDragging ? "text-gray-500 dark:text-gray-400" : "text-gray-900 dark:text-white"}`}
+                >
                   {color.hex}
                 </p>
                 {color.role && (

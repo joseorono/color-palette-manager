@@ -135,7 +135,7 @@ export function PalettePreview({
           key={index}
           className={cn(
             "transition-all duration-200",
-            onColorClick && "cursor-pointer hover:scale-105 hover:z-10",
+            onColorClick && "cursor-pointer hover:z-10 hover:scale-105",
             onColorHover && "hover:brightness-110",
             !isHorizontal && gap > 0 && index < colors.length - 1 && `mb-${gap}`
           )}
@@ -207,7 +207,12 @@ export function createPalettePreview(
   preset: keyof typeof PalettePreviewPresets,
   overrides?: Partial<PalettePreviewProps>
 ) {
-  return function PresetPalettePreview(props: Omit<PalettePreviewProps, keyof typeof PalettePreviewPresets[typeof preset]>) {
+  return function PresetPalettePreview(
+    props: Omit<
+      PalettePreviewProps,
+      keyof (typeof PalettePreviewPresets)[typeof preset]
+    >
+  ) {
     return (
       <PalettePreview
         {...PalettePreviewPresets[preset]}

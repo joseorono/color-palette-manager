@@ -13,7 +13,6 @@ const WHITE_LIGHTNESS_THRESHOLD = 0.9;
 const BLACK_LIGHTNESS_THRESHOLD = 0.1;
 
 export class ColorUtils {
-
   /**
    * Validate if a string is a valid hex color
    * @param hex - Color string to validate
@@ -21,7 +20,7 @@ export class ColorUtils {
    */
   static isValidHex(hex: string): boolean {
     // Remove # if present
-    const cleanHex = hex.replace('#', '');
+    const cleanHex = hex.replace("#", "");
 
     // Check if it's 3 or 6 characters and all hex digits
     return /^([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})$/.test(cleanHex);
@@ -33,11 +32,14 @@ export class ColorUtils {
    * @returns string - Normalized hex color
    */
   static normalizeHex(hex: string): string {
-    let cleanHex = hex.replace('#', '').toUpperCase();
+    let cleanHex = hex.replace("#", "").toUpperCase();
 
     // Expand 3-digit hex to 6-digit
     if (cleanHex.length === 3) {
-      cleanHex = cleanHex.split('').map(char => char + char).join('');
+      cleanHex = cleanHex
+        .split("")
+        .map((char) => char + char)
+        .join("");
     }
 
     return `#${cleanHex}`;
@@ -162,7 +164,7 @@ export class ColorUtils {
     }
 
     // Look for a color with "primary" role first
-    const primaryColor = colors.find(color => color.role === "primary");
+    const primaryColor = colors.find((color) => color.role === "primary");
     if (primaryColor) {
       return primaryColor;
     }
@@ -187,7 +189,10 @@ export class ColorUtils {
    * @param color2Hex - Second color in hexadecimal format
    * @returns RGB distance between the two colors
    */
-  static getDistanceBetweenColors(color1Hex: string, color2Hex: string): number {
+  static getDistanceBetweenColors(
+    color1Hex: string,
+    color2Hex: string
+  ): number {
     const color1Rgb = rgb(color1Hex);
     const color2Rgb = rgb(color2Hex);
 
@@ -216,8 +221,11 @@ export class ColorUtils {
 
     // Use .some() to return early if we find a color that's too similar.
     // If no existing color is too similar, .some() will return false
-    return existingColorHexArray.some(existingColorHex => {
-      const distance = ColorUtils.getDistanceBetweenColors(newColorHex, existingColorHex);
+    return existingColorHexArray.some((existingColorHex) => {
+      const distance = ColorUtils.getDistanceBetweenColors(
+        newColorHex,
+        existingColorHex
+      );
       return distance < threshold;
     });
   }
@@ -235,7 +243,7 @@ export class ColorUtils {
       mode: "hsl",
       h: baseHsl.h || 0,
       s: (baseHsl.s || 0) * 0.1, // Very low saturation
-      l: WHITE_LIGHTNESS_THRESHOLD
+      l: WHITE_LIGHTNESS_THRESHOLD,
     });
   }
 
@@ -252,7 +260,7 @@ export class ColorUtils {
       mode: "hsl",
       h: baseHsl.h || 0,
       s: (baseHsl.s || 0) * 0.8, // Maintain some saturation
-      l: BLACK_LIGHTNESS_THRESHOLD
+      l: BLACK_LIGHTNESS_THRESHOLD,
     });
   }
 
@@ -269,7 +277,7 @@ export class ColorUtils {
       mode: "hsl",
       h: ((baseHsl.h || 0) + COMPLEMENTARY_HUE_OFFSET) % 360,
       s: baseHsl.s || 0,
-      l: baseHsl.l || 0.5
+      l: baseHsl.l || 0.5,
     });
   }
 
@@ -287,14 +295,14 @@ export class ColorUtils {
         mode: "hsl",
         h: ((baseHsl.h || 0) + ANALOGOUS_HUE_OFFSET) % 360,
         s: baseHsl.s || 0,
-        l: baseHsl.l || 0.5
+        l: baseHsl.l || 0.5,
       }),
       formatHex({
         mode: "hsl",
         h: ((baseHsl.h || 0) - ANALOGOUS_HUE_OFFSET + 360) % 360,
         s: baseHsl.s || 0,
-        l: baseHsl.l || 0.5
-      })
+        l: baseHsl.l || 0.5,
+      }),
     ];
   }
 
@@ -320,13 +328,13 @@ export class ColorUtils {
         mode: "hsl",
         h: baseHsl.h || 0,
         s: baseSaturation,
-        l: lighterL
+        l: lighterL,
       }),
       formatHex({
         mode: "hsl",
         h: baseHsl.h || 0,
         s: baseSaturation,
-        l: darkerL
+        l: darkerL,
       })
     );
 
@@ -339,13 +347,13 @@ export class ColorUtils {
         mode: "hsl",
         h: baseHsl.h || 0,
         s: higherS,
-        l: baseLightness
+        l: baseLightness,
       }),
       formatHex({
         mode: "hsl",
         h: baseHsl.h || 0,
         s: lowerS,
-        l: baseLightness
+        l: baseLightness,
       })
     );
 

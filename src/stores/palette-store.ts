@@ -52,12 +52,12 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
         locked: false,
       }));
 
-      set({ 
-        currentPalette: palette, 
+      set({
+        currentPalette: palette,
         isGenerating: false,
         currentPaletteId: null,
         isSaved: false,
-        hasUnsavedChanges: true
+        hasUnsavedChanges: true,
       });
     }, 300); // Add slight delay for UX
   },
@@ -143,29 +143,32 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
 
   savePalette: async (name: string, isPublic = false) => {
     const { currentPalette, currentPaletteId } = get();
-    
+
     try {
       const paletteData = {
         name,
         colors: currentPalette,
         isPublic,
-        tags: []
+        tags: [],
       };
-      
-      const savedId = await PaletteDBQueries.savePalette(paletteData, currentPaletteId || undefined);
-      
-      set({ 
+
+      const savedId = await PaletteDBQueries.savePalette(
+        paletteData,
+        currentPaletteId || undefined
+      );
+
+      set({
         currentPaletteId: savedId,
         isSaved: true,
-        hasUnsavedChanges: false
+        hasUnsavedChanges: false,
       });
-      
+
       // Refresh saved palettes list
       await get().loadSavedPalettes();
-      
+
       return savedId;
     } catch (error) {
-      console.error('Failed to save palette:', error);
+      console.error("Failed to save palette:", error);
       throw error;
     }
   },
@@ -175,7 +178,7 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
       const palettes = await PaletteDBQueries.getAllPalettes();
       set({ savedPalettes: palettes });
     } catch (error) {
-      console.error('Failed to load saved palettes:', error);
+      console.error("Failed to load saved palettes:", error);
     }
   },
 
@@ -186,11 +189,11 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
       locked: false,
     }));
 
-    set({ 
+    set({
       currentPalette: palette,
       currentPaletteId: null,
       isSaved: false,
-      hasUnsavedChanges: true
+      hasUnsavedChanges: true,
     });
   },
 
@@ -202,11 +205,11 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
           currentPalette: palette.colors,
           currentPaletteId: paletteId,
           isSaved: true,
-          hasUnsavedChanges: false
+          hasUnsavedChanges: false,
         });
       }
     } catch (error) {
-      console.error('Failed to load palette for editing:', error);
+      console.error("Failed to load palette for editing:", error);
     }
   },
 

@@ -61,12 +61,16 @@ export function ExportModal() {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className={`${isMobile ? 'max-w-[95vw] max-h-[90vh]' : 'max-w-5xl'} overflow-hidden`}>
+      <DialogContent
+        className={`${isMobile ? "max-h-[90vh] max-w-[95vw]" : "max-w-5xl"} overflow-hidden`}
+      >
         <DialogHeader>
           <DialogTitle>Export Palette</DialogTitle>
         </DialogHeader>
 
-        <div className={`grid gap-6 ${isMobile ? 'grid-cols-1' : 'grid-cols-1 lg:grid-cols-2'} ${isMobile ? 'overflow-auto max-h-[70vh]' : ''}`}>
+        <div
+          className={`grid gap-6 ${isMobile ? "grid-cols-1" : "grid-cols-1 lg:grid-cols-2"} ${isMobile ? "max-h-[70vh] overflow-auto" : ""}`}
+        >
           {/* Left Column - Controls */}
           <div id="export-controls-column" className="space-y-6">
             {/* Format Selection */}
@@ -78,18 +82,25 @@ export function ExportModal() {
                 value={format}
                 onValueChange={(value) => setFormat(value as ExportFormat)}
               >
-                {Object.entries(exportFormatConfig).map(([formatValue, config]) => (
-                  <div key={formatValue} className="flex items-center space-x-2">
-                    <RadioGroupItem value={formatValue} id={formatValue} />
-                    <Label htmlFor={formatValue}>{config.label}</Label>
-                  </div>
-                ))}
+                {Object.entries(exportFormatConfig).map(
+                  ([formatValue, config]) => (
+                    <div
+                      key={formatValue}
+                      className="flex items-center space-x-2"
+                    >
+                      <RadioGroupItem value={formatValue} id={formatValue} />
+                      <Label htmlFor={formatValue}>{config.label}</Label>
+                    </div>
+                  )
+                )}
               </RadioGroup>
             </div>
 
             {/* Color Preview */}
             <div>
-              <Label className="mb-2 block text-sm font-medium">Color Preview</Label>
+              <Label className="mb-2 block text-sm font-medium">
+                Color Preview
+              </Label>
               <PalettePreview
                 colors={currentPalette}
                 height="4rem"
@@ -116,7 +127,7 @@ export function ExportModal() {
               <Label className="block text-sm font-medium">
                 Export Preview
               </Label>
-              <div className="border rounded-lg p-4 bg-gray-50 dark:bg-gray-900 overflow-auto max-h-96">
+              <div className="max-h-96 overflow-auto rounded-lg border bg-gray-50 p-4 dark:bg-gray-900">
                 <ExportPreview colors={currentPalette} format={format} />
               </div>
             </div>

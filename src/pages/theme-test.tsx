@@ -9,14 +9,18 @@ import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export default function ThemeTest() {
   return (
-    <div className="p-6 space-y-8">
+    <div className="space-y-8 p-6">
       {/* Buttons */}
       <section>
-        <h2 className="text-lg font-bold mb-2">Buttons</h2>
+        <h2 className="mb-2 text-lg font-bold">Buttons</h2>
         <div className="flex flex-wrap gap-2">
           <Button variant="default">Default</Button>
           <Button variant="secondary">Secondary</Button>
@@ -24,7 +28,6 @@ export default function ThemeTest() {
           <Button variant="outline">Outline</Button>
           <Button variant="ghost">Ghost</Button>
           <Button variant="link">Link</Button>
-          
         </div>
       </section>
 
@@ -32,7 +35,7 @@ export default function ThemeTest() {
 
       {/* Badges */}
       <section>
-        <h2 className="text-lg font-bold mb-2">Badges</h2>
+        <h2 className="mb-2 text-lg font-bold">Badges</h2>
         <div className="flex flex-wrap gap-2">
           <Badge variant="default">Default</Badge>
           <Badge variant="secondary">Secondary</Badge>
@@ -45,7 +48,7 @@ export default function ThemeTest() {
 
       {/* Card */}
       <section>
-        <h2 className="text-lg font-bold mb-2">Card</h2>
+        <h2 className="mb-2 text-lg font-bold">Card</h2>
         <Card className="max-w-sm">
           <CardHeader>
             <CardTitle>Theme Test Card</CardTitle>
@@ -62,7 +65,7 @@ export default function ThemeTest() {
 
       {/* Form Elements */}
       <section>
-        <h2 className="text-lg font-bold mb-2">Form Elements</h2>
+        <h2 className="mb-2 text-lg font-bold">Form Elements</h2>
         <div className="space-y-4">
           <div>
             <Label htmlFor="name">Name</Label>
@@ -79,7 +82,7 @@ export default function ThemeTest() {
 
       {/* Progress */}
       <section>
-        <h2 className="text-lg font-bold mb-2">Progress</h2>
+        <h2 className="mb-2 text-lg font-bold">Progress</h2>
         <Progress value={45} />
       </section>
 
@@ -87,7 +90,7 @@ export default function ThemeTest() {
 
       {/* Tabs */}
       <section>
-        <h2 className="text-lg font-bold mb-2">Tabs</h2>
+        <h2 className="mb-2 text-lg font-bold">Tabs</h2>
         <Tabs defaultValue="account" className="w-[300px]">
           <TabsList>
             <TabsTrigger value="account">Account</TabsTrigger>
@@ -106,7 +109,7 @@ export default function ThemeTest() {
 
       {/* Alerts */}
       <section>
-        <h2 className="text-lg font-bold mb-2">Alerts</h2>
+        <h2 className="mb-2 text-lg font-bold">Alerts</h2>
         <Alert>
           <AlertTitle>Heads up!</AlertTitle>
           <AlertDescription>
@@ -119,7 +122,7 @@ export default function ThemeTest() {
 
       {/* Tooltip */}
       <section>
-        <h2 className="text-lg font-bold mb-2">Tooltip</h2>
+        <h2 className="mb-2 text-lg font-bold">Tooltip</h2>
         <Tooltip>
           <TooltipTrigger asChild>
             <Button variant="outline">Hover me</Button>

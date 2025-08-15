@@ -1,16 +1,16 @@
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menubar, MenubarMenu, MenubarTrigger } from '@/components/ui/menubar';
-import { Menu, ChevronDown } from 'lucide-react';
-import { cn } from '@/lib/utils'; // Assumes you have a utility for class merging
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Menubar, MenubarMenu, MenubarTrigger } from "@/components/ui/menubar";
+import { Menu, ChevronDown } from "lucide-react";
+import { cn } from "@/lib/utils"; // Assumes you have a utility for class merging
 
 // Define the navigation links
 const navigationLinks = [
-  { name: 'Home', href: '#' },
-  { name: 'Features', href: '#' },
-  { name: 'Pricing', href: '#' },
-  { name: 'Company', href: '#' },
+  { name: "Home", href: "#" },
+  { name: "Features", href: "#" },
+  { name: "Pricing", href: "#" },
+  { name: "Company", href: "#" },
 ];
 
 export default function LandingNavbar() {
@@ -21,7 +21,10 @@ export default function LandingNavbar() {
       <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* --- Logo and Brand Name --- */}
         <div className="flex-shrink-0">
-          <a href="#" className="flex items-center space-x-2 text-2xl font-bold">
+          <a
+            href="#"
+            className="flex items-center space-x-2 text-2xl font-bold"
+          >
             <span className="text-primary">Landing Navbar</span>
             <span>Name</span>
           </a>
@@ -44,7 +47,11 @@ export default function LandingNavbar() {
         <div className="flex md:hidden">
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" aria-label="Toggle navigation menu">
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label="Toggle navigation menu"
+              >
                 <Menu className="h-6 w-6" />
               </Button>
             </SheetTrigger>
@@ -52,13 +59,15 @@ export default function LandingNavbar() {
             {/* --- Mobile Sheet Content --- */}
             <SheetContent side="right" className="flex flex-col">
               <div className="flex-shrink-0 border-b pb-4">
-                <a href="#" className="text-2xl font-bold">App Name</a>
+                <a href="#" className="text-2xl font-bold">
+                  App Name
+                </a>
               </div>
-              <nav className="flex-grow flex flex-col space-y-4 pt-4">
+              <nav className="flex flex-grow flex-col space-y-4 pt-4">
                 {navigationLinks.map((link) => (
-                  <a 
-                    key={link.name} 
-                    href={link.href} 
+                  <a
+                    key={link.name}
+                    href={link.href}
                     onClick={() => setIsMobileMenuOpen(false)} // Close menu on click
                     className="w-full text-lg font-medium text-muted-foreground transition-colors hover:text-primary"
                   >
@@ -72,10 +81,10 @@ export default function LandingNavbar() {
             </SheetContent>
           </Sheet>
         </div>
-        
+
         {/* --- Sign Up Button (Visible on desktop) --- */}
-        <div className="hidden md:flex items-center">
-            <Button>Sign Up</Button>
+        <div className="hidden items-center md:flex">
+          <Button>Sign Up</Button>
         </div>
       </div>
     </nav>

@@ -37,7 +37,10 @@ export function RoleAssigner({
     onRoleAssign(undefined);
   };
 
-  const availableRoles = PaletteUtils.getAvailableRoles(assignedRoles, currentRole);
+  const availableRoles = PaletteUtils.getAvailableRoles(
+    assignedRoles,
+    currentRole
+  );
 
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
@@ -72,35 +75,33 @@ export function RoleAssigner({
                 <X className="h-3 w-3" />
               </Button>
             </div>
-            <div className="border-t border-gray-200 dark:border-gray-700 my-1" />
+            <div className="my-1 border-t border-gray-200 dark:border-gray-700" />
           </>
         )}
-        
-        {availableRoles.length > 0 ? (
-          availableRoles.map((role) => (
-            <DropdownMenuItem
-              key={role}
-              onClick={() => handleRoleSelect(role)}
-              className="cursor-pointer"
-              disabled={role === currentRole}
-            >
-              <div className="flex items-center justify-between w-full">
-                <span className="text-sm">{role}</span>
-                {assignedRoles.has(role) && role === currentRole && (
-                  <Badge variant="outline" className="text-xs">
-                    Current
-                  </Badge>
-                )}
+
+        {availableRoles.length > 0
+          ? availableRoles.map((role) => (
+              <DropdownMenuItem
+                key={role}
+                onClick={() => handleRoleSelect(role)}
+                className="cursor-pointer"
+                disabled={role === currentRole}
+              >
+                <div className="flex w-full items-center justify-between">
+                  <span className="text-sm">{role}</span>
+                  {assignedRoles.has(role) && role === currentRole && (
+                    <Badge variant="outline" className="text-xs">
+                      Current
+                    </Badge>
+                  )}
+                </div>
+              </DropdownMenuItem>
+            ))
+          : !currentRole && (
+              <div className="px-2 py-1.5 text-sm text-gray-500 dark:text-gray-400">
+                All roles assigned
               </div>
-            </DropdownMenuItem>
-          ))
-        ) : (
-          !currentRole && (
-            <div className="px-2 py-1.5 text-sm text-gray-500 dark:text-gray-400">
-              All roles assigned
-            </div>
-          )
-        )}
+            )}
       </DropdownMenuContent>
     </DropdownMenu>
   );

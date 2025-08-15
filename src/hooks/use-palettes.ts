@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import type { Palette } from "@/types/palette"
-import { PaletteDBQueries } from "@/db/queries"
+import { useState, useEffect } from "react";
+import type { Palette } from "@/types/palette";
+import { PaletteDBQueries } from "@/db/queries";
 
 // Mock data for demonstration
 // const mockPalettes: Palette[] = [
@@ -80,39 +80,40 @@ import { PaletteDBQueries } from "@/db/queries"
 // ]
 
 export function usePalettes() {
-  const [palettes, setPalettes] = useState<Palette[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  const [palettes, setPalettes] = useState<Palette[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  
   useEffect(() => {
     // Simulate API call
     const loadPalettes = async () => {
-      const paletteDBData = await PaletteDBQueries.getAllPalettes()
-      setIsLoading(true)
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      setPalettes(paletteDBData)
-      setIsLoading(false)
-    }
+      const paletteDBData = await PaletteDBQueries.getAllPalettes();
+      setIsLoading(true);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      setPalettes(paletteDBData);
+      setIsLoading(false);
+    };
 
-    loadPalettes()
-  }, [])
+    loadPalettes();
+  }, []);
 
   const toggleFavorite = (paletteId: string) => {
-    setPalettes(prev => prev.map(palette =>
-      palette.id === paletteId
-        ? { ...palette, isFavorite: !palette.isFavorite }
-        : palette
-    ))
-  }
+    setPalettes((prev) =>
+      prev.map((palette) =>
+        palette.id === paletteId
+          ? { ...palette, isFavorite: !palette.isFavorite }
+          : palette
+      )
+    );
+  };
 
   const deletePalette = (paletteId: string) => {
-    setPalettes(prev => prev.filter(palette => palette.id !== paletteId))
-  }
+    setPalettes((prev) => prev.filter((palette) => palette.id !== paletteId));
+  };
 
   return {
     palettes,
     isLoading,
     toggleFavorite,
     deletePalette,
-  }
+  };
 }

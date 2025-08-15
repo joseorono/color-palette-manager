@@ -29,13 +29,12 @@ export function PaletteControls() {
     savePalette,
     isSaved,
     hasUnsavedChanges,
-    currentPaletteId
+    currentPaletteId,
   } = usePaletteStore();
   const [paletteSize, setPaletteSize] = useState(currentPalette.length);
   const [paletteName, setPaletteName] = useState("");
   const [isSaveOpen, setIsSaveOpen] = useState(false);
   const [isUploadOpen, setIsUploadOpen] = useState(false);
-
 
   const handleSizeChange = (value: number[]) => {
     generateNewPalette(value[0]);
@@ -54,7 +53,11 @@ export function PaletteControls() {
 
     try {
       await savePalette(paletteName.trim());
-      toast.success(currentPaletteId ? "Palette updated successfully!" : "Palette saved successfully!");
+      toast.success(
+        currentPaletteId
+          ? "Palette updated successfully!"
+          : "Palette saved successfully!"
+      );
       setIsSaveOpen(false);
       setPaletteName("");
     } catch (error) {
@@ -67,7 +70,7 @@ export function PaletteControls() {
     return `${window.location.origin}/editor?colors=${colors.join(",")}`;
   };
 
-  const copyUrlToClipboard = async (url:string, customMessage?: string) => {
+  const copyUrlToClipboard = async (url: string, customMessage?: string) => {
     try {
       await navigator.clipboard.writeText(url);
       toast.success(customMessage || "Palette URL copied to clipboard!");
@@ -87,7 +90,8 @@ export function PaletteControls() {
     const text = `I created this beautiful color palette with ${currentPalette.length} colors. Take a look!`;
     const url = getShareUrl();
 
-    const fallbackMessage = "Device doesn't support sharing, copying URL instead!";
+    const fallbackMessage =
+      "Device doesn't support sharing, copying URL instead!";
 
     if (navigator.share) {
       try {
@@ -99,7 +103,7 @@ export function PaletteControls() {
         toast.success("Palette shared successfully!");
       } catch (error) {
         // User cancelled or sharing failed, fallback to copy URL
-        if (error instanceof Error && error.name !== 'AbortError') {
+        if (error instanceof Error && error.name !== "AbortError") {
           copyUrlToClipboard(url, fallbackMessage);
         }
       }
@@ -142,7 +146,9 @@ export function PaletteControls() {
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{currentPaletteId ? "Update Palette" : "Save Palette"}</DialogTitle>
+            <DialogTitle>
+              {currentPaletteId ? "Update Palette" : "Save Palette"}
+            </DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div>
@@ -158,7 +164,9 @@ export function PaletteControls() {
               <Button variant="outline" onClick={() => setIsSaveOpen(false)}>
                 Cancel
               </Button>
-              <Button onClick={handleSave}>{currentPaletteId ? "Update" : "Save"}</Button>
+              <Button onClick={handleSave}>
+                {currentPaletteId ? "Update" : "Save"}
+              </Button>
             </div>
           </div>
         </DialogContent>

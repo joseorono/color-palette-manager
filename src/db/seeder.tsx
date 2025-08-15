@@ -1,23 +1,59 @@
-import React, { useState } from 'react';
-import { db } from './main';
-import { Palette } from '@/types';
-import { PaletteDBQueries } from './queries';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { nanoidColorId, nanoidPaletteId } from '@/constants';
+import React, { useState } from "react";
+import { db } from "./main";
+import { Palette } from "@/types";
+import { PaletteDBQueries } from "./queries";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { nanoidColorId, nanoidPaletteId } from "@/constants";
 
 // Sample data
-const samplePalettes: Omit<Palette, 'id' | 'createdAt' | 'updatedAt'>[] = [
+const samplePalettes: Omit<Palette, "id" | "createdAt" | "updatedAt">[] = [
   {
     name: "Material Design",
     description: "Google's Material Design color palette",
     colors: [
-      { id: nanoidColorId(), hex: "#F44336", locked: false, name: "Red", role: "accent" },
-      { id: nanoidColorId(), hex: "#2196F3", locked: false, name: "Blue", role: "primary" },
-      { id: nanoidColorId(), hex: "#4CAF50", locked: false, name: "Green", role: "secondary" },
-      { id: nanoidColorId(), hex: "#FFC107", locked: false, name: "Amber", role: "muted" },
-      { id: nanoidColorId(), hex: "#9C27B0", locked: false, name: "Purple", role: "card" },
+      {
+        id: nanoidColorId(),
+        hex: "#F44336",
+        locked: false,
+        name: "Red",
+        role: "accent",
+      },
+      {
+        id: nanoidColorId(),
+        hex: "#2196F3",
+        locked: false,
+        name: "Blue",
+        role: "primary",
+      },
+      {
+        id: nanoidColorId(),
+        hex: "#4CAF50",
+        locked: false,
+        name: "Green",
+        role: "secondary",
+      },
+      {
+        id: nanoidColorId(),
+        hex: "#FFC107",
+        locked: false,
+        name: "Amber",
+        role: "muted",
+      },
+      {
+        id: nanoidColorId(),
+        hex: "#9C27B0",
+        locked: false,
+        name: "Purple",
+        role: "card",
+      },
     ],
     isPublic: true,
     tags: ["material", "google", "popular"],
@@ -28,11 +64,41 @@ const samplePalettes: Omit<Palette, 'id' | 'createdAt' | 'updatedAt'>[] = [
     name: "Tailwind CSS",
     description: "Default color palette from Tailwind CSS",
     colors: [
-      { id: nanoidColorId(), hex: "#3B82F6", locked: false, name: "Blue", role: "primary" },
-      { id: nanoidColorId(), hex: "#10B981", locked: false, name: "Emerald", role: "secondary" },
-      { id: nanoidColorId(), hex: "#EF4444", locked: false, name: "Red", role: "accent" },
-      { id: nanoidColorId(), hex: "#F59E0B", locked: false, name: "Amber", role: "muted" },
-      { id: nanoidColorId(), hex: "#8B5CF6", locked: false, name: "Violet", role: "card" },
+      {
+        id: nanoidColorId(),
+        hex: "#3B82F6",
+        locked: false,
+        name: "Blue",
+        role: "primary",
+      },
+      {
+        id: nanoidColorId(),
+        hex: "#10B981",
+        locked: false,
+        name: "Emerald",
+        role: "secondary",
+      },
+      {
+        id: nanoidColorId(),
+        hex: "#EF4444",
+        locked: false,
+        name: "Red",
+        role: "accent",
+      },
+      {
+        id: nanoidColorId(),
+        hex: "#F59E0B",
+        locked: false,
+        name: "Amber",
+        role: "muted",
+      },
+      {
+        id: nanoidColorId(),
+        hex: "#8B5CF6",
+        locked: false,
+        name: "Violet",
+        role: "card",
+      },
     ],
     isPublic: true,
     tags: ["tailwind", "modern", "web"],
@@ -41,15 +107,58 @@ const samplePalettes: Omit<Palette, 'id' | 'createdAt' | 'updatedAt'>[] = [
   },
   {
     name: "Super Secret Palette",
-    description: "A secret palette that only you know about (actually the one used by the app).",
+    description:
+      "A secret palette that only you know about (actually the one used by the app).",
     colors: [
-      { id: nanoidColorId(), hex: "#1F1F1F", locked: false, name: "Black", role: "primary" },
-      { id: nanoidColorId(), hex: "#E9FCFF", locked: false, name: "Azure Web", role: "secondary" },
-      { id: nanoidColorId(), hex: "#F5F6FA", locked: false, name: "White", role: "accent" },
-      { id: nanoidColorId(), hex: "#93E6EF", locked: false, name: "Electric Blue", role: "muted" },
-      { id: nanoidColorId(), hex: "#46CEE6", locked: false, name: "Vivid Sky Blue", role: "card" },
-      { id: nanoidColorId(), hex: "#1A8499", locked: false, name: "Blue Munsell", role: "card" },
-      { id: nanoidColorId(), hex: "#095764", locked: false, name: "Midnight Green", role: "card" },
+      {
+        id: nanoidColorId(),
+        hex: "#1F1F1F",
+        locked: false,
+        name: "Black",
+        role: "primary",
+      },
+      {
+        id: nanoidColorId(),
+        hex: "#E9FCFF",
+        locked: false,
+        name: "Azure Web",
+        role: "secondary",
+      },
+      {
+        id: nanoidColorId(),
+        hex: "#F5F6FA",
+        locked: false,
+        name: "White",
+        role: "accent",
+      },
+      {
+        id: nanoidColorId(),
+        hex: "#93E6EF",
+        locked: false,
+        name: "Electric Blue",
+        role: "muted",
+      },
+      {
+        id: nanoidColorId(),
+        hex: "#46CEE6",
+        locked: false,
+        name: "Vivid Sky Blue",
+        role: "card",
+      },
+      {
+        id: nanoidColorId(),
+        hex: "#1A8499",
+        locked: false,
+        name: "Blue Munsell",
+        role: "card",
+      },
+      {
+        id: nanoidColorId(),
+        hex: "#095764",
+        locked: false,
+        name: "Midnight Green",
+        role: "card",
+      },
     ],
     isPublic: false,
     tags: ["secret", "own"],
@@ -60,11 +169,41 @@ const samplePalettes: Omit<Palette, 'id' | 'createdAt' | 'updatedAt'>[] = [
     name: "Nord Theme",
     description: "Arctic, north-bluish color palette",
     colors: [
-      { id: nanoidColorId(), hex: "#8FBCBB", locked: false, name: "Nord 7", role: "primary" },
-      { id: nanoidColorId(), hex: "#88C0D0", locked: false, name: "Nord 8", role: "secondary" },
-      { id: nanoidColorId(), hex: "#81A1C1", locked: false, name: "Nord 9", role: "accent" },
-      { id: nanoidColorId(), hex: "#5E81AC", locked: false, name: "Nord 10", role: "background" },
-      { id: nanoidColorId(), hex: "#BF616A", locked: false, name: "Nord 11", role: "border" },
+      {
+        id: nanoidColorId(),
+        hex: "#8FBCBB",
+        locked: false,
+        name: "Nord 7",
+        role: "primary",
+      },
+      {
+        id: nanoidColorId(),
+        hex: "#88C0D0",
+        locked: false,
+        name: "Nord 8",
+        role: "secondary",
+      },
+      {
+        id: nanoidColorId(),
+        hex: "#81A1C1",
+        locked: false,
+        name: "Nord 9",
+        role: "accent",
+      },
+      {
+        id: nanoidColorId(),
+        hex: "#5E81AC",
+        locked: false,
+        name: "Nord 10",
+        role: "background",
+      },
+      {
+        id: nanoidColorId(),
+        hex: "#BF616A",
+        locked: false,
+        name: "Nord 11",
+        role: "border",
+      },
     ],
     isPublic: true,
     tags: ["nord", "arctic", "cool"],
@@ -75,11 +214,41 @@ const samplePalettes: Omit<Palette, 'id' | 'createdAt' | 'updatedAt'>[] = [
     name: "Solarized",
     description: "Precision colors for machines and people",
     colors: [
-      { id: nanoidColorId(), hex: "#268BD2", locked: false, name: "Blue", role: "primary" },
-      { id: nanoidColorId(), hex: "#859900", locked: false, name: "Green", role: "secondary" },
-      { id: nanoidColorId(), hex: "#D33682", locked: false, name: "Magenta", role: "accent" },
-      { id: nanoidColorId(), hex: "#CB4B16", locked: false, name: "Orange", role: "foreground" },
-      { id: nanoidColorId(), hex: "#DC322F", locked: false, name: "Red", role: "muted" },
+      {
+        id: nanoidColorId(),
+        hex: "#268BD2",
+        locked: false,
+        name: "Blue",
+        role: "primary",
+      },
+      {
+        id: nanoidColorId(),
+        hex: "#859900",
+        locked: false,
+        name: "Green",
+        role: "secondary",
+      },
+      {
+        id: nanoidColorId(),
+        hex: "#D33682",
+        locked: false,
+        name: "Magenta",
+        role: "accent",
+      },
+      {
+        id: nanoidColorId(),
+        hex: "#CB4B16",
+        locked: false,
+        name: "Orange",
+        role: "foreground",
+      },
+      {
+        id: nanoidColorId(),
+        hex: "#DC322F",
+        locked: false,
+        name: "Red",
+        role: "muted",
+      },
     ],
     isPublic: true,
     tags: ["solarized", "ethan schoonover", "popular"],
@@ -92,36 +261,38 @@ const samplePalettes: Omit<Palette, 'id' | 'createdAt' | 'updatedAt'>[] = [
  * @returns Promise that resolves when seeding is complete
  */
 const seedDatabase = async () => {
-    try {
-      const paletteCount = await db.palettes.count();
+  try {
+    const paletteCount = await db.palettes.count();
 
-      if (paletteCount === 0) {
-        console.log('Seeding palettes...');
-        const now = new Date();
+    if (paletteCount === 0) {
+      console.log("Seeding palettes...");
+      const now = new Date();
 
-        // Create properly formatted palettes array
-        const palettesWithTimestamps = samplePalettes.map(palette => ({
-          id: nanoidPaletteId(),
-          ...palette,
-          createdAt: now,
-          updatedAt: now,
-        }));
+      // Create properly formatted palettes array
+      const palettesWithTimestamps = samplePalettes.map((palette) => ({
+        id: nanoidPaletteId(),
+        ...palette,
+        createdAt: now,
+        updatedAt: now,
+      }));
 
-        // Insert all palettes at once using bulkAdd
-        await db.palettes.bulkAdd(palettesWithTimestamps);
+      // Insert all palettes at once using bulkAdd
+      await db.palettes.bulkAdd(palettesWithTimestamps);
 
-        console.log(`Added ${palettesWithTimestamps.length} palettes`);
-        console.log(await PaletteDBQueries.getAllPalettes());
-      } else {
-        console.log(`Database already has ${paletteCount} palettes, skipping palette seed`);
-      }
-
-      return { success: true };
-    } catch (error) {
-      console.error('Error seeding database:', error);
-      return { success: false, error };
+      console.log(`Added ${palettesWithTimestamps.length} palettes`);
+      console.log(await PaletteDBQueries.getAllPalettes());
+    } else {
+      console.log(
+        `Database already has ${paletteCount} palettes, skipping palette seed`
+      );
     }
-  };
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error seeding database:", error);
+    return { success: false, error };
+  }
+};
 
 /**
  * Clears all data from the database
@@ -130,10 +301,10 @@ const seedDatabase = async () => {
 const clearDatabase = async () => {
   try {
     await db.palettes.clear();
-    console.log('Database cleared');
+    console.log("Database cleared");
     return { success: true };
   } catch (error) {
-    console.error('Error clearing database:', error);
+    console.error("Error clearing database:", error);
     return { success: false, error };
   }
 };
@@ -151,11 +322,11 @@ export const DatabaseSeeder = () => {
   const [log, setLog] = useState<string[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const runCommand = async (command: 'seed' | 'clear' | 'reset') => {
+  const runCommand = async (command: "seed" | "clear" | "reset") => {
     setIsProcessing(true);
     setLog([]);
     const consoleLog = (message: string) => {
-      setLog(prevLog => [...prevLog, message]);
+      setLog((prevLog) => [...prevLog, message]);
       console.log(message);
     };
 
@@ -163,18 +334,18 @@ export const DatabaseSeeder = () => {
     try {
       consoleLog(`Executing command: ${command}`);
       switch (command) {
-        case 'seed':
+        case "seed":
           result = await seedDatabase();
           break;
-        case 'clear':
+        case "clear":
           result = await clearDatabase();
           break;
-        case 'reset':
+        case "reset":
           result = await resetDatabase();
           break;
         default:
-          consoleLog('Invalid command');
-          result = { success: false, error: 'Invalid command' };
+          consoleLog("Invalid command");
+          result = { success: false, error: "Invalid command" };
       }
       consoleLog(`Result: ${JSON.stringify(result, null, 2)}`);
     } catch (error) {
@@ -186,46 +357,49 @@ export const DatabaseSeeder = () => {
   };
 
   return (
-    <div className="container mx-auto max-w-4xl p-6 space-y-6">
+    <div className="container mx-auto max-w-4xl space-y-6 p-6">
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl font-bold">Database Management Tool</CardTitle>
+          <CardTitle className="text-2xl font-bold">
+            Database Management Tool
+          </CardTitle>
           <CardDescription>
-            This tool allows you to manage the IndexedDB database directly from the browser.
-            Use these utilities to seed, clear, or reset your palette database.
+            This tool allows you to manage the IndexedDB database directly from
+            the browser. Use these utilities to seed, clear, or reset your
+            palette database.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex flex-wrap gap-3">
             <Button
-              onClick={() => runCommand('seed')}
+              onClick={() => runCommand("seed")}
               disabled={isProcessing}
               variant="default"
               className="min-w-[120px]"
             >
-              {isProcessing ? 'Seeding...' : 'Seed Database'}
+              {isProcessing ? "Seeding..." : "Seed Database"}
             </Button>
             <Button
-              onClick={() => runCommand('clear')}
+              onClick={() => runCommand("clear")}
               disabled={isProcessing}
               variant="destructive"
               className="min-w-[120px]"
             >
-              {isProcessing ? 'Clearing...' : 'Clear Database'}
+              {isProcessing ? "Clearing..." : "Clear Database"}
             </Button>
             <Button
-              onClick={() => runCommand('reset')}
+              onClick={() => runCommand("reset")}
               disabled={isProcessing}
               variant="outline"
               className="min-w-[120px]"
             >
-              {isProcessing ? 'Resetting...' : 'Reset Database'}
+              {isProcessing ? "Resetting..." : "Reset Database"}
             </Button>
           </div>
 
           {isProcessing && (
             <div className="flex items-center space-x-2">
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
+              <div className="h-4 w-4 animate-spin rounded-full border-b-2 border-primary"></div>
               <Badge variant="secondary">Processing...</Badge>
             </div>
           )}
@@ -239,7 +413,7 @@ export const DatabaseSeeder = () => {
             <CardDescription>Output from database operations</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="bg-muted p-4 rounded-md font-mono text-sm max-h-96 overflow-y-auto">
+            <div className="max-h-96 overflow-y-auto rounded-md bg-muted p-4 font-mono text-sm">
               {log.map((line, index) => (
                 <div key={index} className="mb-1 text-muted-foreground">
                   {line}

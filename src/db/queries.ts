@@ -1,6 +1,6 @@
-import { Color, Palette } from '@/types/palette';
+import { Color, Palette } from "@/types/palette";
 import { db } from "./main";
-import { nanoidPaletteId } from '@/constants/nanoid';
+import { nanoidPaletteId } from "@/constants/nanoid";
 
 /**
  * Database query operations for palettes and colors.
@@ -30,12 +30,15 @@ export class PaletteDBQueries {
    * @param updates - Partial palette data to update
    * @returns Promise<number> - Number of updated records
    */
-  static async updatePalette(id: string, updates: Partial<Omit<Palette, 'id' | 'createdAt'| 'updatedAt'>>): Promise<number> {
+  static async updatePalette(
+    id: string,
+    updates: Partial<Omit<Palette, "id" | "createdAt" | "updatedAt">>
+  ): Promise<number> {
     const now = new Date();
 
     return await db.palettes.update(id, {
       ...updates,
-      updatedAt: now
+      updatedAt: now,
     });
   }
 
@@ -53,7 +56,9 @@ export class PaletteDBQueries {
    * @param palette - Palette data without id, createdAt, and updatedAt
    * @returns Promise<string> - The generated palette ID
    */
-  static async insertPalette(palette: Omit<Palette, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
+  static async insertPalette(
+    palette: Omit<Palette, "id" | "createdAt" | "updatedAt">
+  ): Promise<string> {
     const now = new Date();
     const id = nanoidPaletteId();
 
@@ -61,7 +66,7 @@ export class PaletteDBQueries {
       ...palette,
       id,
       createdAt: now,
-      updatedAt: now
+      updatedAt: now,
     });
 
     return id;
@@ -73,13 +78,16 @@ export class PaletteDBQueries {
    * @param colors - The new color array
    * @returns Promise<number | false> - Number of updated records or false if palette not found
    */
-  static async updateColors(id: string, colors: Color[]): Promise<number | false> {
+  static async updateColors(
+    id: string,
+    colors: Color[]
+  ): Promise<number | false> {
     const queriedPalette = await db.palettes.get(id);
     if (!queriedPalette) {
       return false;
     }
     return await db.palettes.update(id, {
-      colors
+      colors,
     });
   }
 
@@ -89,14 +97,17 @@ export class PaletteDBQueries {
    * @param color - The color to add
    * @returns Promise<number | false> - Number of updated records or false if palette not found
    */
-  static async addColorToPalette(id: string, color: Color): Promise<number | false> {
+  static async addColorToPalette(
+    id: string,
+    color: Color
+  ): Promise<number | false> {
     const queriedPalette = await db.palettes.get(id);
     if (!queriedPalette) {
       return false;
     }
     const colors = queriedPalette.colors;
     return await db.palettes.update(id, {
-      colors: [...colors, color]
+      colors: [...colors, color],
     });
   }
 
@@ -107,7 +118,7 @@ export class PaletteDBQueries {
    * @returns Promise<string> - The palette ID (new or existing)
    */
   static async savePalette(
-    palette: Omit<Palette, 'id' | 'createdAt' | 'updatedAt'>, 
+    palette: Omit<Palette, "id" | "createdAt" | "updatedAt">,
     existingId?: string
   ): Promise<string> {
     if (existingId) {
