@@ -18,29 +18,30 @@ export default function PaletteEditor() {
         event.preventDefault();
         // Deprecated, but doesn't hurt and aids legacy browser support
         // @ts-ignore
-        event.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
-        return 'You have unsaved changes. Are you sure you want to leave?';
+        event.returnValue =
+          "You have unsaved changes. Are you sure you want to leave?";
+        return "You have unsaved changes. Are you sure you want to leave?";
       }
     };
 
-    window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener("beforeunload", handleBeforeUnload);
 
     return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, [hasUnsavedChanges]);
 
-  useEffect( () => {
+  useEffect(() => {
     try {
       const fetchedData = async () => {
         // const colors = await getAllColors() // TODO: Implement color queries in PaletteDBQueries
-        const palettes = await PaletteDBQueries.getAllPalettes()
+        const palettes = await PaletteDBQueries.getAllPalettes();
         // console.log(colors)
-        console.log(palettes)
-      }
-      fetchedData()
+        console.log(palettes);
+      };
+      fetchedData();
     } catch (error) {
-      console.log(`Error fetching data: ${error}`)
+      console.log(`Error fetching data: ${error}`);
     }
     const colorsParam = searchParams.get("colors");
     if (colorsParam) {

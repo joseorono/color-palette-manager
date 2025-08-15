@@ -1,11 +1,14 @@
 import { ThemeProvider } from "@/components/theme-provider";
 import PaletteEditor from "./pages/palette-editor";
+import LandingPage from "./pages/landing-page";
 import { Routes, Route } from "react-router-dom";
 import DashboardPage from "./pages/dashboard-page";
 import AppLayout from "./layouts/app-layout";
-import LandingLayout from "./layouts/landing-page-layout";
 import { DatabaseSeeder } from "./db/seeder";
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import LandingLayout from "./layouts/landing-page-layout";
+import ThemeTest from "./pages/theme-test";
+import { TooltipProvider } from "@radix-ui/react-tooltip";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -19,17 +22,21 @@ function App() {
         enableSystem
         disableTransitionOnChange
       >
-       <Routes>
-        <Route element={<AppLayout />}>
-            <Route path="/" element={<PaletteEditor />} />
-            <Route path="/dashboard" element={<DashboardPage />} />
-        </Route>
-{/*         
-        <Route element={<LandingLayout />}>
-        </Route> */}
+        <TooltipProvider>
+          <Routes>
+            <Route element={<AppLayout />}>
+              <Route path="/app/palette-edit" element={<PaletteEditor />} />
+              <Route path="/app/dashboard" element={<DashboardPage />} />
+              <Route path="/app/test" element={<ThemeTest />} />
+            </Route>
 
-        <Route path="/db-seeder" element={<DatabaseSeeder />} />
-    </Routes>
+            <Route element={<LandingLayout />}>
+              <Route path="/" element={<LandingPage />} />
+            </Route>
+
+            <Route path="/db-seeder" element={<DatabaseSeeder />} />
+          </Routes>
+        </TooltipProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );
