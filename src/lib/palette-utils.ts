@@ -1,7 +1,8 @@
 import chroma from "chroma-js";
 import { formatHex, random } from "culori";
-import { Color, ColorRole, ColorRoles } from "@/types/palette";
+import { Color, ColorRole, ColorRoles, NewPaletteFormValues, Palette } from "@/types/palette";
 import { ColorUtils } from "@/lib/color-utils";
+import { nanoidPaletteId } from "@/constants";
 
 export class PaletteUtils {
 
@@ -36,6 +37,17 @@ export class PaletteUtils {
     colors.push(...shuffled.slice(0, count - 1));
     console.log(colors);
     return colors.slice(0, count);
+  }
+
+  static newPaletteFormValuesToPalette(newPaletteFormValues: NewPaletteFormValues): Palette {
+    return {
+      id: nanoidPaletteId(),
+      ...newPaletteFormValues,
+      colors: [],
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      favoriteCount: 0,
+    }
   }
 
 
