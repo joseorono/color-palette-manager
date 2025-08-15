@@ -25,8 +25,9 @@ function App() {
         <TooltipProvider>
           <Routes>
             <Route element={<AppLayout />}>
-              <Route path="/app/palette-edit" element={<PaletteEditor />} />
+              <Route path="/app" element={<DashboardPage />} />
               <Route path="/app/dashboard" element={<DashboardPage />} />
+              <Route path="/app/palette-edit" element={<PaletteEditor />} />
               <Route path="/app/test" element={<ThemeTest />} />
             </Route>
 
