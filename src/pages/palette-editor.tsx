@@ -4,10 +4,10 @@ import { PaletteGenerator } from "@/components/palette-generator";
 import { usePaletteStore } from "@/stores/palette-store";
 import { Toaster } from "@/components/ui/sonner";
 import { db } from "@/db/main";
-import { Color, Palette } from "@/types";
+import { Color } from "@/types";
 import { PaletteDBQueries } from "@/db/queries";
 
-export default function HomePage() {
+export default function PaletteEditor() {
   const [searchParams] = useSearchParams();
   const { setPaletteFromUrl, hasUnsavedChanges } = usePaletteStore();
 

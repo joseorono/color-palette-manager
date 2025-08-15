@@ -1,5 +1,5 @@
 import { ThemeProvider } from "@/components/theme-provider";
-import HomePage from "./pages/home-page";
+import PaletteEditor from "./pages/palette-editor";
 import { Routes, Route } from "react-router-dom";
 import DashboardPage from "./pages/dashboard-page";
 import AppLayout from "./layouts/app-layout";
@@ -21,7 +21,7 @@ function App() {
       >
        <Routes>
         <Route element={<AppLayout />}>
-            <Route path="/" element={<HomePage />} />
+            <Route path="/" element={<PaletteEditor />} />
             <Route path="/dashboard" element={<DashboardPage />} />
         </Route>
 {/*         
