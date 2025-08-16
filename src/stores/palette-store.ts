@@ -43,7 +43,6 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
   generateNewPalette: (count = 5) => {
     set({ isGenerating: true });
 
-    setTimeout(() => {
       const colors = PaletteUtils.generateHarmoniousPalette(undefined, count);
       const paletteColors: Color[] = colors.map((hex) => ({
         id: nanoidColorId(),
@@ -62,7 +61,6 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
         isSaved: false,
         hasUnsavedChanges: true,
       });
-    }, 300); // Add slight delay for UX
   },
 
   regenerateUnlocked: () => {
