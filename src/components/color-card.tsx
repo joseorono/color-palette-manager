@@ -145,7 +145,7 @@ export function ColorCard({ color, index }: ColorCardProps) {
                 </Button>
               </div>
 
-              {currentPalette.length > 2 && (
+              {currentPalette && currentPalette.colors.length > 2 && (
                 <Button
                   size="sm"
                   variant="ghost"
@@ -202,7 +202,7 @@ export function ColorCard({ color, index }: ColorCardProps) {
                 onRoleAssign={(role: ColorRole | undefined) =>
                   updateColor(index, { role })
                 }
-                assignedRoles={PaletteUtils.getAssignedRoles(currentPalette)}
+                assignedRoles={PaletteUtils.getAssignedRoles(currentPalette?.colors || [])}
               />
             </div>
           </div>

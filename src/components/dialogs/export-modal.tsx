@@ -29,10 +29,15 @@ export function ExportModal() {
   const { currentPalette } = usePaletteStore();
 
   const handleExport = async () => {
+    if (!currentPalette) {
+      toast.error("No palette to export");
+      return;
+    }
+    
     setIsExporting(true);
 
     try {
-      const result = await PaletteExport.export(currentPalette, format);
+      const result = await PaletteExport.export(currentPalette.colors, format);
 
       // Create and download the file
       if (result.content instanceof Blob) {
@@ -102,7 +107,7 @@ export function ExportModal() {
                 Color Preview
               </Label>
               <PalettePreview
-                colors={currentPalette}
+                colors={currentPalette?.colors || []}
                 height="4rem"
                 showTooltips={true}
                 borderRadius="lg"
@@ -128,7 +133,7 @@ export function ExportModal() {
                 Export Preview
               </Label>
               <div className="max-h-96 overflow-auto rounded-lg border bg-gray-50 p-4 dark:bg-gray-900">
-                <ExportPreview colors={currentPalette} format={format} />
+                <ExportPreview colors={currentPalette?.colors || []} format={format} />
               </div>
             </div>
           )}

@@ -29,9 +29,8 @@ export function PaletteControls() {
     savePalette,
     isSaved,
     hasUnsavedChanges,
-    currentPaletteId,
   } = usePaletteStore();
-  const [paletteSize, setPaletteSize] = useState(currentPalette.length);
+  const [paletteSize, setPaletteSize] = useState(currentPalette?.colors.length || 5);
   const [paletteName, setPaletteName] = useState("");
   const [isSaveOpen, setIsSaveOpen] = useState(false);
   const [isUploadOpen, setIsUploadOpen] = useState(false);
@@ -42,7 +41,7 @@ export function PaletteControls() {
   };
 
   useEffect(() => {
-    setPaletteSize(currentPalette.length);
+    setPaletteSize(currentPalette?.colors.length || 5);
   }, [currentPalette]);
 
   const handleSave = async () => {
@@ -54,7 +53,7 @@ export function PaletteControls() {
     try {
       await savePalette(paletteName.trim());
       toast.success(
-        currentPaletteId
+        currentPalette?.id
           ? "Palette updated successfully!"
           : "Palette saved successfully!"
       );
@@ -66,7 +65,8 @@ export function PaletteControls() {
   };
 
   const getShareUrl = () => {
-    const colors = currentPalette.map((c) => c.hex.replace("#", ""));
+    if (!currentPalette) return window.location.origin;
+    const colors = currentPalette.colors.map((c) => c.hex.replace("#", ""));
     return `${window.location.origin}/editor?colors=${colors.join(",")}`;
   };
 
@@ -87,7 +87,7 @@ export function PaletteControls() {
 
   const handleShare = async () => {
     const title = "Check out this color palette!";
-    const text = `I created this beautiful color palette with ${currentPalette.length} colors. Take a look!`;
+    const text = `I created this beautiful color palette with ${currentPalette?.colors.length || 0} colors. Take a look!`;
     const url = getShareUrl();
 
     const fallbackMessage =
@@ -140,14 +140,14 @@ export function PaletteControls() {
             ) : (
               <Save className="h-4 w-4" />
             )}
-            {currentPaletteId ? "Save Changes" : "Save Palette"}
+            {currentPalette?.id ? "Save Changes" : "Save Palette"}
             {hasUnsavedChanges && <span className="ml-1 text-xs">•</span>}
           </Button>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
-              {currentPaletteId ? "Update Palette" : "Save Palette"}
+              {currentPalette?.id ? "Update Palette" : "Save Palette"}
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
@@ -165,7 +165,7 @@ export function PaletteControls() {
                 Cancel
               </Button>
               <Button onClick={handleSave}>
-                {currentPaletteId ? "Update" : "Save"}
+                {currentPalette?.id ? "Update" : "Save"}
               </Button>
             </div>
           </div>
