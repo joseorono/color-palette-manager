@@ -44,14 +44,14 @@ export function PaletteGenerator() {
 
   useEffect(() => {
     // Generate initial palette
-    if (currentPalette.length === 0) {
+    if (!currentPalette || currentPalette.colors.length === 0) {
       generateNewPalette();
     }
 
     // Add keyboard listeners
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
-  }, [handleKeyPress, generateNewPalette, currentPalette.length]);
+  }, [handleKeyPress, generateNewPalette, currentPalette]);
 
   function handleDragStart(event: any) {
     setActiveId(event.active.id);
@@ -60,11 +60,11 @@ export function PaletteGenerator() {
   function handleDragEnd(event: any) {
     const { active, over } = event;
 
-    if (over && active.id !== over.id) {
-      const activeIndex = currentPalette.findIndex(
+    if (over && active.id !== over.id && currentPalette) {
+      const activeIndex = currentPalette.colors.findIndex(
         (color) => color.id === active.id
       );
-      const overIndex = currentPalette.findIndex(
+      const overIndex = currentPalette.colors.findIndex(
         (color) => color.id === over.id
       );
       reorderColors(activeIndex, overIndex);
@@ -110,7 +110,7 @@ export function PaletteGenerator() {
             <Button
               onClick={addColor}
               variant="outline"
-              disabled={currentPalette.length >= 16}
+              disabled={!currentPalette || currentPalette.colors.length >= 16}
               className="gap-2"
             >
               <Plus className="h-4 w-4" />
@@ -129,20 +129,20 @@ export function PaletteGenerator() {
               onDragEnd={handleDragEnd}
             >
               <SortableContext
-                items={currentPalette}
+                items={currentPalette?.colors || []}
                 strategy={rectSortingStrategy}
               >
-                {currentPalette.map((color, index) => (
+                {currentPalette?.colors.map((color, index) => (
                   <ColorCard key={color.id} color={color} index={index} />
-                ))}
+                )) || []}
               </SortableContext>
 
               <DragOverlay>
-                {activeId ? (
+                {activeId && currentPalette ? (
                   <div className="rotate-3 scale-105 transform opacity-95">
                     <ColorCard
-                      color={currentPalette.find((c) => c.id === activeId)!}
-                      index={currentPalette.findIndex((c) => c.id === activeId)}
+                      color={currentPalette.colors.find((c) => c.id === activeId)!}
+                      index={currentPalette.colors.findIndex((c) => c.id === activeId)}
                     />
                   </div>
                 ) : null}

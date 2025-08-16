@@ -3,9 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { PaletteGenerator } from "@/components/palette-generator";
 import { usePaletteStore } from "@/stores/palette-store";
 import { Toaster } from "@/components/ui/sonner";
-import { db } from "@/db/main";
-import { Color } from "@/types";
-import { PaletteDBQueries } from "@/db/queries";
+import { PaletteUrlUtils } from "@/lib/palette-url-utils";
 
 export default function PaletteEditor() {
   const [searchParams] = useSearchParams();
@@ -31,28 +29,18 @@ export default function PaletteEditor() {
     };
   }, [hasUnsavedChanges]);
 
+  // 
   useEffect(() => {
-    try {
-      const fetchedData = async () => {
-        // const colors = await getAllColors() // TODO: Implement color queries in PaletteDBQueries
-        const palettes = await PaletteDBQueries.getAllPalettes();
-        // console.log(colors)
-        console.log(palettes);
-      };
-      fetchedData();
-    } catch (error) {
-      console.log(`Error fetching data: ${error}`);
-    }
-    const colorsParam = searchParams.get("colors");
-    if (colorsParam) {
-      const colors = colorsParam
-        .split(",")
-        .map((color) => (color.startsWith("#") ? color : `#${color}`));
-      if (colors.length > 0) {
-        setPaletteFromUrl(colors);
+    const loadPaletteFromUrl = async () => {
+      const palette = await PaletteUrlUtils.paletteFromUrlParams(searchParams);
+      if (palette) {
+        setPaletteFromUrl(palette.colors.map((color) => color.hex));
       }
-    }
-  }, [searchParams, setPaletteFromUrl]);
+    };
+
+    loadPaletteFromUrl();
+  }, []);
+
 
   return (
     <>

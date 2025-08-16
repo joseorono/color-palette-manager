@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { nanoidColorId } from "@/constants/nanoid";
+import { nanoidPaletteId } from "@/constants/nanoid";
 import { Color, Palette } from "@/types/palette";
 import { ColorUtils } from "@/lib/color-utils";
 import { PaletteUtils } from "@/lib/palette-utils";
@@ -7,10 +8,9 @@ import { PaletteDBQueries } from "@/db/queries";
 import { arrayMove } from "@dnd-kit/sortable";
 
 interface PaletteStore {
-  currentPalette: Color[];
+  currentPalette: Palette;
   savedPalettes: Palette[];
   isGenerating: boolean;
-  currentPaletteId: string | null; // Track if editing existing palette
   isSaved: boolean; // Track if current palette has been saved
   hasUnsavedChanges: boolean; // Track if there are unsaved changes
 
@@ -34,56 +34,81 @@ interface PaletteStore {
 }
 
 export const usePaletteStore = create<PaletteStore>((set, get) => ({
-  currentPalette: [],
+  currentPalette: PaletteUtils.createEmptyPalette(),
   savedPalettes: [],
   isGenerating: false,
-  currentPaletteId: null,
   isSaved: false,
   hasUnsavedChanges: false,
 
   generateNewPalette: (count = 5) => {
     set({ isGenerating: true });
 
-    setTimeout(() => {
       const colors = PaletteUtils.generateHarmoniousPalette(undefined, count);
-      const palette: Color[] = colors.map((hex) => ({
+      const paletteColors: Color[] = colors.map((hex) => ({
         id: nanoidColorId(),
         hex,
         locked: false,
       }));
 
+      const newPalette: Palette = {
+        ...get().currentPalette,
+        colors: paletteColors,
+      };
+
       set({
-        currentPalette: palette,
+        currentPalette: newPalette,
         isGenerating: false,
-        currentPaletteId: null,
         isSaved: false,
         hasUnsavedChanges: true,
       });
-    }, 300); // Add slight delay for UX
   },
 
   regenerateUnlocked: () => {
     const { currentPalette } = get();
+    if (!currentPalette) return;
+    
     set({ isGenerating: true });
 
     setTimeout(() => {
-      const newPalette = currentPalette.map((color) => {
+      const newColors = currentPalette.colors.map((color) => {
         if (color.locked) return color;
         return { ...color, hex: ColorUtils.generateRandomColorHex() };
       });
 
-      set({ currentPalette: newPalette, isGenerating: false });
+      const updatedPalette: Palette = {
+        ...currentPalette,
+        colors: newColors,
+        updatedAt: new Date(),
+      };
+
+      set({ 
+        currentPalette: updatedPalette, 
+        isGenerating: false,
+        hasUnsavedChanges: true,
+      });
     }, 300);
   },
 
   toggleColorLock: (index: number) => {
     const { currentPalette } = get();
-    const newPalette = [...currentPalette];
-    newPalette[index] = {
-      ...newPalette[index],
-      locked: !newPalette[index].locked,
+    if (!currentPalette || !currentPalette.colors[index]) return;
+    
+    const newColors = [...currentPalette.colors];
+    newColors[index] = {
+      ...newColors[index],
+      locked: !newColors[index].locked,
     };
-    set({ currentPalette: newPalette });
+    
+    const updatedPalette: Palette = {
+      ...currentPalette,
+      colors: newColors,
+      updatedAt: new Date(),
+    };
+    
+    set({ 
+      currentPalette: updatedPalette,
+      hasUnsavedChanges: true,
+    });
   },
 
   updateColor: (
@@ -91,10 +116,11 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
     updates: Partial<Pick<Color, "hex" | "role" | "name">>
   ) => {
     const { currentPalette } = get();
+    if (!currentPalette || !currentPalette.colors[index]) return;
 
     // If updating role (not removing), check if it's already assigned to another color
     if (updates.role !== undefined && updates.role !== null) {
-      const existingColorIndex = currentPalette.findIndex(
+      const existingColorIndex = currentPalette.colors.findIndex(
         (color, i) => color.role === updates.role && i !== index
       );
 
@@ -109,14 +135,24 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
     }
 
     // Update the target color with the provided updates
-    const newPalette = [...currentPalette];
-    newPalette[index] = { ...newPalette[index], ...updates };
-    set({ currentPalette: newPalette });
+    const newColors = [...currentPalette.colors];
+    newColors[index] = { ...newColors[index], ...updates };
+    
+    const updatedPalette: Palette = {
+      ...currentPalette,
+      colors: newColors,
+      updatedAt: new Date(),
+    };
+    
+    set({ 
+      currentPalette: updatedPalette,
+      hasUnsavedChanges: true,
+    });
   },
 
   addColor: () => {
     const { currentPalette } = get();
-    if (currentPalette.length >= 16) return;
+    if (!currentPalette || currentPalette.colors.length >= 16) return;
 
     const newColor: Color = {
       id: nanoidColorId(),
@@ -124,41 +160,78 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
       locked: false,
     };
 
-    set({ currentPalette: [...currentPalette, newColor] });
+    const updatedPalette: Palette = {
+      ...currentPalette,
+      colors: [...currentPalette.colors, newColor],
+      updatedAt: new Date(),
+    };
+
+    set({ 
+      currentPalette: updatedPalette,
+      hasUnsavedChanges: true,
+    });
   },
 
   removeColor: (index: number) => {
     const { currentPalette } = get();
-    if (currentPalette.length <= 2) return;
+    if (!currentPalette || currentPalette.colors.length <= 2) return;
 
-    const newPalette = currentPalette.filter((_, i) => i !== index);
-    set({ currentPalette: newPalette });
+    const newColors = currentPalette.colors.filter((_, i) => i !== index);
+    
+    const updatedPalette: Palette = {
+      ...currentPalette,
+      colors: newColors,
+      updatedAt: new Date(),
+    };
+    
+    set({ 
+      currentPalette: updatedPalette,
+      hasUnsavedChanges: true,
+    });
   },
 
   reorderColors: (dragIndex: number, hoverIndex: number) => {
     const { currentPalette } = get();
-    const newPalette = arrayMove(currentPalette, dragIndex, hoverIndex);
-    set({ currentPalette: newPalette });
+    if (!currentPalette) return;
+    
+    const newColors = arrayMove(currentPalette.colors, dragIndex, hoverIndex);
+    
+    const updatedPalette: Palette = {
+      ...currentPalette,
+      colors: newColors,
+      updatedAt: new Date(),
+    };
+    
+    set({ 
+      currentPalette: updatedPalette,
+      hasUnsavedChanges: true,
+    });
   },
 
   savePalette: async (name: string, isPublic = false) => {
-    const { currentPalette, currentPaletteId } = get();
+    const { currentPalette } = get();
+    if (!currentPalette) throw new Error("No palette to save");
 
     try {
-      const paletteData = {
+      const paletteToSave: Palette = {
+        ...currentPalette,
         name,
-        colors: currentPalette,
         isPublic,
-        tags: [],
+        updatedAt: new Date(),
       };
 
       const savedId = await PaletteDBQueries.savePalette(
-        paletteData,
-        currentPaletteId || undefined
+        paletteToSave,
+        currentPalette.id
       );
 
+      const savedPalette: Palette = {
+        ...paletteToSave,
+        id: savedId,
+      };
+
       set({
-        currentPaletteId: savedId,
+        currentPalette: savedPalette,
         isSaved: true,
         hasUnsavedChanges: false,
       });
@@ -183,15 +256,20 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
   },
 
   setPaletteFromUrl: (colors: string[]) => {
-    const palette: Color[] = colors.map((hex, index) => ({
+    const paletteColors: Color[] = colors.map((hex, index) => ({
       id: `color-${index}-${Date.now()}`,
       hex: hex.startsWith("#") ? hex : `#${hex}`,
       locked: false,
     }));
 
+    const newPalette: Palette = {
+      ...PaletteUtils.createEmptyPalette(),
+      name: "Palette from URL",
+      colors: paletteColors,
+    };
+
     set({
-      currentPalette: palette,
-      currentPaletteId: null,
+      currentPalette: newPalette,
       isSaved: false,
       hasUnsavedChanges: true,
     });
@@ -202,8 +280,7 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
       const palette = await PaletteDBQueries.getPaletteById(paletteId);
       if (palette) {
         set({
-          currentPalette: palette.colors,
-          currentPaletteId: paletteId,
+          currentPalette: palette,
           isSaved: true,
           hasUnsavedChanges: false,
         });
