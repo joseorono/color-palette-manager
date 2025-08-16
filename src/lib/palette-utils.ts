@@ -8,7 +8,7 @@ import {
   Palette,
 } from "@/types/palette";
 import { ColorUtils } from "@/lib/color-utils";
-import { nanoidPaletteId } from "@/constants";
+import { nanoidColorId, nanoidPaletteId } from "@/constants";
 
 export class PaletteUtils {
   static generateHarmoniousPalette_legacy(
@@ -201,6 +201,20 @@ export class PaletteUtils {
     }
 
     return colors.slice(0, count);
+  }
+
+  static generatePaletteFromColorHexArray(colorHexArray: string[]): Palette {
+    const palette: Palette = {
+      id: nanoidPaletteId(),
+      name: `Generated Palette (${colorHexArray.length} colors)`,
+      description: `Generated from color hex array: ${colorHexArray.join(", ")}`,
+      colors: colorHexArray.map((hex) => ColorUtils.HexToColor(hex)),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      isPublic: false,
+      tags: [],
+    };
+    return palette;
   }
 
   static extractColorsFromImage(
