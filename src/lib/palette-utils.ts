@@ -57,6 +57,18 @@ export class PaletteUtils {
     };
   }
 
+  static createEmptyPalette(): Palette {
+    return {
+      id: nanoidPaletteId(),
+      name: "Untitled Palette",
+      colors: [],
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    isPublic: false,
+    tags: [],
+  };
+}
+
   /**
    * Generate a harmonious color palette based on color theory principles
    * @param baseColorHex - Optional base color in hexadecimal format
