@@ -4,6 +4,7 @@ import { nanoidPaletteId } from "@/constants/nanoid";
 import { Color, Palette } from "@/types/palette";
 import { ColorUtils } from "@/lib/color-utils";
 import { PaletteUtils } from "@/lib/palette-utils";
+import { PaletteUrlUtils } from "@/lib/palette-url-utils";
 import { PaletteDBQueries } from "@/db/queries";
 import { arrayMove } from "@dnd-kit/sortable";
 
@@ -65,7 +66,7 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
   regenerateUnlocked: () => {
     const { currentPalette } = get();
     if (!currentPalette) return;
-    
+
     set({ isGenerating: true });
 
     setTimeout(() => {
@@ -80,8 +81,8 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
         updatedAt: new Date(),
       };
 
-      set({ 
-        currentPalette: updatedPalette, 
+      set({
+        currentPalette: updatedPalette,
         isGenerating: false,
         hasUnsavedChanges: true,
       });
@@ -91,20 +92,20 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
   toggleColorLock: (index: number) => {
     const { currentPalette } = get();
     if (!currentPalette || !currentPalette.colors[index]) return;
-    
+
     const newColors = [...currentPalette.colors];
     newColors[index] = {
       ...newColors[index],
       locked: !newColors[index].locked,
     };
-    
+
     const updatedPalette: Palette = {
       ...currentPalette,
       colors: newColors,
       updatedAt: new Date(),
     };
-    
-    set({ 
+
+    set({
       currentPalette: updatedPalette,
       hasUnsavedChanges: true,
     });
@@ -119,12 +120,11 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
 
     // If updating role (not removing), check if it's already assigned to another color
     if (updates.role !== undefined && updates.role !== null) {
-      const existingColorIndex = currentPalette.colors.findIndex(
-        (color, i) => color.role === updates.role && i !== index
-      );
+      const assignedRoles = PaletteUtils.getAssignedRoles(currentPalette.colors);
+      const currentColor = currentPalette.colors[index];
 
-      if (existingColorIndex !== -1) {
-        //TOOD: instead of a console.error(), show a toast.
+      if (assignedRoles.has(updates.role) && currentColor.role !== updates.role) {
+        //TODO: instead of a console.error(), show a toast.
         // toast.warning(`The role "${updates.role}" is already assigned to another color. Please remove it first or choose a different role.`);
         console.error(
           `The role "${updates.role}" is already assigned to another color. Please remove it first or choose a different role.`
@@ -136,14 +136,14 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
     // Update the target color with the provided updates
     const newColors = [...currentPalette.colors];
     newColors[index] = { ...newColors[index], ...updates };
-    
+
     const updatedPalette: Palette = {
       ...currentPalette,
       colors: newColors,
       updatedAt: new Date(),
     };
-    
-    set({ 
+
+    set({
       currentPalette: updatedPalette,
       hasUnsavedChanges: true,
     });
@@ -165,7 +165,7 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
       updatedAt: new Date(),
     };
 
-    set({ 
+    set({
       currentPalette: updatedPalette,
       hasUnsavedChanges: true,
     });
@@ -176,14 +176,14 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
     if (!currentPalette || currentPalette.colors.length <= 2) return;
 
     const newColors = currentPalette.colors.filter((_, i) => i !== index);
-    
+
     const updatedPalette: Palette = {
       ...currentPalette,
       colors: newColors,
       updatedAt: new Date(),
     };
-    
-    set({ 
+
+    set({
       currentPalette: updatedPalette,
       hasUnsavedChanges: true,
     });
@@ -192,16 +192,16 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
   reorderColors: (dragIndex: number, hoverIndex: number) => {
     const { currentPalette } = get();
     if (!currentPalette) return;
-    
+
     const newColors = arrayMove(currentPalette.colors, dragIndex, hoverIndex);
-    
+
     const updatedPalette: Palette = {
       ...currentPalette,
       colors: newColors,
       updatedAt: new Date(),
     };
-    
-    set({ 
+
+    set({
       currentPalette: updatedPalette,
       hasUnsavedChanges: true,
     });
@@ -255,23 +255,17 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
   },
 
   setPaletteFromUrl: (colors: string[]) => {
-    const paletteColors: Color[] = colors.map((hex, index) => ({
-      id: `color-${index}-${Date.now()}`,
-      hex: hex.startsWith("#") ? hex : `#${hex}`,
-      locked: false,
-    }));
+    // Use PaletteUrlUtils to create palette from hex colors
+    const hexCsv = colors.join(",");
+    const palette = PaletteUrlUtils.paletteFromHexCsv(hexCsv);
 
-    const newPalette: Palette = {
-      ...PaletteUtils.createEmptyPalette(),
-      name: "Palette from URL",
-      colors: paletteColors,
-    };
-
-    set({
-      currentPalette: newPalette,
-      isSaved: false,
-      hasUnsavedChanges: true,
-    });
+    if (palette) {
+      set({
+        currentPalette: palette,
+        isSaved: false,
+        hasUnsavedChanges: true,
+      });
+    }
   },
 
   loadPaletteForEditing: async (paletteId: string) => {
