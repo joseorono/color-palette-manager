@@ -1,10 +1,10 @@
 
-ideas for generateHarmoniousPalette():
+ideas for generateHarmoniousHexCsv():
 
 # Current Code
 
 ```ts
-export function generateHarmoniousPalette(
+export function generateHarmoniousHexCsv(
   baseColor?: string,
   count: number = 5
 ): string[] {

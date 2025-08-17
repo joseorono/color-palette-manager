@@ -11,7 +11,7 @@ import { ColorUtils } from "@/lib/color-utils";
 import { nanoidColorId, nanoidPaletteId } from "@/constants";
 
 export class PaletteUtils {
-  static generateHarmoniousPalette_legacy(
+  static generateHarmoniousHexCsv_legacy(
     baseColorArg?: string,
     count: number = 5,
     existingColors?: Color[]
@@ -76,7 +76,7 @@ export class PaletteUtils {
    * @param existingColorHexArray - Array of existing colors in hexadecimal format
    * @returns Array of hex color strings forming a harmonious palette
    */
-  static generateHarmoniousPalette(
+  static generateHarmoniousHexCsv(
     baseColorHex?: string,
     count: number = 5,
     existingColorHexArray: string[] = []

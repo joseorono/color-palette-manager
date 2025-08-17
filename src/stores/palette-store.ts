@@ -43,7 +43,7 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
   generateNewPalette: (count = 5) => {
     set({ isGenerating: true });
 
-      const colors = PaletteUtils.generateHarmoniousPalette(undefined, count);
+      const colors = PaletteUtils.generateHarmoniousHexCsv(undefined, count);
       const paletteColors: Color[] = colors.map((hex) => ({
         id: nanoidColorId(),
         hex,
