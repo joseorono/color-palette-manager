@@ -1,13 +1,10 @@
 import { useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
 import { PaletteGenerator } from "@/components/palette-generator";
 import { usePaletteStore } from "@/stores/palette-store";
 import { Toaster } from "@/components/ui/sonner";
-import { PaletteUrlUtils } from "@/lib/palette-url-utils";
 
 export default function PaletteEditor() {
-  const [searchParams] = useSearchParams();
-  const { setPaletteFromUrl, hasUnsavedChanges } = usePaletteStore();
+  const { loadPaletteFromUrl, hasUnsavedChanges } = usePaletteStore();
 
   // Handle exit warning for unsaved changes
   useEffect(() => {
@@ -29,17 +26,12 @@ export default function PaletteEditor() {
     };
   }, [hasUnsavedChanges]);
 
-  // 
+  // Load palette from URL parameters on component mount
   useEffect(() => {
-    const loadPaletteFromUrl = async () => {
-      const palette = await PaletteUrlUtils.paletteFromUrlParams(searchParams);
-      if (palette) {
-        setPaletteFromUrl(palette.colors.map((color) => color.hex));
-      }
-    };
-
-    loadPaletteFromUrl();
-  }, []);
+    // Convert current URL with search params to full URL string
+    const currentUrl = `${window.location.pathname}${window.location.search}`;
+    loadPaletteFromUrl(currentUrl);
+  }, [loadPaletteFromUrl]);
 
 
   return (

@@ -17,7 +17,7 @@ export function ImageUploader({ onClose }: ImageUploaderProps) {
   const [isProcessing, setIsProcessing] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
-  const { setPaletteFromUrl } = usePaletteStore();
+  const { loadPaletteFromUrl } = usePaletteStore();
 
   const processImage = useCallback(
     async (file: File) => {
@@ -44,7 +44,9 @@ export function ImageUploader({ onClose }: ImageUploaderProps) {
               imageData,
               colorCount[0]
             );
-            setPaletteFromUrl(colors);
+            // Create URL with colors parameter for the new store method
+            const url = `?colors=${encodeURIComponent(colors.join(','))}`;
+            loadPaletteFromUrl(url);
             toast.success("Colors extracted successfully!");
             onClose();
           }
@@ -64,7 +66,7 @@ export function ImageUploader({ onClose }: ImageUploaderProps) {
         setIsProcessing(false);
       }
     },
-    [colorCount, setPaletteFromUrl, onClose]
+    [colorCount, loadPaletteFromUrl, onClose]
   );
 
   const onDrop = useCallback(

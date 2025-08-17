@@ -28,8 +28,7 @@ interface PaletteStore {
   reorderColors: (dragIndex: number, hoverIndex: number) => void;
   savePalette: (name: string, isPublic?: boolean) => Promise<string>;
   loadSavedPalettes: () => Promise<void>;
-  loadPaletteForEditing: (paletteId: string) => Promise<void>;
-  setPaletteFromUrl: (colors: string[]) => void;
+  loadPaletteFromUrl: (url: string) => Promise<void>;
   markAsSaved: () => void;
   resetUnsavedChanges: () => void;
 }
@@ -254,32 +253,25 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
     }
   },
 
-  setPaletteFromUrl: (colors: string[]) => {
-    // Use PaletteUrlUtils to create palette from hex colors
-    const hexCsv = colors.join(",");
-    const palette = PaletteUrlUtils.paletteFromHexCsv(hexCsv);
-
-    if (palette) {
-      set({
-        currentPalette: palette,
-        isSaved: false,
-        hasUnsavedChanges: true,
-      });
-    }
-  },
-
-  loadPaletteForEditing: async (paletteId: string) => {
+  loadPaletteFromUrl: async (url: string) => {
     try {
-      const palette = await PaletteDBQueries.getPaletteById(paletteId);
+      // Extract URLSearchParams from the URL string
+      const urlObject = new URL(url, window.location.origin);
+      const urlParams = urlObject.searchParams;
+
+      const palette = await PaletteUrlUtils.paletteFromUrlParams(urlParams);
       if (palette) {
+        // Determine if this is an existing saved palette (has a real ID from DB)
+        const isExistingPalette = urlParams.has("paletteId");
+
         set({
           currentPalette: palette,
-          isSaved: true,
-          hasUnsavedChanges: false,
+          isSaved: isExistingPalette,
+          hasUnsavedChanges: !isExistingPalette,
         });
       }
     } catch (error) {
-      console.error("Failed to load palette for editing:", error);
+      console.error("Failed to load palette from URL:", error);
     }
   },
 
