@@ -59,7 +59,6 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
         currentPalette: newPalette,
         isGenerating: false,
         isSaved: false,
-        hasUnsavedChanges: true,
       });
   },
 
