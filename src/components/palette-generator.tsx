@@ -57,6 +57,8 @@ export function PaletteGenerator() {
     setActiveId(event.active.id);
   }
 
+  // this may be the cause of the bug where if you drag from right to left
+  // the drag overlay teleports from the left to the right container.
   function handleDragEnd(event: any) {
     const { active, over } = event;
 
@@ -120,8 +122,8 @@ export function PaletteGenerator() {
         </div>
 
         {/* Palette Display */}
-        <div className="mx-auto mb-8 max-w-6xl">
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5 lg:gap-2">
+        <div className="mx-auto mb-8 max-w-7xl">
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
             <DndContext
               sensors={sensors}
               collisionDetection={closestCorners}
@@ -141,8 +143,12 @@ export function PaletteGenerator() {
                 {activeId && currentPalette ? (
                   <div className="rotate-3 scale-105 transform opacity-95">
                     <ColorCard
-                      color={currentPalette.colors.find((c) => c.id === activeId)!}
-                      index={currentPalette.colors.findIndex((c) => c.id === activeId)}
+                      color={
+                        currentPalette.colors.find((c) => c.id === activeId)!
+                      }
+                      index={currentPalette.colors.findIndex(
+                        (c) => c.id === activeId
+                      )}
                     />
                   </div>
                 ) : null}
