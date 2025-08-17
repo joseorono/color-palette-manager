@@ -359,4 +359,26 @@ export class ColorUtils {
 
     return variations;
   }
+
+  /**
+   * Find a color by its ID and return both the color and its index
+   * @param colors - Array of colors to search
+   * @param id - Color ID to find
+   * @returns Object with color and index, or null if not found
+   */
+  static findColorById(colors: Color[], id: string): { color: Color; index: number } | null {
+    const index = colors.findIndex((color) => color.id === id);
+    if (index === -1) return null;
+    return { color: colors[index], index };
+  }
+
+  /**
+   * Get the index of a color by its ID
+   * @param colors - Array of colors to search
+   * @param id - Color ID to find
+   * @returns Index of the color, or -1 if not found
+   */
+  static getColorIndex(colors: Color[], id: string): number {
+    return colors.findIndex((color) => color.id === id);
+  }
 }

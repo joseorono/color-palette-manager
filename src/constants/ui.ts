@@ -10,3 +10,7 @@ export const borderRadiusClassesMap = {
 };
 
 export const MOBILE_BREAKPOINT = 768;
+
+// Palette Generator Constants
+export const MAX_PALETTE_COLORS = 16;
+export const DRAG_ACTIVATION_DISTANCE = 8;

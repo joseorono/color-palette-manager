@@ -19,6 +19,8 @@ import {
   closestCorners,
   DragOverlay,
 } from "@dnd-kit/core";
+import { ColorUtils } from "@/lib/color-utils";
+import { MAX_PALETTE_COLORS, DRAG_ACTIVATION_DISTANCE } from "@/constants/ui";
 
 export function PaletteGenerator() {
   const {
@@ -63,12 +65,8 @@ export function PaletteGenerator() {
     const { active, over } = event;
 
     if (over && active.id !== over.id && currentPalette) {
-      const activeIndex = currentPalette.colors.findIndex(
-        (color) => color.id === active.id
-      );
-      const overIndex = currentPalette.colors.findIndex(
-        (color) => color.id === over.id
-      );
+      const activeIndex = ColorUtils.getColorIndex(currentPalette.colors, active.id);
+      const overIndex = ColorUtils.getColorIndex(currentPalette.colors, over.id);
       reorderColors(activeIndex, overIndex);
     }
 
@@ -78,7 +76,7 @@ export function PaletteGenerator() {
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        distance: 8,
+        distance: DRAG_ACTIVATION_DISTANCE,
       },
     }),
     useSensor(KeyboardSensor, {
@@ -112,7 +110,7 @@ export function PaletteGenerator() {
             <Button
               onClick={addColor}
               variant="outline"
-              disabled={!currentPalette || currentPalette.colors.length >= 16}
+              disabled={!currentPalette || currentPalette.colors.length >= MAX_PALETTE_COLORS}
               className="gap-2"
             >
               <Plus className="h-4 w-4" />
@@ -144,11 +142,11 @@ export function PaletteGenerator() {
                   <div className="rotate-3 scale-105 transform opacity-95">
                     <ColorCard
                       color={
-                        currentPalette.colors.find((c) => c.id === activeId)!
+                        ColorUtils.findColorById(currentPalette.colors, activeId)?.color!
                       }
-                      index={currentPalette.colors.findIndex(
-                        (c) => c.id === activeId
-                      )}
+                      index={
+                        ColorUtils.getColorIndex(currentPalette.colors, activeId)
+                      }
                     />
                   </div>
                 ) : null}
