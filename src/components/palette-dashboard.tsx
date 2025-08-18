@@ -108,7 +108,7 @@ export function PaletteDashboard({
   const getGridClasses = () => {
     switch (viewMode) {
       case "compact":
-        return "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5";
+        return "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5";
       case "list":
         return "grid-cols-1";
       default:
