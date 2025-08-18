@@ -46,7 +46,6 @@ import {
 } from "@/types/palette";
 import { ColorUtils } from "@/lib/color-utils";
 import { PaletteUrlUtils } from "@/lib/palette-url-utils";
-import { nanoidPaletteId } from "@/constants";
 import { PaletteUtils } from "@/lib/palette-utils";
 
 interface CreatePaletteModalProps {

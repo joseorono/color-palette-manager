@@ -1,10 +1,9 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { HexColorPicker } from 'react-colorful';
 import { ColorUtils } from '@/lib/color-utils';
-import { useDebounce } from '@/hooks/use-debounce';
 import { HexColorString } from '@/types/palette';
 
 // Test color samples organized by category
@@ -60,8 +59,8 @@ const ColorCard: React.FC<ColorCardProps> = ({ hex, colorName, type }) => {
 
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-200">
-      <div 
-        className="h-20 w-full" 
+      <div
+        className="h-20 w-full"
         style={{ backgroundColor: hex }}
       />
       <CardContent className="p-3">
@@ -98,42 +97,34 @@ const StatsCard: React.FC<StatsCardProps> = ({ title, value, className = "" }) =
 
 export const ColorNameTestPage: React.FC = () => {
   const [selectedColor, setSelectedColor] = useState<HexColorString>("#FF6B6B");
-  const debouncedColor = useDebounce(selectedColor, 300);
-  
-  // Calculate stats
-  const stats = useMemo(() => {
-    const allColors = Object.values(colorSamples).flat();
-    const uniqueNames = new Set<string>();
-    let exactMatches = 0;
-    let descriptiveNames = 0;
 
-    allColors.forEach(hex => {
-      const colorName = ColorUtils.getColorName(hex);
-      uniqueNames.add(colorName);
-      
-      // Simple heuristic to determine if it's likely an exact match
-      if (colorName.length <= 15 && !colorName.includes(' ')) {
-        exactMatches++;
-      } else {
-        descriptiveNames++;
-      }
-    });
+  // Calculate stats (no memoization - will recalculate on every render)
+  const allColors = Object.values(colorSamples).flat();
+  const uniqueNames = new Set<string>();
+  let exactMatches = 0;
+  let descriptiveNames = 0;
 
-    return {
-      totalColors: allColors.length,
-      exactMatches,
-      descriptiveNames,
-      uniqueNames: uniqueNames.size
-    };
-  }, []);
+  allColors.forEach(hex => {
+    const colorName = ColorUtils.getColorName(hex);
+    uniqueNames.add(colorName);
 
-  // Get color name for selected color with debouncing
-  const selectedColorName = useMemo(() => {
-    return ColorUtils.getColorName(debouncedColor);
-  }, [debouncedColor]);
+    // Simple heuristic to determine if it's likely an exact match
+    if (colorName.length <= 15 && !colorName.includes(' ')) {
+      exactMatches++;
+    } else {
+      descriptiveNames++;
+    }
+  });
 
-  const handleColorChange = useCallback((color: HexColorString) => {
-    setSelectedColor(color);
+  const stats = {
+    totalColors: allColors.length,
+    exactMatches,
+    descriptiveNames,
+    uniqueNames: uniqueNames.size
+  };
+
+  const handleColorChange = useCallback((color: string) => {
+    setSelectedColor(color as HexColorString);
   }, []);
 
   const getColorType = (sectionTitle: string): ColorCardProps['type'] => {
@@ -173,7 +164,7 @@ export const ColorNameTestPage: React.FC = () => {
             <div className="flex-1">
               <div className="space-y-2">
                 <div className="flex items-center gap-3">
-                  <div 
+                  <div
                     className="w-12 h-12 rounded-lg border-2 border-border shadow-sm"
                     style={{ backgroundColor: selectedColor }}
                   />
@@ -182,7 +173,7 @@ export const ColorNameTestPage: React.FC = () => {
                       {selectedColor}
                     </div>
                     <div className="text-lg font-semibold text-foreground">
-                      {selectedColorName}
+                      {ColorUtils.getColorName(selectedColor)}
                     </div>
                   </div>
                 </div>
