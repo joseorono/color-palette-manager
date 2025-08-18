@@ -217,35 +217,7 @@ export class PaletteUtils {
     return palette;
   }
 
-  static extractColorsFromImage(
-    imageData: ImageData,
-    count: number = 5
-  ): Promise<string[]> {
-    return new Promise((resolve) => {
-      const pixels: number[][] = [];
-
-      // Sample pixels (every 10th pixel to improve performance)
-      for (let i = 0; i < imageData.data.length; i += 40) {
-        const r = imageData.data[i];
-        const g = imageData.data[i + 1];
-        const b = imageData.data[i + 2];
-        const a = imageData.data[i + 3];
-
-        if (a > 128) {
-          // Only include non-transparent pixels
-          pixels.push([r, g, b]);
-        }
-      }
-
-      // Simple k-means clustering for color extraction
-      const colors = PaletteUtils.kMeansColors(pixels, count);
-      resolve(
-        colors.map((color) => chroma.rgb(color[0], color[1], color[2]).hex())
-      );
-    });
-  }
-
-  private static kMeansColors(pixels: number[][], k: number): number[][] {
+  static kMeansColors(pixels: number[][], k: number): number[][] {
     // Initialize centroids randomly
     let centroids = Array.from(
       { length: k },

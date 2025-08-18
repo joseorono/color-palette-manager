@@ -78,7 +78,7 @@ export type NewPaletteFormValues = z.infer<typeof newPaletteFormSchema>;
 
 /*
 =====================================
-    Misc Interfaces
+    Palette-Derived Types
 =====================================
 */
 
@@ -95,6 +95,33 @@ export interface PaletteFilters {
   showFavoritesOnly: boolean;
 }
 
+
+/*
+=====================================
+    Image Analysis Types
+=====================================
+*/
+/**
+ * Image analysis results
+ */
+export interface ImageAnalysis {
+  pixels: number[][];
+  colorFrequency: Map<string, ColorFrequencyData>;
+  uniqueColors: number;
+  sampledPixels: number;
+  colorDiversity: number;
+  totalPixels: number;
+  samplingRate: number;
+}
+
+/**
+* Color frequency tracking data
+*/
+export interface ColorFrequencyData {
+  rgb: number[];
+  count: number;
+  hex: string;
+}
 /*
 =====================================
     Accessibility-Related Types

@@ -7,6 +7,7 @@ import { Slider } from "./ui/slider";
 import { PaletteUtils } from "@/lib/palette-utils";
 import { Upload, X } from "lucide-react";
 import { toast } from "sonner";
+import { ImageAnalyzer } from "@/lib/image-analyzer";
 
 interface ImageUploaderProps {
   onClose: () => void;
@@ -40,7 +41,7 @@ export function ImageUploader({ onClose }: ImageUploaderProps) {
             canvas.height
           );
           if (imageData) {
-            const colors = await PaletteUtils.extractColorsFromImage(
+            const colors = await ImageAnalyzer.extractColors(
               imageData,
               colorCount[0]
             );
