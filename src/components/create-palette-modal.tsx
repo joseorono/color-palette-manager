@@ -172,7 +172,7 @@ export function CreatePaletteModal({
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             {/* General Form Error Alert */}
             {formError && (
               <Alert variant="destructive" className="mb-6">
@@ -358,7 +358,7 @@ export function CreatePaletteModal({
             </div>
 
             {/* Submit Button */}
-            <div className="flex justify-end space-x-2 pt-4">
+            <div className="flex justify-end space-x-2 pt-2">
               <Button
                 type="button"
                 variant="outline"
