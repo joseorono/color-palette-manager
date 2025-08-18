@@ -169,7 +169,7 @@ export class PaletteUrlUtils {
    */
   static generateHexCsvUrl(colors: Color[]): string {
     const hexColors = colors.map((color) => color.hex).join(",");
-    return `/app/palette/?colors=${encodeURIComponent(hexColors)}`;
+    return `/app/palette-edit/?colors=${encodeURIComponent(hexColors)}`;
   }
 
   /**
@@ -178,7 +178,7 @@ export class PaletteUrlUtils {
    * @returns string - URL with paletteId parameter
    */
   static generatePaletteIdUrl(paletteId: string): string {
-    return `/app/palette/?paletteId=${encodeURIComponent(paletteId)}`;
+    return `/app/palette-edit/?paletteId=${encodeURIComponent(paletteId)}`;
   }
 
   /**
@@ -248,6 +248,6 @@ export class PaletteUrlUtils {
    */
   static generateShareableUrl(palette: Palette): string {
     const encodedData = this.encodeShareableUrl(palette);
-    return `/app/palette/?share=${encodedData}`;
+    return `/app/palette-edit/?share=${encodedData}`;
   }
 }

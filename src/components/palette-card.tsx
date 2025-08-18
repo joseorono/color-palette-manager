@@ -28,7 +28,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { toast } from "@/hooks/use-toast";
 import type { Palette } from "@/types/palette";
-import { PaletteUrlUtils } from "@/lib/palette-url-utils";
+import { ShareUtils } from "@/lib/share-utils";
 
 interface PaletteCardProps {
   palette: Palette;
@@ -47,21 +47,21 @@ export function PaletteCard({
 }: PaletteCardProps) {
   const [isHovered, setIsHovered] = useState(false);
 
-  const handleCopyColors = () => {
-    const colorString = palette.colors.map((color) => color.hex).join(", ");
-    navigator.clipboard.writeText(colorString);
+  const handleCopyColors = async () => {
+    const result = await ShareUtils.copyPaletteColors(palette);
     toast({
-      title: "Colors copied!",
-      description: "Color codes have been copied to your clipboard.",
+      title: result.success ? "Colors copied!" : "Copy failed",
+      description: result.message,
+      variant: result.success ? "default" : "destructive",
     });
   };
 
-  const handleShare = () => {
-    const url = PaletteUrlUtils.generatePaletteIdUrl(palette.id);
-    navigator.clipboard.writeText(url);
+  const handleShare = async () => {
+    const result = await ShareUtils.copyPaletteUrl(palette.id);
     toast({
-      title: "Link copied!",
-      description: "Palette link has been copied to your clipboard.",
+      title: result.success ? "Link copied!" : "Share failed",
+      description: result.message,
+      variant: result.success ? "default" : "destructive",
     });
   };
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-// import { useRouter } from "next/navigation"
+import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
@@ -62,8 +62,9 @@ export function CreatePaletteModal({
   open,
   onOpenChange,
 }: CreatePaletteModalProps) {
-  //   const router = useRouter()
+  const navigate = useNavigate();
   const [tags, setTags] = useState<string[]>([]);
+  const [tagInput, setTagInput] = useState("");
   const [formError, setFormError] = useState<string | null>(null);
 
   const form = useForm<NewPaletteFormValues>({
@@ -94,11 +95,8 @@ export function CreatePaletteModal({
       form.reset();
       setTags([]);
 
-      // Redirect to palette editor
-      //   router.push(`/palette-editor/?palette_id=${newPalette.id}`)
-      window.location.href = PaletteUrlUtils.generatePaletteIdUrl(
-        newPalette.id
-      );
+      // Navigate to palette editor using React Router
+      navigate(PaletteUrlUtils.generatePaletteIdUrl(newPalette.id));
     },
     onError: (error: Error) => {
       toast({

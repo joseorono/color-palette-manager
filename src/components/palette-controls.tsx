@@ -21,6 +21,7 @@ import { Save, Share, Upload, Check, Link, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 import { ImageUploader } from "./image-uploader";
 import { DebouncedSlider } from "./ui/debounced-slider";
+import { ShareUtils } from "@/lib/share-utils";
 
 export function PaletteControls() {
   const {
@@ -64,52 +65,26 @@ export function PaletteControls() {
     }
   };
 
-  const getShareUrl = () => {
-    if (!currentPalette) return window.location.origin;
-    const colors = currentPalette.colors.map((c) => c.hex.replace("#", ""));
-    return `${window.location.origin}/editor?colors=${colors.join(",")}`;
-  };
-
-  const copyUrlToClipboard = async (url: string, customMessage?: string) => {
-    try {
-      await navigator.clipboard.writeText(url);
-      toast.success(customMessage || "Palette URL copied to clipboard!");
-    } catch (error) {
-      toast.error("Failed to copy URL");
+  const handleCopyUrl = async () => {
+    if (!currentPalette) return;
+    const result = await ShareUtils.copyUrlToClipboard(
+      ShareUtils.generateEditorUrl(currentPalette),
+      "Palette URL copied to clipboard!"
+    );
+    if (result.success) {
+      toast.success(result.message);
+    } else {
+      toast.error(result.message);
     }
   };
 
-  const handleCopyUrl = async () => {
-    const url = getShareUrl();
-
-    await copyUrlToClipboard(url, "Palette URL copied to clipboard!");
-  };
-
   const handleShare = async () => {
-    const title = "Check out this color palette!";
-    const text = `I created this beautiful color palette with ${currentPalette?.colors.length || 0} colors. Take a look!`;
-    const url = getShareUrl();
-
-    const fallbackMessage =
-      "Device doesn't support sharing, copying URL instead!";
-
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title,
-          text,
-          url,
-        });
-        toast.success("Palette shared successfully!");
-      } catch (error) {
-        // User cancelled or sharing failed, fallback to copy URL
-        if (error instanceof Error && error.name !== "AbortError") {
-          copyUrlToClipboard(url, fallbackMessage);
-        }
-      }
-    } else {
-      // Fallback to copy URL if Web Share API not supported
-      copyUrlToClipboard(url, fallbackMessage);
+    if (!currentPalette) return;
+    const result = await ShareUtils.sharePalette(currentPalette);
+    if (result.success) {
+      toast.success(result.message);
+    } else if (result.method !== 'error') {
+      toast.success(result.message);
     }
   };
 
