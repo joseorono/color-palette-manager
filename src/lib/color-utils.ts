@@ -83,7 +83,7 @@ export class ColorUtils {
     return {
       id: nanoidColorId(),
       name: name || ColorUtils.getColorName(hexColor),
-      hex: HexColorString,
+      hex: hexColor,
       locked: false,
     };
   }
