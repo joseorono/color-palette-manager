@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   MoreHorizontal,
   Heart,
@@ -29,6 +30,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "@/hooks/use-toast";
 import type { Palette } from "@/types/palette";
 import { ShareUtils } from "@/lib/share-utils";
+import { PaletteUrlUtils } from "@/lib/palette-url-utils";
 
 interface PaletteCardProps {
   palette: Palette;
@@ -46,6 +48,7 @@ export function PaletteCard({
   onView,
 }: PaletteCardProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const navigate = useNavigate();
 
   const handleCopyColors = async () => {
     const result = await ShareUtils.copyPaletteColors(palette);
@@ -82,6 +85,12 @@ export function PaletteCard({
     });
   };
 
+  const handlePaletteNameClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const editorUrl = PaletteUrlUtils.generatePaletteIdUrl(palette.id);
+    navigate(editorUrl);
+  };
+
   return (
     <Card
       className="group cursor-pointer transition-all duration-200 hover:scale-[1.02] hover:shadow-lg"
@@ -92,7 +101,13 @@ export function PaletteCard({
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div className="min-w-0 flex-1">
-            <h3 className="truncate text-lg font-semibold">{palette.name}</h3>
+            <h3 
+              className="truncate text-lg font-semibold cursor-pointer hover:underline transition-all duration-200 hover:text-primary"
+              onClick={handlePaletteNameClick}
+              title="Click to edit this palette"
+            >
+              {palette.name}
+            </h3>
             {palette.description && (
               <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
                 {palette.description}
