@@ -8,7 +8,7 @@
 - [ ] Implement Theme Switcher in the Layout component (remember we're using Shadcn/UI's default theme system) - https://ui.shadcn.com/docs/dark-mode/vite
 - [x] The index page should be a static landing page with marketing content, not the palette generator itself. The app itself should be moved to a separate route like `localhost:5173/app/`.
 - [x] Resizing a palette (changing its number of colors) should not regenerate all colors. It should preserve existing colors and only add or remove colors as needed. - Taken by Carlos
-- [ ] Look for a way to improve generateHarminousPalette() so that it actually takes into account the existing colors and the desired count (it's currently only using 'count' as a maximum, but caps at 10 because of its internal logic). Add a parameter with the existing colors so it doesn't delete them - Taken by Carlos and Jose
+- [x] Look for a way to improve generateHarminousPalette() so that it actually takes into account the existing colors and the desired count (it's currently only using 'count' as a maximum, but caps at 10 because of its internal logic). Add a parameter with the existing colors so it doesn't delete them.
 
 ## 🏗 Core Functionality
 - [x] Implement **spacebar** trigger to generate random palettes
@@ -19,7 +19,7 @@
 - [ ] Create **shareable link** functionality for palettes (like Coolors) - This is already implemented but it's too basic and doesn't share all the palette data, only the colors.
 - [ ] Implement Color Naming using color name libraries or large JSON dataset.
 - [x] Implement Color Roles (Primary-light, Secondary-dark, Accent, Warning, etc.)
-- [ ] Implement **Layout components** with their own directory.
+- [x] Implement **Layout components** with their own directory.
 ---
 
 ## 📂 User Features
@@ -37,7 +37,7 @@
 
 ## 🎨 Palette & Color Editing
 - [x] **Palette Editor**
-  - [ ] Drag-and-drop colors to reorder - Taken by Carlos
+  - [x] Drag-and-drop colors to reorder
   - [x] Lock/unlock colors
 - [x] **Color Editor Modal**
   - [x] Fields for brightness, contrast, hue, saturation, etc.
@@ -58,13 +58,14 @@
   - [x] Tailwind config
   - [x] DaisyUI config
   - [x] Shadcn/UI config
-- [ ] Test Export formats (don't spend too much time on this)
+- [x] Test Export formats (don't spend too much time on this)
+-
 
 ---
 
 ## ⚙️ `/lib` Functions
-- [ ] Generate shades
-- [ ] Generate gradients
+- [x] Generate shades
+- [x] Generate gradients
 - [ ] Accessibility utilities (contrast checker, WCAG compliance)
 - [x] Abstract palette preview generation (currently tied to a modal)
 - [x] Abstract export functions for all formats (refactored to class-based structure)
@@ -83,15 +84,15 @@ Only mark once it's feature-complete and prepared for beta-testing.
 - [x] **Color Editor Modal**
 - [x] **Palette Export Modal**
 - [ ] **Palette Import Modal**
-- [ ] **Landing Page** (static, marketing)
+- [ ] **Landing Page** (static, marketing) - Taken by Jose. Do not touch until I'm done with my first proposal.
 - [x] **Palette Playground**
 - [x] **Layout component**
 
 ---
 
 ## Future Features
-- [ ] **Gradient Generation**
-- [ ] **Shade Generation**, with 9 or 10 shades for each color so it's usable for Tailwind Colors.
+- [ ] **Gradient Generation** - Not sure if this is needed. Do not tackle yet.
+- [x] **Shade Generation**, with 9 or 10 shades for each color so it's usable for Tailwind Colors.
 
 ---
 
