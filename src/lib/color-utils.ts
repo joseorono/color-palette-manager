@@ -2,7 +2,7 @@ import chroma, { Color as ChromaColor } from "chroma-js";
 import { colord } from "colord";
 import { hsl, rgb, random, formatHex } from "culori";
 import { Color, HexColorString, WCAGContrastLevel } from "@/types/palette";
-import { nanoidColorId } from "@/constants";
+import { COLOR_NAME_DATABASE, nanoidColorId } from "@/constants";
 
 // Constants for color generation and comparison
 const ANALOGOUS_HUE_OFFSET = 30; // degrees
