@@ -123,11 +123,18 @@ export interface PaletteExport {
   palette: Palette;
 }
 
+// Sort options for palette filtering
+export type SortByOption = "name" | "createdAt" | "updatedAt" | "favoriteCount";
+export type SortOrderOption = "asc" | "desc";
+
+// View mode options for palette display
+export type ViewMode = "grid" | "compact" | "list";
+
 export interface PaletteFilters {
   search: string;
   tags: string[];
-  sortBy: "name" | "createdAt" | "updatedAt" | "favoriteCount";
-  sortOrder: "asc" | "desc";
+  sortBy: SortByOption;
+  sortOrder: SortOrderOption;
   showFavoritesOnly: boolean;
 }
 

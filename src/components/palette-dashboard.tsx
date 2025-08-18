@@ -1,7 +1,9 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
+import { useDebounce } from "@/hooks/use-debounce";
 import { Plus, Grid3X3, List, LayoutGrid, Upload } from "lucide-react";
+import { useQueryState } from "nuqs";
 import { Button } from "@/components/ui/button";
 import { PaletteCard } from "./palette-card";
 import { PaletteFilters } from "./palette-filters";
@@ -9,6 +11,9 @@ import { LoadingCard } from "@/components/loaders/loading-card";
 import type {
   Palette,
   PaletteFilters as PaletteFiltersType,
+  ViewMode,
+  SortByOption,
+  SortOrderOption,
 } from "@/types/palette";
 import { CreatePaletteTrigger } from "./create-palette-trigger";
 import ImportPaletteModal from "./import-palette-modal";
@@ -23,7 +28,6 @@ interface PaletteDashboardProps {
   onViewPalette?: (palette: Palette) => void;
 }
 
-type ViewMode = "grid" | "compact" | "list";
 
 export function PaletteDashboard({
   palettes,
@@ -34,15 +38,98 @@ export function PaletteDashboard({
   onToggleFavorite,
   onViewPalette,
 }: PaletteDashboardProps) {
-  const [viewMode, setViewMode] = useState<ViewMode>("grid");
-  const [importModalOpen, setImportModalOpen] = useState(false);
-  const [filters, setFilters] = useState<PaletteFiltersType>({
-    search: "",
-    tags: [],
-    sortBy: "updatedAt",
-    sortOrder: "desc",
-    showFavoritesOnly: false,
+  // URL state for view mode with debouncing
+  const [viewMode, setViewMode] = useQueryState<ViewMode>("view", {
+    defaultValue: "grid",
+    parse: (value) => {
+      return ["grid", "compact", "list"].includes(value) ? value as ViewMode : "grid";
+    },
+    serialize: (value) => value,
   });
+  
+  // Local state for view mode to enable debouncing
+  const [localViewMode, setLocalViewMode] = useState<ViewMode>(viewMode);
+  const debouncedViewMode = useDebounce(localViewMode, 200);
+  
+  // Update URL when debounced view mode changes
+  useEffect(() => {
+    if (debouncedViewMode !== viewMode) {
+      setViewMode(debouncedViewMode);
+    }
+  }, [debouncedViewMode, setViewMode, viewMode]);
+  
+  const [importModalOpen, setImportModalOpen] = useState(false);
+  
+  // URL state for search term with debouncing
+  const [searchTerm, setSearchTerm] = useQueryState("search", {
+    defaultValue: "",
+  });
+  
+  // Local state for search input to enable debouncing
+  const [localSearch, setLocalSearch] = useState(searchTerm);
+  const debouncedSearch = useDebounce(localSearch, 300);
+  
+  // Update URL when debounced search changes
+  useEffect(() => {
+    if (debouncedSearch !== searchTerm) {
+      setSearchTerm(debouncedSearch);
+    }
+  }, [debouncedSearch, setSearchTerm, searchTerm]);
+  
+  // URL state for tags (array of strings)
+  const [tags, setTags] = useQueryState("tags", {
+    defaultValue: [] as string[],
+    parse: (value) => value ? value.split(",") : [],
+    serialize: (value) => value.join(","),
+  });
+  
+  // URL state for sort by
+  const [sortBy, setSortBy] = useQueryState<SortByOption>("sortBy", {
+    defaultValue: "updatedAt" as SortByOption,
+    parse: (value) => {
+      return ["name", "createdAt", "updatedAt", "favoriteCount"].includes(value) 
+        ? value as SortByOption 
+        : "updatedAt";
+    },
+    serialize: (value) => value,
+  });
+  
+  // URL state for sort order
+  const [sortOrder, setSortOrder] = useQueryState<SortOrderOption>("sortOrder", {
+    defaultValue: "desc" as SortOrderOption,
+    parse: (value) => value === "asc" ? "asc" : "desc",
+    serialize: (value) => value,
+  });
+  
+  // URL state for favorites filter
+  const [showFavoritesOnly, setShowFavoritesOnly] = useQueryState("favorites", {
+    defaultValue: false,
+    parse: (value) => value === "true",
+    serialize: (value) => value.toString(),
+  });
+  
+  // Combine all filter states into a single filters object for compatibility
+  const filters: PaletteFiltersType = {
+    search: localSearch, // Use local search for UI updates
+    tags,
+    sortBy,
+    sortOrder,
+    showFavoritesOnly,
+  };
+  
+  // Function to update all filters at once
+  const setFilters = async (newFilters: PaletteFiltersType) => {
+    // Update local search state immediately for UI
+    setLocalSearch(newFilters.search);
+    
+    await Promise.all([
+      // Search term is updated via the debounce effect
+      setTags(newFilters.tags),
+      setSortBy(newFilters.sortBy),
+      setSortOrder(newFilters.sortOrder),
+      setShowFavoritesOnly(newFilters.showFavoritesOnly),
+    ]);
+  };
 
   // Get all available tags
   const availableTags = useMemo(() => {
@@ -108,7 +195,7 @@ export function PaletteDashboard({
   }, [palettes, filters]);
 
   const getGridClasses = () => {
-    switch (viewMode) {
+    switch (localViewMode) {
       case "compact":
         return "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5";
       case "list":
@@ -141,23 +228,23 @@ export function PaletteDashboard({
           {/* View Mode Toggle */}
           <div className="flex rounded-lg border p-1">
             <Button
-              variant={viewMode === "grid" ? "default" : "ghost"}
+              variant={localViewMode === "grid" ? "default" : "ghost"}
               size="sm"
-              onClick={() => setViewMode("grid")}
+              onClick={() => setLocalViewMode("grid")}
             >
               <LayoutGrid className="h-4 w-4" />
             </Button>
             <Button
-              variant={viewMode === "compact" ? "default" : "ghost"}
+              variant={localViewMode === "compact" ? "default" : "ghost"}
               size="sm"
-              onClick={() => setViewMode("compact")}
+              onClick={() => setLocalViewMode("compact")}
             >
               <Grid3X3 className="h-4 w-4" />
             </Button>
             <Button
-              variant={viewMode === "list" ? "default" : "ghost"}
+              variant={localViewMode === "list" ? "default" : "ghost"}
               size="sm"
-              onClick={() => setViewMode("list")}
+              onClick={() => setLocalViewMode("list")}
             >
               <List className="h-4 w-4" />
             </Button>
