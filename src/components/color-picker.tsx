@@ -239,8 +239,8 @@ export function ColorPicker({
             </CardContent>
           </Card>
 
-          <Tabs defaultValue="picker" className="w-full">
-            <TabsList className="grid w-full grid-cols-4">
+          <Tabs defaultValue="picker" id="color-picker-tabs" className="w-full">
+            <TabsList className="grid w-full grid-cols-4 mb-4">
               <TabsTrigger value="picker">
                 <Pipette className="mr-1 h-4 w-4" />
                 Picker
