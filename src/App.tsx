@@ -8,6 +8,7 @@ import { DatabaseSeeder } from "./db/seeder";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import LandingLayout from "./layouts/landing-page-layout";
 import ThemeTest from "./pages/theme-test";
+import NotFoundPage from "./pages/not-found-page";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 
 // Create a client
@@ -36,6 +37,9 @@ function App() {
             </Route>
 
             <Route path="/db-seeder" element={<DatabaseSeeder />} />
+            
+            {/* Catch-all route for 404 */}
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </TooltipProvider>
       </ThemeProvider>
