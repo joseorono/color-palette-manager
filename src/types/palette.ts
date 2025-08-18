@@ -6,6 +6,9 @@ export const indexNumberZod = z.number().int().positive();
 
 export const isLockedFieldZod = z.boolean().default(false);
 
+/** A Hex color string in the format RRGGBB */
+export type HexColorString = string;
+
 /*
 =====================================
     Color Roles and CSS Variables

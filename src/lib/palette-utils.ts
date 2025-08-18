@@ -4,6 +4,7 @@ import {
   Color,
   ColorRole,
   ColorRoles,
+  HexColorString,
   NewPaletteFormValues,
   Palette,
 } from "@/types/palette";
@@ -15,9 +16,9 @@ export class PaletteUtils {
     baseColorArg?: string,
     count: number = 5,
     existingColors?: Color[]
-  ): string[] {
+  ): HexColorString[] {
     const baseColor = baseColorArg ? chroma(baseColorArg) : chroma.random();
-    const colors: string[] = [baseColor.hex()];
+    const colors: HexColorString[] = [baseColor.hex()];
 
     // Generate complementary, triadic, and analogous colors
     const schemes = [
@@ -79,8 +80,8 @@ export class PaletteUtils {
   static generateHarmoniousHexCsv(
     baseColorHex?: string,
     count: number = 5,
-    existingColorHexArray: string[] = []
-  ): string[] {
+    existingColorHexArray: HexColorString[] = []
+  ): HexColorString[] {
     // Get or generate base color
     const baseColor =
       baseColorHex ||
@@ -203,7 +204,7 @@ export class PaletteUtils {
     return colors.slice(0, count);
   }
 
-  static generatePaletteFromColorHexArray(colorHexArray: string[]): Palette {
+  static generatePaletteFromColorHexArray(colorHexArray: HexColorString[]): Palette {
     const palette: Palette = {
       id: nanoidPaletteId(),
       name: `Generated Palette (${colorHexArray.length} colors)`,

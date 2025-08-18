@@ -1,7 +1,7 @@
 import chroma, { Color as ChromaColor } from "chroma-js";
 import { colord } from "colord";
 import { hsl, rgb, random, formatHex } from "culori";
-import { Color, WCAGContrastLevel } from "@/types/palette";
+import { Color, HexColorString, WCAGContrastLevel } from "@/types/palette";
 import { nanoidColorId } from "@/constants";
 
 // Constants for color generation and comparison
@@ -18,7 +18,7 @@ export class ColorUtils {
    * @param hex - Color string to validate
    * @returns boolean - True if valid hex color
    */
-  static isValidHex(hex: string): boolean {
+  static isValidHex(hex: HexColorString): boolean {
     // Remove # if present
     const cleanHex = hex.replace("#", "");
 
@@ -83,7 +83,7 @@ export class ColorUtils {
     return {
       id: nanoidColorId(),
       name: name || ColorUtils.getColorName(hexColor),
-      hex: hexColor,
+      hex: HexColorString,
       locked: false,
     };
   }
@@ -94,10 +94,10 @@ export class ColorUtils {
    * @param count - Number of shades to generate (default: 9)
    * @returns Array of hex color strings representing different lightness levels
    */
-  static generateShades(baseColorHex: string, count: number = 9): string[] {
+  static generateShades(baseColorHex: string, count: number = 9): HexColorString[] {
     const baseColor = colord(baseColorHex);
     const hsl = baseColor.toHsl();
-    const shades: string[] = [];
+    const shades: HexColorString[] = [];
 
     for (let i = 0; i < count; i++) {
       const lightness = (0.2 + (i / (count - 1)) * 0.7) * 100; // Range from 20% to 90%
@@ -180,7 +180,7 @@ export class ColorUtils {
    * @param colorHexArray - Array of hex color strings
    * @returns The first color hex, or a random color if array is empty
    */
-  static getBaseColorHex(colorHexArray: string[]): string {
+  static getBaseColorHex(colorHexArray: HexColorString[]): string {
     return colorHexArray.length > 0 ? colorHexArray[0] : formatHex(random());
   }
   /**
@@ -214,7 +214,7 @@ export class ColorUtils {
    */
   static isColorSimilar(
     newColorHex: string,
-    existingColorHexArray: string[],
+    existingColorHexArray: HexColorString[],
     threshold: number = 50
   ): boolean {
     if (existingColorHexArray.length === 0) return false;
@@ -286,7 +286,7 @@ export class ColorUtils {
    * @param baseColorHex - Base color in hexadecimal format
    * @returns Array of two analogous color hex strings
    */
-  static generateAnalogous(baseColorHex: string): string[] {
+  static generateAnalogous(baseColorHex: string): HexColorString[] {
     const baseHsl = hsl(baseColorHex);
     if (!baseHsl) return [];
 
@@ -311,11 +311,11 @@ export class ColorUtils {
    * @param baseColorHex - Base color in hexadecimal format
    * @returns Array of four variation hex color strings
    */
-  static generateVariations(baseColorHex: string): string[] {
+  static generateVariations(baseColorHex: string): HexColorString[] {
     const baseHsl = hsl(baseColorHex);
     if (!baseHsl) return [];
 
-    const variations: string[] = [];
+    const variations: HexColorString[] = [];
     const baseLightness = baseHsl.l || 0.5;
     const baseSaturation = baseHsl.s || 0.5;
 

@@ -10,6 +10,7 @@ import { Upload, X } from "lucide-react";
 import { toast } from "sonner";
 import { ImageAnalyzer } from "@/lib/image-analyzer";
 import { MAX_PALETTE_COLORS } from "@/constants";
+import { HexColorString } from "@/types/palette";
 
 interface ImageUploaderProps {
   onClose: () => void;
@@ -22,7 +23,7 @@ export function ImageUploader({ onClose }: ImageUploaderProps) {
   const [isProcessing, setIsProcessing] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [algorithm, setAlgorithm] = useState<ExtractionAlgorithm>('new');
-  const [extractedColors, setExtractedColors] = useState<string[]>([]);
+  const [extractedColors, setExtractedColors] = useState<HexColorString[]>([]);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
 
   const { loadPaletteFromUrl } = usePaletteStore();
@@ -51,7 +52,7 @@ export function ImageUploader({ onClose }: ImageUploaderProps) {
             canvas.height
           );
           if (imageData) {
-            let colors: string[];
+            let colors: HexColorString[];
 
             switch (algorithm) {
               case 'old':

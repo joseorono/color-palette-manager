@@ -9,7 +9,7 @@ export function generateHarmoniousHexCsv(
   count: number = 5
 ): string[] {
   const base = baseColor ? chroma(baseColor) : chroma.random();
-  const colors: string[] = [base.hex()];
+  const colors: HexColorString[] = [base.hex()];
 
   // Generate complementary, triadic, and analogous colors
   const schemes = [

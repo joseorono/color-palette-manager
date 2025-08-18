@@ -4,6 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { ColorUtils } from "@/lib/color-utils";
+import { HexColorString } from "@/types/palette";
 
 interface ColorPickerProps {
   isOpen: boolean;
@@ -19,7 +20,7 @@ export function ColorPicker({
   onColorChange,
 }: ColorPickerProps) {
   const [tempColor, setTempColor] = useState(color);
-  const [shades, setShades] = useState<string[]>([]);
+  const [shades, setShades] = useState<HexColorString[]>([]);
 
   useEffect(() => {
     if (isOpen) {

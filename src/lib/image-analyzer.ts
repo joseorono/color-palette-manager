@@ -1,7 +1,7 @@
 import chroma from "chroma-js";
 import { ColorUtils } from "@/lib/color-utils";
 import { PaletteUtils } from "./palette-utils";
-import { ColorFrequencyData, ImageAnalysis } from "@/types/palette";
+import { ColorFrequencyData, HexColorString, ImageAnalysis } from "@/types/palette";
 
 /**
  * Advanced image analysis for intelligent color extraction
@@ -11,7 +11,7 @@ export class ImageAnalyzer {
     static extractColors_old(
         imageData: ImageData,
         count: number = 5
-      ): Promise<string[]> {
+      ): Promise<HexColorString[]> {
         return new Promise((resolve) => {
           const pixels: number[][] = [];
 
@@ -45,7 +45,7 @@ export class ImageAnalyzer {
   static async extractColors(
     imageData: ImageData,
     count: number = 5
-  ): Promise<string[]> {
+  ): Promise<HexColorString[]> {
     const analysis = ImageAnalyzer.analyzeImage(imageData);
 
     if (analysis.pixels.length === 0) {
@@ -58,7 +58,7 @@ export class ImageAnalyzer {
       analysis.pixels.length < 1000 ||
       analysis.colorDiversity < 0.3;
 
-    let colors: string[];
+    let colors: HexColorString[];
 
     if (shouldUseDirectExtraction) {
       colors = ImageAnalyzer.extractDirectColors(analysis.colorFrequency, count);
@@ -166,7 +166,7 @@ export class ImageAnalyzer {
   static extractDirectColors(
     colorFrequency: Map<string, ColorFrequencyData>,
     count: number
-  ): string[] {
+  ): HexColorString[] {
     return Array.from(colorFrequency.values())
       .sort((a, b) => b.count - a.count) // Sort by frequency
       .slice(0, count)
@@ -179,7 +179,7 @@ export class ImageAnalyzer {
    * @param count - Number of colors to extract
    * @returns Array of hex color strings
    */
-  static extractWithKMeans(pixels: number[][], count: number): string[] {
+  static extractWithKMeans(pixels: number[][], count: number): HexColorString[] {
     if (pixels.length <= count) {
       return pixels.map(([r, g, b]) => chroma.rgb(r, g, b).hex());
     }
@@ -309,8 +309,8 @@ export class ImageAnalyzer {
    * @param colors - Array of hex color strings
    * @returns Deduplicated array of hex color strings
    */
-  static deduplicateColors(colors: string[]): string[] {
-    const deduplicated: string[] = [];
+  static deduplicateColors(colors: HexColorString[]): HexColorString[] {
+    const deduplicated: HexColorString[] = [];
 
     for (const color of colors) {
       if (!ColorUtils.isColorSimilar(color, deduplicated)) {
@@ -329,10 +329,10 @@ export class ImageAnalyzer {
    * @returns Array with target number of colors
    */
   static ensureColorCount(
-    colors: string[],
+    colors: HexColorString[],
     targetCount: number,
     colorFrequency: Map<string, ColorFrequencyData>
-  ): string[] {
+  ): HexColorString[] {
     if (colors.length >= targetCount) {
       return colors.slice(0, targetCount);
     }
