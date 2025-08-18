@@ -1,13 +1,13 @@
 # 🎨 Color Palette Generator – ToDo List
 
 # First of All
-- [ ] Fix Existing Functionality
+- [x] Fix Existing Functionality
 - [ ] Enable PWA features
-- [ ] Implement IndexedDB with Dexie.js (https://dexie.org/)
-- [ ] The root `/app` directory should only contain route files. All other components should be moved to a separate `/components` directory, with layout components in their own `/layout` subdirectory.
-- [ ] Implement Them Switcher in the Layout component (remember we're using Shadcn/UI's default theme system) - https://ui.shadcn.com/docs/dark-mode/vite
-- [ ] The index page should be a static landing page with marketing content, not the palette generator itself. The app itself should be moved to a separate route like `localhost:5173/app/`.
-- [ ] Resizing a palette (changing its number of colors) should not regenerate all colors. It should preserve existing colors and only add or remove colors as needed. - Taken by Carlos
+- [x] Implement IndexedDB with Dexie.js (https://dexie.org/)
+- [x] Implement Routing
+- [ ] Implement Theme Switcher in the Layout component (remember we're using Shadcn/UI's default theme system) - https://ui.shadcn.com/docs/dark-mode/vite
+- [x] The index page should be a static landing page with marketing content, not the palette generator itself. The app itself should be moved to a separate route like `localhost:5173/app/`.
+- [x] Resizing a palette (changing its number of colors) should not regenerate all colors. It should preserve existing colors and only add or remove colors as needed. - Taken by Carlos
 - [ ] Look for a way to improve generateHarminousPalette() so that it actually takes into account the existing colors and the desired count (it's currently only using 'count' as a maximum, but caps at 10 because of its internal logic). Add a parameter with the existing colors so it doesn't delete them - Taken by Carlos and Jose
 
 ## 🏗 Core Functionality
@@ -23,13 +23,15 @@
 ---
 
 ## 📂 User Features
-- [ ] **Galería de paletas** (user dashboard)
+- [x] **Galería de paletas** (user dashboard)
 - [x] **Generate Palette**
   - [x] From scratch
   - [x] Based on a specific color
 - [X] **Assign roles** to colors (Primary-light, Secondary-dark, Accent, Warning, etc.)
 - [x] **Color naming** using color name libraries or large JSON dataset
 - [x] **Contrast Checker** for accessibility compliance
+- [x] **Save/Load Palettes** with database integration
+- [x] **Unsaved changes tracking** with exit warnings
 
 ---
 
@@ -46,7 +48,7 @@
 ---
 
 ## 📤 Export / 📥 Import
-- [ ] Add a Side-Pane to the Export Modal with a preview of the palette in the selected format. - Taken by Jose
+- [x] Add a Side-Pane to the Export Modal with a preview of the palette in the selected format.
 - [x] Implement Export formats:
   - [x] CSS
   - [x] JSON
@@ -65,7 +67,8 @@
 - [ ] Generate gradients
 - [ ] Accessibility utilities (contrast checker, WCAG compliance)
 - [x] Abstract palette preview generation (currently tied to a modal)
-- [x] Abstract export functions for all formats
+- [x] Abstract export functions for all formats (refactored to class-based structure)
+- [x] Database queries abstraction (refactored to class-based structure with static methods)
 - [ ] Move color conversion functions to use color-conversion.ts and add tests (there are some inside components).
 
 ---
@@ -74,18 +77,26 @@
 
 Only mark once it's feature-complete and prepared for beta-testing.
 
-- [ ] **Galería de paletas** (dashboard view) - Taken by Mauricio
+- [x] **Galería de paletas** (dashboard view)
 - [ ] **Palette View** (read-only)
-- [ ] **Palette Editor View** - Taken by Jose
-- [ ] **Color Editor Modal** - Taken by Carlos
-- [ ] **Palette Export Modal** - Taken by Jose
+- [x] **Palette Editor View**
+- [x] **Color Editor Modal**
+- [x] **Palette Export Modal**
 - [ ] **Palette Import Modal**
 - [ ] **Landing Page** (static, marketing)
-- [ ] **Palette Playground** - Taken by Jose
-- [ ] **Layout component** - Taken by Mauricio
+- [x] **Palette Playground**
+- [x] **Layout component**
 
 ---
 
 ## Future Features
 - [ ] **Gradient Generation**
 - [ ] **Shade Generation**, with 9 or 10 shades for each color so it's usable for Tailwind Colors.
+
+---
+
+## 🖥️ Desktop App
+- [x] **Electron Integration** - Dependencies installed and configured
+- [x] **Electron Main Process** - Create main.js for desktop app
+- [ ] **Cross-platform Builds** - Configure electron-builder
+- [x] **Desktop App Scripts** - Update package.json with electron scripts
