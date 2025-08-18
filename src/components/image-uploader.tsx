@@ -118,6 +118,7 @@ export function ImageUploader({ onClose }: ImageUploaderProps) {
   );
 
   const handleExtractAndUse = useCallback(() => {
+    // ToDo: Rewrite this some it doesn't create a whole new palette why overriding the existing one
     if (extractedColors.length === 0) return;
 
     const url = `?colors=${encodeURIComponent(extractedColors.join(','))}`;
