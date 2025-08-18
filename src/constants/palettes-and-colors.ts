@@ -1,4 +1,4 @@
-import { Color } from "@/types/palette";
+import { Color, HexColorString } from "@/types/palette";
 
 export const DEFAULT_COLORS: Color[] = [
   {
@@ -30,3 +30,132 @@ export const DEFAULT_COLORS: Color[] = [
     role: "secondary",
   },
 ];
+
+
+export const COLOR_NAME_DATABASE: Record<HexColorString, string> = {
+  // Reds
+  "#FF0000": "Red",
+  "#DC143C": "Crimson",
+  "#B22222": "Fire Brick",
+  "#8B0000": "Dark Red",
+  "#CD5C5C": "Indian Red",
+  "#F08080": "Light Coral",
+  "#FA8072": "Salmon",
+  "#E9967A": "Dark Salmon",
+  "#FFA07A": "Light Salmon",
+  "#FF6347": "Tomato",
+  "#FF4500": "Orange Red",
+
+  // Oranges
+  "#FFA500": "Orange",
+  "#FF8C00": "Dark Orange",
+  "#FFB347": "Peach",
+  "#FFAB91": "Light Orange",
+  "#FF7F50": "Coral",
+  "#D2691E": "Chocolate",
+  "#A0522D": "Sienna",
+  "#8B4513": "Saddle Brown",
+
+  // Yellows
+  "#FFFF00": "Yellow",
+  "#FFD700": "Gold",
+  "#FFFFE0": "Light Yellow",
+  "#FFFACD": "Lemon Chiffon",
+  "#F0E68C": "Khaki",
+  "#BDB76B": "Dark Khaki",
+  "#DAA520": "Goldenrod",
+  "#B8860B": "Dark Goldenrod",
+  "#FFFF99": "Pale Yellow",
+
+  // Greens
+  "#008000": "Green",
+  "#00FF00": "Lime",
+  "#32CD32": "Lime Green",
+  "#00FF7F": "Spring Green",
+  "#90EE90": "Light Green",
+  "#98FB98": "Pale Green",
+  "#00FA9A": "Medium Spring Green",
+  "#228B22": "Forest Green",
+  "#006400": "Dark Green",
+  "#9ACD32": "Yellow Green",
+  "#ADFF2F": "Green Yellow",
+  "#7FFF00": "Chartreuse",
+  "#7CFC00": "Lawn Green",
+  "#556B2F": "Dark Olive Green",
+  "#808000": "Olive",
+  "#6B8E23": "Olive Drab",
+
+  // Cyans/Teals
+  "#00FFFF": "Cyan",
+  "#E0FFFF": "Light Cyan",
+  "#AFEEEE": "Pale Turquoise",
+  "#7FFFD4": "Aquamarine",
+  "#40E0D0": "Turquoise",
+  "#48D1CC": "Medium Turquoise",
+  "#00CED1": "Dark Turquoise",
+  "#5F9EA0": "Cadet Blue",
+  "#008B8B": "Dark Cyan",
+  "#008080": "Teal",
+
+  // Blues
+  "#0000FF": "Blue",
+  "#0000CD": "Medium Blue",
+  "#00008B": "Dark Blue",
+  "#000080": "Navy",
+  "#191970": "Midnight Blue",
+  "#6495ED": "Cornflower Blue",
+  "#4169E1": "Royal Blue",
+  "#1E90FF": "Dodger Blue",
+  "#00BFFF": "Deep Sky Blue",
+  "#87CEEB": "Sky Blue",
+  "#87CEFA": "Light Sky Blue",
+  "#ADD8E6": "Light Blue",
+  "#B0E0E6": "Powder Blue",
+  "#4682B4": "Steel Blue",
+  "#708090": "Slate Gray",
+
+  // Purples/Violets
+  "#800080": "Purple",
+  "#8B008B": "Dark Magenta",
+  "#9400D3": "Violet",
+  "#9932CC": "Dark Orchid",
+  "#BA55D3": "Medium Orchid",
+  "#DA70D6": "Orchid",
+  "#EE82EE": "Violet",
+  "#DDA0DD": "Plum",
+  "#D8BFD8": "Thistle",
+  "#E6E6FA": "Lavender",
+  "#663399": "Rebecca Purple",
+  "#4B0082": "Indigo",
+  "#6A0DAD": "Blue Violet",
+
+  // Pinks/Magentas
+  "#FF00FF": "Magenta",
+  "#FF1493": "Deep Pink",
+  "#FF69B4": "Hot Pink",
+  "#FFB6C1": "Light Pink",
+  "#FFC0CB": "Pink",
+  "#FFCCCB": "Misty Rose",
+  "#C71585": "Medium Violet Red",
+
+  // Browns
+  "#A52A2A": "Brown",
+  "#800000": "Maroon",
+  "#CD853F": "Peru",
+  "#DEB887": "Burlywood",
+  "#F4A460": "Sandy Brown",
+  "#D2B48C": "Tan",
+  "#BC8F8F": "Rosy Brown",
+
+  // Grays
+  "#000000": "Black",
+  "#2F2F2F": "Very Dark Gray",
+  "#696969": "Dim Gray",
+  "#808080": "Gray",
+  "#A9A9A9": "Dark Gray",
+  "#C0C0C0": "Silver",
+  "#D3D3D3": "Light Gray",
+  "#DCDCDC": "Gainsboro",
+  "#F5F5F5": "White Smoke",
+  "#FFFFFF": "White",
+};

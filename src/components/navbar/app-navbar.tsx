@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils"; // Assumes you have a utility for class mergin
 const navigationLinks = [
   { name: "Home", href: "/app" },
   { name: "Palette Editor", href: "/app/palette-edit" },
+  { name: "Color Test", href: "/app/color-test" },
 ];
 
 export default function AppNavbar() {

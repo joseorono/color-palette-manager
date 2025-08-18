@@ -12,7 +12,160 @@ const SATURATION_VARIATION_FACTOR = 0.3; // 30% variation
 const WHITE_LIGHTNESS_THRESHOLD = 0.9;
 const BLACK_LIGHTNESS_THRESHOLD = 0.1;
 
+// Common color descriptors for fallback naming
+const LIGHTNESS_DESCRIPTORS = {
+  VERY_LIGHT: "Pale",
+  LIGHT: "Light",
+  MEDIUM_LIGHT: "",
+  MEDIUM: "",
+  MEDIUM_DARK: "",
+  DARK: "Dark",
+  VERY_DARK: "Deep"
+} as const;
+
+const SATURATION_DESCRIPTORS = {
+  VERY_LOW: "Grayish",
+  LOW: "Muted",
+  MEDIUM: "",
+  HIGH: "Vivid",
+  VERY_HIGH: "Bright"
+} as const;
+
 export class ColorUtils {
+  /**
+   * Check if a color is considered white based on lightness threshold
+   * @param hexColor - Color in hexadecimal format
+   * @returns True if the color is considered white
+   */
+  static isWhiteColor(hexColor: string): boolean {
+    const hsl = colord(hexColor).toHsl();
+    return hsl.l > WHITE_LIGHTNESS_THRESHOLD && hsl.s < 0.1;
+  }
+
+  /**
+   * Check if a color is considered black based on lightness threshold
+   * @param hexColor - Color in hexadecimal format
+   * @returns True if the color is considered black
+   */
+  static isBlackColor(hexColor: string): boolean {
+    const hsl = colord(hexColor).toHsl();
+    return hsl.l < BLACK_LIGHTNESS_THRESHOLD;
+  }
+
+  /**
+   * Check if a color is considered grayscale (low saturation)
+   * @param hexColor - Color in hexadecimal format
+   * @returns True if the color is grayscale
+   */
+  static isGrayscaleColor(hexColor: string): boolean {
+    const hsl = colord(hexColor).toHsl();
+    return hsl.s < 0.1;
+  }
+
+  /**
+   * Calculate perceptual color distance using Delta E CIE76 formula
+   * More accurate than RGB distance for color similarity
+   * @param color1Hex - First color in hexadecimal format
+   * @param color2Hex - Second color in hexadecimal format
+   * @returns Delta E distance (0 = identical, >100 = very different)
+   */
+  static getPerceptualColorDistance(color1Hex: string, color2Hex: string): number {
+    try {
+      // Use chroma.js deltaE function for perceptual color distance
+      return chroma.deltaE(color1Hex, color2Hex);
+    } catch {
+      // Fallback to RGB distance if deltaE fails
+      return ColorUtils.getDistanceBetweenColors(color1Hex, color2Hex) / 255 * 100;
+    }
+  }
+
+  /**
+   * Find the nearest named color from the color database
+   * @param hexColor - Color to find nearest match for
+   * @returns Object with the nearest color name and distance
+   */
+  static findNearestNamedColor(hexColor: string): { name: string; distance: number } {
+    const normalizedHex = ColorUtils.normalizeHex(hexColor);
+
+    // Check for exact match first
+    if (COLOR_NAME_DATABASE[normalizedHex]) {
+      return { name: COLOR_NAME_DATABASE[normalizedHex], distance: 0 };
+    }
+
+    let nearestName = "Unknown";
+    let minDistance = Infinity;
+
+    // Find the closest color in the database using perceptual distance
+    for (const [dbHex, dbName] of Object.entries(COLOR_NAME_DATABASE)) {
+      const distance = ColorUtils.getPerceptualColorDistance(normalizedHex, dbHex);
+      if (distance < minDistance) {
+        minDistance = distance;
+        nearestName = dbName;
+      }
+    }
+
+    return { name: nearestName, distance: minDistance };
+  }
+
+  /**
+   * Generate descriptive color name based on HSL properties
+   * @param hexColor - Color in hexadecimal format
+   * @returns Descriptive color name with modifiers
+   */
+  static generateDescriptiveName(hexColor: string): string {
+    const hsl = colord(hexColor).toHsl();
+    const { h: hue, s: saturation, l: lightness } = hsl;
+
+    // Handle grayscale colors
+    if (ColorUtils.isGrayscaleColor(hexColor)) {
+      if (ColorUtils.isWhiteColor(hexColor)) return "White";
+      if (ColorUtils.isBlackColor(hexColor)) return "Black";
+
+      if (lightness > 0.8) return "Light Gray";
+      if (lightness > 0.6) return "Gray";
+      if (lightness > 0.4) return "Dark Gray";
+      return "Very Dark Gray";
+    }
+
+    // Determine base hue name with more precise ranges
+    let baseName = "";
+    if (hue >= 345 || hue < 15) baseName = "Red";
+    else if (hue < 25) baseName = "Red Orange";
+    else if (hue < 45) baseName = "Orange";
+    else if (hue < 65) baseName = "Yellow Orange";
+    else if (hue < 85) baseName = "Yellow";
+    else if (hue < 105) baseName = "Yellow Green";
+    else if (hue < 125) baseName = "Green";
+    else if (hue < 145) baseName = "Blue Green";
+    else if (hue < 165) baseName = "Cyan";
+    else if (hue < 185) baseName = "Light Blue";
+    else if (hue < 205) baseName = "Blue";
+    else if (hue < 225) baseName = "Blue Violet";
+    else if (hue < 245) baseName = "Violet";
+    else if (hue < 265) baseName = "Purple";
+    else if (hue < 285) baseName = "Red Violet";
+    else if (hue < 305) baseName = "Magenta";
+    else if (hue < 325) baseName = "Pink";
+    else baseName = "Red";
+
+    // Add lightness modifiers
+    let lightnessModifier = "";
+    if (lightness > 0.85) lightnessModifier = LIGHTNESS_DESCRIPTORS.VERY_LIGHT;
+    else if (lightness > 0.7) lightnessModifier = LIGHTNESS_DESCRIPTORS.LIGHT;
+    else if (lightness < 0.2) lightnessModifier = LIGHTNESS_DESCRIPTORS.VERY_DARK;
+    else if (lightness < 0.35) lightnessModifier = LIGHTNESS_DESCRIPTORS.DARK;
+
+    // Add saturation modifiers for very saturated or muted colors
+    let saturationModifier = "";
+    if (saturation > 0.9) saturationModifier = SATURATION_DESCRIPTORS.VERY_HIGH;
+    else if (saturation > 0.7) saturationModifier = SATURATION_DESCRIPTORS.HIGH;
+    else if (saturation < 0.3) saturationModifier = SATURATION_DESCRIPTORS.LOW;
+    else if (saturation < 0.15) saturationModifier = SATURATION_DESCRIPTORS.VERY_LOW;
+
+    // Combine modifiers with base name
+    const modifiers = [saturationModifier, lightnessModifier].filter(Boolean);
+    return modifiers.length > 0 ? `${modifiers.join(" ")} ${baseName}` : baseName;
+  }
   /**
    * Validate if a string is a valid hex color
    * @param hex - Color string to validate
@@ -109,46 +262,43 @@ export class ColorUtils {
   }
 
   /**
-   * Generate a human-readable name for a color based on its HSL values
+   * Generate a human-readable name for a color using advanced color matching
+   * Combines nearest-color matching with descriptive fallback naming
    * @param hexColor - Color in hexadecimal format
-   * @returns Human-readable color name (e.g., "Light Blue", "Dark Red")
+   * @returns Human-readable color name (e.g., "Crimson", "Light Blue", "Muted Green")
    */
   static getColorName(hexColor: string): string {
-    const color = colord(hexColor);
-    const hsl = color.toHsl();
+    try {
+      // First, try to find the nearest named color from our database
+      const { name: nearestName, distance } = ColorUtils.findNearestNamedColor(hexColor);
 
-    // Simple color naming based on HSL values
-    const hue = hsl.h;
-    const saturation = hsl.s;
-    const lightness = hsl.l;
+      // If the color is very close to a named color (Delta E < 15), use the named color
+      // Delta E < 15 is generally considered imperceptible to most people
+      if (distance < 15) {
+        return nearestName;
+      }
 
-    let name = "";
+      // If the color is reasonably close (Delta E < 30), use the named color with a modifier
+      // This helps provide familiar color names while acknowledging the difference
+      if (distance < 30) {
+        const descriptiveName = ColorUtils.generateDescriptiveName(hexColor);
 
-    // Determine base color
-    if (saturation < 0.1) {
-      if (lightness > 0.9) name = "White";
-      else if (lightness < 0.1) name = "Black";
-      else name = "Gray";
-    } else {
-      if (hue < 15 || hue >= 345) name = "Red";
-      else if (hue < 45) name = "Orange";
-      else if (hue < 75) name = "Yellow";
-      else if (hue < 105) name = "Yellow Green";
-      else if (hue < 135) name = "Green";
-      else if (hue < 165) name = "Green Cyan";
-      else if (hue < 195) name = "Cyan";
-      else if (hue < 225) name = "Blue";
-      else if (hue < 255) name = "Blue Violet";
-      else if (hue < 285) name = "Violet";
-      else if (hue < 315) name = "Red Violet";
-      else name = "Red";
+        // If the descriptive name is very different from the nearest name, use descriptive
+        // Otherwise, use the nearest name as it's more recognizable
+        if (descriptiveName.toLowerCase().includes(nearestName.toLowerCase()) ||
+            nearestName.toLowerCase().includes(descriptiveName.toLowerCase())) {
+          return nearestName;
+        }
+      }
+
+      // For colors that don't match well with named colors, use descriptive naming
+      return ColorUtils.generateDescriptiveName(hexColor);
+
+    } catch (error) {
+      // Fallback to descriptive naming if anything goes wrong
+      console.warn('Error in getColorName:', error);
+      return ColorUtils.generateDescriptiveName(hexColor);
     }
-
-    // Add modifiers
-    if (lightness > 0.8) name = `Light ${name}`;
-    else if (lightness < 0.3) name = `Dark ${name}`;
-
-    return name;
   }
 
   /**
