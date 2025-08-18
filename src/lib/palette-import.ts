@@ -1,26 +1,13 @@
 import { z } from "zod";
-import { Color, Palette, colorSchema, paletteSchema } from "@/types/palette";
+import {
+  Color,
+  Palette,
+  colorSchema,
+  paletteSchema,
+  exportedPaletteJSONSchema
+} from "@/types/palette";
 import { nanoidColorId, nanoidPaletteId } from "@/constants/nanoid";
 import { ColorUtils } from "@/lib/color-utils";
-
-/**
- * Zod schema for validating JSON data exported from PaletteExport.toJSON()
- */
-const exportedColorSchema = z.object({
-  name: z.string().min(1),
-  hex: z.string().refine(ColorUtils.isValidHex, {
-    message: "Invalid hex color format",
-  }),
-  index: z.number().int().positive(),
-  locked: z.boolean(),
-});
-
-const exportedPaletteJSONSchema = z.object({
-  name: z.string().min(1).max(48),
-  colors: z.array(exportedColorSchema).min(1),
-  createdAt: z.string().datetime().optional(),
-  totalColors: z.number().int().positive(),
-});
 
 /**
  * Utility class for importing color palettes from various formats.

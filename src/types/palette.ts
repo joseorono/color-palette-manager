@@ -2,6 +2,10 @@ import { z } from "zod";
 import { ExportFormat } from "@/constants/export";
 import { COLOR_ID_LENGTH, PALETTE_ID_LENGTH } from "@/constants";
 
+export const indexNumberZod = z.number().int().positive();
+
+export const isLockedFieldZod = z.boolean().default(false);
+
 /*
 =====================================
     Color Roles and CSS Variables
@@ -37,12 +41,16 @@ export const colorHexRegexZod = z
   .string()
   .regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/);
 
-export const colorSchema = z.object({
-  id: z.string().length(COLOR_ID_LENGTH),
+export const colorFieldsZod = {
   hex: colorHexRegexZod,
-  locked: z.boolean().default(false),
+  locked: isLockedFieldZod,
   name: z.string().min(1).max(48).optional(),
   role: z.enum(ColorRoles).optional(),
+};
+
+export const colorSchema = z.object({
+  id: z.string().length(COLOR_ID_LENGTH),
+  ...colorFieldsZod,
 });
 export type Color = z.infer<typeof colorSchema>;
 
@@ -75,6 +83,31 @@ export const newPaletteFormSchema = z.object({
 });
 
 export type NewPaletteFormValues = z.infer<typeof newPaletteFormSchema>;
+
+/*
+=====================================
+    Export/Import Schemas
+=====================================
+*/
+
+
+export const exportedColorFieldsZod = {
+  name: z.string().min(1),
+  hex: colorHexRegexZod,
+  index: indexNumberZod,
+  locked: isLockedFieldZod,
+};
+
+export const exportedColorSchema = z.object(exportedColorFieldsZod);
+
+export const exportedPaletteFieldsZod = {
+  name: z.string().min(1).max(48),
+  colors: z.array(exportedColorSchema).min(1),
+  createdAt: z.string().datetime().optional(),
+  totalColors: z.number().int().positive(),
+};
+
+export const exportedPaletteJSONSchema = z.object(exportedPaletteFieldsZod);
 
 /*
 =====================================
