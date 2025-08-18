@@ -15,7 +15,7 @@ export default function Footer() {
           </div>
           <div className="flex flex-col items-center space-y-4 sm:flex-row sm:space-x-8 sm:space-y-0">
             <a
-              href="https://github.com/yourusername/color-palette-manager"
+              href="https://github.com/joseorono/color-palette-manager"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center space-x-2 text-gray-300 transition-colors duration-200 hover:text-white"

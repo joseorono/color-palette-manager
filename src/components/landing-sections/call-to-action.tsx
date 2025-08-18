@@ -12,7 +12,7 @@ export default function CallToAction() {
         </p>
         <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
           <a
-            href="https://github.com/yourusername/color-palette-manager"
+            href="https://github.com/joseorono/color-palette-manager"
             target="_blank"
             rel="noopener noreferrer"
             className="btn-primary inline-flex items-center space-x-2 rounded-xl px-8 py-4 text-lg font-semibold text-white transition-all duration-300 hover:-translate-y-1 hover:transform"

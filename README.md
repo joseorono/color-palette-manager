@@ -185,7 +185,7 @@ This project is licensed under the GPL v3 License - see the [LICENSE.md](LICENSE
 - WIP, not real links yet.
 - [Demo](https://your-demo-url.com) - Live demo
 - [Documentation](./docs/) - Detailed documentation, development notes, roadmap, etc.
-- [Issues](https://github.com/yourusername/color-palette-manager/issues) - Bug reports and feature requests
+- [Issues](https://github.com/joseorono/color-palette-manager/issues) - Bug reports and feature requests
 
 ---
 

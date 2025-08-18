@@ -23,7 +23,7 @@ export default function Header() {
           {/* Desktop Navigation */}
           <div className="hidden items-center space-x-4 md:flex">
             <a
-              href="https://github.com/yourusername/color-palette-manager"
+              href="https://github.com/joseorono/color-palette-manager"
               target="_blank"
               rel="noopener noreferrer"
               className="text-brand-dark hover:text-brand-teal font-medium transition-colors duration-200"
@@ -66,7 +66,7 @@ export default function Header() {
           <div className="border-t border-gray-100 py-4 md:hidden">
             <div className="flex flex-col space-y-4">
               <a
-                href="https://github.com/yourusername/color-palette-manager"
+                href="https://github.com/joseorono/color-palette-manager"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-brand-dark hover:text-brand-teal font-medium transition-colors duration-200"

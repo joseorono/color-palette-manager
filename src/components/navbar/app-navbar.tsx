@@ -2,14 +2,15 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menubar, MenubarMenu, MenubarTrigger } from "@/components/ui/menubar";
-import { Menu, ChevronDown } from "lucide-react";
-import { cn } from "@/lib/utils"; // Assumes you have a utility for class merging
+import { Menu, Palette } from "lucide-react";
+import { Link } from "react-router-dom";
 
 // Define the navigation links
 const navigationLinks = [
-  { name: "Home", href: "/app" },
+  { name: "Dashboard", href: "/app" },
   { name: "Palette Editor", href: "/app/palette-edit" },
   { name: "Color Test", href: "/app/color-test" },
+  { name: "Theme Test", href: "/app/test" },
 ];
 
 export default function AppNavbar() {
@@ -20,13 +21,14 @@ export default function AppNavbar() {
       <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* --- Logo and Brand Name --- */}
         <div className="flex-shrink-0">
-          <a
-            href="#"
+          <Link
+            to="/app"
             className="flex items-center space-x-2 text-2xl font-bold"
           >
-            <span className="text-primary">App</span>
-            <span>Name</span>
-          </a>
+            <Palette className="h-8 w-8 text-primary" />
+            <span className="text-primary">Color Palette</span>
+            <span>Manager</span>
+          </Link>
         </div>
 
         {/* --- Desktop Navigation (Hidden on small screens) --- */}
@@ -35,7 +37,7 @@ export default function AppNavbar() {
             {navigationLinks.map((link) => (
               <MenubarMenu key={link.name}>
                 <MenubarTrigger className="font-medium text-muted-foreground transition-colors hover:text-primary">
-                  <a href={link.href}>{link.name}</a>
+                  <Link to={link.href}>{link.name}</Link>
                 </MenubarTrigger>
               </MenubarMenu>
             ))}
@@ -58,32 +60,37 @@ export default function AppNavbar() {
             {/* --- Mobile Sheet Content --- */}
             <SheetContent side="right" className="flex flex-col">
               <div className="flex-shrink-0 border-b pb-4">
-                <a href="#" className="text-2xl font-bold">
-                  App Name
-                </a>
+                <Link to="/app" className="flex items-center space-x-2 text-2xl font-bold">
+                  <Palette className="h-6 w-6 text-primary" />
+                  <span>Color Palette Manager</span>
+                </Link>
               </div>
               <nav className="flex flex-grow flex-col space-y-4 pt-4">
                 {navigationLinks.map((link) => (
-                  <a
+                  <Link
                     key={link.name}
-                    href={link.href}
+                    to={link.href}
                     onClick={() => setIsMobileMenuOpen(false)} // Close menu on click
                     className="w-full text-lg font-medium text-muted-foreground transition-colors hover:text-primary"
                   >
                     {link.name}
-                  </a>
+                  </Link>
                 ))}
               </nav>
               <div className="mt-auto border-t pt-4">
-                <Button className="w-full">Sign Up</Button>
+                <Link to="/" className="w-full">
+                  <Button className="w-full" variant="outline">Back to Landing</Button>
+                </Link>
               </div>
             </SheetContent>
           </Sheet>
         </div>
 
-        {/* --- Sign Up Button (Visible on desktop) --- */}
+        {/* --- Back to Landing Button (Visible on desktop) --- */}
         <div className="hidden items-center md:flex">
-          <Button>Sign Up</Button>
+          <Link to="/">
+            <Button variant="outline">Back to Landing</Button>
+          </Link>
         </div>
       </div>
     </nav>
