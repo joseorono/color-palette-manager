@@ -8,7 +8,7 @@ import { ColorFrequencyData, ImageAnalysis } from "@/types/palette";
  */
 export class ImageAnalyzer {
 
-    static extractColorsFromImage_old(
+    static extractColors_old(
         imageData: ImageData,
         count: number = 5
       ): Promise<string[]> {

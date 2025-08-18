@@ -1,28 +1,38 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import { usePaletteStore } from "@/stores/palette-store";
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { Slider } from "./ui/slider";
-import { PaletteUtils } from "@/lib/palette-utils";
+import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
+import { PalettePreview } from "./palette-preview";
 import { Upload, X } from "lucide-react";
 import { toast } from "sonner";
 import { ImageAnalyzer } from "@/lib/image-analyzer";
+import { MAX_PALETTE_COLORS } from "@/constants";
 
 interface ImageUploaderProps {
   onClose: () => void;
 }
 
+type ExtractionAlgorithm = 'new' | 'old';
+
 export function ImageUploader({ onClose }: ImageUploaderProps) {
   const [colorCount, setColorCount] = useState([5]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [algorithm, setAlgorithm] = useState<ExtractionAlgorithm>('new');
+  const [extractedColors, setExtractedColors] = useState<string[]>([]);
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
 
   const { loadPaletteFromUrl } = usePaletteStore();
 
-  const processImage = useCallback(
-    async (file: File) => {
+  const extractColors = useCallback(
+    async () => {
+      if (!uploadedFile) return;
+
       setIsProcessing(true);
+      setExtractedColors([]);
 
       try {
         const canvas = document.createElement("canvas");
@@ -41,15 +51,26 @@ export function ImageUploader({ onClose }: ImageUploaderProps) {
             canvas.height
           );
           if (imageData) {
-            const colors = await ImageAnalyzer.extractColors(
-              imageData,
-              colorCount[0]
-            );
-            // Create URL with colors parameter for the new store method
-            const url = `?colors=${encodeURIComponent(colors.join(','))}`;
-            loadPaletteFromUrl(url);
+            let colors: string[];
+
+            switch (algorithm) {
+              case 'old':
+                colors = await ImageAnalyzer.extractColors_old(
+                  imageData,
+                  colorCount[0]
+                );
+                break;
+              default:
+                colors = await ImageAnalyzer.extractColors(
+                  imageData,
+                  colorCount[0]
+                );
+                break;
+            }
+
+            // Update preview colors
+            setExtractedColors(colors);
             toast.success("Colors extracted successfully!");
-            onClose();
           }
           setIsProcessing(false);
         };
@@ -59,28 +80,62 @@ export function ImageUploader({ onClose }: ImageUploaderProps) {
           setIsProcessing(false);
         };
 
-        const url = URL.createObjectURL(file);
-        setPreviewUrl(url);
+        const url = URL.createObjectURL(uploadedFile);
         img.src = url;
       } catch (error) {
         toast.error("Error processing image");
         setIsProcessing(false);
       }
     },
-    [colorCount, loadPaletteFromUrl, onClose]
+    [uploadedFile, colorCount, algorithm]
+  );
+
+  const handleImageUpload = useCallback(
+    (file: File) => {
+      const url = URL.createObjectURL(file);
+      setPreviewUrl(url);
+      setUploadedFile(file);
+      setExtractedColors([]); // Clear previous colors
+
+      // Auto-extract colors when image is uploaded
+      setTimeout(() => {
+        extractColors();
+      }, 100);
+    },
+    [extractColors]
   );
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
       const file = acceptedFiles[0];
       if (file && file.type.startsWith("image/")) {
-        processImage(file);
+        handleImageUpload(file);
       } else {
         toast.error("Please upload a valid image file");
       }
     },
-    [processImage]
+    [handleImageUpload]
   );
+
+  const handleExtractAndUse = useCallback(() => {
+    if (extractedColors.length === 0) return;
+
+    const url = `?colors=${encodeURIComponent(extractedColors.join(','))}`;
+    loadPaletteFromUrl(url);
+    toast.success("Palette loaded successfully!");
+    onClose();
+  }, [extractedColors, loadPaletteFromUrl, onClose]);
+
+  // Auto re-extract when color count or algorithm changes (if image is uploaded)
+  useEffect(() => {
+    if (uploadedFile) {
+      const timeoutId = setTimeout(() => {
+        extractColors();
+      }, 100); // Debounce to prevent rapid calls
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [colorCount, algorithm, uploadedFile, extractColors]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -92,7 +147,35 @@ export function ImageUploader({ onClose }: ImageUploaderProps) {
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-2">
+      {/* Algorithm Selection */}
+      <div className="mb-4">
+        <RadioGroup value={algorithm} onValueChange={(value) => setAlgorithm(value as ExtractionAlgorithm)}>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="new" id="new" />
+            <Label htmlFor="new" className="text-sm cursor-pointer mt-4">
+              <div>
+                <div className="font-medium">Advanced Algorithm (Recommended)</div>
+                <div className="text-xs text-muted-foreground">
+                  Intelligent analysis with adaptive sampling and color deduplication. Very accurate, but might not get the "vibe" of larger images.
+                </div>
+              </div>
+            </Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="old" id="old" />
+            <Label htmlFor="old" className="text-sm cursor-pointer">
+              <div>
+                <div className="font-medium">Averaging Algorithm</div>
+                <div className="text-xs text-muted-foreground">
+                  Simple K-means clustering - faster but less sophisticated. Gets the general "vibe", as opposed the exact colors.
+                </div>
+              </div>
+            </Label>
+          </div>
+        </RadioGroup>
+      </div>
+
       {/* Color Count Slider */}
       <div>
         <Label className="mb-2 block text-sm font-medium">
@@ -101,17 +184,37 @@ export function ImageUploader({ onClose }: ImageUploaderProps) {
         <Slider
           value={colorCount}
           onValueChange={setColorCount}
-          max={10}
-          min={2}
+          max={MAX_PALETTE_COLORS}
+          min={4}
           step={1}
           className="w-full"
         />
       </div>
 
+      {/* Color Preview */}
+      {extractedColors.length > 0 && (
+        <div>
+          <Label className="mb-2 block text-sm font-medium">
+            Extracted Colors Preview
+          </Label>
+          <PalettePreview
+            colors={extractedColors.map((hex, index) => ({
+              id: `preview-${index}`,
+              hex,
+              locked: false
+            }))}
+            height="4rem"
+            showTooltips={true}
+            borderRadius="lg"
+            showBorder={true}
+          />
+        </div>
+      )}
+
       {/* Image Upload Area */}
       <div
         {...getRootProps()}
-        className={`cursor-pointer rounded-lg border-2 border-dashed p-8 text-center transition-colors ${isDragActive ? "border-blue-500 bg-blue-50 dark:bg-blue-950" : "border-gray-300 dark:border-gray-600"} ${isProcessing ? "cursor-not-allowed opacity-50" : "hover:border-gray-400"} `}
+        className={`cursor-pointer rounded-lg border-2 border-dashed p-4 text-center transition-colors ${isDragActive ? "border-blue-500 bg-blue-50 dark:bg-blue-950" : "border-gray-300 dark:border-gray-600"} ${isProcessing ? "cursor-not-allowed opacity-50" : "hover:border-gray-400"} `}
       >
         <input {...getInputProps()} />
 
@@ -130,6 +233,8 @@ export function ImageUploader({ onClose }: ImageUploaderProps) {
                 onClick={(e) => {
                   e.stopPropagation();
                   setPreviewUrl(null);
+                  setUploadedFile(null);
+                  setExtractedColors([]);
                 }}
               >
                 <X className="h-3 w-3" />
@@ -163,9 +268,13 @@ export function ImageUploader({ onClose }: ImageUploaderProps) {
       </div>
 
       {/* Actions */}
-      <div className="flex justify-end gap-3">
-        <Button variant="outline" onClick={onClose} disabled={isProcessing}>
-          Cancel
+      <div className="flex justify-end">
+        <Button
+          onClick={handleExtractAndUse}
+          disabled={extractedColors.length === 0 || isProcessing}
+          className="px-8"
+        >
+          Use This Palette
         </Button>
       </div>
     </div>
