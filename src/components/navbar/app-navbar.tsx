@@ -4,6 +4,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menubar, MenubarMenu, MenubarTrigger } from "@/components/ui/menubar";
 import { Menu, Palette } from "lucide-react";
 import { Link } from "react-router-dom";
+import { ModeToggle } from "../ui/theme-switcher-btn";
 
 // Define the navigation links
 const navigationLinks = [
@@ -60,7 +61,10 @@ export default function AppNavbar() {
             {/* --- Mobile Sheet Content --- */}
             <SheetContent side="right" className="flex flex-col">
               <div className="flex-shrink-0 border-b pb-4">
-                <Link to="/app" className="flex items-center space-x-2 text-2xl font-bold">
+                <Link
+                  to="/app"
+                  className="flex items-center space-x-2 text-2xl font-bold"
+                >
                   <Palette className="h-6 w-6 text-primary" />
                   <span>Color Palette Manager</span>
                 </Link>
@@ -79,15 +83,21 @@ export default function AppNavbar() {
               </nav>
               <div className="mt-auto border-t pt-4">
                 <Link to="/" className="w-full">
-                  <Button className="w-full" variant="outline">Back to Landing</Button>
+                  <Button className="w-full" variant="outline">
+                    Back to Landing
+                  </Button>
                 </Link>
+                <div className="mt-4 flex justify-center">
+                  <ModeToggle />
+                </div>
               </div>
             </SheetContent>
           </Sheet>
         </div>
 
-        {/* --- Back to Landing Button (Visible on desktop) --- */}
-        <div className="hidden items-center md:flex">
+        {/* --- Back to Landing Button and Theme Toggle (Visible on desktop) --- */}
+        <div className="hidden items-center gap-3 md:flex">
+          <ModeToggle />
           <Link to="/">
             <Button variant="outline">Back to Landing</Button>
           </Link>
