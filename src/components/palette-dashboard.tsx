@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Plus, Grid3X3, List, LayoutGrid } from "lucide-react";
+import { Plus, Grid3X3, List, LayoutGrid, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PaletteCard } from "./palette-card";
 import { PaletteFilters } from "./palette-filters";
@@ -11,6 +11,7 @@ import type {
   PaletteFilters as PaletteFiltersType,
 } from "@/types/palette";
 import { CreatePaletteTrigger } from "./create-palette-trigger";
+import ImportPaletteModal from "./import-palette-modal";
 
 interface PaletteDashboardProps {
   palettes: Palette[];
@@ -34,6 +35,7 @@ export function PaletteDashboard({
   onViewPalette,
 }: PaletteDashboardProps) {
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
+  const [importModalOpen, setImportModalOpen] = useState(false);
   const [filters, setFilters] = useState<PaletteFiltersType>({
     search: "",
     tags: [],
@@ -166,6 +168,21 @@ export function PaletteDashboard({
             New Palette
           </Button> */}
           {/* Replace the old create button with the new trigger */}
+
+          <Button
+            variant="outline"
+            size="lg"
+            onClick={() => setImportModalOpen(true)}
+            className="ml-2"
+          >
+            <Upload className="mr-2 h-4 w-4" />
+            Import Palette
+          </Button>
+
+          <ImportPaletteModal
+            open={importModalOpen}
+            onOpenChange={setImportModalOpen}
+          />
           <CreatePaletteTrigger size="lg">
             <span className="mr-2">🎨</span>
             Create Palette
