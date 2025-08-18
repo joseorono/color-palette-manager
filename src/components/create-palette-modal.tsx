@@ -36,6 +36,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { LoadingButton } from "@/components/ui/loading-button";
 import { TagInput } from "@/components/tag-input";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { InlineColorPicker } from "@/components/form-fields/inline-color-picker";
 import { toast } from "@/hooks/use-toast";
 // Only importing what we need
 import {
@@ -214,25 +215,21 @@ export function CreatePaletteModal({
                 <FormItem>
                   <FormLabel>Base Color</FormLabel>
                   <FormControl>
-                    <div className="flex items-center gap-2">
-                      <Input
-                        placeholder="Enter base color (e.g. #4285F4)"
-                        {...field}
-                        disabled={isPending}
-                        className={
-                          fieldState.error
-                            ? "border-red-500 focus-visible:ring-red-500"
-                            : ""
-                        }
-                      />
-                      <div
-                        className="h-8 w-8 rounded-md border"
-                        style={{ backgroundColor: field.value || "#FFFFFF" }}
-                      />
-                    </div>
+                    <InlineColorPicker
+                      placeholder="Enter base color (e.g. #4285F4)"
+                      value={field.value}
+                      onChange={field.onChange}
+                      onBlur={field.onBlur}
+                      disabled={isPending}
+                      className={
+                        fieldState.error
+                          ? "border-red-500 focus-visible:ring-red-500"
+                          : ""
+                      }
+                    />
                   </FormControl>
                   <FormDescription>
-                    Enter the base color for your palette (hex format: #RRGGBB)
+                    Enter the base color for your palette or use the color picker
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
