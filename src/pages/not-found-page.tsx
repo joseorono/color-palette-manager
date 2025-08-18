@@ -1,10 +1,17 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Home, ArrowLeft, Palette } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Home, ArrowLeft, Palette, LayoutDashboard } from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function NotFoundPage() {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Check if user came from an /app/ route
+  const isFromApp = location.pathname.startsWith('/app/');
+  const homeButtonText = isFromApp ? 'Back to Dashboard' : 'Home';
+  const HomeIcon = isFromApp ? LayoutDashboard : Home;
+  const homeButtonPath = isFromApp ? '/app/dashboard' : '/';
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 flex items-center justify-center p-4">
@@ -33,7 +40,11 @@ export default function NotFoundPage() {
               Page Not Found
             </h2>
             <p className="text-muted-foreground leading-relaxed">
-              Looks like this color palette got lost in the spectrum. The page you're looking for doesn't exist or has been moved.
+              {isFromApp ? (
+                "Looks like this color palette got lost in the spectrum. The page you're looking for doesn't exist or has been moved."
+              ) : (
+                "Looks like this page got lost. The page you're looking for doesn't exist or has been moved."
+              )}
             </p>
           </div>
 
@@ -48,11 +59,11 @@ export default function NotFoundPage() {
               Go Back
             </Button>
             <Button
-              onClick={() => navigate("/")}
+              onClick={() => navigate(homeButtonPath)}
               className="flex-1 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 transition-all duration-200"
             >
-              <Home className="h-4 w-4 mr-2" />
-              Home
+              <HomeIcon className="h-4 w-4 mr-2" />
+              {homeButtonText}
             </Button>
           </div>
 
