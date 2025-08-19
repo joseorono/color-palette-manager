@@ -4,7 +4,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menubar, MenubarMenu, MenubarTrigger } from "@/components/ui/menubar";
 import { Menu, Palette } from "lucide-react";
 import { Link } from "react-router-dom";
-import { ModeToggle } from "../ui/theme-switcher-btn";
+import ThemeToggle from "../ui/theme-switcher-btn";
 
 // Define the navigation links
 const navigationLinks = [
@@ -88,7 +88,7 @@ export default function AppNavbar() {
                   </Button>
                 </Link>
                 <div className="mt-4 flex justify-center">
-                  <ModeToggle />
+                  <ThemeToggle />
                 </div>
               </div>
             </SheetContent>
@@ -97,7 +97,7 @@ export default function AppNavbar() {
 
         {/* --- Back to Landing Button and Theme Toggle (Visible on desktop) --- */}
         <div className="hidden items-center gap-3 md:flex">
-          <ModeToggle />
+          <ThemeToggle />
           <Link to="/">
             <Button variant="outline">Back to Landing</Button>
           </Link>
