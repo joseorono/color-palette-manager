@@ -7,39 +7,155 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDown, Plus, Star, X } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { ChevronDown, LucideIcon } from "lucide-react";
+import React from "react";
 
-const SplitButton = () => {
-  return (
-    <div className="[&>*]:rounded-none [&>button:first-child]:rounded-l-md [&>button:last-child]:rounded-r-md divide-x divide-border/40">
-      <Button>
-        <Star /> Star
-      </Button>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button size="icon">
-            <ChevronDown />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className="min-w-52">
-          <DropdownMenuLabel className="flex items-center justify-between gap-2">
-            Lists
-            <Button size="icon" variant="ghost" className="h-5 w-5">
-              <X />
+export interface SplitButtonMenuItem {
+  /** Unique identifier for the menu item */
+  id: string;
+  /** The text or content to display */
+  label: React.ReactNode;
+  /** Optional icon to display */
+  icon?: LucideIcon;
+  /** Click handler for the menu item */
+  onClick?: () => void;
+  /** Whether this item is disabled */
+  disabled?: boolean;
+  /** Whether this item should be a separator */
+  separator?: boolean;
+}
+
+export interface SplitButtonProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** The main button text */
+  mainButtonText: React.ReactNode;
+  /** Icon for the main button */
+  mainButtonIcon?: LucideIcon;
+  /** Click handler for the main button */
+  onMainButtonClick?: () => void;
+  /** Array of dropdown menu items */
+  menuItems: SplitButtonMenuItem[];
+  /** Optional dropdown menu label */
+  menuLabel?: React.ReactNode;
+  /** Icon for the dropdown trigger */
+  dropdownIcon?: LucideIcon;
+  /** Button variant for both buttons */
+  variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
+  /** Button size for both buttons */
+  size?: "default" | "sm" | "lg" | "icon";
+  /** Whether the main button is disabled */
+  mainButtonDisabled?: boolean;
+  /** Whether the dropdown is disabled */
+  dropdownDisabled?: boolean;
+  /** Custom className for the main button */
+  mainButtonClassName?: string;
+  /** Custom className for the dropdown button */
+  dropdownButtonClassName?: string;
+  /** Custom className for the dropdown content */
+  dropdownContentClassName?: string;
+  /** Show close button in dropdown label */
+  showCloseButton?: boolean;
+  /** Close button click handler */
+  onCloseClick?: () => void;
+}
+
+const SplitButton = React.forwardRef<HTMLDivElement, SplitButtonProps>(
+  ({
+    mainButtonText,
+    mainButtonIcon: MainButtonIcon,
+    onMainButtonClick,
+    menuItems,
+    menuLabel,
+    dropdownIcon: DropdownIcon = ChevronDown,
+    variant = "default",
+    size = "default",
+    mainButtonDisabled = false,
+    dropdownDisabled = false,
+    mainButtonClassName,
+    dropdownButtonClassName,
+    dropdownContentClassName,
+    showCloseButton = false,
+    onCloseClick,
+    className,
+    ...props
+  }, ref) => {
+    return (
+      <div 
+        ref={ref}
+        className={cn(
+          "[&>*]:rounded-none [&>button:first-child]:rounded-l-md [&>button:last-child]:rounded-r-md divide-x divide-border/40",
+          className
+        )}
+        {...props}
+      >
+        <Button
+          variant={variant}
+          size={size}
+          disabled={mainButtonDisabled}
+          onClick={onMainButtonClick}
+          className={mainButtonClassName}
+        >
+          {MainButtonIcon && <MainButtonIcon />}
+          {mainButtonText}
+        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button 
+              variant={variant}
+              size="icon" 
+              disabled={dropdownDisabled}
+              className={dropdownButtonClassName}
+            >
+              <DropdownIcon />
             </Button>
-          </DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>🔮 Future ideas</DropdownMenuItem>
-          <DropdownMenuItem>🚀 My stack</DropdownMenuItem>
-          <DropdownMenuItem>✨ Inspiration</DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <Plus /> Create List
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
-  );
-};
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className={cn("min-w-52", dropdownContentClassName)}>
+            {menuLabel && (
+              <>
+                <DropdownMenuLabel className={cn(
+                  showCloseButton ? "flex items-center justify-between gap-2" : ""
+                )}>
+                  {menuLabel}
+                  {showCloseButton && (
+                    <Button 
+                      size="icon" 
+                      variant="ghost" 
+                      className="h-5 w-5"
+                      onClick={onCloseClick}
+                    >
+                      <ChevronDown className="rotate-180" />
+                    </Button>
+                  )}
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+              </>
+            )}
+            {menuItems.map((item) => {
+              if (item.separator) {
+                return <DropdownMenuSeparator key={item.id} />;
+              }
+              
+              const ItemIcon = item.icon;
+              
+              return (
+                <DropdownMenuItem
+                  key={item.id}
+                  onClick={item.onClick}
+                  disabled={item.disabled}
+                >
+                  {ItemIcon && <ItemIcon />}
+                  {item.label}
+                </DropdownMenuItem>
+              );
+            })}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    );
+  }
+);
 
+SplitButton.displayName = "SplitButton";
+
+export { SplitButton };
 export default SplitButton;
