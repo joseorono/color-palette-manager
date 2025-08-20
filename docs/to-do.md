@@ -9,6 +9,7 @@
 - [x] The index page should be a static landing page with marketing content, not the palette generator itself. The app itself should be moved to a separate route like `localhost:5173/app/`.
 - [x] Resizing a palette (changing its number of colors) should not regenerate all colors. It should preserve existing colors and only add or remove colors as needed. - Taken by Carlos
 - [x] Look for a way to improve generateHarminousPalette() so that it actually takes into account the existing colors and the desired count (it's currently only using 'count' as a maximum, but caps at 10 because of its internal logic). Add a parameter with the existing colors so it doesn't delete them.
+- [ ] Implement the ?baseColor= query parameter to generate a palette based on a specific color in the palette generator.
 
 ## 🏗 Core Functionality
 - [x] Implement **spacebar** trigger to generate random palettes
@@ -83,7 +84,7 @@ Only mark once it's feature-complete and prepared for beta-testing.
 - [x] **Palette Editor View**
 - [x] **Color Editor Modal**
 - [x] **Palette Export Modal**
-- [ ] **Palette Import Modal**
+- [x] **Palette Import Modal**
 - [ ] **Landing Page** (static, marketing) - Taken by Jose. Do not touch until I'm done with my first proposal.
 - [x] **Palette Playground**
 - [x] **Layout component**
