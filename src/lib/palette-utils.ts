@@ -4,6 +4,7 @@ import {
   Color,
   ColorRole,
   ColorRoles,
+  CSSColorVariablesObject,
   HexColorString,
   NewPaletteFormValues,
   Palette,
@@ -230,6 +231,72 @@ export class PaletteUtils {
     return palette;
   }
 
+  static validateColorRolesObject(colorRolesObject: CSSColorVariablesObject): {
+    isValid: boolean;
+    missingRoles: ColorRole[];
+    invalidRoles: string[];
+  } {
+    const missingRoles: ColorRole[] = [];
+    const invalidRoles: string[] = [];
+
+    // Check for missing required roles
+    for (const role of ColorRoles) {
+      if (!colorRolesObject[role]) {
+        missingRoles.push(role);
+      }
+    }
+
+    // Check for invalid roles (keys that aren't in ColorRoles)
+    for (const key in colorRolesObject) {
+      if (!ColorRoles.includes(key as ColorRole)) {
+        invalidRoles.push(key);
+      }
+    }
+
+    const isValid = missingRoles.length === 0 && invalidRoles.length === 0;
+
+    return {
+      isValid,
+      missingRoles,
+      invalidRoles,
+    };
+  }
+
+  static colorRolesObjectFromColors(colors: Color[]): {
+    wasSuccessful: boolean;
+    errorMessage?: string;
+    colorRolesObject: CSSColorVariablesObject;
+  } {
+    let errorMessage: string | undefined;
+    const colorRolesObject: Partial<CSSColorVariablesObject> = {};
+
+    // Build the color roles object from colors that have roles assigned
+    colors.forEach((color) => {
+      if (color.role) {
+        colorRolesObject[color.role] = color.hex;
+      }
+    });
+
+    // Validate the resulting object
+    const validation = this.validateColorRolesObject(colorRolesObject as CSSColorVariablesObject);
+
+    if (!validation.isValid) {
+      const assignedRoles = this.getAssignedRoles(colors);
+      errorMessage = [
+        "Invalid color roles object:",
+        validation.missingRoles.length > 0 && `Missing roles: ${validation.missingRoles.join(', ')}`,
+        validation.invalidRoles.length > 0 && `Invalid roles: ${validation.invalidRoles.join(', ')}`,
+        `Currently assigned roles: ${Array.from(assignedRoles).join(', ') || 'none'}`
+      ].filter(Boolean).join(' ');
+    }
+
+    return {
+      wasSuccessful: validation.isValid,
+      errorMessage: validation.isValid ? undefined : errorMessage,
+      colorRolesObject: colorRolesObject as CSSColorVariablesObject,
+    };
+  }
+
   static kMeansColors(pixels: number[][], k: number): number[][] {
     // Initialize centroids randomly
     let centroids = Array.from(
@@ -309,7 +376,7 @@ export class PaletteUtils {
   static getAssignedRoles(colors: Color[]): Set<ColorRole> {
     const assignedRoles = new Set<ColorRole>();
     colors.forEach((color) => {
-      if (color.role) {
+      if (color.role !== undefined) {
         assignedRoles.add(color.role);
       }
     });
