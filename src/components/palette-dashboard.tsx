@@ -46,68 +46,68 @@ export function PaletteDashboard({
     },
     serialize: (value) => value,
   });
-  
+
   // Local state for view mode to enable debouncing
   const [localViewMode, setLocalViewMode] = useState<ViewMode>(viewMode);
   const debouncedViewMode = useDebounce(localViewMode, 200);
-  
+
   // Update URL when debounced view mode changes
   useEffect(() => {
     if (debouncedViewMode !== viewMode) {
       setViewMode(debouncedViewMode);
     }
   }, [debouncedViewMode, setViewMode, viewMode]);
-  
+
   const [importModalOpen, setImportModalOpen] = useState(false);
-  
+
   // URL state for search term with debouncing
   const [searchTerm, setSearchTerm] = useQueryState("search", {
     defaultValue: "",
   });
-  
+
   // Local state for search input to enable debouncing
   const [localSearch, setLocalSearch] = useState(searchTerm);
   const debouncedSearch = useDebounce(localSearch, 300);
-  
+
   // Update URL when debounced search changes
   useEffect(() => {
     if (debouncedSearch !== searchTerm) {
       setSearchTerm(debouncedSearch);
     }
   }, [debouncedSearch, setSearchTerm, searchTerm]);
-  
+
   // URL state for tags (array of strings)
   const [tags, setTags] = useQueryState("tags", {
     defaultValue: [] as string[],
     parse: (value) => value ? value.split(",") : [],
     serialize: (value) => value.join(","),
   });
-  
+
   // URL state for sort by
   const [sortBy, setSortBy] = useQueryState<SortByOption>("sortBy", {
     defaultValue: "updatedAt" as SortByOption,
     parse: (value) => {
-      return ["name", "createdAt", "updatedAt", "favoriteCount"].includes(value) 
-        ? value as SortByOption 
+      return ["name", "createdAt", "updatedAt", "favoriteCount"].includes(value)
+        ? value as SortByOption
         : "updatedAt";
     },
     serialize: (value) => value,
   });
-  
+
   // URL state for sort order
   const [sortOrder, setSortOrder] = useQueryState<SortOrderOption>("sortOrder", {
     defaultValue: "desc" as SortOrderOption,
     parse: (value) => value === "asc" ? "asc" : "desc",
     serialize: (value) => value,
   });
-  
+
   // URL state for favorites filter
   const [showFavoritesOnly, setShowFavoritesOnly] = useQueryState("favorites", {
     defaultValue: false,
     parse: (value) => value === "true",
     serialize: (value) => value.toString(),
   });
-  
+
   // Combine all filter states into a single filters object for compatibility
   const filters: PaletteFiltersType = {
     search: localSearch, // Use local search for UI updates
@@ -116,12 +116,12 @@ export function PaletteDashboard({
     sortOrder,
     showFavoritesOnly,
   };
-  
+
   // Function to update all filters at once
   const setFilters = async (newFilters: PaletteFiltersType) => {
     // Update local search state immediately for UI
     setLocalSearch(newFilters.search);
-    
+
     await Promise.all([
       // Search term is updated via the debounce effect
       setTags(newFilters.tags),
@@ -218,8 +218,8 @@ export function PaletteDashboard({
       {/* Header */}
       <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <div>
-          <h1 className="text-3xl font-bold">My Palettes</h1>
-          <p className="text-muted-foreground">
+          <h1 className="mb-2 text-3xl font-bold">My Palettes</h1>
+          <p className="ml-1 text-muted-foreground">
             {filteredPalettes.length} of {palettes.length} palettes
           </p>
         </div>
@@ -293,8 +293,8 @@ export function PaletteDashboard({
           <h3 className="mb-2 text-lg font-medium">No palettes found</h3>
           <p className="mb-4 text-muted-foreground">
             {filters.search ||
-            filters.tags.length > 0 ||
-            filters.showFavoritesOnly
+              filters.tags.length > 0 ||
+              filters.showFavoritesOnly
               ? "Try adjusting your filters to see more results."
               : "Create your first color palette to get started."}
           </p>
