@@ -232,12 +232,12 @@ export class ColorUtils {
    * @param hexColor - Hex color string (e.g., "#ff5733")
    * @returns Color object with generated ID and name
    */
-  static HexToColor(hexColor: string, name?: string): Color {
+  static HexToColor(hexColor: string, name?: string, locked?: boolean): Color {
     return {
       id: nanoidColorId(),
       name: name || ColorUtils.getColorName(hexColor),
       hex: hexColor,
-      locked: false,
+      locked: locked || false,
     };
   }
 

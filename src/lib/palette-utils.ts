@@ -46,12 +46,12 @@ export class PaletteUtils {
   }
 
   static newPaletteFormValuesToPalette(
-    newPaletteFormValues: NewPaletteFormValues
+    formValues: NewPaletteFormValues
   ): Palette {
     return {
       id: nanoidPaletteId(),
-      ...newPaletteFormValues,
-      colors: [],
+      ...formValues,
+      colors: formValues.baseColor ? [ColorUtils.HexToColor(formValues.baseColor, undefined, true)] : [],
       createdAt: new Date(),
       updatedAt: new Date(),
       favoriteCount: 0,
