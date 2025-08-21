@@ -80,10 +80,10 @@ export default function ImportPaletteModal({
       const palette = await PaletteImport.fromJSON(data.jsonData);
       return insertImportedPaletteMutation(palette);
     },
-    onSuccess: (importedPalette: Palette) => {
+    onSuccess: (result: InsertPaletteMutationResult) => {
       toast({
         title: "Palette Imported!",
-        description: `"${importedPalette.name}" has been imported successfully.`,
+        description: `"${result.palette.name}" has been imported successfully.`,
       });
 
       // Close modal
@@ -93,7 +93,7 @@ export default function ImportPaletteModal({
       form.reset();
 
       // Navigate to palette editor using React Router
-      navigate(PaletteUrlUtils.generatePaletteIdUrl(importedPalette.id));
+      navigate(PaletteUrlUtils.generatePaletteIdUrl(result.id));
     },
     onError: (error: Error) => {
       toast({
