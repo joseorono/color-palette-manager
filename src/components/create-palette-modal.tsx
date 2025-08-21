@@ -40,6 +40,7 @@ import { InlineColorPicker } from "@/components/form-fields/inline-color-picker"
 import { toast } from "@/hooks/use-toast";
 // Only importing what we need
 import {
+  InsertPaletteMutationResult,
   newPaletteFormSchema,
   Palette,
   type NewPaletteFormValues,
@@ -52,11 +53,6 @@ import { PaletteDBQueries } from "@/db/queries";
 interface CreatePaletteModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-}
-
-interface InsertPaletteMutationResult {
-  id: string;
-  palette: Omit<Palette, "id" | "createdAt" | "updatedAt">;
 }
 
 // ToDo: Implement this in a less hacky way with a new utility function in palette-db-queries.ts

@@ -138,6 +138,10 @@ export interface PaletteFilters {
   showFavoritesOnly: boolean;
 }
 
+export interface InsertPaletteMutationResult {
+  id: string;
+  palette: Omit<Palette, "id" | "createdAt" | "updatedAt">;
+}
 
 /*
 =====================================

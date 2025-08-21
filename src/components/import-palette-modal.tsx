@@ -31,8 +31,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { PaletteImport } from "@/lib/palette-import";
-import { Palette } from "@/types/palette";
+import { InsertPaletteMutationResult, Palette } from "@/types/palette";
 import { PaletteUrlUtils } from "@/lib/palette-url-utils";
+import { PaletteDBQueries } from "@/db/queries";
 
 interface ImportPaletteModalProps {
   open: boolean;
@@ -49,9 +50,13 @@ type ImportPaletteFormValues = z.infer<typeof importPaletteFormSchema>;
 // Mock function - replace with your actual database insertion
 async function insertImportedPaletteMutation(
   palette: Palette
-): Promise<Palette> {
+): Promise<InsertPaletteMutationResult> {
   // In a real implementation, this would save to your database
-  return palette;
+  const paletteId = await PaletteDBQueries.insertPalette(palette);
+  return {
+    id: paletteId,
+    palette: palette,
+  };
 }
 
 export default function ImportPaletteModal({
