@@ -59,6 +59,7 @@ interface InsertPaletteMutationResult {
   palette: Omit<Palette, "id" | "createdAt" | "updatedAt">;
 }
 
+// ToDo: Implement this in a less hacky way with a new utility function in palette-db-queries.ts
 async function insertPaletteMutation(data: NewPaletteFormValues): Promise<InsertPaletteMutationResult> {
 
   const newPalette = PaletteUtils.newPaletteFormValuesToPalette(data);
