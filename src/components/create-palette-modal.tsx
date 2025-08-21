@@ -47,15 +47,27 @@ import {
 import { ColorUtils } from "@/lib/color-utils";
 import { PaletteUrlUtils } from "@/lib/palette-url-utils";
 import { PaletteUtils } from "@/lib/palette-utils";
+import { PaletteDBQueries } from "@/db/queries";
 
 interface CreatePaletteModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
-// Mock function - replace with your actual PaletteDBQueries.insertPalette()
-async function insertPaletteMutation(data: NewPaletteFormValues) {
-  return PaletteUtils.newPaletteFormValuesToPalette(data);
+interface InsertPaletteMutationResult {
+  id: string;
+  palette: Omit<Palette, "id" | "createdAt" | "updatedAt">;
+}
+
+async function insertPaletteMutation(data: NewPaletteFormValues): Promise<InsertPaletteMutationResult> {
+
+  const newPalette = PaletteUtils.newPaletteFormValuesToPalette(data);
+  const paletteId = await PaletteDBQueries.insertPalette(newPalette);
+
+  return {
+    id: paletteId,
+    palette: newPalette,
+  };
 }
 
 export function CreatePaletteModal({
@@ -82,10 +94,10 @@ export function CreatePaletteModal({
 
   const { mutate: createPalette, isPending } = useMutation({
     mutationFn: insertPaletteMutation,
-    onSuccess: (newPalette: Palette) => {
+    onSuccess: (newPalette: InsertPaletteMutationResult) => {
       toast({
         title: "Palette Created!",
-        description: `"${newPalette.name}" has been created successfully.`,
+        description: `"${newPalette.palette.name}" has been created successfully.`,
       });
 
       // Close modal
