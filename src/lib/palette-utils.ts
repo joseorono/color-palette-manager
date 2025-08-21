@@ -48,27 +48,29 @@ export class PaletteUtils {
   static newPaletteFormValuesToPalette(
     formValues: NewPaletteFormValues
   ): Palette {
+    const now = new Date();
     return {
       id: nanoidPaletteId(),
       ...formValues,
       colors: formValues.baseColor ? [ColorUtils.HexToColor(formValues.baseColor, undefined, true)] : [],
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      createdAt: now,
+      updatedAt: now,
       favoriteCount: 0,
     };
   }
 
   static createEmptyPalette(): Palette {
+    const now = new Date();
     return {
       id: nanoidPaletteId(),
       name: "Untitled Palette",
       colors: [],
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    isPublic: false,
-    tags: [],
-  };
-}
+      createdAt: now,
+      updatedAt: now,
+      isPublic: false,
+      tags: [],
+    };
+  }
 
   /**
    * Generate a harmonious color palette based on color theory principles
@@ -82,12 +84,17 @@ export class PaletteUtils {
     count: number = 5,
     existingColorHexArray: HexColorString[] = []
   ): HexColorString[] {
+    console.log("In generateHarmoniousHexCsv got baseColorHex:", baseColorHex, "count:", count, "existingColorHexArray:", existingColorHexArray);
+    console.log("Existing color hex array:", existingColorHexArray);
+    console.log("Base color hex:", baseColorHex);
     // Get or generate base color
     const baseColor =
       baseColorHex ||
       (existingColorHexArray.length > 0
         ? ColorUtils.getBaseColorHex(existingColorHexArray)
         : formatHex(random()));
+
+    console.log("generateHarmoniousHexCsv::Base color determined to be:", baseColor);
 
     // Initialize with existing colors
     let colors = [...existingColorHexArray];
@@ -107,8 +114,10 @@ export class PaletteUtils {
 
     // Calculate how many more colors we need
     let countToGenerate = count - colors.length;
+    console.log("generateHarmoniousHexCsv::Count to generate:", countToGenerate);
 
     // Priority order for color generation
+    // ToDo: Make this configurable or based on the type of palette requested (e.g. monochrome, triadic, etc.)
     const priorityColorsDuringGeneration = [
       "white",
       "black",
@@ -201,17 +210,20 @@ export class PaletteUtils {
       countToGenerate--;
     }
 
+    console.log("generateHarmoniousHexCsv::Colors generated:", colors);
+
     return colors.slice(0, count);
   }
 
   static generatePaletteFromColorHexArray(colorHexArray: HexColorString[]): Palette {
+    const now = new Date();
     const palette: Palette = {
       id: nanoidPaletteId(),
       name: `Generated Palette (${colorHexArray.length} colors)`,
       description: `Generated from color hex array: ${colorHexArray.join(", ")}`,
       colors: colorHexArray.map((hex) => ColorUtils.HexToColor(hex)),
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      createdAt: now,
+      updatedAt: now,
       isPublic: false,
       tags: [],
     };
