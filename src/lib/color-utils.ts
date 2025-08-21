@@ -20,7 +20,7 @@ const LIGHTNESS_DESCRIPTORS = {
   MEDIUM: "",
   MEDIUM_DARK: "",
   DARK: "Dark",
-  VERY_DARK: "Deep"
+  VERY_DARK: "Deep",
 } as const;
 
 const SATURATION_DESCRIPTORS = {
@@ -28,7 +28,7 @@ const SATURATION_DESCRIPTORS = {
   LOW: "Muted",
   MEDIUM: "",
   HIGH: "Vivid",
-  VERY_HIGH: "Bright"
+  VERY_HIGH: "Bright",
 } as const;
 
 export class ColorUtils {
@@ -69,13 +69,18 @@ export class ColorUtils {
    * @param color2Hex - Second color in hexadecimal format
    * @returns Delta E distance (0 = identical, >100 = very different)
    */
-  static getPerceptualColorDistance(color1Hex: string, color2Hex: string): number {
+  static getPerceptualColorDistance(
+    color1Hex: string,
+    color2Hex: string
+  ): number {
     try {
       // Use chroma.js deltaE function for perceptual color distance
       return chroma.deltaE(color1Hex, color2Hex);
     } catch {
       // Fallback to RGB distance if deltaE fails
-      return ColorUtils.getDistanceBetweenColors(color1Hex, color2Hex) / 255 * 100;
+      return (
+        (ColorUtils.getDistanceBetweenColors(color1Hex, color2Hex) / 255) * 100
+      );
     }
   }
 
@@ -84,7 +89,10 @@ export class ColorUtils {
    * @param hexColor - Color to find nearest match for
    * @returns Object with the nearest color name and distance
    */
-  static findNearestNamedColor(hexColor: string): { name: string; distance: number } {
+  static findNearestNamedColor(hexColor: string): {
+    name: string;
+    distance: number;
+  } {
     const normalizedHex = ColorUtils.normalizeHex(hexColor);
 
     // Check for exact match first
@@ -97,7 +105,10 @@ export class ColorUtils {
 
     // Find the closest color in the database using perceptual distance
     for (const [dbHex, dbName] of Object.entries(COLOR_NAME_DATABASE)) {
-      const distance = ColorUtils.getPerceptualColorDistance(normalizedHex, dbHex);
+      const distance = ColorUtils.getPerceptualColorDistance(
+        normalizedHex,
+        dbHex
+      );
       if (distance < minDistance) {
         minDistance = distance;
         nearestName = dbName;
@@ -152,7 +163,8 @@ export class ColorUtils {
     let lightnessModifier = "";
     if (lightness > 0.85) lightnessModifier = LIGHTNESS_DESCRIPTORS.VERY_LIGHT;
     else if (lightness > 0.7) lightnessModifier = LIGHTNESS_DESCRIPTORS.LIGHT;
-    else if (lightness < 0.2) lightnessModifier = LIGHTNESS_DESCRIPTORS.VERY_DARK;
+    else if (lightness < 0.2)
+      lightnessModifier = LIGHTNESS_DESCRIPTORS.VERY_DARK;
     else if (lightness < 0.35) lightnessModifier = LIGHTNESS_DESCRIPTORS.DARK;
 
     // Add saturation modifiers for very saturated or muted colors
@@ -160,11 +172,14 @@ export class ColorUtils {
     if (saturation > 0.9) saturationModifier = SATURATION_DESCRIPTORS.VERY_HIGH;
     else if (saturation > 0.7) saturationModifier = SATURATION_DESCRIPTORS.HIGH;
     else if (saturation < 0.3) saturationModifier = SATURATION_DESCRIPTORS.LOW;
-    else if (saturation < 0.15) saturationModifier = SATURATION_DESCRIPTORS.VERY_LOW;
+    else if (saturation < 0.15)
+      saturationModifier = SATURATION_DESCRIPTORS.VERY_LOW;
 
     // Combine modifiers with base name
     const modifiers = [saturationModifier, lightnessModifier].filter(Boolean);
-    return modifiers.length > 0 ? `${modifiers.join(" ")} ${baseName}` : baseName;
+    return modifiers.length > 0
+      ? `${modifiers.join(" ")} ${baseName}`
+      : baseName;
   }
   /**
    * Validate if a string is a valid hex color
@@ -242,12 +257,28 @@ export class ColorUtils {
   }
 
   /**
+   * Convert a hex color string to an RGB object
+   * @param hexColor - Hex color string (e.g., "#ff5733")
+   * @returns RGB object with r, g, and b properties
+   */
+
+  static HextoRgb(hexColor: string): { r: number; g: number; b: number } {
+    const r = parseInt(hexColor.slice(1, 3), 16);
+    const g = parseInt(hexColor.slice(3, 5), 16);
+    const b = parseInt(hexColor.slice(5, 7), 16);
+    return { r, g, b };
+  }
+
+  /**
    * Generate a series of shades for a given color
    * @param baseColorHex - Base color in hexadecimal format
    * @param count - Number of shades to generate (default: 9)
    * @returns Array of hex color strings representing different lightness levels
    */
-  static generateShades(baseColorHex: string, count: number = 9): HexColorString[] {
+  static generateShades(
+    baseColorHex: string,
+    count: number = 9
+  ): HexColorString[] {
     const baseColor = colord(baseColorHex);
     const hsl = baseColor.toHsl();
     const shades: HexColorString[] = [];
@@ -270,7 +301,8 @@ export class ColorUtils {
   static getColorName(hexColor: string): string {
     try {
       // First, try to find the nearest named color from our database
-      const { name: nearestName, distance } = ColorUtils.findNearestNamedColor(hexColor);
+      const { name: nearestName, distance } =
+        ColorUtils.findNearestNamedColor(hexColor);
 
       // If the color is very close to a named color (Delta E < 15), use the named color
       // Delta E < 15 is generally considered imperceptible to most people
@@ -285,18 +317,19 @@ export class ColorUtils {
 
         // If the descriptive name is very different from the nearest name, use descriptive
         // Otherwise, use the nearest name as it's more recognizable
-        if (descriptiveName.toLowerCase().includes(nearestName.toLowerCase()) ||
-            nearestName.toLowerCase().includes(descriptiveName.toLowerCase())) {
+        if (
+          descriptiveName.toLowerCase().includes(nearestName.toLowerCase()) ||
+          nearestName.toLowerCase().includes(descriptiveName.toLowerCase())
+        ) {
           return nearestName;
         }
       }
 
       // For colors that don't match well with named colors, use descriptive naming
       return ColorUtils.generateDescriptiveName(hexColor);
-
     } catch (error) {
       // Fallback to descriptive naming if anything goes wrong
-      console.warn('Error in getColorName:', error);
+      console.warn("Error in getColorName:", error);
       return ColorUtils.generateDescriptiveName(hexColor);
     }
   }
@@ -516,7 +549,10 @@ export class ColorUtils {
    * @param id - Color ID to find
    * @returns Object with color and index, or null if not found
    */
-  static findColorById(colors: Color[], id: string): { color: Color; index: number } | null {
+  static findColorById(
+    colors: Color[],
+    id: string
+  ): { color: Color; index: number } | null {
     const index = colors.findIndex((color) => color.id === id);
     if (index === -1) return null;
     return { color: colors[index], index };

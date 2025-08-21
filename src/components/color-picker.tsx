@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { HexColorPicker, HexColorInput } from "react-colorful";
+import { colord } from "colord";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
@@ -98,10 +99,17 @@ export function ColorPicker({
   }, [tempColor]);
 
   const updateColorValues = useCallback((newColor: string) => {
-    const rgb = ColorUtils.HexToColor(newColor);
-    const hsl = ColorUtils.HexToColor(newColor);
-    // setRgbValues(rgb);
-    // setHslValues(hsl);
+    // Convert hex to RGB values
+    const rgb = ColorUtils.HextoRgb(newColor);
+    setRgbValues(rgb);
+
+    // For HSL, we can use colord from the imports
+    const hslColor = colord(newColor).toHsl();
+    setHslValues({
+      h: Math.round(hslColor.h),
+      s: Math.round(hslColor.s * 100),
+      l: Math.round(hslColor.l * 100),
+    });
   }, []);
 
   const handleCopy = async (colorValue: string, format: string) => {
@@ -240,7 +248,7 @@ export function ColorPicker({
           </Card>
 
           <Tabs defaultValue="picker" id="color-picker-tabs" className="w-full">
-            <TabsList className="grid w-full grid-cols-4 mb-4">
+            <TabsList className="mb-4 grid w-full grid-cols-4">
               <TabsTrigger value="picker">
                 <Pipette className="mr-1 h-4 w-4" />
                 Picker
@@ -334,9 +342,7 @@ export function ColorPicker({
                             const newR = Number.parseInt(e.target.value) || 0;
                             const newRgb = { ...rgbValues, r: newR };
                             setRgbValues(newRgb);
-                            // setTempColor(
-                            //   ColorUtils.HexToColor(newRgb.r, newRgb.g, newRgb.b)
-                            // );
+                            // setTempColor(ColorUtils.rgbToHex(newRgb.r, newRgb.g, newRgb.b));
                           }}
                           className="flex-1"
                         />
