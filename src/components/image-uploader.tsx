@@ -230,7 +230,7 @@ export function ImageUploader({ onClose }: ImageUploaderProps) {
             {!isProcessing && (
               <Button
                 size="sm"
-                variant="destructive"
+                variant="outline"
                 className="absolute right-2 top-2"
                 onClick={(e) => {
                   e.stopPropagation();
