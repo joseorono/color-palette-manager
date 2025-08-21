@@ -85,6 +85,7 @@ export function CreatePaletteModal({
       isPublic: false,
       isFavorite: false,
       baseColor: ColorUtils.generateRandomColorHex(),
+      generateFromBaseColor: true,
     },
     mode: "onChange", // Validate on change for better UX
   });
@@ -240,6 +241,32 @@ export function CreatePaletteModal({
                     Enter the base color for your palette or use the color picker
                   </FormDescription>
                   <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Generate Palette Checkbox */}
+            <FormField
+              control={form.control}
+              name="generateFromBaseColor"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                      disabled={isPending}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel className="flex items-center gap-2">
+                      <PaletteIcon className="h-4 w-4 text-blue-600" />
+                      Generate Palette from Base Color?
+                    </FormLabel>
+                    <FormDescription>
+                      Automatically create a harmonious 5-color palette based on your base color
+                    </FormDescription>
+                  </div>
                 </FormItem>
               )}
             />

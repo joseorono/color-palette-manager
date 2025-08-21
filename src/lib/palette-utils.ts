@@ -50,10 +50,22 @@ export class PaletteUtils {
     formValues: NewPaletteFormValues
   ): Palette {
     const now = new Date();
+
+    // Generate colors based on user preference
+    let colors: Color[];
+    if (formValues.generateFromBaseColor) {
+      // Generate harmonious palette from base color
+      const harmoniousHexColors = this.generateHarmoniousHexCsv(formValues.baseColor, 5);
+      colors = harmoniousHexColors.map(hex => ColorUtils.HexToColor(hex));
+    } else {
+      // Just use the base color
+      colors = [ColorUtils.HexToColor(formValues.baseColor, undefined, true)];
+    }
+
     return {
       id: nanoidPaletteId(),
       ...formValues,
-      colors: [ColorUtils.HexToColor(formValues.baseColor, undefined, true)],
+      colors,
       createdAt: now,
       updatedAt: now,
       favoriteCount: 0,
