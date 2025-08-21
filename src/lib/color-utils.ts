@@ -243,6 +243,16 @@ export class ColorUtils {
   }
 
   /**
+   * Convert a hex color string to an HSL string
+   * @param hexColor - Hex color string (e.g., "#ff5733")
+   * @returns HSL string (e.g., "220 90% 56%")
+   */
+  static hexToHsl(hexColor: HexColorString): string {
+    const hsl = colord(hexColor).toHsl();
+    return `${hsl.h} ${hsl.s * 100}% ${hsl.l * 100}%`;
+  }
+
+  /**
    * Convert a hex color string to a Color object
    * @param hexColor - Hex color string (e.g., "#ff5733")
    * @returns Color object with generated ID and name
