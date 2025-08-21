@@ -82,7 +82,7 @@ export const newPaletteFormSchema = z.object({
   isPublic: paletteFieldsZod.isPublic,
   tags: paletteFieldsZod.tags,
   isFavorite: paletteFieldsZod.isFavorite,
-  baseColor: colorHexRegexZod.optional(),
+  baseColor: colorHexRegexZod,
 });
 
 export type NewPaletteFormValues = z.infer<typeof newPaletteFormSchema>;

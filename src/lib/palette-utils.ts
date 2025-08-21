@@ -53,7 +53,7 @@ export class PaletteUtils {
     return {
       id: nanoidPaletteId(),
       ...formValues,
-      colors: formValues.baseColor ? [ColorUtils.HexToColor(formValues.baseColor, undefined, true)] : [],
+      colors: [ColorUtils.HexToColor(formValues.baseColor, undefined, true)],
       createdAt: now,
       updatedAt: now,
       favoriteCount: 0,
