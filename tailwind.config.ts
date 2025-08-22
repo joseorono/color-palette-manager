@@ -20,6 +20,21 @@ const config: Config = {
         sm: 'calc(var(--radius) - 4px)',
       },
       colors: {
+        // Custom color palette for preview
+        'preview-primary': 'var(--preview-primary)',
+        'preview-secondary': 'var(--preview-secondary)',
+        'preview-tertiary': 'var(--preview-tertiary)',
+        'preview-background': 'var(--preview-background)',
+        'preview-foreground': 'var(--preview-foreground)',
+        'preview-card': 'var(--preview-card)',
+        'preview-border': 'var(--preview-border)',
+        'preview-muted': 'var(--preview-muted)',
+        'preview-primary-foreground': 'var(--preview-primary-foreground)',
+        'preview-secondary-foreground': 'var(--preview-secondary-foreground)',
+        'preview-accent-foreground': 'var(--preview-accent-foreground)',
+        'preview-card-foreground': 'var(--preview-card-foreground)',
+        'preview-muted-foreground': 'var(--preview-muted-foreground)',
+
         // Custom color palette with shades
         'eerie-black': {
           50: '#f8f8f8',
