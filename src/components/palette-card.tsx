@@ -109,7 +109,7 @@ export function PaletteCard({
               {palette.name}
             </h3>
             {palette.description && (
-              <p className="mt-1 line-clamp-2 h-10 text-sm text-muted-foreground">
+              <p className="mt-1 line-clamp-2 min-h-10 text-sm text-muted-foreground">
                 {palette.description}
               </p>
             )}
