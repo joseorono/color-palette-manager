@@ -101,8 +101,8 @@ export function PaletteCard({
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div className="min-w-0 flex-1">
-            <h3 
-              className="truncate text-lg font-semibold cursor-pointer hover:underline transition-all duration-200 hover:text-primary"
+            <h3
+              className="cursor-pointer truncate text-lg font-semibold transition-all duration-200 hover:text-primary hover:underline"
               onClick={handlePaletteNameClick}
               title="Click to edit this palette"
             >
@@ -236,6 +236,14 @@ export function PaletteCard({
                 +{palette.tags?.length - 3}
               </Badge>
             )}
+          </div>
+        )}
+
+        {palette.tags?.length == 0 && (
+          <div className="flex flex-wrap gap-1">
+            <Badge variant="outline" className="text-xs">
+              No tags
+            </Badge>
           </div>
         )}
       </CardContent>
