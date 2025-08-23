@@ -28,7 +28,6 @@ interface PaletteDashboardProps {
   onViewPalette?: (palette: Palette) => void;
 }
 
-
 export function PaletteDashboard({
   palettes,
   isLoading = false,
@@ -42,7 +41,9 @@ export function PaletteDashboard({
   const [viewMode, setViewMode] = useQueryState<ViewMode>("view", {
     defaultValue: "grid",
     parse: (value) => {
-      return ["grid", "compact", "list"].includes(value) ? value as ViewMode : "grid";
+      return ["grid", "compact", "list"].includes(value)
+        ? (value as ViewMode)
+        : "grid";
     },
     serialize: (value) => value,
   });
@@ -79,7 +80,7 @@ export function PaletteDashboard({
   // URL state for tags (array of strings)
   const [tags, setTags] = useQueryState("tags", {
     defaultValue: [] as string[],
-    parse: (value) => value ? value.split(",") : [],
+    parse: (value) => (value ? value.split(",") : []),
     serialize: (value) => value.join(","),
   });
 
@@ -88,18 +89,21 @@ export function PaletteDashboard({
     defaultValue: "updatedAt" as SortByOption,
     parse: (value) => {
       return ["name", "createdAt", "updatedAt", "favoriteCount"].includes(value)
-        ? value as SortByOption
+        ? (value as SortByOption)
         : "updatedAt";
     },
     serialize: (value) => value,
   });
 
   // URL state for sort order
-  const [sortOrder, setSortOrder] = useQueryState<SortOrderOption>("sortOrder", {
-    defaultValue: "desc" as SortOrderOption,
-    parse: (value) => value === "asc" ? "asc" : "desc",
-    serialize: (value) => value,
-  });
+  const [sortOrder, setSortOrder] = useQueryState<SortOrderOption>(
+    "sortOrder",
+    {
+      defaultValue: "desc" as SortOrderOption,
+      parse: (value) => (value === "asc" ? "asc" : "desc"),
+      serialize: (value) => value,
+    }
+  );
 
   // URL state for favorites filter
   const [showFavoritesOnly, setShowFavoritesOnly] = useQueryState("favorites", {
@@ -293,8 +297,8 @@ export function PaletteDashboard({
           <h3 className="mb-2 text-lg font-medium">No palettes found</h3>
           <p className="mb-4 text-muted-foreground">
             {filters.search ||
-              filters.tags.length > 0 ||
-              filters.showFavoritesOnly
+            filters.tags.length > 0 ||
+            filters.showFavoritesOnly
               ? "Try adjusting your filters to see more results."
               : "Create your first color palette to get started."}
           </p>
@@ -315,6 +319,7 @@ export function PaletteDashboard({
               onDelete={onDeletePalette}
               onToggleFavorite={onToggleFavorite}
               onView={onViewPalette}
+              viewMode={localViewMode}
             />
           ))}
         </div>

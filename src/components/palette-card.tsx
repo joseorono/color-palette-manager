@@ -31,6 +31,7 @@ import { toast } from "@/hooks/use-toast";
 import type { Palette } from "@/types/palette";
 import { ShareUtils } from "@/lib/share-utils";
 import { PaletteUrlUtils } from "@/lib/palette-url-utils";
+import { cn } from "@/lib/utils";
 
 interface PaletteCardProps {
   palette: Palette;
@@ -38,6 +39,7 @@ interface PaletteCardProps {
   onDelete?: (paletteId: string) => void;
   onToggleFavorite?: (paletteId: string) => void;
   onView?: (palette: Palette) => void;
+  viewMode?: string;
 }
 
 export function PaletteCard({
@@ -46,6 +48,7 @@ export function PaletteCard({
   onDelete,
   onToggleFavorite,
   onView,
+  viewMode,
 }: PaletteCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
@@ -248,13 +251,23 @@ export function PaletteCard({
         )}
       </CardContent>
 
-      <CardFooter className="flex items-center justify-between pt-0 text-sm text-muted-foreground">
+      <CardFooter
+        className={
+          viewMode === "compact"
+            ? "flex min-h-10 flex-col items-center justify-between gap-3 pt-0 text-sm text-muted-foreground"
+            : "flex items-center justify-between pt-0 text-sm text-muted-foreground"
+        }
+      >
         <div className="flex items-center space-x-4">
           <span>{palette.colors?.length} colors</span>
-          {palette.favoriteCount && palette.favoriteCount > 0 && (
+          {palette.favoriteCount && palette.favoriteCount > 0 ? (
             <span className="flex items-center">
               <Heart className="mr-1 h-3 w-3" />
               {palette.favoriteCount}
+            </span>
+          ) : (
+            <span className="flex items-center">
+              <Heart className="mr-1 h-3 w-3" />0
             </span>
           )}
         </div>
