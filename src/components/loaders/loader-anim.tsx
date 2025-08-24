@@ -1,6 +1,5 @@
 import React from "react";
 import BlocksScaleLoader from "@/assets/blocks-scale-loader.svg?react";
-import { useTheme } from "../theme-provider";
 
 interface LoaderAnimProps {
   size?: number;
