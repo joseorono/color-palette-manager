@@ -182,7 +182,10 @@ export function ColorPicker({
         if (!open) onClose();
       }}
     >
-      <SheetContent side="right" className="overflow-y-auto sm:max-w-2xl">
+      <SheetContent
+        side="right"
+        className="w-full overflow-y-auto sm:max-w-2xl"
+      >
         <SheetHeader>
           <SheetTitle className="flex items-center gap-2">
             <Palette className="h-5 w-5" />

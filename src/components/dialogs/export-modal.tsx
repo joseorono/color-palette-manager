@@ -62,7 +62,7 @@ export function ExportModal() {
       <DialogTrigger asChild>
         <Button className="gap-2">
           <Download className="h-4 w-4" />
-          Export Palette
+          <span className="hidden lg:block">Export Palette</span>
         </Button>
       </DialogTrigger>
 
