@@ -1,5 +1,6 @@
 import React from "react";
 import BlocksScaleLoader from "@/assets/blocks-scale-loader.svg?react";
+import { useTheme } from "../theme-provider";
 
 interface LoaderAnimProps {
   size?: number;
@@ -10,11 +11,12 @@ interface LoaderAnimProps {
 const LoaderAnim: React.FC<LoaderAnimProps> = ({
   size = 24,
   className = "",
-  color = "#fff",
+  color = undefined,
 }) => {
+  const fillColor = color ? color : 'hsl(var(--primary))';
   return (
     <div className={`inline-flex items-center justify-center ${className}`}>
-      <BlocksScaleLoader width={size} height={size} fill={color} />
+      <BlocksScaleLoader width={size} height={size} fill={fillColor} />
     </div>
   );
 };
