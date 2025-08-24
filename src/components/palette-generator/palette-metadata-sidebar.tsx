@@ -38,10 +38,7 @@ type PaletteMetadataSidebarProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   // Back-compat props
-  paletteName: string;
   onPaletteNameChange: (name: string) => void;
-  onSave: () => void;
-  currentPaletteName?: string;
   // New optional submit with full metadata
   onSubmit?: (values: PaletteMetadataFormValues) => void;
   initialValues?: Partial<PaletteMetadataFormValues>;
@@ -50,10 +47,7 @@ type PaletteMetadataSidebarProps = {
 export function PaletteMetadataSidebar({
   open,
   onOpenChange,
-  paletteName,
   onPaletteNameChange,
-  onSave,
-  currentPaletteName,
   onSubmit,
   initialValues,
 }: PaletteMetadataSidebarProps) {
@@ -63,7 +57,7 @@ export function PaletteMetadataSidebar({
   const form = useForm<PaletteMetadataFormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
-      name: paletteName || currentPaletteName || "",
+      name: initialValues?.name || "",
       description: initialValues?.description ?? "",
       isPublic: initialValues?.isPublic ?? false,
       tags: initialValues?.tags ?? [],
@@ -76,6 +70,23 @@ export function PaletteMetadataSidebar({
   useEffect(() => {
     form.setValue("tags", tags, { shouldValidate: true });
   }, [tags, form]);
+
+  // When initialValues or external names change, reset the form and local tags
+  useEffect(() => {
+    const nextValues = {
+      name: initialValues?.name || "",
+      description: initialValues?.description ?? "",
+      isPublic: initialValues?.isPublic ?? false,
+      tags: initialValues?.tags ?? [],
+      isFavorite: initialValues?.isFavorite ?? false,
+    } as const;
+
+    // Update local tags state to reflect new props
+    setTags(nextValues.tags);
+
+    // Reset the form with new defaults
+    form.reset(nextValues);
+  }, [initialValues, form]);
 
   // Back-compat: keep external paletteName state in sync with form name
   useEffect(() => {
@@ -90,8 +101,6 @@ export function PaletteMetadataSidebar({
   const handleSubmit = (values: PaletteMetadataFormValues) => {
     // Call new onSubmit if provided
     if (onSubmit) onSubmit({ ...values, tags });
-    // Back-compat save callback
-    onSave();
   };
 
   return (
@@ -118,7 +127,7 @@ export function PaletteMetadataSidebar({
                       <Input
                         id="palette-name"
                         placeholder={
-                          currentPaletteName || "Enter palette name..."
+                          initialValues?.name || "Enter palette name..."
                         }
                         {...field}
                         className={
