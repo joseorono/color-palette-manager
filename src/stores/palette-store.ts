@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import { nanoidColorId } from "@/constants/nanoid";
-import { nanoidPaletteId } from "@/constants/nanoid";
 import { Color, Palette } from "@/types/palette";
 import { ColorUtils } from "@/lib/color-utils";
 import { PaletteUtils } from "@/lib/palette-utils";
@@ -26,7 +25,7 @@ interface PaletteStore {
   addColor: () => void;
   removeColor: (index: number) => void;
   reorderColors: (dragIndex: number, hoverIndex: number) => void;
-  savePalette: (name: string, isPublic?: boolean) => Promise<string>;
+  savePalette: (nameOrPalette: string | Palette, isPublic?: boolean) => Promise<string>;
   loadSavedPalettes: () => Promise<void>;
   loadPaletteFromUrl: (url: string) => Promise<void>;
   markAsSaved: () => void;
@@ -206,21 +205,30 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
     });
   },
 
-  savePalette: async (name: string, isPublic = false) => {
+  savePalette: async (nameOrPalette: string | Palette, isPublic = false) => {
     const { currentPalette } = get();
     if (!currentPalette) throw new Error("No palette to save");
 
     try {
-      const paletteToSave: Palette = {
-        ...currentPalette,
-        name,
-        isPublic,
-        updatedAt: new Date(),
-      };
+      // Support both: (name, isPublic) and (palette)
+      const paletteToSave: Palette =
+        typeof nameOrPalette === "string"
+          ? {
+              ...currentPalette,
+              name: nameOrPalette,
+              isPublic,
+              updatedAt: new Date(),
+            }
+          : {
+              ...currentPalette,
+              ...nameOrPalette,
+              // Ensure timestamps are updated
+              updatedAt: new Date(),
+            };
 
       const savedId = await PaletteDBQueries.savePalette(
         paletteToSave,
-        currentPalette.id
+        paletteToSave.id
       );
 
       const savedPalette: Palette = {

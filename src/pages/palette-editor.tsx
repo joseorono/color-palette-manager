@@ -33,7 +33,6 @@ export default function PaletteEditor() {
     loadPaletteFromUrl(currentUrl);
   }, [loadPaletteFromUrl]);
 
-
   return (
     <>
       <PaletteGenerator />
