@@ -50,7 +50,9 @@ export function PaletteGenerator() {
     if (!currentPalette || currentPalette.colors.length === 0) {
       generateNewPalette();
     }
+  }, []);
 
+  useEffect(() => {
     // Add keyboard listeners
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
