@@ -98,12 +98,9 @@ export function PaletteGenerator() {
       {/* Navigation Bar */}
       <PaletteNavbar />
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-2">
         {/* Header */}
         <div className="mb-8 text-center">
-          <h1 className="mb-2 text-4xl font-bold text-gray-900 dark:text-white">
-            Color Palette Generator
-          </h1>
           <p className="mb-6 text-gray-600 dark:text-gray-300">
             {/* Create beautiful color palettes with ease. Press spacebar to
             generate new colors. */}
