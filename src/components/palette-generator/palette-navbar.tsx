@@ -1,26 +1,16 @@
 import { useState, useEffect } from "react";
 import { usePaletteStore } from "@/stores/palette-store";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "./ui/dialog";
+import { Button } from "../ui/button";
+ 
+ 
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "./ui/tooltip";
+} from "../ui/dropdown-menu";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import {
   Save,
   Share,
@@ -34,7 +24,6 @@ import {
   Pencil,
   Palette,
   Camera,
-  Grid3X3,
   Sliders,
   Undo,
   Redo,
@@ -42,11 +31,12 @@ import {
   Info,
 } from "lucide-react";
 import { toast } from "sonner";
-import { ImageUploader } from "./image-uploader";
-import { DebouncedSlider } from "./ui/debounced-slider";
+import { ImageUploader } from "../image-uploader";
+import { DebouncedSlider } from "../ui/debounced-slider";
 import { ShareUtils } from "@/lib/share-utils";
-import { ExportModal } from "./dialogs/export-modal";
+import { ExportModal } from "../dialogs/export-modal";
 import { MAX_PALETTE_COLORS } from "@/constants/ui";
+import { PaletteMetadataSidebar } from "./palette-metadata-sidebar";
 
 export function PaletteNavbar() {
   const {
@@ -60,12 +50,12 @@ export function PaletteNavbar() {
     isGenerating,
   } = usePaletteStore();
 
-  const [paletteSize, setPaletteSize] = useState(currentPalette?.colors.length || 5);
-  const [paletteName, setPaletteName] = useState("");
+  const [paletteSize, setPaletteSize] = useState(
+    currentPalette?.colors.length || 5
+  );
   const [isSaveOpen, setIsSaveOpen] = useState(false);
   const [isUploadOpen, setIsUploadOpen] = useState(false);
   const [isMetadataOpen, setIsMetadataOpen] = useState(false);
-  const [isSizeControlOpen, setIsSizeControlOpen] = useState(false);
   const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
 
   useEffect(() => {
@@ -75,24 +65,47 @@ export function PaletteNavbar() {
   const handleSizeChange = (value: number[]) => {
     generateNewPalette(value[0]);
     setPaletteSize(value[0]);
-    setIsSizeControlOpen(false);
   };
 
-  const handleSave = async () => {
-    if (!paletteName.trim()) {
+  type MetadataValues = {
+    name: string;
+    description?: string;
+    tags: string[];
+    isPublic: boolean;
+    isFavorite?: boolean;
+  };
+
+  const handleMetadataSubmit = async (values?: MetadataValues) => {
+    const trimmedName = values
+      ? values.name?.trim()
+      : currentPalette.name.trim();
+    if (!trimmedName) {
       toast.error("Please enter a palette name");
       return;
     }
 
     try {
-      await savePalette(paletteName.trim());
+      await savePalette(
+        values
+          ? {
+              ...currentPalette,
+              name: trimmedName,
+              description: values.description ?? "",
+              tags: values.tags ?? [],
+              isPublic: values.isPublic ?? false,
+              isFavorite: values.isFavorite ?? false,
+              updatedAt: new Date(),
+            }
+          : currentPalette.name.trim()
+      );
+
       toast.success(
         currentPalette?.id
           ? "Palette updated successfully!"
           : "Palette saved successfully!"
       );
       setIsSaveOpen(false);
-      setPaletteName("");
+      setIsMetadataOpen(false);
     } catch (error) {
       toast.error("Failed to save palette");
     }
@@ -116,75 +129,42 @@ export function PaletteNavbar() {
     const result = await ShareUtils.sharePalette(currentPalette);
     if (result.success) {
       toast.success(result.message);
-    } else if (result.method !== 'error') {
+    } else if (result.method !== "error") {
       toast.success(result.message);
     }
   };
 
   return (
     <>
-      <div className="sticky top-0 z-50 border-b bg-white/80 backdrop-blur-md dark:bg-gray-900/80 dark:border-gray-800">
+      <div className="sticky top-0 z-50 border-b bg-white/80 backdrop-blur-md dark:border-gray-800 dark:bg-gray-900/80">
         <div className="container mx-auto px-2 sm:px-4">
-          <div className="flex h-14 sm:h-16 items-center justify-between">
+          <div className="grid h-14 grid-cols-3 items-center sm:h-16">
             {/* Left Section - Palette Name */}
-            <div className="flex items-center gap-4">
-              <Dialog open={isMetadataOpen} onOpenChange={setIsMetadataOpen}>
-                <DialogTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    className="flex items-center gap-2 text-left hover:bg-gray-100 dark:hover:bg-gray-800"
-                  >
-                    <Palette className="h-4 w-4 text-gray-500" />
-                    <div className="hidden sm:flex flex-col">
-                      <span className="text-sm font-medium">
-                        {currentPalette?.name || "Untitled Palette"}
-                      </span>
-                      <span className="text-xs text-gray-500">
-                        {currentPalette?.colors.length || 0} colors
-                      </span>
-                    </div>
-                    <div className="sm:hidden">
-                      <span className="text-sm font-medium">
-                        {currentPalette?.name || "Untitled"}
-                      </span>
-                    </div>
-                    <Pencil className="h-3 w-3 text-gray-400" />
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Edit Palette Metadata</DialogTitle>
-                  </DialogHeader>
-                  <div className="space-y-4">
-                    <div>
-                      <Label htmlFor="palette-name">Palette Name</Label>
-                      <Input
-                        id="palette-name"
-                        value={paletteName}
-                        onChange={(e) => setPaletteName(e.target.value)}
-                        placeholder={currentPalette?.name || "Enter palette name..."}
-                      />
-                    </div>
-                    <div className="flex justify-end gap-3">
-                      <Button variant="outline" onClick={() => setIsMetadataOpen(false)}>
-                        Cancel
-                      </Button>
-                      <Button onClick={handleSave}>
-                        Save Changes
-                      </Button>
-                    </div>
-                  </div>
-                </DialogContent>
-              </Dialog>
+            <div className="justify-self-start">
+              <Button
+                onClick={() => setIsMetadataOpen(true)}
+                variant="ghost"
+                className="flex items-center gap-3 text-left hover:bg-gray-100 dark:hover:bg-gray-800"
+              >
+                <Palette className="h-6 w-6 text-gray-500" />
+                <div className="hidden flex-col sm:flex">
+                  <span className="text-2xl font-medium">
+                    {currentPalette?.name || "Untitled Palette"}
+                  </span>
+                </div>
+                <Pencil className="h-3 w-3 text-gray-400" />
+              </Button>
             </div>
 
             {/* Center Section - Main Controls */}
-            <div className="flex items-center gap-0.5 sm:gap-1">
+            <div className="flex items-center gap-0.5 justify-self-center sm:gap-1">
               {/* Generate New */}
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
-                    onClick={() => generateNewPalette()}
+                    onClick={() =>
+                      generateNewPalette(currentPalette?.colors.length)
+                    }
                     disabled={isGenerating}
                     variant="ghost"
                     size="sm"
@@ -217,34 +197,17 @@ export function PaletteNavbar() {
               </Tooltip>
 
               {/* Palette Size Control */}
-              <DropdownMenu open={isSizeControlOpen} onOpenChange={setIsSizeControlOpen}>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="sm" className="h-10 w-10 p-0">
-                        <Grid3X3 className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Adjust palette size</p>
-                  </TooltipContent>
-                </Tooltip>
-                <DropdownMenuContent align="center" className="w-64 p-4">
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium">Palette Size: {paletteSize}</Label>
-                    <DebouncedSlider
-                      value={[paletteSize]}
-                      onChange={handleSizeChange}
-                      debounce={300}
-                      max={MAX_PALETTE_COLORS}
-                      min={2}
-                      step={1}
-                      className="w-full"
-                    />
-                  </div>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <div className="px-2 shadow-sm">
+                <DebouncedSlider
+                  value={[paletteSize]}
+                  onChange={handleSizeChange}
+                  debounce={500}
+                  max={MAX_PALETTE_COLORS}
+                  min={2}
+                  step={1}
+                  className="w-32 cursor-grab"
+                />
+              </div>
 
               {/* Add Color */}
               <Tooltip>
@@ -286,16 +249,16 @@ export function PaletteNavbar() {
             </div>
 
             {/* Right Section - Actions */}
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 justify-self-end">
               {/* View/Preview */}
               <DropdownMenu>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" size="sm" className="h-10 px-3">
-                        <Eye className="h-4 w-4 mr-2" />
+                        <Eye className="mr-2 h-4 w-4" />
                         <span className="hidden sm:inline">View</span>
-                        <ChevronDown className="h-3 w-3 ml-1" />
+                        <ChevronDown className="ml-1 h-3 w-3" />
                       </Button>
                     </DropdownMenuTrigger>
                   </TooltipTrigger>
@@ -324,9 +287,9 @@ export function PaletteNavbar() {
                   <TooltipTrigger asChild>
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" size="sm" className="h-10 px-3">
-                        <Share className="h-4 w-4 mr-2" />
+                        <Share className="mr-2 h-4 w-4" />
                         <span className="hidden sm:inline">Share</span>
-                        <ChevronDown className="h-3 w-3 ml-1" />
+                        <ChevronDown className="ml-1 h-3 w-3" />
                       </Button>
                     </DropdownMenuTrigger>
                   </TooltipTrigger>
@@ -356,18 +319,18 @@ export function PaletteNavbar() {
                     className="h-10 px-3"
                   >
                     {isSaved && !hasUnsavedChanges ? (
-                      <Check className="h-4 w-4 mr-2" />
+                      <Check className="mr-2 h-4 w-4" />
                     ) : (
-                      <Save className="h-4 w-4 mr-2" />
+                      <Save className="mr-2 h-4 w-4" />
                     )}
-                    <span className="hidden sm:inline">
-                      {currentPalette?.id ? "Save" : "Save"}
-                    </span>
-                    {hasUnsavedChanges && <span className="ml-1 text-xs">•</span>}
+                    <span className="hidden sm:inline">Save</span>
+                    {hasUnsavedChanges && (
+                      <span className="ml-1 text-xs">•</span>
+                    )}
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>{currentPalette?.id ? "Save changes" : "Save palette"}</p>
+                  <p>Save Changes</p>
                 </TooltipContent>
               </Tooltip>
 
@@ -376,7 +339,11 @@ export function PaletteNavbar() {
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="sm" className="h-10 w-10 p-0">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-10 w-10 p-0"
+                      >
                         <Menu className="h-4 w-4" />
                       </Button>
                     </DropdownMenuTrigger>
@@ -413,27 +380,22 @@ export function PaletteNavbar() {
       <Dialog open={isSaveOpen} onOpenChange={setIsSaveOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>
-              {currentPalette?.id ? "Update Palette" : "Save Palette"}
-            </DialogTitle>
+            <DialogTitle>Save Changes?</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
-            <div>
-              <Label htmlFor="save-palette-name">Palette Name</Label>
-              <Input
-                id="save-palette-name"
-                value={paletteName}
-                onChange={(e) => setPaletteName(e.target.value)}
-                placeholder="Enter palette name..."
-              />
-            </div>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              This will save your current changes to
+              {" "}
+              <span className="font-medium">
+                {currentPalette?.name || "Untitled Palette"}
+              </span>
+              . Do you want to proceed?
+            </p>
             <div className="flex justify-end gap-3">
               <Button variant="outline" onClick={() => setIsSaveOpen(false)}>
                 Cancel
               </Button>
-              <Button onClick={handleSave}>
-                {currentPalette?.id ? "Update" : "Save"}
-              </Button>
+              <Button onClick={() => handleMetadataSubmit()}>Save Changes</Button>
             </div>
           </div>
         </DialogContent>
@@ -459,30 +421,49 @@ export function PaletteNavbar() {
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-sm">Generate new palette</span>
-                <kbd className="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-800 rounded border">Space</kbd>
+                <kbd className="rounded border bg-gray-100 px-2 py-1 text-xs dark:bg-gray-800">
+                  Space
+                </kbd>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm">Copy color hex</span>
-                <kbd className="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-800 rounded border">Click</kbd>
+                <kbd className="rounded border bg-gray-100 px-2 py-1 text-xs dark:bg-gray-800">
+                  Click
+                </kbd>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm">Lock/unlock color</span>
-                <kbd className="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-800 rounded border">L</kbd>
+                <kbd className="rounded border bg-gray-100 px-2 py-1 text-xs dark:bg-gray-800">
+                  L
+                </kbd>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm">Save palette</span>
-                <kbd className="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-800 rounded border">Ctrl+S</kbd>
+                <kbd className="rounded border bg-gray-100 px-2 py-1 text-xs dark:bg-gray-800">
+                  Ctrl+S
+                </kbd>
               </div>
             </div>
             <div className="flex justify-end">
-              <Button onClick={() => setIsShortcutsOpen(false)}>
-                Close
-              </Button>
+              <Button onClick={() => setIsShortcutsOpen(false)}>Close</Button>
             </div>
           </div>
         </DialogContent>
       </Dialog>
 
+      {/* Metadata Sidebar (Sheet) */}
+      <PaletteMetadataSidebar
+        open={isMetadataOpen}
+        onOpenChange={setIsMetadataOpen}
+        onSubmit={handleMetadataSubmit}
+        initialValues={{
+          name: currentPalette?.name ?? "",
+          description: currentPalette?.description ?? "",
+          tags: currentPalette?.tags ?? [],
+          isPublic: currentPalette?.isPublic ?? false,
+          isFavorite: currentPalette?.isFavorite ?? false,
+        }}
+      />
     </>
   );
 }

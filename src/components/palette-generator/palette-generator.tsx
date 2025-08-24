@@ -32,6 +32,12 @@ export function PaletteGenerator() {
   const handleKeyPress = useCallback(
     (event: KeyboardEvent) => {
       if (event.code === "Space" && !event.repeat) {
+        const dialogOrSheetOpen = !!document.querySelector(
+          '[role="dialog"][data-state="open"]'
+        );
+
+        if (dialogOrSheetOpen) return;
+
         event.preventDefault();
         regenerateUnlocked();
       }
@@ -89,7 +95,7 @@ export function PaletteGenerator() {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       {/* Navigation Bar */}
       <PaletteNavbar />
-      
+
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8 text-center">
@@ -97,8 +103,13 @@ export function PaletteGenerator() {
             Color Palette Generator
           </h1>
           <p className="mb-6 text-gray-600 dark:text-gray-300">
-            Create beautiful color palettes with ease. Press spacebar to
-            generate new colors.
+            {/* Create beautiful color palettes with ease. Press spacebar to
+            generate new colors. */}
+            Generate a new palette by pressing{" "}
+            <kbd className="rounded border bg-gray-100 px-2 py-1 text-xs dark:bg-gray-800">
+              Space
+            </kbd>{" "}
+            or clicking the shuffle button.
           </p>
         </div>
 

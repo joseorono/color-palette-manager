@@ -42,7 +42,6 @@ import { toast } from "@/hooks/use-toast";
 import {
   InsertPaletteMutationResult,
   newPaletteFormSchema,
-  Palette,
   type NewPaletteFormValues,
 } from "@/types/palette";
 import { ColorUtils } from "@/lib/color-utils";
@@ -56,8 +55,9 @@ interface CreatePaletteModalProps {
 }
 
 // ToDo: Implement this in a less hacky way with a new utility function in palette-db-queries.ts
-async function insertPaletteMutation(data: NewPaletteFormValues): Promise<InsertPaletteMutationResult> {
-
+async function insertPaletteMutation(
+  data: NewPaletteFormValues
+): Promise<InsertPaletteMutationResult> {
   const newPalette = PaletteUtils.newPaletteFormValuesToPalette(data);
   const paletteId = await PaletteDBQueries.insertPalette(newPalette);
 
@@ -73,7 +73,6 @@ export function CreatePaletteModal({
 }: CreatePaletteModalProps) {
   const navigate = useNavigate();
   const [tags, setTags] = useState<string[]>([]);
-  const [tagInput, setTagInput] = useState("");
   const [formError, setFormError] = useState<string | null>(null);
 
   const form = useForm<NewPaletteFormValues>({
@@ -238,7 +237,8 @@ export function CreatePaletteModal({
                     />
                   </FormControl>
                   <FormDescription>
-                    Enter the base color for your palette or use the color picker
+                    Enter the base color for your palette or use the color
+                    picker
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -264,7 +264,8 @@ export function CreatePaletteModal({
                       Generate Palette from Base Color?
                     </FormLabel>
                     <FormDescription>
-                      Automatically create a harmonious 5-color palette based on your base color
+                      Automatically create a harmonious 5-color palette based on
+                      your base color
                     </FormDescription>
                   </div>
                 </FormItem>
