@@ -2,7 +2,7 @@ import { Color, Palette, paletteSchema } from "@/types/palette";
 import { ColorUtils } from "@/lib/color-utils";
 import { PaletteUtils } from "@/lib/palette-utils";
 import { PaletteDBQueries } from "@/db/queries";
-import { nanoidPaletteId, nanoidColorId } from "@/constants";
+import { nanoidPaletteId, nanoidColorId } from "@/constants/nanoid";
 
 /**
  * Utility class for handling palette operations via URL parameters.
