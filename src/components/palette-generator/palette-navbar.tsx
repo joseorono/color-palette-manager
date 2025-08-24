@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { usePaletteStore } from "@/stores/palette-store";
 import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
+ 
+ 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import {
   DropdownMenu,
@@ -380,23 +380,22 @@ export function PaletteNavbar() {
       <Dialog open={isSaveOpen} onOpenChange={setIsSaveOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>
-              {currentPalette?.id ? "Update Palette" : "Save Palette"}
-            </DialogTitle>
+            <DialogTitle>Save Changes?</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
-            <div>
-              <Label htmlFor="save-palette-name">Palette Name</Label>
-              <Input
-                id="save-palette-name"
-                placeholder="Enter palette name..."
-              />
-            </div>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              This will save your current changes to
+              {" "}
+              <span className="font-medium">
+                {currentPalette?.name || "Untitled Palette"}
+              </span>
+              . Do you want to proceed?
+            </p>
             <div className="flex justify-end gap-3">
               <Button variant="outline" onClick={() => setIsSaveOpen(false)}>
                 Cancel
               </Button>
-              <Button onClick={() => handleMetadataSubmit()}>Save</Button>
+              <Button onClick={() => handleMetadataSubmit()}>Save Changes</Button>
             </div>
           </div>
         </DialogContent>
