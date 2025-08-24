@@ -218,7 +218,6 @@ export function PaletteCard({
             enableCopyOnClick={true}
             showTooltips={true}
             showColorNames={true}
-            copySuccessMessage="Color copied!"
           />
         </div>
 
