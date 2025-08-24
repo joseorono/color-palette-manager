@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { Color } from "@/types/palette";
 import { cn } from "@/lib/utils";
 import { borderRadiusClassesMap } from "@/constants/ui";
 import LoaderAnim from "./loaders/loader-anim";
+import useCopyToClipboard from "@/hooks/use-copy-to-clipboard";
 
 export interface PalettePreviewProps {
   /** Array of colors to display in the palette */
@@ -34,6 +36,12 @@ export interface PalettePreviewProps {
   loadingComponent?: React.ReactNode;
   /** Whether segments should have equal width/height */
   equalSegments?: boolean;
+  /** Whether to enable hover effects with hex overlay */
+  showHoverEffects?: boolean;
+  /** Whether to enable click-to-copy functionality */
+  enableCopyOnClick?: boolean;
+  /** Custom copy success message */
+  copySuccessMessage?: string;
 }
 
 export function PalettePreview({
@@ -52,7 +60,15 @@ export function PalettePreview({
   isLoading = false,
   loadingComponent = <LoaderAnim />,
   equalSegments = true,
+  showHoverEffects = true,
+  enableCopyOnClick = true,
+  copySuccessMessage,
 }: PalettePreviewProps) {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const { copyToClipboard } = useCopyToClipboard({
+    successMessage: copySuccessMessage || "Color copied to clipboard!",
+  });
+
   // Handle loading state
   if (isLoading) {
     if (loadingComponent) {
@@ -123,6 +139,26 @@ export function PalettePreview({
     return parts.join(" - ") || color.hex.toUpperCase();
   };
 
+  const handleColorClick = (color: Color, index: number) => {
+    if (enableCopyOnClick) {
+      copyToClipboard(color.hex.toUpperCase());
+    }
+    onColorClick?.(color, index);
+  };
+
+  const handleColorHover = (color: Color, index: number) => {
+    if (showHoverEffects) {
+      setHoveredIndex(index);
+    }
+    onColorHover?.(color, index);
+  };
+
+  const handleColorLeave = () => {
+    if (showHoverEffects) {
+      setHoveredIndex(null);
+    }
+  };
+
   return (
     <div
       className={containerClasses}
@@ -134,8 +170,8 @@ export function PalettePreview({
         <div
           key={index}
           className={cn(
-            "transition-all duration-200",
-            onColorClick && "cursor-pointer hover:z-10 hover:scale-105",
+            "group/color relative transition-all duration-200",
+            (onColorClick || enableCopyOnClick) && "cursor-pointer hover:z-10 hover:scale-105",
             onColorHover && "hover:brightness-110",
             !isHorizontal && gap > 0 && index < colors.length - 1 && `mb-${gap}`
           )}
@@ -144,18 +180,27 @@ export function PalettePreview({
             ...segmentStyle,
           }}
           title={getTooltipText(color)}
-          onClick={() => onColorClick?.(color, index)}
-          onMouseEnter={() => onColorHover?.(color, index)}
-          role={onColorClick ? "button" : undefined}
-          tabIndex={onColorClick ? 0 : undefined}
+          onClick={() => handleColorClick(color, index)}
+          onMouseEnter={() => handleColorHover(color, index)}
+          onMouseLeave={handleColorLeave}
+          role={(onColorClick || enableCopyOnClick) ? "button" : undefined}
+          tabIndex={(onColorClick || enableCopyOnClick) ? 0 : undefined}
           onKeyDown={(e) => {
-            if (onColorClick && (e.key === "Enter" || e.key === " ")) {
+            if ((onColorClick || enableCopyOnClick) && (e.key === "Enter" || e.key === " ")) {
               e.preventDefault();
-              onColorClick(color, index);
+              handleColorClick(color, index);
             }
           }}
           aria-label={`Color ${index + 1}: ${getTooltipText(color)}`}
-        />
+        >
+          {showHoverEffects && hoveredIndex === index && (
+            <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 transition-opacity group-hover/color:opacity-100">
+              <span className="rounded bg-black/50 px-1 py-0.5 text-xs font-medium text-white">
+                {color.hex.toUpperCase()}
+              </span>
+            </div>
+          )}
+        </div>
       ))}
     </div>
   );
