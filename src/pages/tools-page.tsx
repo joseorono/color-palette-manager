@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useNavigate } from "react-router-dom";
 import {
   Palette,
   Blend,
@@ -113,6 +114,7 @@ const getStatusBadge = (status: Tool["status"]) => {
 };
 
 const ToolCard = ({ tool }: { tool: Tool }) => {
+  const navigate = useNavigate();
   const IconComponent = tool.icon;
 
   return (
@@ -140,7 +142,7 @@ const ToolCard = ({ tool }: { tool: Tool }) => {
           disabled={tool.status !== "available"}
           onClick={() => {
             if (tool.link && tool.status === "available") {
-              window.location.href = tool.link;
+              navigate(tool.link);
             }
           }}
         >

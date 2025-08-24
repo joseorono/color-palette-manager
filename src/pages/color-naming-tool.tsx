@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { LiveColorPicker } from '@/components/color-naming/live-color-picker';
 import { ColorCard } from '@/components/color-naming/color-card';
 import { ToolHeroSection } from '@/components/reusable-sections/tool-hero-section';
 import { ColorUtils } from '@/lib/color-utils';
 import { HexColorString } from '@/types/palette';
+import { Button } from '@/components/ui/button';
 import { Palette, Sparkles, Eye } from 'lucide-react';
 
 // Featured color examples to showcase the naming system
@@ -15,6 +17,7 @@ const featuredColors: HexColorString[] = [
 ];
 
 export const ColorNamingTool: React.FC = () => {
+  const navigate = useNavigate();
   const [currentColor, setCurrentColor] = useState<HexColorString>("#FF6B6B");
   const [currentColorName, setCurrentColorName] = useState<string>(
     ColorUtils.getColorName("#FF6B6B")
@@ -23,6 +26,10 @@ export const ColorNamingTool: React.FC = () => {
   const handleColorChange = (color: HexColorString, colorName: string) => {
     setCurrentColor(color);
     setCurrentColorName(colorName);
+  };
+
+  const handleGeneratePalette = () => {
+    navigate(`/app/palette-edit/?basedOnColor=${currentColor}`);
   };
 
   return (
@@ -50,7 +57,7 @@ export const ColorNamingTool: React.FC = () => {
 
         {/* Current Color Showcase */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-4 p-6 rounded-2xl bg-card/50 backdrop-blur-sm border shadow-lg">
+          <div className="inline-flex items-center gap-6 p-6 rounded-2xl bg-card/50 backdrop-blur-sm border shadow-lg">
             <div
               className="w-16 h-16 rounded-xl shadow-md border-2 border-border"
               style={{ backgroundColor: currentColor }}
@@ -63,7 +70,16 @@ export const ColorNamingTool: React.FC = () => {
                 {currentColorName}
               </div>
             </div>
-            <Sparkles className="h-6 w-6 text-primary" />
+            <div className="flex items-center gap-3">
+              <Button
+                onClick={handleGeneratePalette}
+                variant="secondary"
+                className="rounded-full"
+              >
+                <Sparkles className="h-5 w-5 mr-2" />
+                Generate Palette
+              </Button>
+            </div>
           </div>
         </div>
 
