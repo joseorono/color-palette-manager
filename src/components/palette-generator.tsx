@@ -1,10 +1,7 @@
 import React, { useEffect, useCallback, useState } from "react";
 import { usePaletteStore } from "@/stores/palette-store";
 import { ColorCard } from "./color-card";
-import { PaletteControls } from "./palette-controls";
-import { ExportModal } from "./dialogs/export-modal";
-import { Button } from "./ui/button";
-import { Shuffle, Plus } from "lucide-react";
+import { PaletteNavbar } from "./palette-navbar";
 import {
   rectSortingStrategy,
   SortableContext,
@@ -20,16 +17,13 @@ import {
   DragOverlay,
 } from "@dnd-kit/core";
 import { ColorUtils } from "@/lib/color-utils";
-import { MAX_PALETTE_COLORS, DRAG_ACTIVATION_DISTANCE } from "@/constants/ui";
-import ImportPaletteModal from "./import-palette-modal";
+import { DRAG_ACTIVATION_DISTANCE } from "@/constants/ui";
 
 export function PaletteGenerator() {
   const {
     currentPalette,
-    isGenerating,
     generateNewPalette,
     regenerateUnlocked,
-    addColor,
     reorderColors,
   } = usePaletteStore();
 
@@ -93,6 +87,9 @@ export function PaletteGenerator() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+      {/* Navigation Bar */}
+      <PaletteNavbar />
+      
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8 text-center">
@@ -103,30 +100,6 @@ export function PaletteGenerator() {
             Create beautiful color palettes with ease. Press spacebar to
             generate new colors.
           </p>
-
-          <div className="mb-8 flex justify-center gap-4">
-            <Button
-              onClick={() => generateNewPalette()}
-              disabled={isGenerating}
-              className="gap-2"
-            >
-              <Shuffle className="h-4 w-4" />
-              Generate New
-            </Button>
-
-            <Button
-              onClick={addColor}
-              variant="outline"
-              disabled={
-                !currentPalette ||
-                currentPalette.colors.length >= MAX_PALETTE_COLORS
-              }
-              className="gap-2"
-            >
-              <Plus className="h-4 w-4" />
-              Add Color
-            </Button>
-          </div>
         </div>
 
         {/* Palette Display */}
@@ -168,12 +141,6 @@ export function PaletteGenerator() {
             </DndContext>
           </div>
         </div>
-
-        {/* Controls */}
-        <PaletteControls />
-
-        {/* Export Modal */}
-        <ExportModal />
       </div>
     </div>
   );
