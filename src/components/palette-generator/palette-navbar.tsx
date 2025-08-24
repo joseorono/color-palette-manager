@@ -157,24 +157,26 @@ export function PaletteNavbar() {
     <>
       <div className="sticky top-0 z-50 border-b bg-white/80 backdrop-blur-md dark:border-gray-800 dark:bg-gray-900/80">
         <div className="container mx-auto px-2 sm:px-4">
-          <div className="flex h-14 items-center justify-between sm:h-16">
+          <div className="grid h-14 grid-cols-3 items-center sm:h-16">
             {/* Left Section - Palette Name */}
-            <Button
-              onClick={() => setIsMetadataOpen(true)}
-              variant="ghost"
-              className="flex items-center gap-3 text-left hover:bg-gray-100 dark:hover:bg-gray-800"
-            >
-              <Palette className="h-6 w-6 text-gray-500" />
-              <div className="hidden flex-col sm:flex">
-                <span className="text-2xl font-medium">
-                  {currentPalette?.name || "Untitled Palette"}
-                </span>
-              </div>
-              <Pencil className="h-3 w-3 text-gray-400" />
-            </Button>
+            <div className="justify-self-start">
+              <Button
+                onClick={() => setIsMetadataOpen(true)}
+                variant="ghost"
+                className="flex items-center gap-3 text-left hover:bg-gray-100 dark:hover:bg-gray-800"
+              >
+                <Palette className="h-6 w-6 text-gray-500" />
+                <div className="hidden flex-col sm:flex">
+                  <span className="text-2xl font-medium">
+                    {currentPalette?.name || "Untitled Palette"}
+                  </span>
+                </div>
+                <Pencil className="h-3 w-3 text-gray-400" />
+              </Button>
+            </div>
 
             {/* Center Section - Main Controls */}
-            <div className="flex items-center gap-0.5 sm:gap-1">
+            <div className="flex items-center justify-self-center gap-0.5 sm:gap-1">
               {/* Generate New */}
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -266,7 +268,7 @@ export function PaletteNavbar() {
             </div>
 
             {/* Right Section - Actions */}
-            <div className="flex items-center gap-1">
+            <div className="flex items-center justify-self-end gap-1">
               {/* View/Preview */}
               <DropdownMenu>
                 <Tooltip>
