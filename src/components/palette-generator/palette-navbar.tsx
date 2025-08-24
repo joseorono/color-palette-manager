@@ -214,43 +214,17 @@ export function PaletteNavbar() {
               </Tooltip>
 
               {/* Palette Size Control */}
-              <DropdownMenu
-                open={isSizeControlOpen}
-                onOpenChange={setIsSizeControlOpen}
-              >
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-10 w-10 p-0"
-                      >
-                        <Grid3X3 className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Adjust palette size</p>
-                  </TooltipContent>
-                </Tooltip>
-                <DropdownMenuContent align="center" className="w-64 p-4">
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium">
-                      Palette Size: {paletteSize}
-                    </Label>
-                    <DebouncedSlider
-                      value={[paletteSize]}
-                      onChange={handleSizeChange}
-                      debounce={300}
-                      max={MAX_PALETTE_COLORS}
-                      min={2}
-                      step={1}
-                      className="w-full"
-                    />
-                  </div>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <div className="px-2 shadow-sm">
+                <DebouncedSlider
+                  value={[paletteSize]}
+                  onChange={handleSizeChange}
+                  debounce={500}
+                  max={MAX_PALETTE_COLORS}
+                  min={2}
+                  step={1}
+                  className="w-32 cursor-grab"
+                />
+              </div>
 
               {/* Add Color */}
               <Tooltip>
