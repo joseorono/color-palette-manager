@@ -10,6 +10,7 @@ import LandingLayout from "./layouts/landing-page-layout";
 import ThemeTest from "./pages/theme-test";
 import NotFoundPage from "./pages/not-found-page";
 import { ColorNameTestPage } from "./pages/color-name-test";
+import { ColorNamingTool } from "./pages/color-naming-tool";
 import ToolsPage from "./pages/tools-page";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 
@@ -28,9 +29,12 @@ function App() {
               <Route path="/app" element={<DashboardPage />} />
               <Route path="/app/dashboard" element={<DashboardPage />} />
               <Route path="/app/palette-edit" element={<PaletteEditor />} />
-              <Route path="/app/tools" element={<ToolsPage />} />
               <Route path="/app/color-test" element={<ColorNameTestPage />} />
+              <Route path="/app/tools" element={<ToolsPage />} />
               <Route path="/app/test" element={<ThemeTest />} />
+
+              {/* Tools */}
+              <Route path="/app/tools/color-naming" element={<ColorNamingTool />} />
             </Route>
 
             <Route element={<LandingLayout />}>
@@ -38,7 +42,7 @@ function App() {
             </Route>
 
             <Route path="/db-seeder" element={<DatabaseSeeder />} />
-            
+
             {/* Catch-all route for 404 */}
             <Route path="*" element={<NotFoundPage />} />
           </Routes>

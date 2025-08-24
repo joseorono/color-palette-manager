@@ -1,13 +1,13 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Palette, 
-  Blend, 
-  Tag, 
-  Image, 
-  RefreshCw, 
-  Pipette, 
+import {
+  Palette,
+  Blend,
+  Tag,
+  Image,
+  RefreshCw,
+  Pipette,
   Layers,
   Eye,
   Type,
@@ -38,7 +38,7 @@ const colorTools: Tool[] = [
     description: "Input any color and instantly see its descriptive name. Perfect for identifying colors quickly.",
     icon: Tag,
     status: "available",
-    link: "/app/color-test"
+    link: "/app/tools/color-naming"
   },
   {
     id: "palette-extractor",
@@ -114,7 +114,7 @@ const getStatusBadge = (status: Tool["status"]) => {
 
 const ToolCard = ({ tool }: { tool: Tool }) => {
   const IconComponent = tool.icon;
-  
+
   return (
     <Card className="h-full transition-all duration-200 hover:shadow-lg hover:scale-[1.02]">
       <CardHeader className="pb-3">
@@ -134,8 +134,8 @@ const ToolCard = ({ tool }: { tool: Tool }) => {
         <CardDescription className="text-sm leading-relaxed mb-4">
           {tool.description}
         </CardDescription>
-        <Button 
-          variant={tool.status === "available" ? "default" : "outline"} 
+        <Button
+          variant={tool.status === "available" ? "default" : "outline"}
           className="w-full"
           disabled={tool.status !== "available"}
           onClick={() => {
@@ -173,7 +173,7 @@ export default function ToolsPage() {
             <p className="text-muted-foreground">Essential tools for color manipulation and exploration</p>
           </div>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {colorTools.map((tool) => (
             <ToolCard key={tool.id} tool={tool} />
@@ -192,7 +192,7 @@ export default function ToolsPage() {
             <p className="text-muted-foreground">Tools to ensure your colors work for everyone</p>
           </div>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {accessibilityTools.map((tool) => (
             <ToolCard key={tool.id} tool={tool} />

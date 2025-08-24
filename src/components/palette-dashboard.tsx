@@ -230,7 +230,7 @@ export function PaletteDashboard({
 
         <div className="flex items-center gap-2">
           {/* View Mode Toggle */}
-          <div className="flex rounded-lg border p-1">
+          <div className="flex rounded-lg border p-1 gap-1">
             <Button
               variant={localViewMode === "grid" ? "default" : "ghost"}
               size="sm"
