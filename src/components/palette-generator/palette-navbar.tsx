@@ -3,12 +3,7 @@ import { usePaletteStore } from "@/stores/palette-store";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "../ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -42,7 +37,7 @@ import { DebouncedSlider } from "../ui/debounced-slider";
 import { ShareUtils } from "@/lib/share-utils";
 import { ExportModal } from "../dialogs/export-modal";
 import { MAX_PALETTE_COLORS } from "@/constants/ui";
-import { PaletteMetadataSidebar } from "./metadata-sidebar";
+import { PaletteMetadataSidebar } from "./palette-metadata-sidebar";
 
 export function PaletteNavbar() {
   const {
@@ -164,29 +159,19 @@ export function PaletteNavbar() {
         <div className="container mx-auto px-2 sm:px-4">
           <div className="flex h-14 items-center justify-between sm:h-16">
             {/* Left Section - Palette Name */}
-            <div className="flex items-center gap-4">
-              <Button
-                onClick={() => setIsMetadataOpen(true)}
-                variant="ghost"
-                className="flex items-center gap-2 text-left hover:bg-gray-100 dark:hover:bg-gray-800"
-              >
-                <Palette className="h-4 w-4 text-gray-500" />
-                <div className="hidden flex-col sm:flex">
-                  <span className="text-sm font-medium">
-                    {currentPalette?.name || "Untitled Palette"}
-                  </span>
-                  <span className="text-xs text-gray-500">
-                    {currentPalette?.colors.length || 0} colors
-                  </span>
-                </div>
-                <div className="sm:hidden">
-                  <span className="text-sm font-medium">
-                    {currentPalette?.name || "Untitled"}
-                  </span>
-                </div>
-                <Pencil className="h-3 w-3 text-gray-400" />
-              </Button>
-            </div>
+            <Button
+              onClick={() => setIsMetadataOpen(true)}
+              variant="ghost"
+              className="flex items-center gap-3 text-left hover:bg-gray-100 dark:hover:bg-gray-800"
+            >
+              <Palette className="h-6 w-6 text-gray-500" />
+              <div className="hidden flex-col sm:flex">
+                <span className="text-2xl font-medium">
+                  {currentPalette?.name || "Untitled Palette"}
+                </span>
+              </div>
+              <Pencil className="h-3 w-3 text-gray-400" />
+            </Button>
 
             {/* Center Section - Main Controls */}
             <div className="flex items-center gap-0.5 sm:gap-1">
@@ -194,7 +179,9 @@ export function PaletteNavbar() {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
-                    onClick={() => generateNewPalette()}
+                    onClick={() =>
+                      generateNewPalette(currentPalette?.colors.length)
+                    }
                     disabled={isGenerating}
                     variant="ghost"
                     size="sm"
@@ -518,10 +505,7 @@ export function PaletteNavbar() {
       <PaletteMetadataSidebar
         open={isMetadataOpen}
         onOpenChange={setIsMetadataOpen}
-        paletteName={paletteName}
         onPaletteNameChange={setPaletteName}
-        onSave={handleSave}
-        currentPaletteName={currentPalette?.name}
         onSubmit={handleMetadataSubmit}
         initialValues={{
           name: currentPalette?.name ?? "",
