@@ -16,6 +16,9 @@
     - Implementing this would require some work and research...
     - But it would open the door to a color picker tool like Color Cop.
 
+- [ ] Shade Generator: A tool that allows users to select a base color and then generate a range of shades (lighter and darker versions) of that color.
+    - It should still provide a button to open the generated Palette in the palette editor using generateUrlToPaletteFromBaseColor.
+
 # Accessibility & Utility
 - [ ] Color Blindness Simulator: A visual tool that applies filters to a user's selected palette to simulate how it would appear to someone with different types of color blindness (e.g., Deuteranopia, Protanopia). This is a simple but powerful accessibility feature that can be implemented with CSS filters.
     - This might require some image manipulation or advanced use of CSS filters.

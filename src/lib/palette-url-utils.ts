@@ -297,4 +297,8 @@ export class PaletteUrlUtils {
     const encodedData = this.encodeShareableUrl(palette);
     return `/app/palette-edit/?share=${encodedData}`;
   }
+
+  static generateUrlToPaletteFromBaseColor(baseColor: string): string {
+    return `/app/palette-edit/?basedOnColor=${baseColor}`;
+  }
 }

@@ -10,6 +10,7 @@ import LandingLayout from "./layouts/landing-page-layout";
 import ThemeTest from "./pages/theme-test";
 import NotFoundPage from "./pages/not-found-page";
 import { ColorNameTestPage } from "./pages/color-name-test";
+import ToolsPage from "./pages/tools-page";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 
 // Create a client
@@ -27,6 +28,7 @@ function App() {
               <Route path="/app" element={<DashboardPage />} />
               <Route path="/app/dashboard" element={<DashboardPage />} />
               <Route path="/app/palette-edit" element={<PaletteEditor />} />
+              <Route path="/app/tools" element={<ToolsPage />} />
               <Route path="/app/color-test" element={<ColorNameTestPage />} />
               <Route path="/app/test" element={<ThemeTest />} />
             </Route>

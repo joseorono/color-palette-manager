@@ -7,11 +7,16 @@ import { Link } from "react-router-dom";
 import ThemeToggle from "../ui/theme-switcher-btn";
 
 // Define the navigation links
-const navigationLinks = [
+interface NavigationLink {
+  name: string;
+  href: string;
+}
+const navigationLinks: NavigationLink[] = [
   { name: "Dashboard", href: "/app" },
   { name: "Palette Editor", href: "/app/palette-edit" },
   { name: "Color Test", href: "/app/color-test" },
-  { name: "Theme Test", href: "/app/test" },
+  { name: "Theme Test", href: "/app/test"},
+  { name: "Tools", href: "/app/tools" },
 ];
 
 export default function AppNavbar() {
