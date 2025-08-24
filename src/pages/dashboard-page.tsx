@@ -2,33 +2,24 @@
 
 import { PaletteDashboard } from "@/components/palette-dashboard";
 import { usePalettes } from "@/hooks/use-palettes";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 
 export default function DashboardPage() {
   const { palettes, isLoading, toggleFavorite, deletePalette } = usePalettes();
 
   const handleCreateNew = () => {
-    toast({
-      title: "Create New Palette",
-      description: "This would open the palette creation modal.",
-    });
+    toast.info("This would open the palette creation modal.");
   };
 
   const handleEditPalette = (palette: any) => {
-    toast({
-      title: "Edit Palette",
-      description: `This would open the editor for "${palette.name}".`,
-    });
+    toast.info(`This would open the editor for "${palette.name}".`);
   };
 
   const handleDeletePalette = async (paletteId: string) => {
     const palette = palettes.find((p: { id: string }) => p.id === paletteId);
     if (palette) {
       await deletePalette(paletteId);
-      toast({
-        title: "Palette Deleted",
-        description: `"${palette.name}" has been deleted.`,
-      });
+      toast.success(`"${palette.name}" has been deleted.`);
     }
   };
 
@@ -36,20 +27,14 @@ export default function DashboardPage() {
     const palette = palettes.find((p: { id: string }) => p.id === paletteId);
     if (palette) {
       toggleFavorite(paletteId);
-      toast({
-        title: palette.isFavorite
-          ? "Removed from Favorites"
-          : "Added to Favorites",
-        description: `"${palette.name}" ${palette.isFavorite ? "removed from" : "added to"} your favorites.`,
-      });
+      toast.success(
+        `"${palette.name}" ${palette.isFavorite ? "removed from" : "added to"} favorites.`
+      );
     }
   };
 
   const handleViewPalette = (palette: any) => {
-    toast({
-      title: "View Palette",
-      description: `This would open the detailed view for "${palette.name}".`,
-    });
+    toast.info(`This would open the detailed view for "${palette.name}".`);
   };
 
   return (

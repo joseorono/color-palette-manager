@@ -25,7 +25,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { LoadingButton } from "@/components/ui/loading-button";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -81,10 +81,7 @@ export default function ImportPaletteModal({
       return insertImportedPaletteMutation(palette);
     },
     onSuccess: (result: InsertPaletteMutationResult) => {
-      toast({
-        title: "Palette Imported!",
-        description: `"${result.palette.name}" has been imported successfully.`,
-      });
+      toast.success(`"${result.palette.name}" has been imported successfully.`);
 
       // Close modal
       onOpenChange(false);
@@ -96,14 +93,11 @@ export default function ImportPaletteModal({
       navigate(PaletteUrlUtils.generatePaletteIdUrl(result.id));
     },
     onError: (error: Error) => {
-      toast({
-        title: "Error Importing Palette",
-        description:
-          error instanceof Error
-            ? error.message
-            : "Something went wrong. Please try again.",
-        variant: "destructive",
-      });
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Something went wrong. Please try again."
+      );
       setFormError(
         error instanceof Error ? error.message : "An unexpected error occurred"
       );

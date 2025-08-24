@@ -37,7 +37,7 @@ import { LoadingButton } from "@/components/ui/loading-button";
 import { TagInput } from "@/components/tag-input";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { InlineColorPicker } from "@/components/form-fields/inline-color-picker";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 // Only importing what we need
 import {
   InsertPaletteMutationResult,
@@ -92,10 +92,7 @@ export function CreatePaletteModal({
   const { mutate: createPalette, isPending } = useMutation({
     mutationFn: insertPaletteMutation,
     onSuccess: (newPalette: InsertPaletteMutationResult) => {
-      toast({
-        title: "Palette Created!",
-        description: `"${newPalette.palette.name}" has been created successfully.`,
-      });
+      toast.success(`"${newPalette.palette.name}" has been created successfully.`);
 
       // Close modal
       onOpenChange(false);
@@ -108,14 +105,11 @@ export function CreatePaletteModal({
       navigate(PaletteUrlUtils.generatePaletteIdUrl(newPalette.id));
     },
     onError: (error: Error) => {
-      toast({
-        title: "Error Creating Palette",
-        description:
-          error instanceof Error
-            ? error.message
-            : "Something went wrong. Please try again.",
-        variant: "destructive",
-      });
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Something went wrong. Please try again."
+      );
     },
   });
 

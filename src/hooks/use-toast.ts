@@ -1,6 +1,11 @@
 "use client";
 
 // Inspired by react-hot-toast library
+// This file has been deprecated in favor of Sonner toast system
+// All toast functionality now uses 'sonner' package
+// Use: import { toast } from "sonner" instead
+// This file is kept for reference but should not be used
+
 import * as React from "react";
 
 import type { ToastActionElement, ToastProps } from "@/components/ui/toast";
@@ -188,3 +193,4 @@ function useToast() {
 }
 
 export { useToast, toast };
+

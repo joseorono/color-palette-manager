@@ -24,7 +24,7 @@ import {
 } from "lucide-react";
 import { ColorUtils } from "@/lib/color-utils";
 import type { HexColorString } from "@/types/palette";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 
 interface ColorPickerProps {
   isOpen: boolean;
@@ -116,19 +116,12 @@ export function ColorPicker({
     try {
       await navigator.clipboard.writeText(colorValue);
       setCopiedStates({ ...copiedStates, [colorValue]: true });
-      toast({
-        title: "Copied!",
-        description: `${format} value copied to clipboard`,
-      });
+      toast.success(`${format} value copied to clipboard`);
       setTimeout(() => {
         setCopiedStates((prev) => ({ ...prev, [colorValue]: false }));
       }, 2000);
     } catch (err) {
-      toast({
-        title: "Copy failed",
-        description: "Unable to copy to clipboard",
-        variant: "destructive",
-      });
+      toast.error("Unable to copy to clipboard");
     }
   };
 

@@ -27,7 +27,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import type { Palette } from "@/types/palette";
 import { ShareUtils } from "@/lib/share-utils";
 import { PaletteUrlUtils } from "@/lib/palette-url-utils";
@@ -56,20 +56,20 @@ export function PaletteCard({
 
   const handleCopyColors = async () => {
     const result = await ShareUtils.copyPaletteColors(palette);
-    toast({
-      title: result.success ? "Colors copied!" : "Copy failed",
-      description: result.message,
-      variant: result.success ? "default" : "destructive",
-    });
+    if (result.success) {
+      toast.success(result.message);
+    } else {
+      toast.error(result.message);
+    }
   };
 
   const handleShare = async () => {
     const result = await ShareUtils.copyPaletteUrl(palette.id);
-    toast({
-      title: result.success ? "Link copied!" : "Share failed",
-      description: result.message,
-      variant: result.success ? "default" : "destructive",
-    });
+    if (result.success) {
+      toast.success(result.message);
+    } else {
+      toast.error(result.message);
+    }
   };
 
   const handleExport = () => {
@@ -83,10 +83,7 @@ export function PaletteCard({
     linkElement.setAttribute("download", exportFileDefaultName);
     linkElement.click();
 
-    toast({
-      title: "Palette exported!",
-      description: "Your palette has been downloaded as a JSON file.",
-    });
+    toast.success("Your palette has been downloaded as a JSON file.");
   };
 
   const handlePaletteNameClick = (e: React.MouseEvent) => {
