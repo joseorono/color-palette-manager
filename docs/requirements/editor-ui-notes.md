@@ -12,7 +12,7 @@
 - For the Palette Metadata (Name, Description, Tags, etc), we could use a Shadcn Sidebar with a form inside it.
 https://v3.shadcn.com/docs/components/sidebar
 
-- The idea I've been toying with is a footer with a few options:
+- The idea I've been toying with is distributing these options across the bottom bar and the topbar:
     - Save
     - Save as...
         - (This should open a modal to create a copy of a palette with a new name)
@@ -20,3 +20,5 @@ https://v3.shadcn.com/docs/components/sidebar
     - Export
     - Share
     - Delete
+
+We could probably create a Clickable Div that displays the name of the palette and a pencil icon, and when clicked, opens a modal to edit the palette metadata.
