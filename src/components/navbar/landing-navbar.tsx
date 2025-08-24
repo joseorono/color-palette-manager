@@ -12,7 +12,7 @@ export default function LandingNavbar() {
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center space-x-3">
             <img
-              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo-v2-r4LSQvlSDwWnidwWccNvlEwol5kVsn.png"
+              src="/logo-v2.png"
               alt="Color Palette Manager Logo"
               width={32}
               height={32}
