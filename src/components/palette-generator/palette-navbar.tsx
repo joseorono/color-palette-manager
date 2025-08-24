@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { usePaletteStore } from "@/stores/palette-store";
 import { Button } from "../ui/button";
- 
- 
+
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import {
   DropdownMenu,
@@ -29,6 +28,7 @@ import {
   Redo,
   Keyboard,
   Info,
+  Grid3X3,
 } from "lucide-react";
 import { toast } from "sonner";
 import { ImageUploader } from "../image-uploader";
@@ -37,6 +37,7 @@ import { ShareUtils } from "@/lib/share-utils";
 import { ExportModal } from "../dialogs/export-modal";
 import { MAX_PALETTE_COLORS } from "@/constants/ui";
 import { PaletteMetadataSidebar } from "./palette-metadata-sidebar";
+import { Label } from "../ui/label";
 
 export function PaletteNavbar() {
   const {
@@ -55,6 +56,7 @@ export function PaletteNavbar() {
   );
   const [isSaveOpen, setIsSaveOpen] = useState(false);
   const [isUploadOpen, setIsUploadOpen] = useState(false);
+  const [isSizeControlOpen, setIsSizeControlOpen] = useState(false);
   const [isMetadataOpen, setIsMetadataOpen] = useState(false);
   const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
 
@@ -136,18 +138,18 @@ export function PaletteNavbar() {
 
   return (
     <>
-      <div className="sticky top-0 z-50 border-b bg-white/80 backdrop-blur-md dark:border-gray-800 dark:bg-gray-900/80">
-        <div className="container mx-auto px-2 sm:px-4">
-          <div className="grid h-14 grid-cols-3 items-center sm:h-16">
+      <div className="sticky z-50 border-b bg-white/80 backdrop-blur-md dark:border-gray-800 dark:bg-gray-900/80">
+        <div className="container mx-auto px-2 2xl:px-4">
+          <div className="flex flex-wrap items-center justify-between gap-2 py-4 2xl:grid 2xl:h-16 2xl:grid-cols-3">
             {/* Left Section - Palette Name */}
-            <div className="justify-self-start">
+            <div className="flex-shrink-0 2xl:justify-self-start">
               <Button
                 onClick={() => setIsMetadataOpen(true)}
                 variant="ghost"
                 className="flex items-center gap-3 text-left hover:bg-gray-100 dark:hover:bg-gray-800"
               >
                 <Palette className="h-6 w-6 text-gray-500" />
-                <div className="hidden flex-col sm:flex">
+                <div className="hidden flex-col lg:flex">
                   <span className="text-2xl font-medium">
                     {currentPalette?.name || "Untitled Palette"}
                   </span>
@@ -157,7 +159,7 @@ export function PaletteNavbar() {
             </div>
 
             {/* Center Section - Main Controls */}
-            <div className="flex items-center gap-0.5 justify-self-center sm:gap-1">
+            <div className="flex snap-x snap-mandatory items-center px-1 2xl:gap-1 2xl:justify-self-center">
               {/* Generate New */}
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -168,7 +170,7 @@ export function PaletteNavbar() {
                     disabled={isGenerating}
                     variant="ghost"
                     size="sm"
-                    className="h-10 w-10 p-0"
+                    className="h-9 w-9 shrink-0 snap-start p-0 2xl:h-10 2xl:w-10"
                   >
                     <Shuffle className="h-4 w-4" />
                   </Button>
@@ -186,7 +188,7 @@ export function PaletteNavbar() {
                     disabled={isGenerating}
                     variant="ghost"
                     size="sm"
-                    className="h-10 w-10 p-0"
+                    className="h-9 w-9 shrink-0 snap-start p-0 2xl:h-10 2xl:w-10"
                   >
                     <Undo className="h-4 w-4" />
                   </Button>
@@ -197,7 +199,7 @@ export function PaletteNavbar() {
               </Tooltip>
 
               {/* Palette Size Control */}
-              <div className="px-2 shadow-sm">
+              <div className="hidden px-1 shadow-sm lg:block 2xl:px-2">
                 <DebouncedSlider
                   value={[paletteSize]}
                   onChange={handleSizeChange}
@@ -205,9 +207,47 @@ export function PaletteNavbar() {
                   max={MAX_PALETTE_COLORS}
                   min={2}
                   step={1}
-                  className="w-32 cursor-grab"
+                  className="w-40 cursor-grab 2xl:w-32"
                 />
               </div>
+
+              <DropdownMenu
+                open={isSizeControlOpen}
+                onOpenChange={setIsSizeControlOpen}
+              >
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="block h-9 w-9 lg:hidden"
+                      >
+                        <Grid3X3 className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Adjust palette size</p>
+                  </TooltipContent>
+                </Tooltip>
+                <DropdownMenuContent align="center" className="w-64 p-4">
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium">
+                      Palette Size: {paletteSize}
+                    </Label>
+                    <DebouncedSlider
+                      value={[paletteSize]}
+                      onChange={handleSizeChange}
+                      debounce={300}
+                      max={MAX_PALETTE_COLORS}
+                      min={2}
+                      step={1}
+                      className="w-full"
+                    />
+                  </div>
+                </DropdownMenuContent>
+              </DropdownMenu>
 
               {/* Add Color */}
               <Tooltip>
@@ -216,7 +256,7 @@ export function PaletteNavbar() {
                     onClick={addColor}
                     variant="ghost"
                     size="sm"
-                    className="h-10 w-10 p-0"
+                    className="h-9 w-9 shrink-0 snap-start p-0 2xl:h-10 2xl:w-10"
                     disabled={
                       !currentPalette ||
                       currentPalette.colors.length >= MAX_PALETTE_COLORS
@@ -237,7 +277,7 @@ export function PaletteNavbar() {
                     onClick={() => setIsUploadOpen(true)}
                     variant="ghost"
                     size="sm"
-                    className="h-10 w-10 p-0"
+                    className="h-9 w-9 shrink-0 snap-start p-0 2xl:h-10 2xl:w-10"
                   >
                     <Camera className="h-4 w-4" />
                   </Button>
@@ -249,15 +289,19 @@ export function PaletteNavbar() {
             </div>
 
             {/* Right Section - Actions */}
-            <div className="flex items-center gap-1 justify-self-end">
+            <div className="flex items-center gap-1 2xl:justify-self-end">
               {/* View/Preview */}
               <DropdownMenu>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="sm" className="h-10 px-3">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-9 px-2 2xl:h-10 2xl:px-3"
+                      >
                         <Eye className="mr-2 h-4 w-4" />
-                        <span className="hidden sm:inline">View</span>
+                        <span className="hidden 2xl:inline">View</span>
                         <ChevronDown className="ml-1 h-3 w-3" />
                       </Button>
                     </DropdownMenuTrigger>
@@ -286,9 +330,13 @@ export function PaletteNavbar() {
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="sm" className="h-10 px-3">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-9 px-2 2xl:h-10 2xl:px-3"
+                      >
                         <Share className="mr-2 h-4 w-4" />
-                        <span className="hidden sm:inline">Share</span>
+                        <span className="hidden 2xl:inline">Share</span>
                         <ChevronDown className="ml-1 h-3 w-3" />
                       </Button>
                     </DropdownMenuTrigger>
@@ -316,21 +364,21 @@ export function PaletteNavbar() {
                     onClick={() => setIsSaveOpen(true)}
                     variant={hasUnsavedChanges ? "default" : "ghost"}
                     size="sm"
-                    className="h-10 px-3"
+                    className="h-9 px-2 2xl:h-10 2xl:px-3"
                   >
                     {isSaved && !hasUnsavedChanges ? (
                       <Check className="mr-2 h-4 w-4" />
                     ) : (
                       <Save className="mr-2 h-4 w-4" />
                     )}
-                    <span className="hidden sm:inline">Save</span>
+                    <span className="hidden 2xl:inline">Save</span>
                     {hasUnsavedChanges && (
                       <span className="ml-1 text-xs">•</span>
                     )}
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Save Changes</p>
+                  <p>{currentPalette?.id ? "Save changes" : "Save palette"}</p>
                 </TooltipContent>
               </Tooltip>
 
@@ -342,7 +390,7 @@ export function PaletteNavbar() {
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="h-10 w-10 p-0"
+                        className="h-9 w-9 p-0 2xl:h-10 2xl:w-10"
                       >
                         <Menu className="h-4 w-4" />
                       </Button>
@@ -384,8 +432,7 @@ export function PaletteNavbar() {
           </DialogHeader>
           <div className="space-y-4">
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              This will save your current changes to
-              {" "}
+              This will save your current changes to{" "}
               <span className="font-medium">
                 {currentPalette?.name || "Untitled Palette"}
               </span>
@@ -395,7 +442,9 @@ export function PaletteNavbar() {
               <Button variant="outline" onClick={() => setIsSaveOpen(false)}>
                 Cancel
               </Button>
-              <Button onClick={() => handleMetadataSubmit()}>Save Changes</Button>
+              <Button onClick={() => handleMetadataSubmit()}>
+                Save Changes
+              </Button>
             </div>
           </div>
         </DialogContent>
