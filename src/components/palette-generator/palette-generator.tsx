@@ -32,6 +32,12 @@ export function PaletteGenerator() {
   const handleKeyPress = useCallback(
     (event: KeyboardEvent) => {
       if (event.code === "Space" && !event.repeat) {
+        const dialogOrSheetOpen = !!document.querySelector(
+          '[role="dialog"][data-state="open"]'
+        );
+
+        if (dialogOrSheetOpen) return;
+
         event.preventDefault();
         regenerateUnlocked();
       }
@@ -99,8 +105,11 @@ export function PaletteGenerator() {
           <p className="mb-6 text-gray-600 dark:text-gray-300">
             {/* Create beautiful color palettes with ease. Press spacebar to
             generate new colors. */}
-            Generate a new palette by pressing the spacebar or clicking the
-            shuffle button.
+            Generate a new palette by pressing{" "}
+            <kbd className="rounded border bg-gray-100 px-2 py-1 text-xs dark:bg-gray-800">
+              Space
+            </kbd>{" "}
+            or clicking the shuffle button.
           </p>
         </div>
 

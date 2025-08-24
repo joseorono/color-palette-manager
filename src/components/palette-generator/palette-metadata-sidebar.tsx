@@ -37,8 +37,6 @@ function buildPaletteMetadataFormSchema() {
 type PaletteMetadataSidebarProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  // Back-compat props
-  onPaletteNameChange: (name: string) => void;
   // New optional submit with full metadata
   onSubmit?: (values: PaletteMetadataFormValues) => void;
   initialValues?: Partial<PaletteMetadataFormValues>;
@@ -47,7 +45,6 @@ type PaletteMetadataSidebarProps = {
 export function PaletteMetadataSidebar({
   open,
   onOpenChange,
-  onPaletteNameChange,
   onSubmit,
   initialValues,
 }: PaletteMetadataSidebarProps) {
@@ -88,16 +85,6 @@ export function PaletteMetadataSidebar({
     form.reset(nextValues);
   }, [initialValues, form]);
 
-  // Back-compat: keep external paletteName state in sync with form name
-  useEffect(() => {
-    const subscription = form.watch((values, { name }) => {
-      if (name === "name" && typeof values.name === "string") {
-        onPaletteNameChange(values.name);
-      }
-    });
-    return () => subscription.unsubscribe();
-  }, [form, onPaletteNameChange]);
-
   const handleSubmit = (values: PaletteMetadataFormValues) => {
     // Call new onSubmit if provided
     if (onSubmit) onSubmit({ ...values, tags });
@@ -126,9 +113,7 @@ export function PaletteMetadataSidebar({
                     <FormControl>
                       <Input
                         id="palette-name"
-                        placeholder={
-                          initialValues?.name || "Enter palette name..."
-                        }
+                        placeholder="Enter palette name..."
                         {...field}
                         className={
                           fieldState.error

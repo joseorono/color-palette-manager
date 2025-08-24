@@ -24,7 +24,6 @@ import {
   Pencil,
   Palette,
   Camera,
-  Grid3X3,
   Sliders,
   Undo,
   Redo,
@@ -54,11 +53,9 @@ export function PaletteNavbar() {
   const [paletteSize, setPaletteSize] = useState(
     currentPalette?.colors.length || 5
   );
-  const [paletteName, setPaletteName] = useState("");
   const [isSaveOpen, setIsSaveOpen] = useState(false);
   const [isUploadOpen, setIsUploadOpen] = useState(false);
   const [isMetadataOpen, setIsMetadataOpen] = useState(false);
-  const [isSizeControlOpen, setIsSizeControlOpen] = useState(false);
   const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
 
   useEffect(() => {
@@ -68,7 +65,6 @@ export function PaletteNavbar() {
   const handleSizeChange = (value: number[]) => {
     generateNewPalette(value[0]);
     setPaletteSize(value[0]);
-    setIsSizeControlOpen(false);
   };
 
   type MetadataValues = {
@@ -79,44 +75,30 @@ export function PaletteNavbar() {
     isFavorite?: boolean;
   };
 
-  const handleMetadataSubmit = async (values: MetadataValues) => {
-    const trimmedName = values.name?.trim();
+  const handleMetadataSubmit = async (values?: MetadataValues) => {
+    const trimmedName = values
+      ? values.name?.trim()
+      : currentPalette.name.trim();
     if (!trimmedName) {
       toast.error("Please enter a palette name");
       return;
     }
 
     try {
-      await savePalette({
-        ...currentPalette,
-        name: trimmedName,
-        description: values.description ?? "",
-        tags: values.tags ?? [],
-        isPublic: values.isPublic ?? false,
-        isFavorite: values.isFavorite ?? false,
-        updatedAt: new Date(),
-      });
-
-      toast.success(
-        currentPalette?.id
-          ? "Palette updated successfully!"
-          : "Palette saved successfully!"
+      await savePalette(
+        values
+          ? {
+              ...currentPalette,
+              name: trimmedName,
+              description: values.description ?? "",
+              tags: values.tags ?? [],
+              isPublic: values.isPublic ?? false,
+              isFavorite: values.isFavorite ?? false,
+              updatedAt: new Date(),
+            }
+          : currentPalette.name.trim()
       );
-      setIsMetadataOpen(false);
-      setPaletteName("");
-    } catch (error) {
-      toast.error("Failed to save palette");
-    }
-  };
 
-  const handleSave = async () => {
-    if (!paletteName.trim()) {
-      toast.error("Please enter a palette name");
-      return;
-    }
-
-    try {
-      await savePalette(paletteName.trim());
       toast.success(
         currentPalette?.id
           ? "Palette updated successfully!"
@@ -124,7 +106,6 @@ export function PaletteNavbar() {
       );
       setIsSaveOpen(false);
       setIsMetadataOpen(false);
-      setPaletteName("");
     } catch (error) {
       toast.error("Failed to save palette");
     }
@@ -176,7 +157,7 @@ export function PaletteNavbar() {
             </div>
 
             {/* Center Section - Main Controls */}
-            <div className="flex items-center justify-self-center gap-0.5 sm:gap-1">
+            <div className="flex items-center gap-0.5 justify-self-center sm:gap-1">
               {/* Generate New */}
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -268,7 +249,7 @@ export function PaletteNavbar() {
             </div>
 
             {/* Right Section - Actions */}
-            <div className="flex items-center justify-self-end gap-1">
+            <div className="flex items-center gap-1 justify-self-end">
               {/* View/Preview */}
               <DropdownMenu>
                 <Tooltip>
@@ -342,16 +323,14 @@ export function PaletteNavbar() {
                     ) : (
                       <Save className="mr-2 h-4 w-4" />
                     )}
-                    <span className="hidden sm:inline">
-                      {currentPalette?.id ? "Save" : "Save"}
-                    </span>
+                    <span className="hidden sm:inline">Save</span>
                     {hasUnsavedChanges && (
                       <span className="ml-1 text-xs">•</span>
                     )}
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>{currentPalette?.id ? "Save changes" : "Save palette"}</p>
+                  <p>Save Changes</p>
                 </TooltipContent>
               </Tooltip>
 
@@ -410,8 +389,6 @@ export function PaletteNavbar() {
               <Label htmlFor="save-palette-name">Palette Name</Label>
               <Input
                 id="save-palette-name"
-                value={paletteName}
-                onChange={(e) => setPaletteName(e.target.value)}
                 placeholder="Enter palette name..."
               />
             </div>
@@ -419,9 +396,7 @@ export function PaletteNavbar() {
               <Button variant="outline" onClick={() => setIsSaveOpen(false)}>
                 Cancel
               </Button>
-              <Button onClick={handleSave}>
-                {currentPalette?.id ? "Update" : "Save"}
-              </Button>
+              <Button onClick={() => handleMetadataSubmit()}>Save</Button>
             </div>
           </div>
         </DialogContent>
@@ -481,7 +456,6 @@ export function PaletteNavbar() {
       <PaletteMetadataSidebar
         open={isMetadataOpen}
         onOpenChange={setIsMetadataOpen}
-        onPaletteNameChange={setPaletteName}
         onSubmit={handleMetadataSubmit}
         initialValues={{
           name: currentPalette?.name ?? "",
