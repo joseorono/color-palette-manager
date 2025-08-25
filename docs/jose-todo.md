@@ -3,7 +3,7 @@
 
 
 ## Business Logic
-- [ ] The `generateHarmonious` function should have different types of palette (receive a prop, with its type-safety) and should respect the locked colors.
+- [ ] The `generateHarmoniousHexCsv` function should have different types of palette (receive a prop, with its type-safety) and should respect the locked colors.
     - [ ] Create constants for the different types of palette.
     - [ ] Create priority lists for all the different types of palettes.
     - [ ] Create types to use in the UI to select the type of palette (including an object with PrettyName, Description, Icon and value).
