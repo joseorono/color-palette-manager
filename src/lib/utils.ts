@@ -5,6 +5,8 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export const noop = () => {};
+
 export function debounce<T extends (...args: any[]) => any>(
   func: T,
   wait: number
