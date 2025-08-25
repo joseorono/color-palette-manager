@@ -20,16 +20,16 @@ import {
 
   // Presets (includes the practical generator default)
   export const HARMONY_PRESETS = {
-    AUTO: "auto",
+    WEB_FRIENDLY: "webFriendly",
     ...COLOR_HARMONIES,
   } as const satisfies Record<string, HarmonyPreset>;
 
-  export const DEFAULT_HARMONY_PRESET: HarmonyPreset = HARMONY_PRESETS.AUTO;
+  export const DEFAULT_HARMONY_PRESET: HarmonyPreset = HARMONY_PRESETS.WEB_FRIENDLY;
 
   // Priority lists per preset/harmony
   export const HARMONY_GENERATION_PRIORITIES: HarmonyPriorityMap = {
     // Your example default: neutrals first, then relationships, then variations
-    [HARMONY_PRESETS.AUTO]: [
+    [HARMONY_PRESETS.WEB_FRIENDLY]: [
       "white",
       "black",
       "complementary",
@@ -51,7 +51,7 @@ import {
   // Type to use in the UI — includes the practical default plus strict harmonies
   export const COLOR_HARMONY_OPTIONS: ColorHarmonyOption[] = [
     {
-      value: HARMONY_PRESETS.AUTO,
+      value: HARMONY_PRESETS.WEB_FRIENDLY,
       prettyName: "Web-Friendly (Default)",
       description:
         "Smart mix of neutrals (white, black) and common harmonies (complementary, analogous) with tasteful variations. Perfect for web design.",

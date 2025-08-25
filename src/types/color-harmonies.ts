@@ -10,8 +10,8 @@ export type ColorHarmony =
   | "square"
   | "compound";
 
-// Presets include the generator "auto" in addition to strict harmonies
-export type HarmonyPreset = ColorHarmony | "auto";
+// Presets include the generator "webFriendly" in addition to strict harmonies
+export type HarmonyPreset = ColorHarmony | "webFriendly";
 
 // Tokens used by the generator to decide what to produce first
 export type GenerationPriorityToken =

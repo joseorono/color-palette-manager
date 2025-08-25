@@ -9,7 +9,7 @@ import { PalettePreview } from "./palette-preview";
 import { Upload, X } from "lucide-react";
 import { toast } from "sonner";
 import { ImageAnalyzer } from "@/lib/image-analyzer";
-import { MAX_PALETTE_COLORS } from "@/constants";
+import { MAX_PALETTE_COLORS } from "@/constants/ui";
 import { HexColorString } from "@/types/palette";
 
 interface ImageUploaderProps {

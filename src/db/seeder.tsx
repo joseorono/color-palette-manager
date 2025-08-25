@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { nanoidColorId, nanoidPaletteId } from "@/constants";
+import { nanoidColorId, nanoidPaletteId } from "@/constants/nanoid";
 
 // Sample data
 const samplePalettes: Omit<Palette, "id" | "createdAt" | "updatedAt">[] = [
