@@ -394,4 +394,22 @@ export class PaletteUtils {
     });
     return assignedRoles;
   }
+
+  /**
+   * Filter an array of colors to return only the locked/blocked colors
+   * @param colors - Array of Color objects to filter
+   * @returns Array of Color objects that are locked (blocked)
+   */
+  static getLockedColors(colors: Color[]): Color[] {
+    return colors.filter((color) => color.locked === true);
+  }
+
+  /**
+   * Filter an array of colors to return only the unlocked colors
+   * @param colors - Array of Color objects to filter
+   * @returns Array of Color objects that are not locked
+   */
+  static getUnlockedColors(colors: Color[]): Color[] {
+    return colors.filter((color) => color.locked !== true);
+  }
 }
