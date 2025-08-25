@@ -1,8 +1,8 @@
 # Color Tools
-- [ ] Color Mixer: Allow users to mix two or more colors to create a new one. This could be done by averaging their RGB or HSL values. You could offer a simple two-color mixer or a more advanced version that lets users set mixing ratios.
+- [x] Color Mixer: Allow users to mix two or more colors to create a new one. This could be done by averaging their RGB or HSL values. You could offer a simple two-color mixer or a more advanced version that lets users set mixing ratios.
     - It should still provide a button to generate a palette with the color using the ?basedOnColor= query parameter.
 
-- [ ] Color Naming Tool: A tool that allows users to input a color and instantly see its name. This could be done using a color name library or a large JSON dataset.
+- [x] Color Naming Tool: A tool that allows users to input a color and instantly see its name. This could be done using a color name library or a large JSON dataset.
     - This is basically already implemented in color-name-test.tsx, but it could be a standalone tool.
     - It should still provide a button to generate a palette with the color using the ?basedOnColor= query parameter.
 

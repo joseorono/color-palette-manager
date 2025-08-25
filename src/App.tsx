@@ -11,6 +11,7 @@ import ThemeTest from "./pages/theme-test";
 import NotFoundPage from "./pages/not-found-page";
 import { ColorNameTestPage } from "./pages/color-name-test";
 import { ColorNamingTool } from "./pages/color-naming-tool";
+import { ColorMixerTool } from "./pages/color-mixer-tool";
 import ToolsPage from "./pages/tools-page";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 
@@ -35,6 +36,7 @@ function App() {
 
               {/* Tools */}
               <Route path="/app/tools/color-naming" element={<ColorNamingTool />} />
+              <Route path="/app/tools/color-mixer" element={<ColorMixerTool />} />
             </Route>
 
             <Route element={<LandingLayout />}>

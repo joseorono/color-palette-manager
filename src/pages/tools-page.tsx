@@ -31,7 +31,8 @@ const colorTools: Tool[] = [
     name: "Color Mixer",
     description: "Mix two or more colors to create new ones. Set custom mixing ratios and explore color combinations.",
     icon: Blend,
-    status: "coming-soon"
+    status: "available",
+    link: "/app/tools/color-mixer"
   },
   {
     id: "color-naming",

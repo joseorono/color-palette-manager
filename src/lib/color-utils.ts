@@ -357,6 +357,57 @@ export class ColorUtils {
   }
 
   /**
+   * Mix two colors with a specified ratio using HSL interpolation
+   * @param color1Hex - First color in hexadecimal format
+   * @param color2Hex - Second color in hexadecimal format
+   * @param ratio - Mixing ratio (0 = all color1, 1 = all color2, 0.5 = equal mix)
+   * @returns Mixed color in hexadecimal format
+   */
+  static mixColors(color1Hex: string, color2Hex: string, ratio: number = 0.5): string {
+    return ColorUtils.lerpColors(color1Hex, color2Hex, ratio);
+  }
+
+  /**
+   * Mix multiple colors with equal ratios
+   * @param colorHexArray - Array of colors in hexadecimal format
+   * @returns Mixed color in hexadecimal format
+   */
+  static mixMultipleColors(colorHexArray: string[]): string {
+    if (colorHexArray.length === 0) return "#000000";
+    if (colorHexArray.length === 1) return colorHexArray[0];
+    
+    // Convert all colors to HSL for better mixing
+    const hslColors = colorHexArray.map(hex => colord(hex).toHsl());
+    
+    // Average the HSL values
+    const avgH = hslColors.reduce((sum, hsl) => sum + hsl.h, 0) / hslColors.length;
+    const avgS = hslColors.reduce((sum, hsl) => sum + hsl.s, 0) / hslColors.length;
+    const avgL = hslColors.reduce((sum, hsl) => sum + hsl.l, 0) / hslColors.length;
+    
+    return colord({ h: avgH, s: avgS, l: avgL }).toHex();
+  }
+
+  /**
+   * Mix colors using RGB averaging (alternative mixing method)
+   * @param color1Hex - First color in hexadecimal format
+   * @param color2Hex - Second color in hexadecimal format
+   * @param ratio - Mixing ratio (0 = all color1, 1 = all color2, 0.5 = equal mix)
+   * @returns Mixed color in hexadecimal format
+   */
+  static mixColorsRGB(color1Hex: string, color2Hex: string, ratio: number = 0.5): string {
+    const color1 = colord(color1Hex).toRgb();
+    const color2 = colord(color2Hex).toRgb();
+    
+    const clampedRatio = ColorUtils.clamp(ratio, 0, 1);
+    
+    const mixedR = Math.round(color1.r + (color2.r - color1.r) * clampedRatio);
+    const mixedG = Math.round(color1.g + (color2.g - color1.g) * clampedRatio);
+    const mixedB = Math.round(color1.b + (color2.b - color1.b) * clampedRatio);
+    
+    return colord({ r: mixedR, g: mixedG, b: mixedB }).toHex();
+  }
+
+  /**
    * Generate descriptive color name based on HSL properties
    * @param hexColor - Color in hexadecimal format
    * @returns Descriptive color name with modifiers
