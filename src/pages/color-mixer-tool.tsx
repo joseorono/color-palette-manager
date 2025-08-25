@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ToolHeroSection } from '@/components/reusable-sections/tool-hero-section';
 import { ColorUtils } from '@/lib/color-utils';
+import { PaletteUrlUtils } from '@/lib/palette-url-utils';
 import { HexColorString } from '@/types/palette';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -45,7 +46,7 @@ export const ColorMixerTool: React.FC = () => {
   }, [multiColors]);
 
   const handleGeneratePalette = (baseColor: HexColorString) => {
-    navigate(`/app/palette-edit/?basedOnColor=${baseColor}`);
+    navigate(PaletteUrlUtils.generateUrlToPaletteFromBaseColor(baseColor));
   };
 
   const handleRandomColors = () => {

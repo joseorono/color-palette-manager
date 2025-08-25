@@ -4,6 +4,7 @@ import { LiveColorPicker } from '@/components/color-naming/live-color-picker';
 import { ColorCard } from '@/components/color-naming/color-card';
 import { ToolHeroSection } from '@/components/reusable-sections/tool-hero-section';
 import { ColorUtils } from '@/lib/color-utils';
+import { PaletteUrlUtils } from '@/lib/palette-url-utils';
 import { HexColorString } from '@/types/palette';
 import { Button } from '@/components/ui/button';
 import { Palette, Sparkles, Eye } from 'lucide-react';
@@ -29,7 +30,7 @@ export const ColorNamingTool: React.FC = () => {
   };
 
   const handleGeneratePalette = () => {
-    navigate(`/app/palette-edit/?basedOnColor=${currentColor}`);
+    navigate(PaletteUrlUtils.generateUrlToPaletteFromBaseColor(currentColor));
   };
 
   return (
