@@ -12,6 +12,9 @@ import NotFoundPage from "./pages/not-found-page";
 import { ColorNameTestPage } from "./pages/color-name-test";
 import { ColorNamingTool } from "./pages/color-naming-tool";
 import { ColorMixerTool } from "./pages/color-mixer-tool";
+import { ShadeGeneratorTool } from "./pages/shade-generator-tool";
+import { ColorConverterTool } from "./pages/color-converter-tool";
+import { ColorPaletteExtractorTool } from "./pages/color-palette-extractor-tool";
 import ToolsPage from "./pages/tools-page";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 
@@ -37,6 +40,9 @@ function App() {
               {/* Tools */}
               <Route path="/app/tools/color-naming" element={<ColorNamingTool />} />
               <Route path="/app/tools/color-mixer" element={<ColorMixerTool />} />
+              <Route path="/app/tools/shade-generator" element={<ShadeGeneratorTool />} />
+              <Route path="/app/tools/color-converter" element={<ColorConverterTool />} />
+              <Route path="/app/tools/img-palette-extractor" element={<ColorPaletteExtractorTool />} />
             </Route>
 
             <Route element={<LandingLayout />}>

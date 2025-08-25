@@ -47,14 +47,16 @@ const colorTools: Tool[] = [
     name: "Color Palette Extractor",
     description: "Extract dominant colors from images with a simplified, focused interface for quick color extraction.",
     icon: Image,
-    status: "coming-soon"
+    status: "available",
+    link: "/app/tools/img-palette-extractor"
   },
   {
     id: "color-converter",
     name: "Color Converter",
     description: "Convert colors between different formats: Hex, RGB, HSL, CMYK, and more with instant results.",
     icon: RefreshCw,
-    status: "coming-soon"
+    status: "available",
+    link: "/app/tools/color-converter"
   },
   {
     id: "eyedropper",
@@ -68,7 +70,8 @@ const colorTools: Tool[] = [
     name: "Shade Generator",
     description: "Generate lighter and darker shades of any base color. Create complete tonal ranges instantly.",
     icon: Layers,
-    status: "coming-soon"
+    status: "available",
+    link: "/app/tools/shade-generator"
   }
 ];
 
