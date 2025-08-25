@@ -2,16 +2,21 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menubar, MenubarMenu, MenubarTrigger } from "@/components/ui/menubar";
-import { Menu, Palette } from "lucide-react";
+import { Menu } from "lucide-react";
 import { Link } from "react-router-dom";
 import ThemeToggle from "../ui/theme-switcher-btn";
 
 // Define the navigation links
-const navigationLinks = [
+interface NavigationLink {
+  name: string;
+  href: string;
+}
+const navigationLinks: NavigationLink[] = [
   { name: "Dashboard", href: "/app" },
   { name: "Palette Editor", href: "/app/palette-edit" },
   { name: "Color Test", href: "/app/color-test" },
-  { name: "Theme Test", href: "/app/test" },
+  { name: "Theme Test", href: "/app/test"},
+  { name: "Tools", href: "/app/tools" },
 ];
 
 export default function AppNavbar() {
@@ -26,9 +31,16 @@ export default function AppNavbar() {
             to="/app"
             className="flex items-center space-x-2 text-2xl font-bold"
           >
-            <Palette className="h-8 w-8 text-primary" />
-            <span className="text-primary">Color Palette</span>
-            <span>Manager</span>
+            <img
+              src="/logo-v2.png"
+              alt="Color Palette Manager Logo"
+              width={32}
+              height={32}
+              className="h-8 w-8"
+            />
+            <span className="text-foreground text-xl font-semibold">
+              Color Palette Manager
+            </span>
           </Link>
         </div>
 
@@ -65,7 +77,13 @@ export default function AppNavbar() {
                   to="/app"
                   className="flex items-center space-x-2 text-2xl font-bold"
                 >
-                  <Palette className="h-6 w-6 text-primary" />
+                  <img
+                    src="/logo-v2.png"
+                    alt="Color Palette Manager Logo"
+                    width={24}
+                    height={24}
+                    className="h-6 w-6"
+                  />
                   <span>Color Palette Manager</span>
                 </Link>
               </div>
@@ -83,7 +101,7 @@ export default function AppNavbar() {
               </nav>
               <div className="mt-auto border-t pt-4">
                 <Link to="/" className="w-full">
-                  <Button className="w-full" variant="outline">
+                  <Button className="w-full rounded-full" variant="secondary">
                     Back to Landing
                   </Button>
                 </Link>
@@ -99,7 +117,7 @@ export default function AppNavbar() {
         <div className="hidden items-center gap-3 md:flex">
           <ThemeToggle />
           <Link to="/">
-            <Button variant="outline">Back to Landing</Button>
+            <Button className="rounded-full px-6" variant="secondary">Back to Landing</Button>
           </Link>
         </div>
       </div>

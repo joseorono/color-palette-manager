@@ -27,11 +27,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import type { Palette } from "@/types/palette";
 import { ShareUtils } from "@/lib/share-utils";
 import { PaletteUrlUtils } from "@/lib/palette-url-utils";
 import { cn } from "@/lib/utils";
+import { PalettePreview } from "../palette-preview";
 
 interface PaletteCardProps {
   palette: Palette;
@@ -55,20 +56,20 @@ export function PaletteCard({
 
   const handleCopyColors = async () => {
     const result = await ShareUtils.copyPaletteColors(palette);
-    toast({
-      title: result.success ? "Colors copied!" : "Copy failed",
-      description: result.message,
-      variant: result.success ? "default" : "destructive",
-    });
+    if (result.success) {
+      toast.success(result.message);
+    } else {
+      toast.error(result.message);
+    }
   };
 
   const handleShare = async () => {
     const result = await ShareUtils.copyPaletteUrl(palette.id);
-    toast({
-      title: result.success ? "Link copied!" : "Share failed",
-      description: result.message,
-      variant: result.success ? "default" : "destructive",
-    });
+    if (result.success) {
+      toast.success(result.message);
+    } else {
+      toast.error(result.message);
+    }
   };
 
   const handleExport = () => {
@@ -82,10 +83,7 @@ export function PaletteCard({
     linkElement.setAttribute("download", exportFileDefaultName);
     linkElement.click();
 
-    toast({
-      title: "Palette exported!",
-      description: "Your palette has been downloaded as a JSON file.",
-    });
+    toast.success("Your palette has been downloaded as a JSON file.");
   };
 
   const handlePaletteNameClick = (e: React.MouseEvent) => {
@@ -207,23 +205,17 @@ export function PaletteCard({
 
       <CardContent className="pb-3">
         {/* Color Preview */}
-        <div className="mb-3 flex h-20 overflow-hidden rounded-lg border">
-          {palette?.colors?.map((color, index) => (
-            <div
-              key={index}
-              className="group/color relative flex-1 transition-all duration-200"
-              style={{ backgroundColor: color.hex }}
-              title={`${color.name || "Untitled"} - ${color.hex}`}
-            >
-              {isHovered && (
-                <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 transition-opacity group-hover/color:opacity-100">
-                  <span className="rounded bg-black/50 px-1 py-0.5 text-xs font-medium text-white">
-                    {color.hex}
-                  </span>
-                </div>
-              )}
-            </div>
-          ))}
+        <div className="mb-3">
+          <PalettePreview
+            colors={palette?.colors || []}
+            height="5rem"
+            borderRadius="lg"
+            showBorder={true}
+            showHoverEffects={isHovered}
+            enableCopyOnClick={true}
+            showTooltips={true}
+            showColorNames={true}
+          />
         </div>
 
         {/* Tags */}

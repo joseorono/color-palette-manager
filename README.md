@@ -148,6 +148,10 @@ npm run test-cli
 
 ## 🔧 Development
 
+### Seeding the Database
+
+In order to seed the database with some test data, enter http://localhost:5173/db-seeder in your browser and click the seed button.
+
 ### Available Scripts
 
 ```bash

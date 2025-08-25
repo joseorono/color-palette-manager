@@ -1,10 +1,7 @@
 import React, { useEffect, useCallback, useState } from "react";
 import { usePaletteStore } from "@/stores/palette-store";
 import { ColorCard } from "./color-card";
-import { PaletteControls } from "./palette-controls";
-import { ExportModal } from "./dialogs/export-modal";
-import { Button } from "./ui/button";
-import { Shuffle, Plus } from "lucide-react";
+import { PaletteNavbar } from "./palette-navbar";
 import {
   rectSortingStrategy,
   SortableContext,
@@ -20,16 +17,13 @@ import {
   DragOverlay,
 } from "@dnd-kit/core";
 import { ColorUtils } from "@/lib/color-utils";
-import { MAX_PALETTE_COLORS, DRAG_ACTIVATION_DISTANCE } from "@/constants/ui";
-import ImportPaletteModal from "./import-palette-modal";
+import { DRAG_ACTIVATION_DISTANCE } from "@/constants/ui";
 
 export function PaletteGenerator() {
   const {
     currentPalette,
-    isGenerating,
     generateNewPalette,
     regenerateUnlocked,
-    addColor,
     reorderColors,
   } = usePaletteStore();
 
@@ -38,6 +32,12 @@ export function PaletteGenerator() {
   const handleKeyPress = useCallback(
     (event: KeyboardEvent) => {
       if (event.code === "Space" && !event.repeat) {
+        const dialogOrSheetOpen = !!document.querySelector(
+          '[role="dialog"][data-state="open"]'
+        );
+
+        if (dialogOrSheetOpen) return;
+
         event.preventDefault();
         regenerateUnlocked();
       }
@@ -50,7 +50,9 @@ export function PaletteGenerator() {
     if (!currentPalette || currentPalette.colors.length === 0) {
       generateNewPalette();
     }
+  }, []);
 
+  useEffect(() => {
     // Add keyboard listeners
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
@@ -93,40 +95,21 @@ export function PaletteGenerator() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
-      <div className="container mx-auto px-4 py-8">
+      {/* Navigation Bar */}
+      <PaletteNavbar />
+
+      <div className="container mx-auto px-4 py-2">
         {/* Header */}
         <div className="mb-8 text-center">
-          <h1 className="mb-2 text-4xl font-bold text-gray-900 dark:text-white">
-            Color Palette Generator
-          </h1>
           <p className="mb-6 text-gray-600 dark:text-gray-300">
-            Create beautiful color palettes with ease. Press spacebar to
-            generate new colors.
+            {/* Create beautiful color palettes with ease. Press spacebar to
+            generate new colors. */}
+            Generate a new palette by pressing{" "}
+            <kbd className="rounded border bg-gray-100 px-2 py-1 text-xs dark:bg-gray-800">
+              Space
+            </kbd>{" "}
+            or clicking the shuffle button.
           </p>
-
-          <div className="mb-8 flex justify-center gap-4">
-            <Button
-              onClick={() => generateNewPalette()}
-              disabled={isGenerating}
-              className="gap-2"
-            >
-              <Shuffle className="h-4 w-4" />
-              Generate New
-            </Button>
-
-            <Button
-              onClick={addColor}
-              variant="outline"
-              disabled={
-                !currentPalette ||
-                currentPalette.colors.length >= MAX_PALETTE_COLORS
-              }
-              className="gap-2"
-            >
-              <Plus className="h-4 w-4" />
-              Add Color
-            </Button>
-          </div>
         </div>
 
         {/* Palette Display */}
@@ -168,12 +151,6 @@ export function PaletteGenerator() {
             </DndContext>
           </div>
         </div>
-
-        {/* Controls */}
-        <PaletteControls />
-
-        {/* Export Modal */}
-        <ExportModal />
       </div>
     </div>
   );

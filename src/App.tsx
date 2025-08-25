@@ -10,6 +10,12 @@ import LandingLayout from "./layouts/landing-page-layout";
 import ThemeTest from "./pages/theme-test";
 import NotFoundPage from "./pages/not-found-page";
 import { ColorNameTestPage } from "./pages/color-name-test";
+import { ColorNamingTool } from "./pages/color-naming-tool";
+import { ColorMixerTool } from "./pages/color-mixer-tool";
+import { ShadeGeneratorTool } from "./pages/shade-generator-tool";
+import { ColorConverterTool } from "./pages/color-converter-tool";
+import { ImagePaletteExtractorTool } from "@/pages/image-palette-extractor-tool";
+import ToolsPage from "./pages/tools-page";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { TestPreview } from "./pages/test-preview";
 
@@ -27,30 +33,59 @@ function App() {
               <Route path="/app/dashboard" element={<DashboardPage />} />
               <Route path="/app/palette-edit" element={<PaletteEditor />} />
               <Route path="/app/color-test" element={<ColorNameTestPage />} />
+
               {/* <Route path="/app/test" element={<ThemeTest />} /> */}
-              <Route path="/app/test" element={
-                <TestPreview 
-                  colors={{
-                    primary: "#3b82f6",
-                    secondary: "#10b981",
-                    accent: "#f3f4f6",
-                    background: "#ffffff",
-                    foreground: "#1f2937",
-                    card: "#ffffff",
-                    "card-foreground": "#1f2937",
-                    border: "#e5e7eb",
-                    muted: "#f3f4f6",
-                    "muted-foreground": "#6b7280",
-                    "primary-foreground": "#ffffff",
-                    "secondary-foreground": "#ffffff",
-                    "accent-foreground": "#1f2937"
-                  }}
-                  onColorsChange={(colors) => {
-                    console.log("Colors changed:", colors);
-                    // You could save these colors to state or storage
-                  }}
-                />
-              } />
+              <Route
+                path="/app/test"
+                element={
+                  <TestPreview
+                    colors={{
+                      primary: "#3b82f6",
+                      secondary: "#10b981",
+                      accent: "#f3f4f6",
+                      background: "#ffffff",
+                      foreground: "#1f2937",
+                      card: "#ffffff",
+                      "card-foreground": "#1f2937",
+                      border: "#e5e7eb",
+                      muted: "#f3f4f6",
+                      "muted-foreground": "#6b7280",
+                      "primary-foreground": "#ffffff",
+                      "secondary-foreground": "#ffffff",
+                      "accent-foreground": "#1f2937",
+                    }}
+                    onColorsChange={(colors) => {
+                      console.log("Colors changed:", colors);
+                      // You could save these colors to state or storage
+                    }}
+                  />
+                }
+              />
+
+              <Route path="/app/tools" element={<ToolsPage />} />
+              <Route path="/app/test" element={<ThemeTest />} />
+
+              {/* Tools */}
+              <Route
+                path="/app/tools/color-naming"
+                element={<ColorNamingTool />}
+              />
+              <Route
+                path="/app/tools/color-mixer"
+                element={<ColorMixerTool />}
+              />
+              <Route
+                path="/app/tools/shade-generator"
+                element={<ShadeGeneratorTool />}
+              />
+              <Route
+                path="/app/tools/color-converter"
+                element={<ColorConverterTool />}
+              />
+              <Route
+                path="/app/tools/img-palette-extractor"
+                element={<ImagePaletteExtractorTool />}
+              />
             </Route>
 
             <Route element={<LandingLayout />}>

@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { ExportFormat } from "@/constants/export";
-import { COLOR_ID_LENGTH, PALETTE_ID_LENGTH } from "@/constants";
+import { COLOR_ID_LENGTH, PALETTE_ID_LENGTH } from "@/constants/nanoid";
 
 export const indexNumberZod = z.number().int().positive();
 

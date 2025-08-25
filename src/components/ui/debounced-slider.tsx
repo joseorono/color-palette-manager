@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Slider } from "./slider";
-import { debounce as debounceUtil } from "@/lib/utils";
+import { cn, debounce as debounceUtil } from "@/lib/utils";
 import { Label } from "./label";
 
 export function DebouncedSlider({
@@ -48,7 +48,7 @@ export function DebouncedSlider({
       </Label>
       <Slider
         {...props}
-        className={className}
+        className={cn(className)}
         value={internalValue}
         onValueChange={(newValue) => handleInternalValue(newValue)}
       />

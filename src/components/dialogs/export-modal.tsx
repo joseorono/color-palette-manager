@@ -33,7 +33,7 @@ export function ExportModal() {
       toast.error("No palette to export");
       return;
     }
-    
+
     setIsExporting(true);
 
     try {
@@ -62,7 +62,7 @@ export function ExportModal() {
       <DialogTrigger asChild>
         <Button className="gap-2">
           <Download className="h-4 w-4" />
-          Export Palette
+          <span className="hidden lg:block">Export Palette</span>
         </Button>
       </DialogTrigger>
 
@@ -133,7 +133,10 @@ export function ExportModal() {
                 Export Preview
               </Label>
               <div className="max-h-96 overflow-auto rounded-lg border bg-gray-50 p-4 dark:bg-gray-900">
-                <ExportPreview colors={currentPalette?.colors || []} format={format} />
+                <ExportPreview
+                  colors={currentPalette?.colors || []}
+                  format={format}
+                />
               </div>
             </div>
           )}

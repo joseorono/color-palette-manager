@@ -5,7 +5,7 @@ import { useDebounce } from "@/hooks/use-debounce";
 import { Plus, Grid3X3, List, LayoutGrid, Upload } from "lucide-react";
 import { useQueryState } from "nuqs";
 import { Button } from "@/components/ui/button";
-import { PaletteCard } from "./palette-card";
+import { PaletteCard } from "./palette-generator/palette-card";
 import { PaletteFilters } from "./palette-filters";
 import { LoadingCard } from "@/components/loaders/loading-card";
 import type {
@@ -230,7 +230,7 @@ export function PaletteDashboard({
 
         <div className="flex items-center gap-2">
           {/* View Mode Toggle */}
-          <div className="flex rounded-lg border p-1">
+          <div className="flex gap-1 rounded-lg border p-1">
             <Button
               variant={localViewMode === "grid" ? "default" : "ghost"}
               size="sm"

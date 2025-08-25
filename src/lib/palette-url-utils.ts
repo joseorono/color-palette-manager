@@ -1,7 +1,8 @@
 import { Color, Palette, paletteSchema } from "@/types/palette";
 import { ColorUtils } from "@/lib/color-utils";
+import { PaletteUtils } from "@/lib/palette-utils";
 import { PaletteDBQueries } from "@/db/queries";
-import { nanoidPaletteId, nanoidColorId } from "@/constants";
+import { nanoidPaletteId, nanoidColorId } from "@/constants/nanoid";
 
 /**
  * Utility class for handling palette operations via URL parameters.
@@ -28,6 +29,11 @@ export class PaletteUrlUtils {
         return await this.paletteFromPaletteId(urlParams.get("paletteId")!);
       }
 
+      // Check for base color to generate harmonious palette
+      if (urlParams.has("basedOnColor")) {
+        return this.paletteFromBaseColor(urlParams.get("basedOnColor")!);
+      }
+
       // Check for hex CSV colors
       if (urlParams.has("colors")) {
         return this.paletteFromHexCsv(urlParams.get("colors")!);
@@ -36,6 +42,47 @@ export class PaletteUrlUtils {
       return null;
     } catch (error) {
       console.error("Error loading palette from URL:", error);
+      return null;
+    }
+  }
+
+  /**
+   * Create a harmonious palette from a base color in URL.
+   * Example: ?basedOnColor=#ff0000
+   * @param baseColorParam - Base color hex string
+   * @returns Palette | null - Generated harmonious palette or null if invalid
+   */
+  static paletteFromBaseColor(baseColorParam: string): Palette | null {
+    try {
+      if (!baseColorParam || baseColorParam.trim() === "") {
+        return null;
+      }
+
+      const trimmedColor = baseColorParam.trim();
+
+      // Validate the base color
+      if (!ColorUtils.isValidHex(trimmedColor)) {
+        return null;
+      }
+
+      const normalizedBaseColor = ColorUtils.normalizeHex(trimmedColor);
+
+      // Generate harmonious colors using PaletteUtils
+      const harmoniousHexColors = PaletteUtils.generateHarmoniousHexCsv(normalizedBaseColor, 5);
+
+      // Convert to CSV format and use existing paletteFromHexCsv method
+      const colorsParam = harmoniousHexColors.join(",");
+      const palette = this.paletteFromHexCsv(colorsParam);
+
+      if (palette) {
+        // Update the palette name and description to reflect it was generated from base color
+        palette.name = `New From ${normalizedBaseColor}`;
+        palette.description = `Generated palette from base color ${normalizedBaseColor}`;
+      }
+
+      return palette;
+    } catch (error) {
+      console.error("Error creating palette from base color:", error);
       return null;
     }
   }
@@ -249,5 +296,9 @@ export class PaletteUrlUtils {
   static generateShareableUrl(palette: Palette): string {
     const encodedData = this.encodeShareableUrl(palette);
     return `/app/palette-edit/?share=${encodedData}`;
+  }
+
+  static generateUrlToPaletteFromBaseColor(baseColor: string): string {
+    return `/app/palette-edit/?basedOnColor=${baseColor}`;
   }
 }

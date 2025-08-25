@@ -2,36 +2,274 @@ import chroma, { Color as ChromaColor } from "chroma-js";
 import { colord } from "colord";
 import { hsl, rgb, random, formatHex } from "culori";
 import { Color, HexColorString, WCAGContrastLevel } from "@/types/palette";
-import { COLOR_NAME_DATABASE, nanoidColorId } from "@/constants";
+import { COLOR_NAME_DATABASE } from "@/constants/palettes-and-colors";
+import { nanoidColorId } from "@/constants/nanoid";
+import {
+  ANALOGOUS_HUE_OFFSET,
+  COMPLEMENTARY_HUE_OFFSET,
+  LIGHTNESS_VARIATION_FACTOR,
+  SATURATION_VARIATION_FACTOR,
+  WHITE_LIGHTNESS_THRESHOLD,
+  BLACK_LIGHTNESS_THRESHOLD,
+  LIGHTNESS_DESCRIPTORS,
+  SATURATION_DESCRIPTORS,
+} from "@/constants/color-constants";
 
-// Constants for color generation and comparison
-const ANALOGOUS_HUE_OFFSET = 30; // degrees
-const COMPLEMENTARY_HUE_OFFSET = 180; // degrees
-const LIGHTNESS_VARIATION_FACTOR = 0.2; // 20% variation
-const SATURATION_VARIATION_FACTOR = 0.3; // 30% variation
-const WHITE_LIGHTNESS_THRESHOLD = 0.9;
-const BLACK_LIGHTNESS_THRESHOLD = 0.1;
-
-// Common color descriptors for fallback naming
-const LIGHTNESS_DESCRIPTORS = {
-  VERY_LIGHT: "Pale",
-  LIGHT: "Light",
-  MEDIUM_LIGHT: "",
-  MEDIUM: "",
-  MEDIUM_DARK: "",
-  DARK: "Dark",
-  VERY_DARK: "Deep",
-} as const;
-
-const SATURATION_DESCRIPTORS = {
-  VERY_LOW: "Grayish",
-  LOW: "Muted",
-  MEDIUM: "",
-  HIGH: "Vivid",
-  VERY_HIGH: "Bright",
-} as const;
 
 export class ColorUtils {
+  /*
+  ======================================
+          Clamping & Normalization
+  ======================================
+  */
+
+  /**
+   * Clamps a value between a minimum and maximum range.
+   * @param value The value to clamp.
+   * @param min The minimum allowed value.
+   * @param max The maximum allowed value.
+   * @returns The clamped value.
+   */
+  static clamp(value: number, min: number, max: number): number {
+    return Math.min(Math.max(value, min), max);
+  }
+
+  /**
+   * Normalizes a value from one range to another.
+   * @param value The value to normalize.
+   * @param fromMin The minimum of the source range.
+   * @param fromMax The maximum of the source range.
+   * @param toMin The minimum of the target range.
+   * @param toMax The maximum of the target range.
+   * @returns The normalized value.
+   */
+  static normalize(value: number, fromMin: number, fromMax: number, toMin: number, toMax: number): number {
+    const normalized = (value - fromMin) / (fromMax - fromMin);
+    return toMin + normalized * (toMax - toMin);
+  }
+
+  /**
+   * Wraps a value around a maximum (useful for hue values).
+   * @param value The value to wrap.
+   * @param max The maximum value before wrapping.
+   * @returns The wrapped value.
+   */
+  static wrap(value: number, max: number): number {
+    return ((value % max) + max) % max;
+  }
+
+  /*
+  ======================================
+          Color Space Calculations
+  ======================================
+  */
+
+  /**
+   * Linear interpolation between two colors in HSL space.
+   * @param color1Hex First color in hex format.
+   * @param color2Hex Second color in hex format.
+   * @param t Interpolation factor (0-1).
+   * @returns Interpolated color in hex format.
+   */
+  static lerpColors(color1Hex: string, color2Hex: string, t: number): string {
+    const color1 = colord(color1Hex).toHsl();
+    const color2 = colord(color2Hex).toHsl();
+    
+    // Handle hue interpolation (shortest path around the color wheel)
+    let h1 = color1.h;
+    let h2 = color2.h;
+    
+    if (Math.abs(h2 - h1) > 180) {
+      if (h2 > h1) {
+        h1 += 360;
+      } else {
+        h2 += 360;
+      }
+    }
+    
+    const interpolatedH = h1 + (h2 - h1) * ColorUtils.clamp(t, 0, 1);
+    const interpolatedS = color1.s + (color2.s - color1.s) * ColorUtils.clamp(t, 0, 1);
+    const interpolatedL = color1.l + (color2.l - color1.l) * ColorUtils.clamp(t, 0, 1);
+    
+    const normalizedH = ColorUtils.wrap(interpolatedH, 360);
+    const normalizedS = ColorUtils.clamp(interpolatedS, 0, 1);
+    const normalizedL = ColorUtils.clamp(interpolatedL, 0, 1);
+    
+    return colord({ h: normalizedH, s: normalizedS, l: normalizedL }).toHex();
+  }
+
+  /**
+   * Calculates the Euclidean distance between two colors in RGB space.
+   * @param color1Hex First color in hex format.
+   * @param color2Hex Second color in hex format.
+   * @returns Distance value (0-441.67).
+   */
+  static colorDistance(color1Hex: string, color2Hex: string): number {
+    const color1 = colord(color1Hex).toRgb();
+    const color2 = colord(color2Hex).toRgb();
+    
+    const rDiff = color1.r - color2.r;
+    const gDiff = color1.g - color2.g;
+    const bDiff = color1.b - color2.b;
+    
+    return Math.sqrt(rDiff * rDiff + gDiff * gDiff + bDiff * bDiff);
+  }
+
+  /*
+  ======================================
+          Harmony Calculations
+  ======================================
+  */
+
+  /**
+   * Calculates the complementary hue (opposite on color wheel).
+   * @param hue The base hue in degrees (0-360).
+   * @returns The complementary hue.
+   */
+  static complementaryHue(hue: number): number {
+    return ColorUtils.wrap(hue + 180, 360);
+  }
+
+  /**
+   * Generates analogous hues around a base hue.
+   * @param baseHue The base hue in degrees (0-360).
+   * @param count The number of analogous hues to generate.
+   * @param spread The spread angle in degrees (default: 30).
+   * @returns Array of analogous hues.
+   */
+  static analogousHues(baseHue: number, count: number, spread: number = 30): number[] {
+    const hues: number[] = [];
+    const step = spread / Math.max(count - 1, 1);
+    const startHue = baseHue - spread / 2;
+    
+    for (let i = 0; i < count; i++) {
+      hues.push(ColorUtils.wrap(startHue + i * step, 360));
+    }
+    
+    return hues;
+  }
+
+  /**
+   * Calculates triadic harmony hues (120° apart).
+   * @param baseHue The base hue in degrees (0-360).
+   * @returns Array of three triadic hues.
+   */
+  static triadicHues(baseHue: number): number[] {
+    return [
+      baseHue,
+      ColorUtils.wrap(baseHue + 120, 360),
+      ColorUtils.wrap(baseHue + 240, 360)
+    ];
+  }
+
+  /**
+   * Calculates tetradic harmony hues (90° apart).
+   * @param baseHue The base hue in degrees (0-360).
+   * @returns Array of four tetradic hues.
+   */
+  static tetradicHues(baseHue: number): number[] {
+    return [
+      baseHue,
+      ColorUtils.wrap(baseHue + 90, 360),
+      ColorUtils.wrap(baseHue + 180, 360),
+      ColorUtils.wrap(baseHue + 270, 360)
+    ];
+  }
+
+  /**
+   * Calculates split complementary hues.
+   * @param baseHue The base hue in degrees (0-360).
+   * @param splitAngle The angle to split from complement (default: 30).
+   * @returns Array of split complementary hues.
+   */
+  static splitComplementaryHues(baseHue: number, splitAngle: number = 30): number[] {
+    const complement = ColorUtils.complementaryHue(baseHue);
+    return [
+      baseHue,
+      ColorUtils.wrap(complement - splitAngle, 360),
+      ColorUtils.wrap(complement + splitAngle, 360)
+    ];
+  }
+
+  /*
+  ======================================
+          Contrast & Accessibility
+  ======================================
+  */
+
+  /**
+   * Calculates the relative luminance of a color according to WCAG guidelines.
+   * @param hexColor Color in hex format.
+   * @returns Relative luminance value (0-1).
+   */
+  static relativeLuminance(hexColor: string): number {
+    const rgb = colord(hexColor).toRgb();
+    
+    // Convert to linear RGB
+    const toLinear = (value: number): number => {
+      const normalized = value / 255;
+      return normalized <= 0.03928 
+        ? normalized / 12.92 
+        : Math.pow((normalized + 0.055) / 1.055, 2.4);
+    };
+    
+    const r = toLinear(rgb.r);
+    const g = toLinear(rgb.g);
+    const b = toLinear(rgb.b);
+    
+    // WCAG formula for relative luminance
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  }
+
+  /**
+   * Calculates the contrast ratio between two colors according to WCAG guidelines.
+   * @param color1Hex First color in hex format.
+   * @param color2Hex Second color in hex format.
+   * @returns Contrast ratio (1-21).
+   */
+  static contrastRatio(color1Hex: string, color2Hex: string): number {
+    const lum1 = ColorUtils.relativeLuminance(color1Hex);
+    const lum2 = ColorUtils.relativeLuminance(color2Hex);
+    
+    const lighter = Math.max(lum1, lum2);
+    const darker = Math.min(lum1, lum2);
+    
+    return (lighter + 0.05) / (darker + 0.05);
+  }
+
+  /**
+   * Convenience method to get contrast ratio with hex colors.
+   * @param hexColor1 First color in hex format.
+   * @param hexColor2 Second color in hex format.
+   * @returns Contrast ratio (1-21).
+   */
+  static hexContrastRatio(hexColor1: string, hexColor2: string): number {
+    return ColorUtils.contrastRatio(hexColor1, hexColor2);
+  }
+
+  /**
+   * Checks if two colors meet WCAG contrast requirements.
+   * @param color1Hex First color in hex format.
+   * @param color2Hex Second color in hex format.
+   * @param level WCAG level (AA or AAA).
+   * @param isLargeText Whether the text is considered large (default: false).
+   * @returns Whether the contrast meets the specified level.
+   */
+  static meetsWCAGContrast(
+    color1Hex: string, 
+    color2Hex: string, 
+    level: WCAGContrastLevel = WCAGContrastLevel.AA, 
+    isLargeText: boolean = false
+  ): boolean {
+    const ratio = ColorUtils.contrastRatio(color1Hex, color2Hex);
+    
+    if (level === WCAGContrastLevel.AAA) {
+      return isLargeText ? ratio >= 4.5 : ratio >= 7;
+    } else {
+      return isLargeText ? ratio >= 3 : ratio >= 4.5;
+    }
+  }
+
   /**
    * Check if a color is considered white based on lightness threshold
    * @param hexColor - Color in hexadecimal format
@@ -116,6 +354,57 @@ export class ColorUtils {
     }
 
     return { name: nearestName, distance: minDistance };
+  }
+
+  /**
+   * Mix two colors with a specified ratio using HSL interpolation
+   * @param color1Hex - First color in hexadecimal format
+   * @param color2Hex - Second color in hexadecimal format
+   * @param ratio - Mixing ratio (0 = all color1, 1 = all color2, 0.5 = equal mix)
+   * @returns Mixed color in hexadecimal format
+   */
+  static mixColors(color1Hex: string, color2Hex: string, ratio: number = 0.5): string {
+    return ColorUtils.lerpColors(color1Hex, color2Hex, ratio);
+  }
+
+  /**
+   * Mix multiple colors with equal ratios
+   * @param colorHexArray - Array of colors in hexadecimal format
+   * @returns Mixed color in hexadecimal format
+   */
+  static mixMultipleColors(colorHexArray: string[]): string {
+    if (colorHexArray.length === 0) return "#000000";
+    if (colorHexArray.length === 1) return colorHexArray[0];
+    
+    // Convert all colors to HSL for better mixing
+    const hslColors = colorHexArray.map(hex => colord(hex).toHsl());
+    
+    // Average the HSL values
+    const avgH = hslColors.reduce((sum, hsl) => sum + hsl.h, 0) / hslColors.length;
+    const avgS = hslColors.reduce((sum, hsl) => sum + hsl.s, 0) / hslColors.length;
+    const avgL = hslColors.reduce((sum, hsl) => sum + hsl.l, 0) / hslColors.length;
+    
+    return colord({ h: avgH, s: avgS, l: avgL }).toHex();
+  }
+
+  /**
+   * Mix colors using RGB averaging (alternative mixing method)
+   * @param color1Hex - First color in hexadecimal format
+   * @param color2Hex - Second color in hexadecimal format
+   * @param ratio - Mixing ratio (0 = all color1, 1 = all color2, 0.5 = equal mix)
+   * @returns Mixed color in hexadecimal format
+   */
+  static mixColorsRGB(color1Hex: string, color2Hex: string, ratio: number = 0.5): string {
+    const color1 = colord(color1Hex).toRgb();
+    const color2 = colord(color2Hex).toRgb();
+    
+    const clampedRatio = ColorUtils.clamp(ratio, 0, 1);
+    
+    const mixedR = Math.round(color1.r + (color2.r - color1.r) * clampedRatio);
+    const mixedG = Math.round(color1.g + (color2.g - color1.g) * clampedRatio);
+    const mixedB = Math.round(color1.b + (color2.b - color1.b) * clampedRatio);
+    
+    return colord({ r: mixedR, g: mixedG, b: mixedB }).toHex();
   }
 
   /**

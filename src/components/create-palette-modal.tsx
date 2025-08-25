@@ -37,12 +37,11 @@ import { LoadingButton } from "@/components/ui/loading-button";
 import { TagInput } from "@/components/tag-input";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { InlineColorPicker } from "@/components/form-fields/inline-color-picker";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 // Only importing what we need
 import {
   InsertPaletteMutationResult,
   newPaletteFormSchema,
-  Palette,
   type NewPaletteFormValues,
 } from "@/types/palette";
 import { ColorUtils } from "@/lib/color-utils";
@@ -56,8 +55,9 @@ interface CreatePaletteModalProps {
 }
 
 // ToDo: Implement this in a less hacky way with a new utility function in palette-db-queries.ts
-async function insertPaletteMutation(data: NewPaletteFormValues): Promise<InsertPaletteMutationResult> {
-
+async function insertPaletteMutation(
+  data: NewPaletteFormValues
+): Promise<InsertPaletteMutationResult> {
   const newPalette = PaletteUtils.newPaletteFormValuesToPalette(data);
   const paletteId = await PaletteDBQueries.insertPalette(newPalette);
 
@@ -73,7 +73,6 @@ export function CreatePaletteModal({
 }: CreatePaletteModalProps) {
   const navigate = useNavigate();
   const [tags, setTags] = useState<string[]>([]);
-  const [tagInput, setTagInput] = useState("");
   const [formError, setFormError] = useState<string | null>(null);
 
   const form = useForm<NewPaletteFormValues>({
@@ -93,10 +92,7 @@ export function CreatePaletteModal({
   const { mutate: createPalette, isPending } = useMutation({
     mutationFn: insertPaletteMutation,
     onSuccess: (newPalette: InsertPaletteMutationResult) => {
-      toast({
-        title: "Palette Created!",
-        description: `"${newPalette.palette.name}" has been created successfully.`,
-      });
+      toast.success(`"${newPalette.palette.name}" has been created successfully.`);
 
       // Close modal
       onOpenChange(false);
@@ -109,14 +105,11 @@ export function CreatePaletteModal({
       navigate(PaletteUrlUtils.generatePaletteIdUrl(newPalette.id));
     },
     onError: (error: Error) => {
-      toast({
-        title: "Error Creating Palette",
-        description:
-          error instanceof Error
-            ? error.message
-            : "Something went wrong. Please try again.",
-        variant: "destructive",
-      });
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Something went wrong. Please try again."
+      );
     },
   });
 
@@ -238,7 +231,8 @@ export function CreatePaletteModal({
                     />
                   </FormControl>
                   <FormDescription>
-                    Enter the base color for your palette or use the color picker
+                    Enter the base color for your palette or use the color
+                    picker
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -264,7 +258,8 @@ export function CreatePaletteModal({
                       Generate Palette from Base Color?
                     </FormLabel>
                     <FormDescription>
-                      Automatically create a harmonious 5-color palette based on your base color
+                      Automatically create a harmonious 5-color palette based on
+                      your base color
                     </FormDescription>
                   </div>
                 </FormItem>

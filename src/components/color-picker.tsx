@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { HexColorPicker, HexColorInput } from "react-colorful";
 import { colord } from "colord";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "./ui/sheet";
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
@@ -24,7 +24,7 @@ import {
 } from "lucide-react";
 import { ColorUtils } from "@/lib/color-utils";
 import type { HexColorString } from "@/types/palette";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 
 interface ColorPickerProps {
   isOpen: boolean;
@@ -116,19 +116,12 @@ export function ColorPicker({
     try {
       await navigator.clipboard.writeText(colorValue);
       setCopiedStates({ ...copiedStates, [colorValue]: true });
-      toast({
-        title: "Copied!",
-        description: `${format} value copied to clipboard`,
-      });
+      toast.success(`${format} value copied to clipboard`);
       setTimeout(() => {
         setCopiedStates((prev) => ({ ...prev, [colorValue]: false }));
       }, 2000);
     } catch (err) {
-      toast({
-        title: "Copy failed",
-        description: "Unable to copy to clipboard",
-        variant: "destructive",
-      });
+      toast.error("Unable to copy to clipboard");
     }
   };
 
@@ -183,14 +176,22 @@ export function ColorPicker({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
+    <Sheet
+      open={isOpen}
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <SheetContent
+        side="right"
+        className="w-full overflow-y-auto sm:max-w-2xl"
+      >
+        <SheetHeader>
+          <SheetTitle className="flex items-center gap-2">
             <Palette className="h-5 w-5" />
             Color Picker
-          </DialogTitle>
-        </DialogHeader>
+          </SheetTitle>
+        </SheetHeader>
 
         <div className="space-y-6">
           {/* Main Color Preview */}
@@ -476,7 +477,7 @@ export function ColorPicker({
             <Button onClick={handleSave}>Apply Color</Button>
           </div>
         </div>
-      </DialogContent>
-    </Dialog>
+      </SheetContent>
+    </Sheet>
   );
 }
