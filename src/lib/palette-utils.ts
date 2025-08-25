@@ -10,7 +10,7 @@ import {
   Palette,
 } from "@/types/palette";
 import { ColorUtils } from "@/lib/color-utils";
-import { nanoidColorId, nanoidPaletteId } from "@/constants/nanoid";
+import { nanoidPaletteId } from "@/constants/nanoid";
 
 export class PaletteUtils {
   static generateHarmoniousHexCsv_legacy(
