@@ -6,7 +6,7 @@
     - This is basically already implemented in color-name-test.tsx, but it could be a standalone tool.
     - It should still provide a button to generate a palette with the color using the ?basedOnColor= query parameter.
 
-- [ ] Color Palette Extractor: A standalone, simplified version of your core image-based palette generation. This tool could focus purely on extracting the most dominant colors from an image without the full palette management interface.
+- [x] Color Palette Extractor: A standalone, simplified version of your core image-based palette generation. This tool could focus purely on extracting the most dominant colors from an image without the full palette management interface.
     - It should still provide a button to open the generated Palette in the palette editor using the ?colors= query parameter.
 
 - [ ] Color Converter: A quick-access tool for converting a single color's value between different formats (Hex, RGB, HSL, CMYK, etc.) without having to go into a full palette view. You already have the code for this, so it would just be a UI wrapper.
@@ -16,7 +16,7 @@
     - Implementing this would require some work and research...
     - But it would open the door to a color picker tool like Color Cop.
 
-- [ ] Shade Generator: A tool that allows users to select a base color and then generate a range of shades (lighter and darker versions) of that color.
+- [x] Shade Generator: A tool that allows users to select a base color and then generate a range of shades (lighter and darker versions) of that color.
     - It should still provide a button to open the generated Palette in the palette editor using generateUrlToPaletteFromBaseColor.
 
 # Accessibility & Utility

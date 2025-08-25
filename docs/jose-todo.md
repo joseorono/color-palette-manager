@@ -15,12 +15,12 @@
 ## Tools:
 
 ### 🎨 Color Tools
-- [x] Color Mixer
+- [ ] Color Mixer - WIP
 - [x] Color Naming Tool
-- [ ] Color Palette Extractor
+- [x] Color Palette Extractor
 - [ ] Color Converter
 - [ ] Eyedropper
-- [ ] Shade Generator
+- [x] Shade Generator
 
 ## ♿ Accessibility & Utility
 - [ ] Color Blindness Simulator
