@@ -2,6 +2,7 @@
   "name": "color-palette-manager",
   "version": "0.0.1",
   "private": true,
+  "type": "module",
   "license": "GPL-3.0-or-later",
   "scripts": {
     "test-cli": "vitest --run --reporter verbose",
