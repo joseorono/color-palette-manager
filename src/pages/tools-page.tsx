@@ -91,11 +91,12 @@ const accessibilityTools: Tool[] = [
     status: "coming-soon"
   },
   {
-    id: "hsl-explorer",
-    name: "HSL Color Explorer",
+    id: "hsl-color-picker",
+    name: "HSL Color Picker",
     description: "Interactive tool with sliders for Hue, Saturation, and Lightness to explore color space in real-time.",
     icon: Sliders,
-    status: "coming-soon"
+    status: "available",
+    link: "/app/tools/hsl-color-picker"
   },
   {
     id: "wcag-checker",

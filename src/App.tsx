@@ -8,16 +8,17 @@ import { DatabaseSeeder } from "./db/seeder";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import LandingLayout from "./layouts/landing-page-layout";
 import ThemeTest from "./pages/theme-test";
-import NotFoundPage from "./pages/not-found-page";
-import { ColorNameTestPage } from "./pages/color-name-test";
-import { ColorNamingTool } from "./pages/color-naming-tool";
-import { ColorMixerTool } from "./pages/color-mixer-tool";
-import { ShadeGeneratorTool } from "./pages/shade-generator-tool";
-import { ColorConverterTool } from "./pages/color-converter-tool";
+import { ColorNameTestPage } from "./pages/tools/color-name-test";
+import { ColorNamingTool } from "./pages/tools/color-naming-tool";
+import { ColorMixerTool } from "./pages/tools/color-mixer-tool";
+import { ShadeGeneratorTool } from "./pages/tools/shade-generator-tool";
+import { ColorConverterTool } from "./pages/tools/color-converter-tool";
 import { ImagePaletteExtractorTool } from "@/pages/image-palette-extractor-tool";
+import { HslColorPickerTool } from "./pages/tools/hsl-color-picker-tool";
 import ToolsPage from "./pages/tools-page";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { TestPreview } from "./pages/test-preview";
+import NotFoundPage from "./pages/not-found-page";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -85,6 +86,10 @@ function App() {
               <Route
                 path="/app/tools/img-palette-extractor"
                 element={<ImagePaletteExtractorTool />}
+              />
+              <Route
+                path="/app/tools/hsl-color-picker"
+                element={<HslColorPickerTool />}
               />
             </Route>
 

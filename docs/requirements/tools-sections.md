@@ -19,13 +19,16 @@
 - [x] Shade Generator: A tool that allows users to select a base color and then generate a range of shades (lighter and darker versions) of that color.
     - It should still provide a button to open the generated Palette in the palette editor using generateUrlToPaletteFromBaseColor.
 
+
+- [ ] Hue, Saturation, Lightness (HSL) Color Picker: An interactive tool with sliders for Hue, Saturation, and Lightness that allows users to explore the color space in real-time. This helps in understanding how these three properties affect a color and can be a great educational feature.
+It displays the name of the color and the various formats with copy buttons like the Color Mixer.
+    - It should still provide a button to open the generated Palette in the palette editor using generateUrlToPaletteFromBaseColor.
+
 # Accessibility & Utility
 - [ ] Color Blindness Simulator: A visual tool that applies filters to a user's selected palette to simulate how it would appear to someone with different types of color blindness (e.g., Deuteranopia, Protanopia). This is a simple but powerful accessibility feature that can be implemented with CSS filters.
     - This might require some image manipulation or advanced use of CSS filters.
 
 - [ ] Text & Background Contrast Checker: A focused version of your existing feature. Users can input a foreground and background color and instantly see if it passes WCAG contrast guidelines for both normal and large text.
-
-- [ ] Hue, Saturation, Lightness (HSL) Explorer: An interactive tool with sliders for Hue, Saturation, and Lightness that allows users to explore the color space in real-time. This helps in understanding how these three properties affect a color and can be a great educational feature.
 
 - [ ] A Text & Background Contrast Checker where a user can input two colors (from their palette or elsewhere) and it will display the contrast ratio and a pass/fail grade for both AA and AAA levels.
 

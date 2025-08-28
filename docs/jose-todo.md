@@ -15,16 +15,17 @@
 ## Tools:
 
 ### 🎨 Color Tools
-- [ ] Color Mixer - WIP
+- [x] Color Mixer
 - [x] Color Naming Tool
 - [x] Color Palette Extractor
-- [ ] Color Converter
+- [x] Color Converter
 - [ ] Eyedropper
 - [x] Shade Generator
+- [ ] HSL Color Picker (WIP)
+
 
 ## ♿ Accessibility & Utility
 - [ ] Color Blindness Simulator
 - [ ] Text & Background Contrast Checker
-- [ ] HSL Explorer
 - [ ] Advanced Contrast Checker
 
