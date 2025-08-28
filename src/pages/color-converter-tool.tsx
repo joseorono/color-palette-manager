@@ -8,14 +8,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { 
-  Palette, 
-  Sparkles, 
+import {
+  Palette,
+  Sparkles,
   Shuffle,
   Copy,
   RefreshCw
 } from 'lucide-react';
-import { colord } from 'colord';
 import useCopyToClipboard from '@/hooks/use-copy-to-clipboard';
 
 interface ColorFormats {
@@ -45,84 +44,13 @@ export const ColorConverterTool: React.FC = () => {
   // Convert color to all formats when input changes
   useEffect(() => {
     try {
-      const color = colord(inputColor);
-      
-      // Get all color format conversions
-      const rgb = color.toRgb();
-      const hsl = color.toHsl();
-      const hsv = color.toHsv();
-      // LAB conversion using manual calculation since colord doesn't have toLab
-      const labValues = rgbToLab(rgb.r, rgb.g, rgb.b);
-      
-      // Calculate CMYK manually since colord doesn't have native CMYK
-      const cmyk = rgbToCmyk(rgb.r, rgb.g, rgb.b);
-      
-      setFormats({
-        hex: color.toHex().toUpperCase(),
-        rgb: `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`,
-        hsl: `hsl(${Math.round(hsl.h)}, ${Math.round(hsl.s * 100)}%, ${Math.round(hsl.l * 100)}%)`,
-        hsv: `hsv(${Math.round(hsv.h)}, ${Math.round(hsv.s * 100)}%, ${Math.round(hsv.v * 100)}%)`,
-        cmyk: `cmyk(${cmyk.c}%, ${cmyk.m}%, ${cmyk.y}%, ${cmyk.k}%)`,
-        lab: `lab(${Math.round(labValues.l)}, ${Math.round(labValues.a)}, ${Math.round(labValues.b)})`,
-        name: ColorUtils.getColorName(inputColor)
-      });
+      const allFormats = ColorUtils.getAllColorFormatsFromHex(inputColor);
+      setFormats(allFormats);
     } catch (error) {
       console.error('Error converting color:', error);
     }
   }, [inputColor]);
 
-  // Helper function to convert RGB to LAB
-  const rgbToLab = (r: number, g: number, blue: number) => {
-    // Convert RGB to XYZ first
-    let rNorm = r / 255;
-    let gNorm = g / 255;
-    let bNorm = blue / 255;
-
-    // Apply gamma correction
-    rNorm = rNorm > 0.04045 ? Math.pow((rNorm + 0.055) / 1.055, 2.4) : rNorm / 12.92;
-    gNorm = gNorm > 0.04045 ? Math.pow((gNorm + 0.055) / 1.055, 2.4) : gNorm / 12.92;
-    bNorm = bNorm > 0.04045 ? Math.pow((bNorm + 0.055) / 1.055, 2.4) : bNorm / 12.92;
-
-    // Convert to XYZ using sRGB matrix
-    const x = rNorm * 0.4124564 + gNorm * 0.3575761 + bNorm * 0.1804375;
-    const y = rNorm * 0.2126729 + gNorm * 0.7151522 + bNorm * 0.0721750;
-    const z = rNorm * 0.0193339 + gNorm * 0.1191920 + bNorm * 0.9503041;
-
-    // Normalize for D65 illuminant
-    const xn = x / 0.95047;
-    const yn = y / 1.00000;
-    const zn = z / 1.08883;
-
-    // Convert XYZ to LAB
-    const fx = xn > 0.008856 ? Math.pow(xn, 1/3) : (7.787 * xn + 16/116);
-    const fy = yn > 0.008856 ? Math.pow(yn, 1/3) : (7.787 * yn + 16/116);
-    const fz = zn > 0.008856 ? Math.pow(zn, 1/3) : (7.787 * zn + 16/116);
-
-    const l = 116 * fy - 16;
-    const a = 500 * (fx - fy);
-    const bStar = 200 * (fy - fz);
-
-    return { l, a, b: bStar };
-  };
-
-  // Helper function to convert RGB to CMYK
-  const rgbToCmyk = (r: number, g: number, b: number) => {
-    const rPercent = r / 255;
-    const gPercent = g / 255;
-    const bPercent = b / 255;
-    
-    const k = 1 - Math.max(rPercent, gPercent, bPercent);
-    const c = k === 1 ? 0 : (1 - rPercent - k) / (1 - k);
-    const m = k === 1 ? 0 : (1 - gPercent - k) / (1 - k);
-    const y = k === 1 ? 0 : (1 - bPercent - k) / (1 - k);
-    
-    return {
-      c: Math.round(c * 100),
-      m: Math.round(m * 100),
-      y: Math.round(y * 100),
-      k: Math.round(k * 100)
-    };
-  };
 
   const handleGeneratePalette = () => {
     navigate(`/app/palette-edit/?basedOnColor=${encodeURIComponent(inputColor)}`);
@@ -133,17 +61,12 @@ export const ColorConverterTool: React.FC = () => {
   };
 
   const handleInputChange = (value: string) => {
-    try {
-      // Try to parse the input as a color
-      const color = colord(value);
-      if (color.isValid()) {
-        setInputColor(color.toHex() as HexColorString);
-      }
-    } catch (error) {
-      // If parsing fails, still update the input for user feedback
-      if (value.startsWith('#') && value.length <= 7) {
-        setInputColor(value as HexColorString);
-      }
+    const parsedColor = ColorUtils.parseAnyColorInputToHex(value);
+    if (parsedColor) {
+      setInputColor(parsedColor as HexColorString);
+    } else if (value.startsWith('#') && value.length <= 7) {
+      // Allow partial hex input for user feedback
+      setInputColor(value as HexColorString);
     }
   };
 

@@ -1,4 +1,4 @@
-import chroma, { Color as ChromaColor } from "chroma-js";
+import chroma from "chroma-js";
 import { colord } from "colord";
 import { hsl, rgb, random, formatHex } from "culori";
 import { Color, HexColorString, WCAGContrastLevel } from "@/types/palette";
@@ -74,11 +74,11 @@ export class ColorUtils {
   static lerpColors(color1Hex: string, color2Hex: string, t: number): string {
     const color1 = colord(color1Hex).toHsl();
     const color2 = colord(color2Hex).toHsl();
-    
+
     // Handle hue interpolation (shortest path around the color wheel)
     let h1 = color1.h;
     let h2 = color2.h;
-    
+
     if (Math.abs(h2 - h1) > 180) {
       if (h2 > h1) {
         h1 += 360;
@@ -86,15 +86,15 @@ export class ColorUtils {
         h2 += 360;
       }
     }
-    
+
     const interpolatedH = h1 + (h2 - h1) * ColorUtils.clamp(t, 0, 1);
     const interpolatedS = color1.s + (color2.s - color1.s) * ColorUtils.clamp(t, 0, 1);
     const interpolatedL = color1.l + (color2.l - color1.l) * ColorUtils.clamp(t, 0, 1);
-    
+
     const normalizedH = ColorUtils.wrap(interpolatedH, 360);
     const normalizedS = ColorUtils.clamp(interpolatedS, 0, 1);
     const normalizedL = ColorUtils.clamp(interpolatedL, 0, 1);
-    
+
     return colord({ h: normalizedH, s: normalizedS, l: normalizedL }).toHex();
   }
 
@@ -107,11 +107,11 @@ export class ColorUtils {
   static colorDistance(color1Hex: string, color2Hex: string): number {
     const color1 = colord(color1Hex).toRgb();
     const color2 = colord(color2Hex).toRgb();
-    
+
     const rDiff = color1.r - color2.r;
     const gDiff = color1.g - color2.g;
     const bDiff = color1.b - color2.b;
-    
+
     return Math.sqrt(rDiff * rDiff + gDiff * gDiff + bDiff * bDiff);
   }
 
@@ -141,11 +141,11 @@ export class ColorUtils {
     const hues: number[] = [];
     const step = spread / Math.max(count - 1, 1);
     const startHue = baseHue - spread / 2;
-    
+
     for (let i = 0; i < count; i++) {
       hues.push(ColorUtils.wrap(startHue + i * step, 360));
     }
-    
+
     return hues;
   }
 
@@ -204,19 +204,19 @@ export class ColorUtils {
    */
   static relativeLuminance(hexColor: string): number {
     const rgb = colord(hexColor).toRgb();
-    
+
     // Convert to linear RGB
     const toLinear = (value: number): number => {
       const normalized = value / 255;
-      return normalized <= 0.03928 
-        ? normalized / 12.92 
+      return normalized <= 0.03928
+        ? normalized / 12.92
         : Math.pow((normalized + 0.055) / 1.055, 2.4);
     };
-    
+
     const r = toLinear(rgb.r);
     const g = toLinear(rgb.g);
     const b = toLinear(rgb.b);
-    
+
     // WCAG formula for relative luminance
     return 0.2126 * r + 0.7152 * g + 0.0722 * b;
   }
@@ -230,10 +230,10 @@ export class ColorUtils {
   static contrastRatio(color1Hex: string, color2Hex: string): number {
     const lum1 = ColorUtils.relativeLuminance(color1Hex);
     const lum2 = ColorUtils.relativeLuminance(color2Hex);
-    
+
     const lighter = Math.max(lum1, lum2);
     const darker = Math.min(lum1, lum2);
-    
+
     return (lighter + 0.05) / (darker + 0.05);
   }
 
@@ -256,13 +256,13 @@ export class ColorUtils {
    * @returns Whether the contrast meets the specified level.
    */
   static meetsWCAGContrast(
-    color1Hex: string, 
-    color2Hex: string, 
-    level: WCAGContrastLevel = WCAGContrastLevel.AA, 
+    color1Hex: string,
+    color2Hex: string,
+    level: WCAGContrastLevel = WCAGContrastLevel.AA,
     isLargeText: boolean = false
   ): boolean {
     const ratio = ColorUtils.contrastRatio(color1Hex, color2Hex);
-    
+
     if (level === WCAGContrastLevel.AAA) {
       return isLargeText ? ratio >= 4.5 : ratio >= 7;
     } else {
@@ -375,15 +375,15 @@ export class ColorUtils {
   static mixMultipleColors(colorHexArray: string[]): string {
     if (colorHexArray.length === 0) return "#000000";
     if (colorHexArray.length === 1) return colorHexArray[0];
-    
+
     // Convert all colors to HSL for better mixing
     const hslColors = colorHexArray.map(hex => colord(hex).toHsl());
-    
+
     // Average the HSL values
     const avgH = hslColors.reduce((sum, hsl) => sum + hsl.h, 0) / hslColors.length;
     const avgS = hslColors.reduce((sum, hsl) => sum + hsl.s, 0) / hslColors.length;
     const avgL = hslColors.reduce((sum, hsl) => sum + hsl.l, 0) / hslColors.length;
-    
+
     return colord({ h: avgH, s: avgS, l: avgL }).toHex();
   }
 
@@ -397,13 +397,13 @@ export class ColorUtils {
   static mixColorsRGB(color1Hex: string, color2Hex: string, ratio: number = 0.5): string {
     const color1 = colord(color1Hex).toRgb();
     const color2 = colord(color2Hex).toRgb();
-    
+
     const clampedRatio = ColorUtils.clamp(ratio, 0, 1);
-    
+
     const mixedR = Math.round(color1.r + (color2.r - color1.r) * clampedRatio);
     const mixedG = Math.round(color1.g + (color2.g - color1.g) * clampedRatio);
     const mixedB = Math.round(color1.b + (color2.b - color1.b) * clampedRatio);
-    
+
     return colord({ r: mixedR, g: mixedG, b: mixedB }).toHex();
   }
 
@@ -865,5 +865,135 @@ export class ColorUtils {
    */
   static getColorIndex(colors: Color[], id: string): number {
     return colors.findIndex((color) => color.id === id);
+  }
+
+  /*
+  ======================================
+          Color Format Conversions
+  ======================================
+  */
+
+  /**
+   * Convert RGB values to LAB color space
+   * @param r - Red component (0-255)
+   * @param g - Green component (0-255)
+   * @param b - Blue component (0-255)
+   * @returns LAB color object with l, a, b properties
+   */
+  static rgbToLab(r: number, g: number, b: number): { l: number; a: number; b: number } {
+    // Convert RGB to XYZ first
+    let rNorm = r / 255;
+    let gNorm = g / 255;
+    let bNorm = b / 255;
+
+    // Apply gamma correction
+    rNorm = rNorm > 0.04045 ? Math.pow((rNorm + 0.055) / 1.055, 2.4) : rNorm / 12.92;
+    gNorm = gNorm > 0.04045 ? Math.pow((gNorm + 0.055) / 1.055, 2.4) : gNorm / 12.92;
+    bNorm = bNorm > 0.04045 ? Math.pow((bNorm + 0.055) / 1.055, 2.4) : bNorm / 12.92;
+
+    // Convert to XYZ using sRGB matrix
+    const x = rNorm * 0.4124564 + gNorm * 0.3575761 + bNorm * 0.1804375;
+    const y = rNorm * 0.2126729 + gNorm * 0.7151522 + bNorm * 0.0721750;
+    const z = rNorm * 0.0193339 + gNorm * 0.1191920 + bNorm * 0.9503041;
+
+    // Normalize for D65 illuminant
+    const xn = x / 0.95047;
+    const yn = y / 1.00000;
+    const zn = z / 1.08883;
+
+    // Convert XYZ to LAB
+    const fx = xn > 0.008856 ? Math.pow(xn, 1/3) : (7.787 * xn + 16/116);
+    const fy = yn > 0.008856 ? Math.pow(yn, 1/3) : (7.787 * yn + 16/116);
+    const fz = zn > 0.008856 ? Math.pow(zn, 1/3) : (7.787 * zn + 16/116);
+
+    const l = 116 * fy - 16;
+    const a = 500 * (fx - fy);
+    const bStar = 200 * (fy - fz);
+
+    return { l, a, b: bStar };
+  }
+
+  /**
+   * Convert RGB values to CMYK color space
+   * @param r - Red component (0-255)
+   * @param g - Green component (0-255)
+   * @param b - Blue component (0-255)
+   * @returns CMYK color object with c, m, y, k properties (0-100)
+   */
+  static rgbToCmyk(r: number, g: number, b: number): { c: number; m: number; y: number; k: number } {
+    const rPercent = r / 255;
+    const gPercent = g / 255;
+    const bPercent = b / 255;
+
+    const k = 1 - Math.max(rPercent, gPercent, bPercent);
+    const c = k === 1 ? 0 : (1 - rPercent - k) / (1 - k);
+    const m = k === 1 ? 0 : (1 - gPercent - k) / (1 - k);
+    const y = k === 1 ? 0 : (1 - bPercent - k) / (1 - k);
+
+    return {
+      c: Math.round(c * 100),
+      m: Math.round(m * 100),
+      y: Math.round(y * 100),
+      k: Math.round(k * 100)
+    };
+  }
+
+  /**
+   * Convert hex color to all common color formats
+   * @param hexColor - Color in hexadecimal format
+   * @returns Object with all color format strings
+   */
+  static getAllColorFormatsFromHex(hexColor: HexColorString): {
+    hex: string;
+    rgb: string;
+    hsl: string;
+    hsv: string;
+    cmyk: string;
+    lab: string;
+    name: string;
+  } {
+    try {
+      const color = colord(hexColor);
+      const rgb = color.toRgb();
+      const hsl = color.toHsl();
+      const hsv = color.toHsv();
+      const lab = ColorUtils.rgbToLab(rgb.r, rgb.g, rgb.b);
+      const cmyk = ColorUtils.rgbToCmyk(rgb.r, rgb.g, rgb.b);
+
+      return {
+        hex: color.toHex().toUpperCase(),
+        rgb: `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`,
+        hsl: `hsl(${Math.round(hsl.h)}, ${Math.round(hsl.s * 100)}%, ${Math.round(hsl.l * 100)}%)`,
+        hsv: `hsv(${Math.round(hsv.h)}, ${Math.round(hsv.s * 100)}%, ${Math.round(hsv.v * 100)}%)`,
+        cmyk: `cmyk(${cmyk.c}%, ${cmyk.m}%, ${cmyk.y}%, ${cmyk.k}%)`,
+        lab: `lab(${Math.round(lab.l)}, ${Math.round(lab.a)}, ${Math.round(lab.b)})`,
+        name: ColorUtils.getColorName(hexColor)
+      };
+    } catch (error) {
+      console.error('Error converting color formats:', error);
+      return {
+        hex: hexColor,
+        rgb: 'Invalid color',
+        hsl: 'Invalid color',
+        hsv: 'Invalid color',
+        cmyk: 'Invalid color',
+        lab: 'Invalid color',
+        name: 'Invalid color'
+      };
+    }
+  }
+
+  /**
+   * Parse various color input formats and convert to hex
+   * @param colorInput - Color string in various formats (hex, rgb, hsl, color name, etc.)
+   * @returns Hex color string or null if invalid
+   */
+  static parseAnyColorInputToHex(colorInput: string): HexColorString | null {
+    try {
+      const color = colord(colorInput.trim());
+      return color.isValid() ? color.toHex() : null;
+    } catch {
+      return null;
+    }
   }
 }
