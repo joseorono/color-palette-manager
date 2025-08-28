@@ -8,6 +8,7 @@ import { PaletteUrlUtils } from '@/lib/palette-url-utils';
 import { HexColorString } from '@/types/palette';
 import { Button } from '@/components/ui/button';
 import { ToolSectionHeading } from '@/components/reusable-sections/tool-section-heading';
+import { ToolFeatureCard } from '@/components/reusable-sections/tool-feature-card';
 import { Palette, Sparkles, Eye } from 'lucide-react';
 
 // Featured color examples to showcase the naming system
@@ -91,36 +92,28 @@ export const ColorNamingTool: React.FC = () => {
         />
 
         {/* Features Section */}
-        <div className="grid md:grid-cols-3 gap-8 mt-16">
-          <div className="text-center p-6 rounded-xl bg-card/30 backdrop-blur-sm border">
-            <div className="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center mx-auto mb-4">
-              <Eye className="h-6 w-6 text-green-600 dark:text-green-400" />
-            </div>
-            <h3 className="text-lg font-semibold mb-2">Exact Matches</h3>
-            <p className="text-sm text-muted-foreground">
-              Recognizes standard color names like "Crimson", "Turquoise", and "Indigo"
-            </p>
-          </div>
-
-          <div className="text-center p-6 rounded-xl bg-card/30 backdrop-blur-sm border">
-            <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center mx-auto mb-4">
-              <Sparkles className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-            </div>
-            <h3 className="text-lg font-semibold mb-2">Smart Analysis</h3>
-            <p className="text-sm text-muted-foreground">
-              Uses perceptual color distance and hue analysis for accurate naming
-            </p>
-          </div>
-
-          <div className="text-center p-6 rounded-xl bg-card/30 backdrop-blur-sm border">
-            <div className="w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center mx-auto mb-4">
-              <Palette className="h-6 w-6 text-purple-600 dark:text-purple-400" />
-            </div>
-            <h3 className="text-lg font-semibold mb-2">Descriptive Names</h3>
-            <p className="text-sm text-muted-foreground">
-              Generates meaningful descriptions like "Deep Ocean Blue" or "Warm Sunset Orange"
-            </p>
-          </div>
+        <div className="grid md:grid-cols-3 gap-8 mt-16 mb-16">
+          <ToolFeatureCard
+            icon={Eye}
+            title="Exact Matches"
+            description="Recognizes standard color names like 'Crimson', 'Turquoise', and 'Indigo'"
+            iconColorClasses="text-green-600 dark:text-green-400"
+            iconBgColorClasses="bg-green-100 dark:bg-green-900"
+          />
+          <ToolFeatureCard
+            icon={Palette}
+            title="Smart Descriptions"
+            description="Creates descriptive names like 'Deep Crimson' or 'Pale Turquoise' when exact matches aren't found"
+            iconColorClasses="text-blue-600 dark:text-blue-400"
+            iconBgColorClasses="bg-blue-100 dark:bg-blue-900"
+          />
+          <ToolFeatureCard
+            icon={Sparkles}
+            title="Perceptual Accuracy"
+            description="Uses Delta E color distance for scientifically accurate color matching"
+            iconColorClasses="text-purple-600 dark:text-purple-400"
+            iconBgColorClasses="bg-purple-100 dark:bg-purple-900"
+          />
         </div>
 
         {/* Featured Colors Gallery */}

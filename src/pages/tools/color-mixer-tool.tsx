@@ -12,6 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { ToolSectionHeading } from '@/components/reusable-sections/tool-section-heading';
+import { ToolFeatureCard } from '@/components/reusable-sections/tool-feature-card';
 import {
   Palette,
   Sparkles,
@@ -355,26 +356,21 @@ export const ColorMixerTool: React.FC = () => {
         />
 
         {/* Features Section */}
-        <div className="grid md:grid-cols-2 gap-8 mt-16">
-          <div className="text-center p-6 rounded-xl bg-card/30 backdrop-blur-sm border">
-            <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center mx-auto mb-4">
-              <Droplets className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-            </div>
-            <h3 className="text-lg font-semibold mb-2">HSL vs RGB Mixing</h3>
-            <p className="text-sm text-muted-foreground">
-              Choose between HSL (perceptually uniform) and RGB (additive) color mixing methods for different results
-            </p>
-          </div>
-
-          <div className="text-center p-6 rounded-xl bg-card/30 backdrop-blur-sm border">
-            <div className="w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center mx-auto mb-4">
-              <Palette className="h-6 w-6 text-purple-600 dark:text-purple-400" />
-            </div>
-            <h3 className="text-lg font-semibold mb-2">Multi-Color Averaging</h3>
-            <p className="text-sm text-muted-foreground">
-              Mix multiple colors simultaneously using HSL averaging for harmonious results
-            </p>
-          </div>
+        <div className="grid md:grid-cols-2 gap-8 mt-16 mb-16">
+          <ToolFeatureCard
+            icon={Droplets}
+            title="HSL vs RGB Mixing"
+            description="Choose between HSL (perceptually uniform) and RGB (additive) color mixing methods for different results"
+            iconColorClasses="text-blue-600 dark:text-blue-400"
+            iconBgColorClasses="bg-blue-100 dark:bg-blue-900"
+          />
+          <ToolFeatureCard
+            icon={Palette}
+            title="Custom Ratios"
+            description="Adjust the mixing ratio from 0% to 100% to control how much of each color contributes to the final result"
+            iconColorClasses="text-purple-600 dark:text-purple-400"
+            iconBgColorClasses="bg-purple-100 dark:bg-purple-900"
+          />
         </div>
       </div>
     </div>

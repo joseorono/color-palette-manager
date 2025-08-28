@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ToolHeroSection } from '@/components/reusable-sections/tool-hero-section';
 import { ToolSectionHeading } from '@/components/reusable-sections/tool-section-heading';
+import { ToolFeatureCard } from '@/components/reusable-sections/tool-feature-card';
 import { PalettePreview } from '@/components/palette-preview';
 import { ColorUtils } from '@/lib/color-utils';
 import { HexColorString, Color } from '@/types/palette';
@@ -185,26 +186,21 @@ export const ShadeGeneratorTool: React.FC = () => {
         />
 
         {/* Features Section */}
-        <div className="grid md:grid-cols-2 gap-8 mt-16">
-          <div className="text-center p-6 rounded-xl bg-card/30 backdrop-blur-sm border">
-            <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center mx-auto mb-4">
-              <Layers className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-            </div>
-            <h3 className="text-lg font-semibold mb-2">Intelligent Lightness Range</h3>
-            <p className="text-sm text-muted-foreground">
-              Generates shades from 20% to 90% lightness while preserving the original hue and saturation
-            </p>
-          </div>
-
-          <div className="text-center p-6 rounded-xl bg-card/30 backdrop-blur-sm border">
-            <div className="w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center mx-auto mb-4">
-              <Palette className="h-6 w-6 text-purple-600 dark:text-purple-400" />
-            </div>
-            <h3 className="text-lg font-semibold mb-2">Click to Copy</h3>
-            <p className="text-sm text-muted-foreground">
-              Click any shade to copy its hex value to clipboard, or use the palette editor for advanced features
-            </p>
-          </div>
+        <div className="grid md:grid-cols-2 gap-8 mt-16 mb-16">
+          <ToolFeatureCard
+            icon={Layers}
+            title="Intelligent Lightness Range"
+            description="Generates shades from 20% to 90% lightness while preserving the original hue and saturation"
+            iconColor="text-blue-600 dark:text-blue-400"
+            iconBgColor="bg-blue-100 dark:bg-blue-900"
+          />
+          <ToolFeatureCard
+            icon={Palette}
+            title="Click to Copy"
+            description="Click any shade to copy its hex value to clipboard, or use the palette editor for advanced features"
+            iconColor="text-purple-600 dark:text-purple-400"
+            iconBgColor="bg-purple-100 dark:bg-purple-900"
+          />
         </div>
       </div>
     </div>

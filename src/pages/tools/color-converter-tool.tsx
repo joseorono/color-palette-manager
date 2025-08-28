@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { ToolSectionHeading } from '@/components/reusable-sections/tool-section-heading';
+import { ToolFeatureCard } from '@/components/reusable-sections/tool-feature-card';
 import {
   Palette,
   Sparkles,
@@ -203,36 +204,28 @@ export const ColorConverterTool: React.FC = () => {
         />
 
         {/* Features Section */}
-        <div className="grid md:grid-cols-3 gap-8 mt-16">
-          <div className="text-center p-6 rounded-xl bg-card/30 backdrop-blur-sm border">
-            <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center mx-auto mb-4">
-              <RefreshCw className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-            </div>
-            <h3 className="text-lg font-semibold mb-2">Real-time Conversion</h3>
-            <p className="text-sm text-muted-foreground">
-              Instantly converts between all major color formats as you type
-            </p>
-          </div>
-
-          <div className="text-center p-6 rounded-xl bg-card/30 backdrop-blur-sm border">
-            <div className="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center mx-auto mb-4">
-              <Copy className="h-6 w-6 text-green-600 dark:text-green-400" />
-            </div>
-            <h3 className="text-lg font-semibold mb-2">One-Click Copy</h3>
-            <p className="text-sm text-muted-foreground">
-              Copy any color format to clipboard with a single click
-            </p>
-          </div>
-
-          <div className="text-center p-6 rounded-xl bg-card/30 backdrop-blur-sm border">
-            <div className="w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center mx-auto mb-4">
-              <Palette className="h-6 w-6 text-purple-600 dark:text-purple-400" />
-            </div>
-            <h3 className="text-lg font-semibold mb-2">Multiple Input Types</h3>
-            <p className="text-sm text-muted-foreground">
-              Accepts HEX, RGB, HSL values, and even color names as input
-            </p>
-          </div>
+        <div className="grid md:grid-cols-3 gap-8 mt-16 mb-16">
+          <ToolFeatureCard
+            icon={RefreshCw}
+            title="Real-time Conversion"
+            description="Instantly converts between all major color formats as you type"
+            iconColorClasses="text-blue-600 dark:text-blue-400"
+            iconBgColorClasses="bg-blue-100 dark:bg-blue-900"
+          />
+          <ToolFeatureCard
+            icon={Copy}
+            title="One-Click Copy"
+            description="Copy any color format to your clipboard with a single click"
+            iconColorClasses="text-green-600 dark:text-green-400"
+            iconBgColorClasses="bg-green-100 dark:bg-green-900"
+          />
+          <ToolFeatureCard
+            icon={Palette}
+            title="Multiple Formats"
+            description="Supports HEX, RGB, HSL, and named color formats"
+            iconColorClasses="text-purple-600 dark:text-purple-400"
+            iconBgColorClasses="bg-purple-100 dark:bg-purple-900"
+          />
         </div>
       </div>
     </div>

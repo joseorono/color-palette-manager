@@ -12,6 +12,7 @@ import { Slider } from '@/components/ui/slider';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ToolSectionHeading } from '@/components/reusable-sections/tool-section-heading';
+import { ToolFeatureCard } from '@/components/reusable-sections/tool-feature-card';
 import {
   Sparkles,
   RotateCcw,
@@ -320,36 +321,28 @@ export const HslColorPickerTool: React.FC = () => {
         />
 
         {/* Educational Features Section */}
-        <div className="grid md:grid-cols-3 gap-6 mt-16">
-          <div className="text-center p-6 rounded-xl bg-card/30 backdrop-blur-sm border">
-            <div className="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900 flex items-center justify-center mx-auto mb-4">
-              <Circle className="h-6 w-6 text-red-600 dark:text-red-400" />
-            </div>
-            <h3 className="text-lg font-semibold mb-2">Hue Control</h3>
-            <p className="text-sm text-muted-foreground">
-              Adjust the color wheel position (0-360°) to change the base color family
-            </p>
-          </div>
-
-          <div className="text-center p-6 rounded-xl bg-card/30 backdrop-blur-sm border">
-            <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center mx-auto mb-4">
-              <Droplet className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-            </div>
-            <h3 className="text-lg font-semibold mb-2">Saturation Control</h3>
-            <p className="text-sm text-muted-foreground">
-              Control color intensity from grayscale (0%) to fully vivid (100%)
-            </p>
-          </div>
-
-          <div className="text-center p-6 rounded-xl bg-card/30 backdrop-blur-sm border">
-            <div className="w-12 h-12 rounded-full bg-yellow-100 dark:bg-yellow-900 flex items-center justify-center mx-auto mb-4">
-              <Sun className="h-6 w-6 text-yellow-600 dark:text-yellow-400" />
-            </div>
-            <h3 className="text-lg font-semibold mb-2">Lightness Control</h3>
-            <p className="text-sm text-muted-foreground">
-              Adjust brightness from black (0%) through normal (50%) to white (100%)
-            </p>
-          </div>
+        <div className="grid md:grid-cols-3 gap-6 mt-16 mb-16">
+          <ToolFeatureCard
+            icon={Circle}
+            title="Hue Control"
+            description="Adjust the color wheel position (0-360°) to change the base color family"
+            iconColorClasses="text-red-600 dark:text-red-400"
+            iconBgColorClasses="bg-red-100 dark:bg-red-900"
+          />
+          <ToolFeatureCard
+            icon={Droplet}
+            title="Saturation Control"
+            description="Control color intensity from grayscale (0%) to fully vivid (100%)"
+            iconColorClasses="text-blue-600 dark:text-blue-400"
+            iconBgColorClasses="bg-blue-100 dark:bg-blue-900"
+          />
+          <ToolFeatureCard
+            icon={Sun}
+            title="Lightness Control"
+            description="Adjust brightness from black (0%) to white (100%)"
+            iconColorClasses="text-yellow-600 dark:text-yellow-400"
+            iconBgColorClasses="bg-yellow-100 dark:bg-yellow-900"
+          />
         </div>
       </div>
     </div>
