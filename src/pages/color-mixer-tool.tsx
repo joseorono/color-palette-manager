@@ -4,17 +4,18 @@ import { ToolHeroSection } from '@/components/reusable-sections/tool-hero-sectio
 import { ColorUtils } from '@/lib/color-utils';
 import { PaletteUrlUtils } from '@/lib/palette-url-utils';
 import { HexColorString } from '@/types/palette';
+import useCopyToClipboard from '@/hooks/use-copy-to-clipboard';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Slider } from '@/components/ui/slider';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import { 
-  Palette, 
-  Sparkles, 
-  RotateCcw, 
-  Shuffle, 
+import {
+  Palette,
+  Sparkles,
+  RotateCcw,
+  Shuffle,
   Droplets,
   Plus,
   Minus,
@@ -23,6 +24,7 @@ import {
 
 export const ColorMixerTool: React.FC = () => {
   const navigate = useNavigate();
+  const { copyToClipboard } = useCopyToClipboard({ showToast: true });
   const [color1, setColor1] = useState<HexColorString>("#FF6B6B");
   const [color2, setColor2] = useState<HexColorString>("#4ECDC4");
   const [mixRatio, setMixRatio] = useState<number>(50);
@@ -34,7 +36,7 @@ export const ColorMixerTool: React.FC = () => {
   // Update mixed color when inputs change
   useEffect(() => {
     const ratio = mixRatio / 100;
-    const mixed = mixingMethod === 'HSL' 
+    const mixed = mixingMethod === 'HSL'
       ? ColorUtils.mixColors(color1, color2, ratio)
       : ColorUtils.mixColorsRGB(color1, color2, ratio);
     setMixedColor(mixed.toUpperCase() as HexColorString);
@@ -50,19 +52,6 @@ export const ColorMixerTool: React.FC = () => {
     navigate(PaletteUrlUtils.generateUrlToPaletteFromBaseColor(baseColor));
   };
 
-  const copyToClipboard = async (text: string) => {
-    try {
-      await navigator.clipboard.writeText(text);
-    } catch (err) {
-      // Fallback for older browsers
-      const textArea = document.createElement('textarea');
-      textArea.value = text;
-      document.body.appendChild(textArea);
-      textArea.select();
-      document.execCommand('copy');
-      document.body.removeChild(textArea);
-    }
-  };
 
 
   const handleRandomColors = () => {
@@ -240,7 +229,7 @@ export const ColorMixerTool: React.FC = () => {
                             <Button
                               variant="ghost"
                               size="sm"
-                              onClick={() => copyToClipboard(value)}
+                              onClick={() => copyToClipboard(value, `${format.toUpperCase()} color copied: ${value}`)}
                               className="h-6 w-6 p-0"
                             >
                               <Copy className="h-3 w-3" />
@@ -336,7 +325,7 @@ export const ColorMixerTool: React.FC = () => {
                             <Button
                               variant="ghost"
                               size="sm"
-                              onClick={() => copyToClipboard(value)}
+                              onClick={() => copyToClipboard(value, `${format.toUpperCase()} color copied: ${value}`)}
                               className="h-6 w-6 p-0"
                             >
                               <Copy className="h-3 w-3" />
