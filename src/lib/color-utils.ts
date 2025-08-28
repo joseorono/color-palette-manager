@@ -124,15 +124,32 @@ export class ColorUtils {
     let h1 = color1.h;
     let h2 = color2.h;
 
-    if (Math.abs(h2 - h1) > 180) {
-      if (h2 > h1) {
-        h1 += 360;
-      } else {
-        h2 += 360;
+    // Handle undefined/NaN hue values (grayscale colors)
+    const isColor1Grayscale = isNaN(h1) || color1.s === 0;
+    const isColor2Grayscale = isNaN(h2) || color2.s === 0;
+
+    let interpolatedH: number;
+    if (isColor1Grayscale && isColor2Grayscale) {
+      // Both colors are grayscale, use hue 0
+      interpolatedH = 0;
+    } else if (isColor1Grayscale) {
+      // Color1 is grayscale, use color2's hue
+      interpolatedH = h2;
+    } else if (isColor2Grayscale) {
+      // Color2 is grayscale, use color1's hue
+      interpolatedH = h1;
+    } else {
+      // Both colors have valid hues, interpolate normally
+      if (Math.abs(h2 - h1) > 180) {
+        if (h2 > h1) {
+          h1 += 360;
+        } else {
+          h2 += 360;
+        }
       }
+      interpolatedH = h1 + (h2 - h1) * ColorUtils.clamp(t, 0, 1);
     }
 
-    const interpolatedH = h1 + (h2 - h1) * ColorUtils.clamp(t, 0, 1);
     const interpolatedS = color1.s + (color2.s - color1.s) * ColorUtils.clamp(t, 0, 1);
     const interpolatedL = color1.l + (color2.l - color1.l) * ColorUtils.clamp(t, 0, 1);
 
@@ -421,8 +438,23 @@ export class ColorUtils {
     // Convert all colors to HSL for better mixing
     const hslColors = colorHexArray.map(hex => colord(hex).toHsl());
 
-    // Average the HSL values
-    const avgH = hslColors.reduce((sum, hsl) => sum + hsl.h, 0) / hslColors.length;
+    // Filter out grayscale colors for hue calculation
+    const coloredHsls = hslColors.filter(hsl => !isNaN(hsl.h) && hsl.s > 0);
+    
+    let avgH: number;
+    if (coloredHsls.length === 0) {
+      // All colors are grayscale
+      avgH = 0;
+    } else {
+      // Calculate average hue using circular mean for proper hue averaging
+      const hueRadians = coloredHsls.map(hsl => (hsl.h * Math.PI) / 180);
+      const avgSin = hueRadians.reduce((sum, rad) => sum + Math.sin(rad), 0) / hueRadians.length;
+      const avgCos = hueRadians.reduce((sum, rad) => sum + Math.cos(rad), 0) / hueRadians.length;
+      avgH = (Math.atan2(avgSin, avgCos) * 180) / Math.PI;
+      if (avgH < 0) avgH += 360;
+    }
+
+    // Average the saturation and lightness values
     const avgS = hslColors.reduce((sum, hsl) => sum + hsl.s, 0) / hslColors.length;
     const avgL = hslColors.reduce((sum, hsl) => sum + hsl.l, 0) / hslColors.length;
 

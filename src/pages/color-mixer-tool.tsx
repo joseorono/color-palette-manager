@@ -26,7 +26,7 @@ export const ColorMixerTool: React.FC = () => {
   const [color2, setColor2] = useState<HexColorString>("#4ECDC4");
   const [mixRatio, setMixRatio] = useState<number>(50);
   const [mixedColor, setMixedColor] = useState<HexColorString>("#FF6B6B");
-  const [mixingMethod, setMixingMethod] = useState<'HSL' | 'RGB'>('HSL');
+  const [mixingMethod, setMixingMethod] = useState<'HSL' | 'RGB'>('RGB');
   const [multiColors, setMultiColors] = useState<HexColorString[]>(["#FF6B6B", "#4ECDC4", "#45B7D1"]);
   const [multiMixedColor, setMultiMixedColor] = useState<HexColorString>("#FF6B6B");
 
