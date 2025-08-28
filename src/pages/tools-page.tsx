@@ -6,7 +6,7 @@ import {
   Palette,
   Blend,
   Tag,
-  Image,
+  Camera,
   RefreshCw,
   Pipette,
   Layers,
@@ -46,7 +46,7 @@ const colorTools: Tool[] = [
     id: "palette-extractor",
     name: "Color Palette Extractor",
     description: "Extract dominant colors from images with a simplified, focused interface for quick color extraction.",
-    icon: Image,
+    icon: Camera,
     status: "available",
     link: "/app/tools/img-palette-extractor"
   },
