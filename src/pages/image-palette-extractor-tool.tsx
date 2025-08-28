@@ -1,11 +1,9 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDropzone } from 'react-dropzone';
 import { ToolHeroSection } from '@/components/reusable-sections/tool-hero-section';
 import { ToolSectionHeading } from '@/components/reusable-sections/tool-section-heading';
 import { PalettePreview } from '@/components/palette-preview';
-import { ImageAnalyzer } from '@/lib/image-analyzer';
-import { HexColorString } from '@/types/palette';
+import { useImageColorExtraction } from '@/hooks/use-image-color-extraction';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Label } from '@/components/ui/label';
@@ -16,120 +14,34 @@ import {
   Upload,
   X
 } from 'lucide-react';
-import { toast } from 'sonner';
 import { MAX_PALETTE_COLORS } from '@/constants/ui';
-
-type ExtractionAlgorithm = 'new' | 'old';
 
 export const ImagePaletteExtractorTool: React.FC = () => {
   const navigate = useNavigate();
-  const [colorCount, setColorCount] = useState([5]);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [algorithm, setAlgorithm] = useState<ExtractionAlgorithm>('new');
-  const [extractedColors, setExtractedColors] = useState<HexColorString[]>([]);
-  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
-
-  const extractColors = useCallback(async () => {
-    if (!uploadedFile) return;
-
-    setIsProcessing(true);
-    setExtractedColors([]);
-
-    try {
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
-      const img = new Image();
-
-      img.onload = async () => {
-        canvas.width = img.width;
-        canvas.height = img.height;
-        ctx?.drawImage(img, 0, 0);
-
-        const imageData = ctx?.getImageData(0, 0, canvas.width, canvas.height);
-        if (imageData) {
-          let hexColors: HexColorString[];
-
-          switch (algorithm) {
-            case 'old':
-              hexColors = await ImageAnalyzer.extractColors_old(imageData, colorCount[0]);
-              break;
-            default:
-              hexColors = await ImageAnalyzer.extractColors(imageData, colorCount[0]);
-              break;
-          }
-
-          setExtractedColors(hexColors);
-          toast.success(`Extracted ${hexColors.length} colors successfully!`);
-        }
-        setIsProcessing(false);
-      };
-
-      img.onerror = () => {
-        toast.error("Failed to process image");
-        setIsProcessing(false);
-      };
-
-      const url = URL.createObjectURL(uploadedFile);
-      img.src = url;
-    } catch (error) {
-      toast.error("Error processing image");
-      setIsProcessing(false);
-    }
-  }, [uploadedFile, colorCount, algorithm]);
-
-  const handleImageUpload = useCallback((file: File) => {
-    const url = URL.createObjectURL(file);
-    setPreviewUrl(url);
-    setUploadedFile(file);
-    setExtractedColors([]);
-
-    // Auto-extract colors when image is uploaded
-    setTimeout(() => {
-      extractColors();
-    }, 100);
-  }, [extractColors]);
-
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    const file = acceptedFiles[0];
-    if (file && file.type.startsWith("image/")) {
-      handleImageUpload(file);
-    } else {
-      toast.error("Please upload a valid image file");
-    }
-  }, [handleImageUpload]);
+  
+  const {
+    colorCount,
+    setColorCount,
+    isProcessing,
+    previewUrl,
+    algorithm,
+    setAlgorithm,
+    extractedColors,
+    clearImage,
+    getRootProps,
+    getInputProps,
+    isDragActive,
+  } = useImageColorExtraction({
+    initialColorCount: 5,
+    initialAlgorithm: 'new',
+    autoExtractOnUpload: true
+  });
 
   const handleOpenInEditor = () => {
     if (extractedColors.length === 0) return;
     const hexColors = extractedColors.join(',');
     navigate(`/app/palette-edit/?colors=${encodeURIComponent(hexColors)}`);
   };
-
-  const clearImage = () => {
-    setPreviewUrl(null);
-    setUploadedFile(null);
-    setExtractedColors([]);
-  };
-
-  // Auto re-extract when color count or algorithm changes (if image is uploaded)
-  useEffect(() => {
-    if (uploadedFile) {
-      const timeoutId = setTimeout(() => {
-        extractColors();
-      }, 100); // Debounce to prevent rapid calls
-
-      return () => clearTimeout(timeoutId);
-    }
-  }, [colorCount, algorithm, uploadedFile, extractColors]);
-
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-    accept: {
-      "image/*": [".png", ".jpg", ".jpeg", ".gif", ".bmp", ".webp"],
-    },
-    maxFiles: 1,
-    disabled: isProcessing,
-  });
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
@@ -144,7 +56,7 @@ export const ImagePaletteExtractorTool: React.FC = () => {
         <div className="space-y-8">
           {/* Algorithm Selection */}
           <div className="space-y-4">
-            <RadioGroup value={algorithm} onValueChange={(value) => setAlgorithm(value as ExtractionAlgorithm)}>
+            <RadioGroup value={algorithm} onValueChange={setAlgorithm}>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="new" id="new" />
                 <Label htmlFor="new" className="text-sm cursor-pointer">

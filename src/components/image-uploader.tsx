@@ -1,6 +1,6 @@
-import { useCallback, useState, useEffect } from "react";
-import { useDropzone } from "react-dropzone";
+import { useCallback } from "react";
 import { usePaletteStore } from "@/stores/palette-store";
+import { useImageColorExtraction } from "@/hooks/use-image-color-extraction";
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { Slider } from "./ui/slider";
@@ -8,115 +8,32 @@ import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { PalettePreview } from "./palette-preview";
 import { Upload, X } from "lucide-react";
 import { toast } from "sonner";
-import { ImageAnalyzer } from "@/lib/image-analyzer";
 import { MAX_PALETTE_COLORS } from "@/constants/ui";
-import { HexColorString } from "@/types/palette";
 
 interface ImageUploaderProps {
   onClose: () => void;
 }
 
-type ExtractionAlgorithm = 'new' | 'old';
-
 export function ImageUploader({ onClose }: ImageUploaderProps) {
-  const [colorCount, setColorCount] = useState([5]);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [algorithm, setAlgorithm] = useState<ExtractionAlgorithm>('new');
-  const [extractedColors, setExtractedColors] = useState<HexColorString[]>([]);
-  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
-
   const { loadPaletteFromUrl } = usePaletteStore();
-
-  const extractColors = useCallback(
-    async () => {
-      if (!uploadedFile) return;
-
-      setIsProcessing(true);
-      setExtractedColors([]);
-
-      try {
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
-        const img = new Image();
-
-        img.onload = async () => {
-          canvas.width = img.width;
-          canvas.height = img.height;
-          ctx?.drawImage(img, 0, 0);
-
-          const imageData = ctx?.getImageData(
-            0,
-            0,
-            canvas.width,
-            canvas.height
-          );
-          if (imageData) {
-            let colors: HexColorString[];
-
-            switch (algorithm) {
-              case 'old':
-                colors = await ImageAnalyzer.extractColors_old(
-                  imageData,
-                  colorCount[0]
-                );
-                break;
-              default:
-                colors = await ImageAnalyzer.extractColors(
-                  imageData,
-                  colorCount[0]
-                );
-                break;
-            }
-
-            // Update preview colors
-            setExtractedColors(colors);
-            toast.success("Colors extracted successfully!");
-          }
-          setIsProcessing(false);
-        };
-
-        img.onerror = () => {
-          toast.error("Failed to process image");
-          setIsProcessing(false);
-        };
-
-        const url = URL.createObjectURL(uploadedFile);
-        img.src = url;
-      } catch (error) {
-        toast.error("Error processing image");
-        setIsProcessing(false);
-      }
-    },
-    [uploadedFile, colorCount, algorithm]
-  );
-
-  const handleImageUpload = useCallback(
-    (file: File) => {
-      const url = URL.createObjectURL(file);
-      setPreviewUrl(url);
-      setUploadedFile(file);
-      setExtractedColors([]); // Clear previous colors
-
-      // Auto-extract colors when image is uploaded
-      setTimeout(() => {
-        extractColors();
-      }, 100);
-    },
-    [extractColors]
-  );
-
-  const onDrop = useCallback(
-    (acceptedFiles: File[]) => {
-      const file = acceptedFiles[0];
-      if (file && file.type.startsWith("image/")) {
-        handleImageUpload(file);
-      } else {
-        toast.error("Please upload a valid image file");
-      }
-    },
-    [handleImageUpload]
-  );
+  
+  const {
+    colorCount,
+    setColorCount,
+    isProcessing,
+    previewUrl,
+    algorithm,
+    setAlgorithm,
+    extractedColors,
+    clearImage,
+    getRootProps,
+    getInputProps,
+    isDragActive,
+  } = useImageColorExtraction({
+    initialColorCount: 5,
+    initialAlgorithm: 'new',
+    autoExtractOnUpload: true
+  });
 
   const handleExtractAndUse = useCallback(() => {
     // ToDo: Rewrite this some it doesn't create a whole new palette why overriding the existing one
@@ -128,31 +45,11 @@ export function ImageUploader({ onClose }: ImageUploaderProps) {
     onClose();
   }, [extractedColors, loadPaletteFromUrl, onClose]);
 
-  // Auto re-extract when color count or algorithm changes (if image is uploaded)
-  useEffect(() => {
-    if (uploadedFile) {
-      const timeoutId = setTimeout(() => {
-        extractColors();
-      }, 100); // Debounce to prevent rapid calls
-
-      return () => clearTimeout(timeoutId);
-    }
-  }, [colorCount, algorithm, uploadedFile, extractColors]);
-
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-    accept: {
-      "image/*": [".png", ".jpg", ".jpeg", ".gif", ".bmp", ".webp"],
-    },
-    maxFiles: 1,
-    disabled: isProcessing,
-  });
-
   return (
     <div className="space-y-2">
       {/* Algorithm Selection */}
       <div className="mb-4">
-        <RadioGroup value={algorithm} onValueChange={(value) => setAlgorithm(value as ExtractionAlgorithm)}>
+        <RadioGroup value={algorithm} onValueChange={setAlgorithm}>
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="new" id="new" />
             <Label htmlFor="new" className="text-sm cursor-pointer mt-4">
@@ -234,9 +131,7 @@ export function ImageUploader({ onClose }: ImageUploaderProps) {
                 className="absolute right-2 top-2"
                 onClick={(e) => {
                   e.stopPropagation();
-                  setPreviewUrl(null);
-                  setUploadedFile(null);
-                  setExtractedColors([]);
+                  clearImage();
                 }}
               >
                 <X className="h-3 w-3" />
