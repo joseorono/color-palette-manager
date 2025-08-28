@@ -3,8 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menubar, MenubarMenu, MenubarTrigger } from "@/components/ui/menubar";
 import { Menu } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import ThemeToggle from "../ui/theme-switcher-btn";
+import { cn } from "@/lib/utils";
 
 // Define the navigation links
 interface NavigationLink {
@@ -21,6 +22,16 @@ const navigationLinks: NavigationLink[] = [
 
 export default function AppNavbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
+
+  // Helper function to check if a route is active
+  const isActiveRoute = (href: string) => {
+    if (href === "/app") {
+      // For dashboard, match exact path or /app/dashboard
+      return location.pathname === "/app" || location.pathname === "/app/dashboard";
+    }
+    return location.pathname === href;
+  };
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-background shadow-sm">
@@ -49,7 +60,14 @@ export default function AppNavbar() {
           <Menubar className="border-none">
             {navigationLinks.map((link) => (
               <MenubarMenu key={link.name}>
-                <MenubarTrigger className="font-medium text-muted-foreground transition-colors hover:text-primary">
+                <MenubarTrigger 
+                  className={cn(
+                    "font-medium transition-colors hover:text-primary",
+                    isActiveRoute(link.href) 
+                      ? "text-primary" 
+                      : "text-muted-foreground"
+                  )}
+                >
                   <Link to={link.href}>{link.name}</Link>
                 </MenubarTrigger>
               </MenubarMenu>
@@ -93,7 +111,12 @@ export default function AppNavbar() {
                     key={link.name}
                     to={link.href}
                     onClick={() => setIsMobileMenuOpen(false)} // Close menu on click
-                    className="w-full text-lg font-medium text-muted-foreground transition-colors hover:text-primary"
+                    className={cn(
+                      "w-full text-lg font-medium transition-colors hover:text-primary",
+                      isActiveRoute(link.href) 
+                        ? "text-primary" 
+                        : "text-muted-foreground"
+                    )}
                   >
                     {link.name}
                   </Link>
