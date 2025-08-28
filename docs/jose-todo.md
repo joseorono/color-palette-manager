@@ -21,7 +21,7 @@
 - [x] Color Converter
 - [ ] Eyedropper
 - [x] Shade Generator
-- [ ] HSL Color Picker (WIP)
+- [X] HSL Color Picker
 
 
 ## ♿ Accessibility & Utility
