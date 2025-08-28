@@ -59,11 +59,12 @@ const colorTools: Tool[] = [
     link: "/app/tools/color-converter"
   },
   {
-    id: "eyedropper",
-    name: "Eyedropper Tool",
-    description: "Pick colors from anywhere on your screen within the browser. Advanced color picking capabilities.",
-    icon: Pipette,
-    status: "in-development"
+    id: "hsl-color-picker",
+    name: "HSL Color Picker",
+    description: "Interactive tool with sliders for Hue, Saturation, and Lightness to explore color space in real-time.",
+    icon: Sliders,
+    status: "available",
+    link: "/app/tools/hsl-color-picker"
   },
   {
     id: "shade-generator",
@@ -72,7 +73,14 @@ const colorTools: Tool[] = [
     icon: Layers,
     status: "available",
     link: "/app/tools/shade-generator"
-  }
+  },
+  {
+    id: "eyedropper",
+    name: "Eyedropper Tool",
+    description: "Pick colors from anywhere on your screen within the browser. Advanced color picking capabilities.",
+    icon: Pipette,
+    status: "in-development"
+  },
 ];
 
 const accessibilityTools: Tool[] = [
@@ -90,14 +98,7 @@ const accessibilityTools: Tool[] = [
     icon: Type,
     status: "coming-soon"
   },
-  {
-    id: "hsl-color-picker",
-    name: "HSL Color Picker",
-    description: "Interactive tool with sliders for Hue, Saturation, and Lightness to explore color space in real-time.",
-    icon: Sliders,
-    status: "available",
-    link: "/app/tools/hsl-color-picker"
-  },
+
   {
     id: "wcag-checker",
     name: "WCAG Compliance Checker",

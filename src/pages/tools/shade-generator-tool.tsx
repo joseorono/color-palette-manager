@@ -191,15 +191,15 @@ export const ShadeGeneratorTool: React.FC = () => {
             icon={Layers}
             title="Intelligent Lightness Range"
             description="Generates shades from 20% to 90% lightness while preserving the original hue and saturation"
-            iconColor="text-blue-600 dark:text-blue-400"
-            iconBgColor="bg-blue-100 dark:bg-blue-900"
+            iconColorClasses="text-blue-600 dark:text-blue-400"
+            iconBgColorClasses="bg-blue-100 dark:bg-blue-900"
           />
           <ToolFeatureCard
             icon={Palette}
             title="Click to Copy"
             description="Click any shade to copy its hex value to clipboard, or use the palette editor for advanced features"
-            iconColor="text-purple-600 dark:text-purple-400"
-            iconBgColor="bg-purple-100 dark:bg-purple-900"
+            iconColorClasses="text-purple-600 dark:text-purple-400"
+            iconBgColorClasses="bg-purple-100 dark:bg-purple-900"
           />
         </div>
       </div>
