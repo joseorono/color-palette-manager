@@ -4,8 +4,12 @@ import { injectColorVariablesObjectToCSS } from "@/lib/preview-utils";
 import { ColorPreviewCard } from "@/components/preview-views/color-preview-card";
 import { UIPreviewCard } from "@/components/preview-views/ui-preview-card";
 import { PaletteSelector } from "@/components/preview-views/palette-preview-selector";
-import { ViewSelector, PreviewViewType } from "@/components/preview-views/view-selector";
+import {
+  ViewSelector,
+  PreviewViewType,
+} from "@/components/preview-views/view-selector";
 import { EbookPreviewCard } from "@/components/preview-views/ebook-preview-card";
+import { MobileUIPreviewCard } from "@/components/preview-views/mobile-ui-preview-card";
 
 /**
  * TestPreview Component
@@ -87,19 +91,30 @@ export function TestPreview({
         </div>
 
         <div className="lg:col-span-2">
-          {currentView === "desktop" && (
-            <UIPreviewCard currentColors={currentColors} />
-          )}
-          {currentView === "ebook" && (
-            <EbookPreviewCard currentColors={currentColors} />
-          )}
-          {currentView === "mobile" && (
-            <div className="flex justify-center">
+          <div className="relative min-h-[800px]">
+            {" "}
+            {/* Fixed height container to prevent layout shifts */}
+            {/* Desktop View */}
+            <div
+              className={`absolute left-0 top-0 w-full transform transition-all duration-200 ease-in-out ${currentView === "desktop" ? "z-10 translate-y-0 opacity-100" : "pointer-events-none z-0 -translate-y-4 opacity-0"}`}
+            >
+              <UIPreviewCard currentColors={currentColors} />
+            </div>
+            {/* Ebook View */}
+            <div
+              className={`absolute left-0 top-0 w-full transform transition-all duration-200 ease-in-out ${currentView === "ebook" ? "z-10 translate-y-0 opacity-100" : "pointer-events-none z-0 -translate-y-4 opacity-0"}`}
+            >
+              <EbookPreviewCard currentColors={currentColors} />
+            </div>
+            {/* Mobile View */}
+            <div
+              className={`absolute left-0 top-0 flex w-full transform justify-center transition-all duration-200 ease-in-out ${currentView === "mobile" ? "z-10 translate-y-0 opacity-100" : "pointer-events-none z-0 -translate-y-4 opacity-0"}`}
+            >
               <div className="w-[375px] overflow-hidden rounded-lg border-4 border-gray-800 shadow-lg">
-                <UIPreviewCard currentColors={currentColors} />
+                <MobileUIPreviewCard currentColors={currentColors} />
               </div>
             </div>
-          )}
+          </div>
         </div>
       </div>
     </div>
