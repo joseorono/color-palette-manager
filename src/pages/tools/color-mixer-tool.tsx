@@ -11,6 +11,7 @@ import { Slider } from '@/components/ui/slider';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
+import { ToolSectionHeading } from '@/components/reusable-sections/tool-section-heading';
 import {
   Palette,
   Sparkles,
@@ -347,6 +348,11 @@ export const ColorMixerTool: React.FC = () => {
             </CardContent>
           </Card>
         </div>
+
+        <ToolSectionHeading
+          title="How to Use"
+          description="Mix colors using different methods and ratios to create new color combinations"
+        />
 
         {/* Features Section */}
         <div className="grid md:grid-cols-2 gap-8 mt-16">

@@ -179,12 +179,13 @@ export const ShadeGeneratorTool: React.FC = () => {
           </Card>
         </div>
 
-        {/* How to Use Section */}
-        <ToolSectionHeading 
+        <ToolSectionHeading
           title="How to Use"
-          description="Learn how to create beautiful color shades with our intuitive generator"
+          description="Generate beautiful shade variations from any base color with precise control"
         />
-        <div className="grid md:grid-cols-2 gap-8">
+
+        {/* Features Section */}
+        <div className="grid md:grid-cols-2 gap-8 mt-16">
           <div className="text-center p-6 rounded-xl bg-card/30 backdrop-blur-sm border">
             <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center mx-auto mb-4">
               <Layers className="h-6 w-6 text-blue-600 dark:text-blue-400" />

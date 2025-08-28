@@ -11,6 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Slider } from '@/components/ui/slider';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { ToolSectionHeading } from '@/components/reusable-sections/tool-section-heading';
 import {
   Sparkles,
   RotateCcw,
@@ -312,6 +313,11 @@ export const HslColorPickerTool: React.FC = () => {
             </div>
           </CardContent>
         </Card>
+
+        <ToolSectionHeading
+          title="How to Use"
+          description="Master the HSL color space with interactive sliders and real-time feedback"
+        />
 
         {/* Educational Features Section */}
         <div className="grid md:grid-cols-3 gap-6 mt-16">

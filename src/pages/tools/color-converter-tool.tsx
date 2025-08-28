@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
+import { ToolSectionHeading } from '@/components/reusable-sections/tool-section-heading';
 import {
   Palette,
   Sparkles,
@@ -195,6 +196,11 @@ export const ColorConverterTool: React.FC = () => {
             </CardContent>
           </Card>
         </div>
+
+        <ToolSectionHeading
+          title="How to Use"
+          description="Convert between different color formats with real-time updates and one-click copying"
+        />
 
         {/* Features Section */}
         <div className="grid md:grid-cols-3 gap-8 mt-16">

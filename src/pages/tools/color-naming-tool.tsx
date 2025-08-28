@@ -7,6 +7,7 @@ import { ColorUtils } from '@/lib/color-utils';
 import { PaletteUrlUtils } from '@/lib/palette-url-utils';
 import { HexColorString } from '@/types/palette';
 import { Button } from '@/components/ui/button';
+import { ToolSectionHeading } from '@/components/reusable-sections/tool-section-heading';
 import { Palette, Sparkles, Eye } from 'lucide-react';
 
 // Featured color examples to showcase the naming system
@@ -84,8 +85,13 @@ export const ColorNamingTool: React.FC = () => {
           </div>
         </div>
 
+        <ToolSectionHeading
+          title="How to Use"
+          description="Get instant, descriptive names for any color using our intelligent naming system"
+        />
+
         {/* Features Section */}
-        <div className="grid md:grid-cols-3 gap-8 mb-16">
+        <div className="grid md:grid-cols-3 gap-8 mt-16">
           <div className="text-center p-6 rounded-xl bg-card/30 backdrop-blur-sm border">
             <div className="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center mx-auto mb-4">
               <Eye className="h-6 w-6 text-green-600 dark:text-green-400" />
