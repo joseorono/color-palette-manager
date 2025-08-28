@@ -8,7 +8,14 @@ import {
   HexColorString,
   NewPaletteFormValues,
   Palette,
+  ColorRoleValidationResult,
+  ColorRolesConversionResult,
 } from "@/types/palette";
+import {
+  PALETTE_GENERATION_PRIORITIES,
+  KMEANS_CONSTANTS,
+  PALETTE_DEFAULTS,
+} from "@/constants/palette-constants";
 import { ColorUtils } from "@/lib/color-utils";
 import { nanoidPaletteId } from "@/constants/nanoid";
 
@@ -131,13 +138,7 @@ export class PaletteUtils {
 
     // Priority order for color generation
     // ToDo: Make this configurable or based on the type of palette requested (e.g. monochrome, triadic, etc.)
-    const priorityColorsDuringGeneration = [
-      "white",
-      "black",
-      "complementary",
-      "analogous",
-      "variations",
-    ];
+    const priorityColorsDuringGeneration = PALETTE_GENERATION_PRIORITIES;
 
     // Generate colors by priority
     for (const priority of priorityColorsDuringGeneration) {
@@ -203,7 +204,7 @@ export class PaletteUtils {
 
     // If we still need more colors, generate random ones with safety limit
     let attempts = 0;
-    const maxAttempts = 100; // Prevent infinite loops
+    const maxAttempts = PALETTE_DEFAULTS.MAX_GENERATION_ATTEMPTS; // Prevent infinite loops
 
     while (countToGenerate > 0 && attempts < maxAttempts) {
       const randomColor = formatHex(random());
@@ -243,11 +244,7 @@ export class PaletteUtils {
     return palette;
   }
 
-  static validateColorRolesObject(colorRolesObject: CSSColorVariablesObject): {
-    isValid: boolean;
-    missingRoles: ColorRole[];
-    invalidRoles: string[];
-  } {
+  static validateColorRolesObject(colorRolesObject: CSSColorVariablesObject): ColorRoleValidationResult {
     const missingRoles: ColorRole[] = [];
     const invalidRoles: string[] = [];
 
@@ -274,11 +271,7 @@ export class PaletteUtils {
     };
   }
 
-  static colorRolesObjectFromColors(colors: Color[]): {
-    wasSuccessful: boolean;
-    errorMessage?: string;
-    colorRolesObject: CSSColorVariablesObject;
-  } {
+  static colorRolesObjectFromColors(colors: Color[]): ColorRolesConversionResult {
     let errorMessage: string | undefined;
     const colorRolesObject: Partial<CSSColorVariablesObject> = {};
 
@@ -316,7 +309,7 @@ export class PaletteUtils {
       () => pixels[Math.floor(Math.random() * pixels.length)]
     );
 
-    for (let iteration = 0; iteration < 10; iteration++) {
+    for (let iteration = 0; iteration < KMEANS_CONSTANTS.MAX_ITERATIONS; iteration++) {
       const clusters: number[][][] = Array.from({ length: k }, () => []);
 
       // Assign pixels to nearest centroid

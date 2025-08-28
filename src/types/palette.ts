@@ -189,3 +189,21 @@ export interface WCAGContrastResult {
   ratio: number;
   level: WCAGContrastLevel;
 }
+
+/**
+ * Result interface for color role validation
+ */
+export interface ColorRoleValidationResult {
+  isValid: boolean;
+  missingRoles: ColorRole[];
+  invalidRoles: string[];
+}
+
+/**
+ * Result interface for converting colors to color roles object
+ */
+export interface ColorRolesConversionResult {
+  wasSuccessful: boolean;
+  errorMessage?: string;
+  colorRolesObject: CSSColorVariablesObject;
+}

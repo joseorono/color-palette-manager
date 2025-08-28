@@ -13,7 +13,16 @@ import {
   BLACK_LIGHTNESS_THRESHOLD,
   LIGHTNESS_DESCRIPTORS,
   SATURATION_DESCRIPTORS,
+  COLOR_DISTANCE_THRESHOLDS,
+  HUE_NAMES,
 } from "@/constants/color-constants";
+import type {
+  ColorFormatResult,
+  RgbColorObj,
+  LabColorObj,
+  CmykColorObj,
+  NearestColorResult,
+} from "@/types/color";
 
 
 export class ColorUtils {
@@ -22,6 +31,42 @@ export class ColorUtils {
           Clamping & Normalization
   ======================================
   */
+
+  /**
+   * Get the base color name for a given hue (0-360 degrees)
+   * @param hue - Hue value in degrees
+   * @returns Base color name
+   */
+  static getHueBaseName(hue: number): string {
+    // Handle the wrap-around case for red (345-360 and 0-15)
+    if (hue >= 345) return HUE_NAMES[0];
+    
+    // Hue ranges for color name mapping
+    const hueRanges = [
+      [15, HUE_NAMES[0]],    // Red (345-15, wraps around)
+      [25, HUE_NAMES[15]],   // Red Orange
+      [45, HUE_NAMES[25]],   // Orange
+      [65, HUE_NAMES[45]],   // Yellow Orange
+      [85, HUE_NAMES[65]],   // Yellow
+      [105, HUE_NAMES[85]],  // Yellow Green
+      [125, HUE_NAMES[105]], // Green
+      [145, HUE_NAMES[125]], // Blue Green
+      [165, HUE_NAMES[145]], // Cyan
+      [185, HUE_NAMES[165]], // Light Blue
+      [205, HUE_NAMES[185]], // Blue
+      [225, HUE_NAMES[205]], // Blue Violet
+      [245, HUE_NAMES[225]], // Violet
+      [265, HUE_NAMES[245]], // Purple
+      [285, HUE_NAMES[265]], // Red Violet
+      [305, HUE_NAMES[285]], // Magenta
+      [325, HUE_NAMES[305]], // Pink
+      [345, HUE_NAMES[325]], // Red
+    ] as const;
+    
+    // Find the first range where hue is less than the max value
+    const range = hueRanges.find(([maxHue]) => hue < maxHue);
+    return range ? range[1] : HUE_NAMES[0]; // Fallback to red
+  }
 
   /**
    * Clamps a value between a minimum and maximum range.
@@ -327,10 +372,7 @@ export class ColorUtils {
    * @param hexColor - Color to find nearest match for
    * @returns Object with the nearest color name and distance
    */
-  static findNearestNamedColor(hexColor: string): {
-    name: string;
-    distance: number;
-  } {
+  static findNearestNamedColor(hexColor: string): NearestColorResult {
     const normalizedHex = ColorUtils.normalizeHex(hexColor);
 
     // Check for exact match first
@@ -427,26 +469,8 @@ export class ColorUtils {
       return "Very Dark Gray";
     }
 
-    // Determine base hue name with more precise ranges
-    let baseName = "";
-    if (hue >= 345 || hue < 15) baseName = "Red";
-    else if (hue < 25) baseName = "Red Orange";
-    else if (hue < 45) baseName = "Orange";
-    else if (hue < 65) baseName = "Yellow Orange";
-    else if (hue < 85) baseName = "Yellow";
-    else if (hue < 105) baseName = "Yellow Green";
-    else if (hue < 125) baseName = "Green";
-    else if (hue < 145) baseName = "Blue Green";
-    else if (hue < 165) baseName = "Cyan";
-    else if (hue < 185) baseName = "Light Blue";
-    else if (hue < 205) baseName = "Blue";
-    else if (hue < 225) baseName = "Blue Violet";
-    else if (hue < 245) baseName = "Violet";
-    else if (hue < 265) baseName = "Purple";
-    else if (hue < 285) baseName = "Red Violet";
-    else if (hue < 305) baseName = "Magenta";
-    else if (hue < 325) baseName = "Pink";
-    else baseName = "Red";
+    // Get base hue name using the centralized function
+    const baseName = ColorUtils.getHueBaseName(hue);
 
     // Add lightness modifiers
     let lightnessModifier = "";
@@ -561,7 +585,7 @@ export class ColorUtils {
    * @returns RGB object with r, g, and b properties
    */
 
-  static HextoRgb(hexColor: string): { r: number; g: number; b: number } {
+  static HextoRgb(hexColor: string): RgbColorObj {
     const r = parseInt(hexColor.slice(1, 3), 16);
     const g = parseInt(hexColor.slice(3, 5), 16);
     const b = parseInt(hexColor.slice(5, 7), 16);
@@ -605,13 +629,13 @@ export class ColorUtils {
 
       // If the color is very close to a named color (Delta E < 15), use the named color
       // Delta E < 15 is generally considered imperceptible to most people
-      if (distance < 15) {
+      if (distance < COLOR_DISTANCE_THRESHOLDS.IMPERCEPTIBLE) {
         return nearestName;
       }
 
       // If the color is reasonably close (Delta E < 30), use the named color with a modifier
       // This helps provide familiar color names while acknowledging the difference
-      if (distance < 30) {
+      if (distance < COLOR_DISTANCE_THRESHOLDS.REASONABLE_MATCH) {
         const descriptiveName = ColorUtils.generateDescriptiveName(hexColor);
 
         // If the descriptive name is very different from the nearest name, use descriptive
@@ -880,7 +904,7 @@ export class ColorUtils {
    * @param b - Blue component (0-255)
    * @returns LAB color object with l, a, b properties
    */
-  static rgbToLab(r: number, g: number, b: number): { l: number; a: number; b: number } {
+  static rgbToLab(r: number, g: number, b: number): LabColorObj {
     // Convert RGB to XYZ first
     let rNorm = r / 255;
     let gNorm = g / 255;
@@ -920,7 +944,7 @@ export class ColorUtils {
    * @param b - Blue component (0-255)
    * @returns CMYK color object with c, m, y, k properties (0-100)
    */
-  static rgbToCmyk(r: number, g: number, b: number): { c: number; m: number; y: number; k: number } {
+  static rgbToCmyk(r: number, g: number, b: number): CmykColorObj {
     const rPercent = r / 255;
     const gPercent = g / 255;
     const bPercent = b / 255;
@@ -943,15 +967,7 @@ export class ColorUtils {
    * @param hexColor - Color in hexadecimal format
    * @returns Object with all color format strings
    */
-  static getAllColorFormatsFromHex(hexColor: HexColorString): {
-    hex: string;
-    rgb: string;
-    hsl: string;
-    hsv: string;
-    cmyk: string;
-    lab: string;
-    name: string;
-  } {
+  static getAllColorFormatsFromHex(hexColor: HexColorString): ColorFormatResult {
     try {
       const color = colord(hexColor);
       const rgb = color.toRgb();
