@@ -17,7 +17,8 @@ import {
   Shuffle, 
   Droplets,
   Plus,
-  Minus
+  Minus,
+  Copy
 } from 'lucide-react';
 
 export const ColorMixerTool: React.FC = () => {
@@ -32,37 +33,11 @@ export const ColorMixerTool: React.FC = () => {
 
   // Update mixed color when inputs change
   useEffect(() => {
-    try {
-      const ratio = mixRatio / 100;
-      let mixed: string;
-      
-      if (mixingMethod === 'HSL') {
-        mixed = ColorUtils.mixColors(color1, color2, ratio);
-      } else {
-        mixed = ColorUtils.mixColorsRGB(color1, color2, ratio);
-      }
-      
-      // Ensure we have a valid hex color and normalize format
-      if (mixed && typeof mixed === 'string') {
-        // Normalize to uppercase 6-digit hex
-        const normalizedColor = mixed.toUpperCase();
-        if (normalizedColor.match(/^#[0-9A-F]{6}$/)) {
-          setMixedColor(normalizedColor as HexColorString);
-        } else {
-          console.warn('Invalid color format from mixing:', mixed);
-          // Fallback to RGB mixing if HSL fails
-          if (mixingMethod === 'HSL') {
-            const fallback = ColorUtils.mixColorsRGB(color1, color2, ratio);
-            setMixedColor(fallback.toUpperCase() as HexColorString);
-          }
-        }
-      }
-    } catch (error) {
-      console.error('Error in color mixing:', error);
-      // Fallback to RGB mixing
-      const fallback = ColorUtils.mixColorsRGB(color1, color2, mixRatio / 100);
-      setMixedColor(fallback.toUpperCase() as HexColorString);
-    }
+    const ratio = mixRatio / 100;
+    const mixed = mixingMethod === 'HSL' 
+      ? ColorUtils.mixColors(color1, color2, ratio)
+      : ColorUtils.mixColorsRGB(color1, color2, ratio);
+    setMixedColor(mixed.toUpperCase() as HexColorString);
   }, [color1, color2, mixRatio, mixingMethod]);
 
   // Update multi-color mix when colors change
@@ -74,6 +49,21 @@ export const ColorMixerTool: React.FC = () => {
   const handleGeneratePalette = (baseColor: HexColorString) => {
     navigate(PaletteUrlUtils.generateUrlToPaletteFromBaseColor(baseColor));
   };
+
+  const copyToClipboard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch (err) {
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+    }
+  };
+
 
   const handleRandomColors = () => {
     setColor1(ColorUtils.generateRandomColorHex());
@@ -232,24 +222,41 @@ export const ColorMixerTool: React.FC = () => {
               {/* Result */}
               <div className="space-y-3">
                 <Label>Mixed Result</Label>
-                <div className="flex items-center gap-4 p-4 rounded-lg bg-muted/50">
-                  <div
-                    className="w-16 h-16 rounded-lg shadow-md border-2 border-border"
-                    style={{ backgroundColor: mixedColor }}
-                  />
-                  <div className="flex-1">
-                    <div className="font-mono text-sm font-medium">{mixedColor}</div>
-                    <div className="text-sm text-muted-foreground">
-                      {ColorUtils.getColorName(mixedColor)}
+                <div className="p-4 rounded-lg bg-muted/50 space-y-4">
+                  <div className="flex items-center gap-4">
+                    <div
+                      className="w-16 h-16 rounded-lg shadow-md border-2 border-border"
+                      style={{ backgroundColor: mixedColor }}
+                    />
+                    <div className="flex-1">
+                      <div className="text-sm text-muted-foreground mb-1">
+                        {ColorUtils.getColorName(mixedColor)}
+                      </div>
+                      <div className="space-y-2">
+                        {Object.entries(ColorUtils.getAllColorFormatsFromHex(mixedColor)).filter(([format]) => ['hex', 'rgb', 'hsl'].includes(format)).map(([format, value]) => (
+                          <div key={format} className="flex items-center gap-2">
+                            <div className="text-xs text-muted-foreground uppercase w-8">{format}</div>
+                            <div className="font-mono text-xs flex-1">{value}</div>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => copyToClipboard(value)}
+                              className="h-6 w-6 p-0"
+                            >
+                              <Copy className="h-3 w-3" />
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
                     </div>
+                    <Button
+                      onClick={() => handleGeneratePalette(mixedColor)}
+                      size="sm"
+                    >
+                      <Sparkles className="h-4 w-4 mr-2" />
+                      Generate Palette
+                    </Button>
                   </div>
-                  <Button
-                    onClick={() => handleGeneratePalette(mixedColor)}
-                    size="sm"
-                  >
-                    <Sparkles className="h-4 w-4 mr-2" />
-                    Generate Palette
-                  </Button>
                 </div>
               </div>
             </CardContent>
@@ -311,24 +318,41 @@ export const ColorMixerTool: React.FC = () => {
               {/* Multi-Color Result */}
               <div className="space-y-3">
                 <Label>Average Mix Result</Label>
-                <div className="flex items-center gap-4 p-4 rounded-lg bg-muted/50">
-                  <div
-                    className="w-16 h-16 rounded-lg shadow-md border-2 border-border"
-                    style={{ backgroundColor: multiMixedColor }}
-                  />
-                  <div className="flex-1">
-                    <div className="font-mono text-sm font-medium">{multiMixedColor}</div>
-                    <div className="text-sm text-muted-foreground">
-                      {ColorUtils.getColorName(multiMixedColor)}
+                <div className="p-4 rounded-lg bg-muted/50 space-y-4">
+                  <div className="flex items-center gap-4">
+                    <div
+                      className="w-16 h-16 rounded-lg shadow-md border-2 border-border"
+                      style={{ backgroundColor: multiMixedColor }}
+                    />
+                    <div className="flex-1">
+                      <div className="text-sm text-muted-foreground mb-1">
+                        {ColorUtils.getColorName(multiMixedColor)}
+                      </div>
+                      <div className="space-y-2">
+                        {Object.entries(ColorUtils.getAllColorFormatsFromHex(multiMixedColor)).filter(([format]) => ['hex', 'rgb', 'hsl'].includes(format)).map(([format, value]) => (
+                          <div key={format} className="flex items-center gap-2">
+                            <div className="text-xs text-muted-foreground uppercase w-8">{format}</div>
+                            <div className="font-mono text-xs flex-1">{value}</div>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => copyToClipboard(value)}
+                              className="h-6 w-6 p-0"
+                            >
+                              <Copy className="h-3 w-3" />
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
                     </div>
+                    <Button
+                      onClick={() => handleGeneratePalette(multiMixedColor)}
+                      size="sm"
+                    >
+                      <Sparkles className="h-4 w-4 mr-2" />
+                      Generate Palette
+                    </Button>
                   </div>
-                  <Button
-                    onClick={() => handleGeneratePalette(multiMixedColor)}
-                    size="sm"
-                  >
-                    <Sparkles className="h-4 w-4 mr-2" />
-                    Generate Palette
-                  </Button>
                 </div>
               </div>
             </CardContent>
