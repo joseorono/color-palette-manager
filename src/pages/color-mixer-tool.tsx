@@ -32,11 +32,37 @@ export const ColorMixerTool: React.FC = () => {
 
   // Update mixed color when inputs change
   useEffect(() => {
-    const ratio = mixRatio / 100;
-    const mixed = mixingMethod === 'HSL' 
-      ? ColorUtils.mixColors(color1, color2, ratio)
-      : ColorUtils.mixColorsRGB(color1, color2, ratio);
-    setMixedColor(mixed);
+    try {
+      const ratio = mixRatio / 100;
+      let mixed: string;
+      
+      if (mixingMethod === 'HSL') {
+        mixed = ColorUtils.mixColors(color1, color2, ratio);
+      } else {
+        mixed = ColorUtils.mixColorsRGB(color1, color2, ratio);
+      }
+      
+      // Ensure we have a valid hex color and normalize format
+      if (mixed && typeof mixed === 'string') {
+        // Normalize to uppercase 6-digit hex
+        const normalizedColor = mixed.toUpperCase();
+        if (normalizedColor.match(/^#[0-9A-F]{6}$/)) {
+          setMixedColor(normalizedColor as HexColorString);
+        } else {
+          console.warn('Invalid color format from mixing:', mixed);
+          // Fallback to RGB mixing if HSL fails
+          if (mixingMethod === 'HSL') {
+            const fallback = ColorUtils.mixColorsRGB(color1, color2, ratio);
+            setMixedColor(fallback.toUpperCase() as HexColorString);
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error in color mixing:', error);
+      // Fallback to RGB mixing
+      const fallback = ColorUtils.mixColorsRGB(color1, color2, mixRatio / 100);
+      setMixedColor(fallback.toUpperCase() as HexColorString);
+    }
   }, [color1, color2, mixRatio, mixingMethod]);
 
   // Update multi-color mix when colors change
@@ -187,18 +213,18 @@ export const ColorMixerTool: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <Label>Method:</Label>
                   <Button
-                    variant={mixingMethod === 'HSL' ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => setMixingMethod('HSL')}
-                  >
-                    HSL
-                  </Button>
-                  <Button
                     variant={mixingMethod === 'RGB' ? 'default' : 'outline'}
                     size="sm"
                     onClick={() => setMixingMethod('RGB')}
                   >
                     RGB
+                  </Button>
+                  <Button
+                    variant={mixingMethod === 'HSL' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setMixingMethod('HSL')}
+                  >
+                    HSL
                   </Button>
                 </div>
               </div>

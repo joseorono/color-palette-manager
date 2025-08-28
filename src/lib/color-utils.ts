@@ -154,8 +154,8 @@ export class ColorUtils {
     const interpolatedL = color1.l + (color2.l - color1.l) * ColorUtils.clamp(t, 0, 1);
 
     const normalizedH = ColorUtils.wrap(interpolatedH, 360);
-    const normalizedS = ColorUtils.clamp(interpolatedS, 0, 1);
-    const normalizedL = ColorUtils.clamp(interpolatedL, 0, 1);
+    const normalizedS = ColorUtils.clamp(interpolatedS, 0, 100);
+    const normalizedL = ColorUtils.clamp(interpolatedL, 0, 100);
 
     return colord({ h: normalizedH, s: normalizedS, l: normalizedL }).toHex();
   }
