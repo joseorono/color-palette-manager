@@ -4,6 +4,8 @@ import { injectColorVariablesObjectToCSS } from "@/lib/preview-utils";
 import { ColorPreviewCard } from "@/components/preview-views/color-preview-card";
 import { UIPreviewCard } from "@/components/preview-views/ui-preview-card";
 import { PaletteSelector } from "@/components/preview-views/palette-preview-selector";
+import { ViewSelector, PreviewViewType } from "@/components/preview-views/view-selector";
+import { EbookPreviewCard } from "@/components/preview-views/ebook-preview-card";
 
 /**
  * TestPreview Component
@@ -37,6 +39,7 @@ export function TestPreview({
   initialColors,
   onColorsChange,
 }: TestPreviewProps) {
+  const [currentView, setCurrentView] = useState<PreviewViewType>("desktop");
   const [currentColors, setCurrentColors] = useState<
     CSSColorVariablesObject | undefined
   >(initialColors);
@@ -59,6 +62,11 @@ export function TestPreview({
     setCurrentColors(colors);
   };
 
+  // Handle view selection
+  const handleViewChange = (view: PreviewViewType) => {
+    setCurrentView(view);
+  };
+
   return (
     <div className="container mx-auto py-8">
       <div className="mb-6 flex flex-col items-start justify-between md:flex-row">
@@ -70,13 +78,28 @@ export function TestPreview({
         <PaletteSelector onPaletteSelect={handlePaletteSelect} />
       </div>
 
+      {/* View Selector */}
+      <ViewSelector currentView={currentView} onViewChange={handleViewChange} />
+
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         <div className="lg:col-span-1">
           <ColorPreviewCard currentColors={currentColors} />
         </div>
 
         <div className="lg:col-span-2">
-          <UIPreviewCard currentColors={currentColors} />
+          {currentView === "desktop" && (
+            <UIPreviewCard currentColors={currentColors} />
+          )}
+          {currentView === "ebook" && (
+            <EbookPreviewCard currentColors={currentColors} />
+          )}
+          {currentView === "mobile" && (
+            <div className="flex justify-center">
+              <div className="w-[375px] overflow-hidden rounded-lg border-4 border-gray-800 shadow-lg">
+                <UIPreviewCard currentColors={currentColors} />
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
