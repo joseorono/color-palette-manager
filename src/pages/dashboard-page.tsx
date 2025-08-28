@@ -2,16 +2,20 @@
 
 import { PaletteDashboard } from "@/components/palette-dashboard";
 import { usePalettes } from "@/hooks/use-palettes";
+import { PaletteUrlUtils } from "@/lib/palette-url-utils";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
+import type { Palette } from "@/types/palette";
 
 export default function DashboardPage() {
   const { palettes, isLoading, toggleFavorite, deletePalette } = usePalettes();
+  const navigate = useNavigate();
 
   const handleCreateNew = () => {
     toast.info("This would open the palette creation modal.");
   };
 
-  const handleEditPalette = (palette: any) => {
+  const handleEditPalette = (palette: Palette) => {
     toast.info(`This would open the editor for "${palette.name}".`);
   };
 
@@ -33,8 +37,11 @@ export default function DashboardPage() {
     }
   };
 
-  const handleViewPalette = (palette: any) => {
-    toast.info(`This would open the detailed view for "${palette.name}".`);
+  const handleViewPalette = (palette: Palette) => {
+    // For now, I'm just using the editor.
+    // Change the code to use the Viewer once it's implemented.
+    const viewUrl = PaletteUrlUtils.generatePaletteIdUrl(palette.id);
+    navigate(viewUrl);
   };
 
   return (
