@@ -32,6 +32,16 @@ Export your palettes in multiple formats for different use cases:
 - **DaisyUI Theme** - DaisyUI theme configuration
 - **Shadcn/UI Variables** - Shadcn/UI CSS variables
 
+### 📚 Tools
+
+- **Color Mixer**: Combine two colors to create a new color.
+- **Color Naming Tool**: Convert a color to its name.
+- **Color Palette Extractor**: Extract colors from an image.
+- **Color Converter**: Convert a color to different formats.
+- **Shade Generator**: Generate lighter and darker shades of any base color.
+- **HSL Color Picker**: Interactive tool with sliders for Hue, Saturation, and Lightness.
+-- **More tools to come...**
+
 ### 🖥️ Platform Support
 - **Web Application** - Modern browser support
 - **Desktop App** - Cross-platform Electron application (Windows, macOS, Linux)
