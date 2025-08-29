@@ -16,9 +16,8 @@ import { ImagePaletteExtractorTool } from "@/pages/image-palette-extractor-tool"
 import { HslColorPickerTool } from "./pages/tools/hsl-color-picker-tool";
 import ToolsPage from "./pages/tools-page";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
-import { PalettePreview } from "./pages/palette-preview";
 import NotFoundPage from "./pages/not-found-page";
-import { PropsPreview } from "./pages/props-preview";
+import { PalettePreviewPage } from "./pages/palette-preview-page";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -36,13 +35,16 @@ function App() {
               <Route path="/app/color-test" element={<ColorNameTestPage />} />
 
               {/* <Route path="/app/test" element={<ThemeTest />} /> */}
-              <Route path="/app/palette-preview" element={<PalettePreview />} />
+              {/* <Route
+                path="/app/palette-preview"
+                element={<PaletteTabsPreview />}
+              /> */}
 
               <Route path="/app/tools" element={<ToolsPage />} />
               <Route
-                path="/app/props-preview"
+                path="/app/palette-preview"
                 element={
-                  <PropsPreview
+                  <PalettePreviewPage
                     initialColors={{
                       primary: "#3b82f6",
                       secondary: "#f97316",
@@ -59,11 +61,7 @@ function App() {
                       "accent-foreground": "#ffffff",
                     }}
                     title="Color Scheme Preview"
-                    showPaletteSelector={true}
-                    showViewSelector={true}
-                    showColorPreview={false}
                     initialView="desktop"
-                    availableViews={["desktop", "ebook", "mobile"]}
                     className=""
                     previewHeight={800}
                     containerClassName=""
