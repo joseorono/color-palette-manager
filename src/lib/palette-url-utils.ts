@@ -68,7 +68,10 @@ export class PaletteUrlUtils {
       const normalizedBaseColor = ColorUtils.normalizeHex(trimmedColor);
 
       // Generate harmonious colors using PaletteUtils
-      const harmoniousHexColors = PaletteUtils.generateHarmoniousHexCsv(normalizedBaseColor, 5);
+      const harmoniousHexColors = PaletteUtils.generateHarmoniousHexCsv(
+        normalizedBaseColor,
+        5
+      );
 
       // Convert to CSV format and use existing paletteFromHexCsv method
       const colorsParam = harmoniousHexColors.join(",");
@@ -217,6 +220,15 @@ export class PaletteUrlUtils {
   static generateHexCsvUrl(colors: Color[]): string {
     const hexColors = colors.map((color) => color.hex).join(",");
     return `/app/palette-edit/?colors=${encodeURIComponent(hexColors)}`;
+  }
+
+  /**
+   * Generate a URL with palette ID parameter.
+   * @param paletteId - The palette ID
+   * @returns string - URL with paletteId parameter
+   */
+  static generatePaletteIdPreviewUrl(paletteId: string): string {
+    return `/app/props-preview/?paletteId=${encodeURIComponent(paletteId)}`;
   }
 
   /**
