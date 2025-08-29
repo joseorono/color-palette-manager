@@ -2,14 +2,8 @@ import { useEffect, useState } from "react";
 import { CSSColorVariablesObject } from "@/types/palette";
 import { injectColorVariablesObjectToCSS } from "@/lib/preview-utils";
 import { ColorPreviewCard } from "@/components/preview-views/color-preview-card";
-import { UIPreviewCard } from "@/components/preview-views/ui-preview-card";
 import { PaletteSelector } from "@/components/preview-views/palette-preview-selector";
-import {
-  ViewSelector,
-  PreviewViewType,
-} from "@/components/preview-views/view-selector";
-import { EbookPreviewCard } from "@/components/preview-views/ebook-preview-card";
-import { MobileUIPreviewCard } from "@/components/preview-views/mobile-ui-preview-card";
+import { PreviewViewType } from "@/components/preview-views/view-selector";
 import { cn } from "@/lib/utils";
 import { PaletteTabsPreview } from "@/components/palette-tabs-preview";
 
@@ -71,32 +65,13 @@ export function PalettePreviewPage({
   previewHeight = 800,
   containerClassName = "",
 }: PropsPreviewProps) {
-  const [currentView, setCurrentView] = useState<PreviewViewType>(initialView);
   const [currentColors, setCurrentColors] = useState<
     CSSColorVariablesObject | undefined
   >(initialColors);
 
-  // Apply the colors to CSS variables
-  // useEffect(() => {
-  //   if (currentColors) {
-  //     // Inject colors to CSS variables
-  //     injectColorVariablesObjectToCSS(currentColors);
-
-  //     // Notify parent component if needed
-  //     if (onColorsChange) {
-  //       onColorsChange(currentColors);
-  //     }
-  //   }
-  // }, [currentColors, onColorsChange]);
-
   // Handle palette selection
   const handlePaletteSelect = (colors: CSSColorVariablesObject) => {
     setCurrentColors(colors);
-  };
-
-  // Handle view selection
-  const handleViewChange = (view: PreviewViewType) => {
-    setCurrentView(view);
   };
 
   return (
@@ -130,7 +105,6 @@ export function PalettePreviewPage({
 
         <PaletteTabsPreview
           initialColors={currentColors}
-          onColorsChange={handlePaletteSelect}
           title="Color Scheme Preview"
           initialView="desktop"
           className="lg:col-span-2"
