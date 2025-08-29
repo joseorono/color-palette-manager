@@ -92,6 +92,11 @@ export function PaletteCard({
     navigate(editorUrl);
   };
 
+  const handlePreviewPalette = (paletteId: string) => {
+    const previewUrl = PaletteUrlUtils.generatePaletteIdPreviewUrl(paletteId);
+    navigate(previewUrl);
+  };
+
   return (
     <Card
       className="group cursor-pointer transition-all duration-200 hover:scale-[1.02] hover:shadow-lg"
@@ -149,6 +154,15 @@ export function PaletteCard({
                 >
                   <Eye className="mr-2 h-4 w-4" />
                   View Details
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handlePreviewPalette(palette.id);
+                  }}
+                >
+                  <Eye className="mr-2 h-4 w-4" />
+                  Preview
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={(e) => {
