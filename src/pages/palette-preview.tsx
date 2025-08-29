@@ -34,15 +34,15 @@ import { MobileUIPreviewCard } from "@/components/preview-views/mobile-ui-previe
  *   onColorsChange={(colors) => console.log('Colors changed:', colors)}
  * />
  */
-interface TestPreviewProps {
+interface PalettePreviewProps {
   initialColors?: CSSColorVariablesObject;
   onColorsChange?: (colors: CSSColorVariablesObject) => void;
 }
 
-export function TestPreview({
+export function PalettePreview({
   initialColors,
   onColorsChange,
-}: TestPreviewProps) {
+}: PalettePreviewProps) {
   const [currentView, setCurrentView] = useState<PreviewViewType>("desktop");
   const [currentColors, setCurrentColors] = useState<
     CSSColorVariablesObject | undefined
