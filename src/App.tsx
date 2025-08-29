@@ -7,7 +7,6 @@ import AppLayout from "./layouts/app-layout";
 import { DatabaseSeeder } from "./db/seeder";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import LandingLayout from "./layouts/landing-page-layout";
-import ThemeTest from "./pages/theme-test";
 import { ColorNameTestPage } from "./pages/tools/color-name-test";
 import { ColorNamingTool } from "./pages/tools/color-naming-tool";
 import { ColorMixerTool } from "./pages/tools/color-mixer-tool";
@@ -17,8 +16,9 @@ import { ImagePaletteExtractorTool } from "@/pages/image-palette-extractor-tool"
 import { HslColorPickerTool } from "./pages/tools/hsl-color-picker-tool";
 import ToolsPage from "./pages/tools-page";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
-import { TestPreview } from "./pages/test-preview";
+import { PalettePreview } from "./pages/palette-preview";
 import NotFoundPage from "./pages/not-found-page";
+import { PropsPreview } from "./pages/props-preview";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -36,35 +36,40 @@ function App() {
               <Route path="/app/color-test" element={<ColorNameTestPage />} />
 
               {/* <Route path="/app/test" element={<ThemeTest />} /> */}
+              <Route path="/app/palette-preview" element={<PalettePreview />} />
+
+              <Route path="/app/tools" element={<ToolsPage />} />
               <Route
-                path="/app/test"
+                path="/app/props-preview"
                 element={
-                  <TestPreview
-                    colors={{
+                  <PropsPreview
+                    initialColors={{
                       primary: "#3b82f6",
-                      secondary: "#10b981",
-                      accent: "#f3f4f6",
-                      background: "#ffffff",
-                      foreground: "#1f2937",
+                      secondary: "#f97316",
+                      accent: "#8b5cf6",
+                      background: "#f8fafc",
+                      foreground: "#1e293b",
                       card: "#ffffff",
-                      "card-foreground": "#1f2937",
-                      border: "#e5e7eb",
-                      muted: "#f3f4f6",
-                      "muted-foreground": "#6b7280",
+                      border: "#e2e8f0",
+                      muted: "#f1f5f9",
                       "primary-foreground": "#ffffff",
                       "secondary-foreground": "#ffffff",
-                      "accent-foreground": "#1f2937",
+                      "muted-foreground": "#64748b",
+                      "card-foreground": "#1e293b",
+                      "accent-foreground": "#ffffff",
                     }}
-                    onColorsChange={(colors) => {
-                      console.log("Colors changed:", colors);
-                      // You could save these colors to state or storage
-                    }}
+                    title="Color Scheme Preview"
+                    showPaletteSelector={true}
+                    showViewSelector={true}
+                    showColorPreview={false}
+                    initialView="desktop"
+                    availableViews={["desktop", "ebook", "mobile"]}
+                    className=""
+                    previewHeight={800}
+                    containerClassName=""
                   />
                 }
               />
-
-              <Route path="/app/tools" element={<ToolsPage />} />
-              <Route path="/app/test" element={<ThemeTest />} />
 
               {/* Tools */}
               <Route
