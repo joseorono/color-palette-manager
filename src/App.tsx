@@ -41,33 +41,7 @@ function App() {
               /> */}
 
               <Route path="/app/tools" element={<ToolsPage />} />
-              <Route
-                path="/app/palette-preview"
-                element={
-                  <PalettePreviewPage
-                    initialColors={{
-                      primary: "#3b82f6",
-                      secondary: "#f97316",
-                      accent: "#8b5cf6",
-                      background: "#f8fafc",
-                      foreground: "#1e293b",
-                      card: "#ffffff",
-                      border: "#e2e8f0",
-                      muted: "#f1f5f9",
-                      "primary-foreground": "#ffffff",
-                      "secondary-foreground": "#ffffff",
-                      "muted-foreground": "#64748b",
-                      "card-foreground": "#1e293b",
-                      "accent-foreground": "#ffffff",
-                    }}
-                    title="Color Scheme Preview"
-                    initialView="desktop"
-                    className=""
-                    previewHeight={800}
-                    containerClassName=""
-                  />
-                }
-              />
+              <Route path="/app/palette-preview" element={<PalettePreviewPage />} />
 
               {/* Tools */}
               <Route
