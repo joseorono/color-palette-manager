@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useQueryState } from "nuqs";
 import { CSSColorVariablesObject, Palette } from "@/types/palette";
 import { injectColorVariablesObjectToCSS } from "@/lib/preview-utils";
 import { ColorPreviewCard } from "@/components/preview-views/color-preview-card";
@@ -14,26 +15,27 @@ import { PaletteNotSelected } from "@/components/preview-views/palette-not-selec
  * PalettePreviewPage Component
  *
  * A reusable component that displays a preview of UI elements with colors from a palette.
- * Can accept either a Palette object directly or a palette ID to fetch from database.
+ * Can accept either a Palette object directly or fetch from database using paletteId URL parameter.
  *
  * @component
  *
  * @param {Object} props - Component props
  * @param {Palette} [props.palette] - Palette object to use for preview
- * @param {string} [props.paletteId] - Palette ID to fetch from database
  * @param {Function} [props.onColorsChange] - Callback function that receives the colors whenever they change
  * @param {PreviewViewType} [props.initialView] - Initial view type to display
  * @param {string} [props.className] - Additional CSS classes for the container
  * @param {number} [props.previewHeight] - Height for the preview container in pixels
  * @param {string} [props.containerClassName] - Additional CSS classes for the outer container
  *
+ * @note The paletteId is now handled via URL search parameters using nuqs (?paletteId=abc123)
+ *
  * @example
  * // Usage with palette object
  * <PalettePreviewPage palette={myPalette} />
  *
  * @example
- * // Usage with palette ID
- * <PalettePreviewPage paletteId="abc123" />
+ * // Usage with URL parameter (navigate to /palette-preview?paletteId=abc123)
+ * <PalettePreviewPage />
  *
  * @example
  * // Fully customized usage
@@ -47,7 +49,6 @@ import { PaletteNotSelected } from "@/components/preview-views/palette-not-selec
  */
 interface PalettePreviewPageProps {
   palette?: Palette;
-  paletteId?: string;
   onColorsChange?: (colors: CSSColorVariablesObject) => void;
   initialView?: PreviewViewType;
   className?: string;
@@ -57,21 +58,25 @@ interface PalettePreviewPageProps {
 
 export function PalettePreviewPage({
   palette,
-  paletteId,
   onColorsChange,
   initialView = "desktop",
   className = "",
   previewHeight = 800,
   containerClassName = "",
 }: PalettePreviewPageProps) {
+  // Use nuqs to handle paletteId from URL search parameters
+  const [paletteId] = useQueryState("paletteId", {
+    defaultValue: "",
+  });
+
   const [currentPalette, setCurrentPalette] = useState<Palette | undefined>(palette);
   const [currentColors, setCurrentColors] = useState<CSSColorVariablesObject | undefined>();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | undefined>();
 
-  // Load palette from database if paletteId is provided
+  // Load palette from database if paletteId is provided via URL
   useEffect(() => {
-    if (paletteId && !palette) {
+    if (paletteId && paletteId.trim() !== "" && !palette) {
       setIsLoading(true);
       setError(undefined);
 
