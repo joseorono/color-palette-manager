@@ -228,7 +228,7 @@ export class PaletteUrlUtils {
    * @returns string - URL with paletteId parameter
    */
   static generatePaletteIdPreviewUrl(paletteId: string): string {
-    return `/app/props-preview/?paletteId=${encodeURIComponent(paletteId)}`;
+    return `/app/palette-preview/?paletteId=${encodeURIComponent(paletteId)}`;
   }
 
   /**
