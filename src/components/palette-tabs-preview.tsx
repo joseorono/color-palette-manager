@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { CSSColorVariablesObject } from "@/types/palette";
+import { CSSColorVariablesObject, Palette } from "@/types/palette";
 import { UIPreviewCard } from "@/components/preview-views/ui-preview-card";
 import {
   ViewSelector,
@@ -7,7 +7,6 @@ import {
 } from "@/components/preview-views/view-selector";
 import { EbookPreviewCard } from "@/components/preview-views/ebook-preview-card";
 import { MobileUIPreviewCard } from "@/components/preview-views/mobile-ui-preview-card";
-import { cn } from "@/lib/utils";
 import { injectColorVariablesObjectToCSS } from "@/lib/preview-utils";
 
 /**
@@ -43,6 +42,7 @@ import { injectColorVariablesObjectToCSS } from "@/lib/preview-utils";
  * />
  */
 interface PropsPreviewProps {
+  palette?: Palette;
   initialColors?: CSSColorVariablesObject;
   title?: string;
   initialView?: PreviewViewType;
@@ -53,8 +53,9 @@ interface PropsPreviewProps {
 }
 
 export function PaletteTabsPreview({
+  palette,
   initialColors,
-  title = "Color Scheme Preview",
+  title,
   initialView = "desktop",
   className = "",
   previewHeight = 800,

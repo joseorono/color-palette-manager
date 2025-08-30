@@ -13,7 +13,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { PreviewComponentProps } from "./types";
+import { CSSColorVariablesObject, Palette } from "@/types/palette";
+
+interface PreviewComponentProps {
+  palette?: Palette;
+  currentColors?: CSSColorVariablesObject;
+  onColorsChange?: (colors: CSSColorVariablesObject) => void;
+}
 
 export function UIPreviewCard({ currentColors }: PreviewComponentProps) {
   return (

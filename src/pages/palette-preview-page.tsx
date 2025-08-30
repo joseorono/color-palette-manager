@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import { useQueryState } from "nuqs";
-import { CSSColorVariablesObject, Palette } from "@/types/palette";
+import { Palette } from "@/types/palette";
 import { injectColorVariablesObjectToCSS } from "@/lib/preview-utils";
 import { ColorPreviewCard } from "@/components/preview-views/color-preview-card";
 import { PaletteSelector } from "@/components/preview-views/palette-preview-selector";
 import { PaletteTabsPreview } from "@/components/palette-tabs-preview";
 import { PaletteDBQueries } from "@/db/queries";
-import { PaletteUtils } from "@/lib/palette-utils";
 import { PaletteNotSelected } from "@/components/preview-views/palette-not-selected";
 
 /**
@@ -32,7 +31,6 @@ export function PalettePreviewPage() {
   });
 
   const [currentPalette, setCurrentPalette] = useState<Palette | undefined>();
-  const [currentColors, setCurrentColors] = useState<CSSColorVariablesObject | undefined>();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | undefined>();
 
@@ -59,23 +57,11 @@ export function PalettePreviewPage() {
     }
   }, [paletteId]);
 
-  // Convert palette colors to CSS variables when palette changes
-  useEffect(() => {
-    if (currentPalette?.colors) {
-      const conversionResult = PaletteUtils.colorRolesObjectFromColors(currentPalette.colors);
-      if (conversionResult.wasSuccessful) {
-        setCurrentColors(conversionResult.colorRolesObject);
-      } else {
-        // If role-based conversion fails, still show the palette with basic preview
-        setCurrentColors(undefined);
-        console.warn('Color roles conversion failed:', conversionResult.errorMessage);
-      }
-    }
-  }, [currentPalette]);
 
   // Handle palette selection from selector
-  const handlePaletteSelect = (colors: CSSColorVariablesObject) => {
-    setCurrentColors(colors);
+  const handlePaletteSelect = () => {
+    // This function is kept for the PaletteSelector component compatibility
+    // but we don't need to store the colors in state anymore
   };
 
   // Show loading state
@@ -128,15 +114,12 @@ export function PalettePreviewPage() {
       </div>
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-        {
-          <div className="lg:col-span-1">
-            <ColorPreviewCard currentColors={currentColors} />
-          </div>
-        }
+        <div className="lg:col-span-1">
+          <ColorPreviewCard palette={currentPalette} />
+        </div>
 
         <PaletteTabsPreview
-          initialColors={currentColors}
-          title={title}
+          palette={currentPalette}
           initialView="desktop"
           className="lg:col-span-2"
           previewHeight={800}

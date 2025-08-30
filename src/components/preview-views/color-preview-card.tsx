@@ -5,7 +5,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { PreviewComponentProps } from "./types";
+import { CSSColorVariablesObject, Palette } from "@/types/palette";
+
+interface PreviewComponentProps {
+  palette?: Palette;
+  currentColors?: CSSColorVariablesObject;
+  onColorsChange?: (colors: CSSColorVariablesObject) => void;
+}
 
 export function ColorPreviewCard({ currentColors }: PreviewComponentProps) {
   return (

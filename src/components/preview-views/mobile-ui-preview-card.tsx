@@ -8,7 +8,13 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { PreviewComponentProps } from "./types";
+import { CSSColorVariablesObject, Palette } from "@/types/palette";
+
+interface PreviewComponentProps {
+  palette?: Palette;
+  currentColors?: CSSColorVariablesObject;
+  onColorsChange?: (colors: CSSColorVariablesObject) => void;
+}
 
 export function MobileUIPreviewCard({ currentColors }: PreviewComponentProps) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
