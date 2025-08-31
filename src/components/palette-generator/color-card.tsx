@@ -68,10 +68,8 @@ export function ColorCard({ color, index }: ColorCardProps) {
       >
         <div
           className={cn(
-            "flex flex-col items-end justify-start shadow-sm",
-            "transition-all duration-300 ease-out",
-            "dark:hover:bg-gray-750 hover:bg-gray-50 hover:shadow-md",
-            isDragging && "dark:bg-gray-750 bg-gray-50 shadow-lg"
+            "flex flex-col items-end justify-start rounded-lg shadow-sm",
+            "transition-all duration-300 ease-out"
           )}
         >
           {/* color square */}
@@ -86,7 +84,7 @@ export function ColorCard({ color, index }: ColorCardProps) {
             {/* buttons */}
             <div
               className={cn(
-                "absolute inset-0 flex flex-col justify-between bg-black bg-opacity-20 p-4 opacity-0 backdrop-blur-sm transition-all duration-300 ease-out",
+                "absolute inset-0 flex flex-col justify-between rounded-t-lg bg-black bg-opacity-20 p-4 opacity-0 transition-all duration-300 ease-out",
                 (isHovered || isDragging) && "opacity-100",
                 isDragging && "bg-opacity-30 backdrop-blur-md"
               )}
@@ -100,7 +98,7 @@ export function ColorCard({ color, index }: ColorCardProps) {
                       e.stopPropagation();
                       toggleColorLock(index);
                     }}
-                    className="text-white backdrop-blur-sm transition-all duration-200 ease-out hover:scale-110 hover:bg-white hover:bg-opacity-20 active:scale-95 active:bg-opacity-30"
+                    className="text-white transition-all duration-200 ease-out hover:scale-110 hover:bg-white hover:bg-opacity-20 active:scale-95 active:bg-opacity-30"
                   >
                     {color.locked ? (
                       <Lock className="h-4 w-4 transition-transform duration-200" />
@@ -115,7 +113,7 @@ export function ColorCard({ color, index }: ColorCardProps) {
                       e.stopPropagation();
                       copyToClipboard();
                     }}
-                    className="text-white backdrop-blur-sm transition-all duration-200 ease-out hover:scale-110 hover:bg-white hover:bg-opacity-20 active:scale-95 active:bg-opacity-30"
+                    className="text-white transition-all duration-200 ease-out hover:scale-110 hover:bg-white hover:bg-opacity-20 active:scale-95 active:bg-opacity-30"
                   >
                     <Copy className="h-4 w-4 transition-transform duration-200" />
                   </Button>
@@ -129,7 +127,7 @@ export function ColorCard({ color, index }: ColorCardProps) {
                       e.stopPropagation();
                       removeColor(index);
                     }}
-                    className="text-white backdrop-blur-sm transition-all duration-200 ease-out hover:scale-110 hover:bg-red-500 hover:bg-opacity-50 active:scale-95 active:bg-red-600 active:bg-opacity-60"
+                    className="text-white transition-all duration-200 ease-out hover:scale-110 hover:bg-red-500 hover:bg-opacity-50 active:scale-95 active:bg-red-600 active:bg-opacity-60"
                   >
                     <Trash2 className="h-4 w-4 transition-transform duration-200 hover:rotate-12" />
                   </Button>

@@ -105,7 +105,7 @@ export function PaletteGenerator() {
 
               <DragOverlay>
                 {activeId && currentPalette ? (
-                  <div className="rotate-3 scale-105 transform opacity-95">
+                  <div className="rotate-3 scale-105 transform rounded-lg opacity-95">
                     <ColorCard
                       color={
                         ColorUtils.findColorById(
