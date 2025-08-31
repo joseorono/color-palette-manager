@@ -35,10 +35,6 @@ function App() {
               <Route path="/app/palette-preview" element={<PalettePreviewPage />} />
 
               {/* <Route path="/app/test" element={<ThemeTest />} /> */}
-              {/* <Route
-                path="/app/palette-preview"
-                element={<PaletteTabsPreview />}
-                /> */}
 
               {/* Test Routes - Make them private later */}
               <Route path="/app/color-test" element={<ColorNameTestPage />} />
