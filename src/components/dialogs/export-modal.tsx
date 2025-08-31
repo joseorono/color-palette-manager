@@ -70,7 +70,7 @@ export function ExportModal() {
         className={`${isMobile ? "max-h-[90vh] max-w-[95vw]" : "max-w-5xl"} overflow-hidden`}
       >
         <DialogHeader>
-          <DialogTitle>Export Palette</DialogTitle>
+          <DialogTitle>Export</DialogTitle>
         </DialogHeader>
 
         <div
