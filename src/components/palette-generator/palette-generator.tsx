@@ -18,6 +18,7 @@ import {
 } from "@dnd-kit/core";
 import { ColorUtils } from "@/lib/color-utils";
 import { DRAG_ACTIVATION_DISTANCE } from "@/constants/ui";
+import { Lock } from "lucide-react";
 
 export function PaletteGenerator() {
   const { currentPalette, generateNewPalette, reorderColors } =
@@ -73,15 +74,14 @@ export function PaletteGenerator() {
 
       <div className="container mx-auto px-4 py-2">
         {/* Header */}
-        <div className="mb-8 text-center">
+        <div className="mb-8 text-center max-w-screen-lg mx-auto">
           <p className="mb-6 text-gray-600 dark:text-gray-300">
-            {/* Create beautiful color palettes with ease. Press spacebar to
-            generate new colors. */}
-            Generate a new palette by pressing{" "}
+            Regenerate all non-locked colors by pressing{" "}
             <kbd className="rounded border bg-gray-100 px-2 py-1 text-xs dark:bg-gray-800">
               Space
             </kbd>{" "}
-            or clicking the shuffle button.
+            or clicking the shuffle button. Make sure to{" "}
+            <Lock className="inline-block h-3 w-3" /> all colors you like.
           </p>
         </div>
 

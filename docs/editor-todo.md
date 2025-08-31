@@ -31,7 +31,7 @@
 
 ### High Priority
 
-- [ ] **Implement GenerateHarmonious** with palette type props and respect locked colors
+- [ ] **Implement GenerateHarmonious** with palette type props and respect locked colors - Jose: I'll do this but I need the UI/store to pass the palette type to the GenerateHarmonious function. It already takes the argument.
 - [ ] **Create method** to filter only locked colors from Color[] array
 
 ### Medium Priority
