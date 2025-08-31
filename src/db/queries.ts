@@ -42,6 +42,22 @@ export class PaletteDBQueries {
     });
   }
 
+  static async updateMetadataOnly(
+    id: string,
+    updates: Partial<Omit<Palette, "id" | "createdAt" | "updatedAt" | "colors">>
+  ): Promise<number> {
+    // The data might be full palette, so we need to filter out the colors
+    const now = new Date();
+    return await db.palettes.update(id, {
+      name: updates.name,
+      description: updates.description,
+      isPublic: updates.isPublic,
+      tags: updates.tags,
+      isFavorite: updates.isFavorite,
+      updatedAt: now,
+    });
+  }
+
   /**
    * Delete a palette by its ID
    * @param id - The palette ID
