@@ -43,7 +43,7 @@ export default function AppNavbar() {
         <div className="flex-shrink-0">
           <Link
             to="/app"
-            className="flex items-center space-x-2 text-2xl font-bold"
+            className="flex items-center space-x-2 text-2xl font-bold p-1"
           >
             <img
               src="/logo-v2.png"
@@ -96,7 +96,7 @@ export default function AppNavbar() {
               <div className="flex-shrink-0 border-b pb-4">
                 <Link
                   to="/app"
-                  className="flex items-center space-x-2 text-2xl font-bold"
+                  className="flex items-center space-x-2 text-2xl font-bold p-1"
                 >
                   <img
                     src="/logo-v2.png"
