@@ -6,6 +6,9 @@ import { PaletteUtils } from "@/lib/palette-utils";
 import { PaletteUrlUtils } from "@/lib/palette-url-utils";
 import { PaletteDBQueries } from "@/db/queries";
 import { arrayMove } from "@dnd-kit/sortable";
+import { HarmonyPreset } from "@/types/color-harmonies";
+import { COLOR_HARMONY_OPTIONS, DEFAULT_HARMONY_PRESET } from "@/constants/color-harmonies";
+import { toast } from "sonner";
 
 interface PaletteStore {
   currentPalette: Palette;
@@ -13,10 +16,12 @@ interface PaletteStore {
   isGenerating: boolean;
   isSaved: boolean; // Track if current palette has been saved
   hasUnsavedChanges: boolean; // Track if there are unsaved changes
+  selectedPreset: HarmonyPreset | null; // Track the selected preset for quick generation
 
   // Actions
-  generateNewPalette: (count?: number) => void;
+  generateNewPalette: (count?: number, preset?: HarmonyPreset) => void;
   regenerateUnlocked: () => void;
+  setSelectedPreset: (preset: HarmonyPreset) => void;
   toggleColorLock: (index: number) => void;
   updateColor: (
     index: number,
@@ -38,27 +43,44 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
   isGenerating: false,
   isSaved: false,
   hasUnsavedChanges: false,
+  selectedPreset: null,
 
-  generateNewPalette: (count = 5) => {
+  generateNewPalette: (count = 5, preset?: HarmonyPreset) => {
+    const { selectedPreset } = get();
+    const usePreset = preset || selectedPreset || DEFAULT_HARMONY_PRESET;
+    
     set({ isGenerating: true });
 
-      const colors = PaletteUtils.generateHarmoniousHexCsv(undefined, count);
-      const paletteColors: Color[] = colors.map((hex) => ({
-        id: nanoidColorId(),
-        hex,
-        locked: false,
-      }));
+    // Show toast notification with preset name
+    if (usePreset) {
+      const presetOption = COLOR_HARMONY_OPTIONS.find(option => option.value === usePreset);
+      const presetName = presetOption?.prettyName || usePreset;
+      toast.info(`Generating ${presetName} palette`);
+      
+      // Update selectedPreset if a new preset was provided
+      if (preset) {
+        set({ selectedPreset: preset });
+      }
+    }
 
-      const newPalette: Palette = {
-        ...get().currentPalette,
-        colors: paletteColors,
-      };
+    const colors = PaletteUtils.generateHarmoniousHexCsv(undefined, count, [], usePreset || undefined);
+    const paletteColors: Color[] = colors.map((hex) => ({
+      id: nanoidColorId(),
+      hex,
+      locked: false,
+    }));
 
-      set({
-        currentPalette: newPalette,
-        isGenerating: false,
-        isSaved: false,
-      });
+    const newPalette: Palette = {
+      ...get().currentPalette,
+      colors: paletteColors,
+    };
+
+    set({
+      currentPalette: newPalette,
+      isGenerating: false,
+      isSaved: false,
+      hasUnsavedChanges: true,
+    });
   },
 
   regenerateUnlocked: () => {
@@ -289,5 +311,9 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
 
   resetUnsavedChanges: () => {
     set({ hasUnsavedChanges: false });
+  },
+
+  setSelectedPreset: (preset: HarmonyPreset) => {
+    set({ selectedPreset: preset });
   },
 }));
