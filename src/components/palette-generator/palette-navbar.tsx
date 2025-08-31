@@ -224,20 +224,36 @@ export function PaletteNavbar() {
               {/* Generate New */}
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button
-                    onClick={() =>
+                  <SplitButton
+                    mainButtonText=""
+                    mainButtonIcon={Shuffle}
+                    onMainButtonClick={() =>
                       generateNewPalette(currentPalette?.colors.length)
                     }
-                    disabled={isGenerating}
+                    menuItems={[
+                      {
+                        id: "generate-new",
+                        label: "Generate New Palette",
+                        icon: Shuffle,
+                        onClick: () =>
+                          generateNewPalette(currentPalette?.colors.length),
+                      },
+                      {
+                        id: "generation-method",
+                        label: "Select Generation Method",
+                        icon: Sliders,
+                        onClick: () =>
+                          console.log("Open generation method selector"),
+                      },
+                    ]}
                     variant="ghost"
                     size="sm"
-                    className="h-9 w-9 shrink-0 snap-start p-0 2xl:h-10 2xl:w-10"
-                  >
-                    <Shuffle className="h-4 w-4" />
-                  </Button>
+                    dropdownButtonClassName="h-9 w-9"
+                    mainButtonClassName="h-9 w-9"
+                  />
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Generate new palette (Space)</p>
+                  <p>Generate new palette</p>
                 </TooltipContent>
               </Tooltip>
 
@@ -406,6 +422,8 @@ export function PaletteNavbar() {
                     ]}
                     variant="outline"
                     size="sm"
+                    dropdownButtonClassName="h-9 w-8"
+                    mainButtonClassName="h-9 w-9"
                   />
                 </TooltipTrigger>
                 <TooltipContent>

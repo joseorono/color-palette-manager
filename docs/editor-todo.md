@@ -1,6 +1,7 @@
 ## High Priority
 
 - [ ] Settle on a **final design for the Color Cards**
+- [ ] **Fix Creating new palette from the editor** It doesn't work. Weird!.
 - [ ] Fix **responsive issues**
   - There may be others, but the most salient one happens at around 888px x 631px (feasible for a small tablet or windowed Electron app)
 
@@ -11,12 +12,12 @@
 - [x] **Fix bug with the Save Icon**, it changes to a checkmark when saving but doesn't go back to the floppy disk icon a few seconds after saving.
 - [x] **Add 'Add Color' keyboard shortcut** (Maybe Shift + A)
 - [x] **Reorder navbar actions**: Share - Preview - Export - Save (primary)
-- [ ] **Update Preview button** with two options:
+- [x] **Update Preview button** with two options:
   - Preview Palette (opens side pane to the right)
   - Full-Screen Preview (opens new tab with palette ID)
   - Remove "Color Details" option
 - [x] **Fix keyboard shortcuts dialog** making page unresponsive
-- [ ] **Convert Generate button** to split button:
+- [x] **Convert Generate button** to split button:
   - Main button: Sparkles icon for AI generation
   - Dropdown: Settings gear icon for Generation Methods/Preferred Palette Types
 
