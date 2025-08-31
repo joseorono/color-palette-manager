@@ -1,0 +1,36 @@
+## High Priority
+- [ ] Settle on a **final design for the Color Cards**
+- [ ] Fix **responsive issues**
+    - There may be others, but the most salient one happens at around 888px x 631px (feasible for a small tablet or windowed Electron app)
+
+## Navbar Improvements
+
+### High Priority
+- [ ] **Reorder navbar actions**: Share - View - Export - Save (primary)
+- [ ] **Update Preview button** with two options:
+  - Preview Palette (opens side pane to the right)
+  - Full-Screen Preview (opens new tab with palette ID)
+  - Remove "Color Details" option
+- [ ] **Fix keyboard shortcuts dialog** making page unresponsive
+- [ ] **Convert Generate button** to split button:
+  - Main button: Sparkles icon for AI generation
+  - Dropdown: Settings gear icon for Generation Methods/Preferred Palette Types
+
+### Medium Priority
+- [ ] **Create mobile bottom bar** for mobile navigation
+- [ ] **Change save icon** from checkmark to floppy disk
+- [ ] **Remove unused hamburger menu options** (keep only keyboard shortcuts)
+
+## Backend/Logic Improvements
+
+### High Priority
+- [ ] **Implement GenerateHarmonious** with palette type props and respect locked colors
+- [ ] **Create method** to filter only locked colors from Color[] array
+
+### Medium Priority
+- [ ] **Fix unnecessary scroll** in palette editor (height/flex issue - use flex instead of min-height 100%)
+
+## Notes
+- Extract From Image button keeps camera icon
+- Generate and Extract buttons should be icon buttons
+- Save button should be primary action in navbar
