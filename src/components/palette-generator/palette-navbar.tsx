@@ -1,13 +1,16 @@
 import { useState, useEffect, useCallback } from "react";
 import { usePaletteStore } from "@/stores/palette-store";
 import { Button } from "../ui/button";
-
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../ui/sheet";
+import { PaletteTabsPreview } from "../palette-tabs-preview";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
 } from "../ui/dropdown-menu";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import {
@@ -39,6 +42,7 @@ import { ExportModal } from "../dialogs/export-modal";
 import { MAX_PALETTE_COLORS } from "@/constants/ui";
 import { PaletteMetadataSidebar } from "./palette-metadata-sidebar";
 import { Label } from "../ui/label";
+import SplitButton from "../shadcn-blocks/split-button";
 
 export function PaletteNavbar() {
   const {
@@ -59,6 +63,7 @@ export function PaletteNavbar() {
   const [isSizeControlOpen, setIsSizeControlOpen] = useState(false);
   const [isMetadataOpen, setIsMetadataOpen] = useState(false);
   const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
@@ -171,6 +176,20 @@ export function PaletteNavbar() {
     },
     [regenerateUnlocked, currentPalette, addColor]
   );
+
+  function palettePreviewNewTab() {
+    // Open new tab with palette ID
+    if (currentPalette?.id) {
+      window.open(
+        `/app/palette-preview?paletteId=${currentPalette.id}`,
+        "_blank"
+      );
+    }
+  }
+
+  function handleOpenPreview() {
+    setIsPreviewOpen(true);
+  }
 
   useEffect(() => {
     // Add keyboard listeners
@@ -364,53 +383,35 @@ export function PaletteNavbar() {
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              {/* View/Preview */}
-              <DropdownMenu>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-9 px-2 2xl:h-10 2xl:px-3"
-                      >
-                        <Eye className="mr-2 h-4 w-4" />
-                        <span className="hidden 2xl:inline">Preview</span>
-                        <ChevronDown className="ml-1 h-3 w-3" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Preview palette options</p>
-                  </TooltipContent>
-                </Tooltip>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem
-                    onClick={() => {
-                      // Open side pane to the right
-                      // This will need to be implemented with your state management
-                      console.log("Open side pane preview");
-                    }}
-                  >
-                    <Eye className="mr-2 h-4 w-4" />
-                    Preview Palette
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => {
-                      // Open new tab with palette ID
-                      if (currentPalette?.id) {
-                        window.open(
-                          `/app/palette-preview/${currentPalette.id}`,
-                          "_blank"
-                        );
-                      }
-                    }}
-                  >
-                    <ExternalLink className="mr-2 h-4 w-4" />
-                    Full-Screen Preview
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              {/* Preview Split Button */}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <SplitButton
+                    mainButtonText="Preview"
+                    mainButtonIcon={Eye}
+                    onMainButtonClick={handleOpenPreview}
+                    menuItems={[
+                      {
+                        id: "preview-palette",
+                        label: "Preview Palette",
+                        icon: Eye,
+                        onClick: handleOpenPreview,
+                      },
+                      {
+                        id: "fullscreen-preview",
+                        label: "Full-Screen Preview",
+                        icon: ExternalLink,
+                        onClick: palettePreviewNewTab,
+                      },
+                    ]}
+                    variant="outline"
+                    size="sm"
+                  />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Preview palette options</p>
+                </TooltipContent>
+              </Tooltip>
 
               {/* Export */}
               <ExportModal />
@@ -558,6 +559,21 @@ export function PaletteNavbar() {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Preview Sheet */}
+      <Sheet open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
+        <SheetContent
+          side="right"
+          className="w-full overflow-y-auto sm:max-w-5xl"
+        >
+          <SheetHeader className="mb-6">
+            <SheetTitle>Preview Palette</SheetTitle>
+          </SheetHeader>
+          <div className="h-[calc(100%-4rem)]">
+            <PaletteTabsPreview />
+          </div>
+        </SheetContent>
+      </Sheet>
 
       {/* Metadata Sidebar (Sheet) */}
       <PaletteMetadataSidebar
