@@ -301,7 +301,7 @@ export function PaletteNavbar() {
                         className="h-9 px-2 2xl:h-10 2xl:px-3"
                       >
                         <Eye className="mr-2 h-4 w-4" />
-                        <span className="hidden 2xl:inline">View</span>
+                        <span className="hidden 2xl:inline">Preview</span>
                         <ChevronDown className="ml-1 h-3 w-3" />
                       </Button>
                     </DropdownMenuTrigger>
