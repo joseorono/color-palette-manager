@@ -46,18 +46,20 @@ export function ColorCard({ color, index }: ColorCardProps) {
   };
 
   const colorName = ColorUtils.getColorName(color.hex);
+  const actionBtnClass = cn(
+    "text-white transition-all duration-200 ease-out hover:scale-110 active:scale-95",
+    "hover:bg-white/20 active:bg-opacity-30"
+  );
+  const iconClass = "h-4 w-4 transition-transform duration-200";
 
   return (
     <>
       <div
         className={cn(
-          "group flex transform flex-col rounded-lg bg-white shadow-md transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl hover:shadow-black/20 dark:bg-gray-800",
+          "group relative flex flex-col rounded-lg bg-white shadow-md transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl hover:shadow-black/20 dark:bg-gray-800",
           "cursor-grab",
-          !isDragging && ["hover:shadow-lg hover:shadow-black/10"],
-          isDragging && [
-            "z-50 opacity-90",
-            "z-10 border-4 border-dashed border-blue-500 bg-blue-500 bg-opacity-20",
-          ]
+          isDragging &&
+            "z-10 border-4 border-dashed border-blue-500 bg-blue-500/20 opacity-90"
         )}
         style={style}
         onMouseEnter={() => setIsHovered(true)}
@@ -68,8 +70,7 @@ export function ColorCard({ color, index }: ColorCardProps) {
       >
         <div
           className={cn(
-            "flex flex-col items-end justify-start rounded-lg shadow-sm",
-            "transition-all duration-300 ease-out"
+            "flex flex-col items-end justify-start rounded-lg shadow-sm transition-all duration-300 ease-out"
           )}
         >
           {/* color square */}
@@ -84,9 +85,10 @@ export function ColorCard({ color, index }: ColorCardProps) {
             {/* buttons */}
             <div
               className={cn(
-                "absolute inset-0 flex flex-col justify-between rounded-t-lg bg-black bg-opacity-20 p-4 opacity-0 transition-all duration-300 ease-out",
+                "absolute inset-0 flex flex-col justify-between rounded-t-lg p-4 opacity-0 transition-all duration-300 ease-out",
+                isDragging ? "bg-black/30" : "bg-black/20",
                 (isHovered || isDragging) && "opacity-100",
-                isDragging && "bg-opacity-30 backdrop-blur-md"
+                isDragging && "backdrop-blur-md"
               )}
             >
               <div className="flex items-start justify-between">
@@ -98,12 +100,12 @@ export function ColorCard({ color, index }: ColorCardProps) {
                       e.stopPropagation();
                       toggleColorLock(index);
                     }}
-                    className="text-white transition-all duration-200 ease-out hover:scale-110 hover:bg-white hover:bg-opacity-20 active:scale-95 active:bg-opacity-30"
+                    className={actionBtnClass}
                   >
                     {color.locked ? (
-                      <Lock className="h-4 w-4 transition-transform duration-200" />
+                      <Lock className={iconClass} />
                     ) : (
-                      <Unlock className="h-4 w-4 transition-transform duration-200" />
+                      <Unlock className={iconClass} />
                     )}
                   </Button>
                   <Button
@@ -113,9 +115,9 @@ export function ColorCard({ color, index }: ColorCardProps) {
                       e.stopPropagation();
                       copyToClipboard();
                     }}
-                    className="text-white transition-all duration-200 ease-out hover:scale-110 hover:bg-white hover:bg-opacity-20 active:scale-95 active:bg-opacity-30"
+                    className={actionBtnClass}
                   >
-                    <Copy className="h-4 w-4 transition-transform duration-200" />
+                    <Copy className={iconClass} />
                   </Button>
                 </div>
 
@@ -127,9 +129,12 @@ export function ColorCard({ color, index }: ColorCardProps) {
                       e.stopPropagation();
                       removeColor(index);
                     }}
-                    className="text-white transition-all duration-200 ease-out hover:scale-110 hover:bg-red-500 hover:bg-opacity-50 active:scale-95 active:bg-red-600 active:bg-opacity-60"
+                    className={cn(
+                      "text-white transition-all duration-200 ease-out hover:scale-110 active:scale-95",
+                      "hover:bg-red-500/50 active:bg-red-600/60"
+                    )}
                   >
-                    <Trash2 className="h-4 w-4 transition-transform duration-200 hover:rotate-12" />
+                    <Trash2 className={cn(iconClass, "hover:rotate-12")} />
                   </Button>
                 )}
               </div>
@@ -140,7 +145,12 @@ export function ColorCard({ color, index }: ColorCardProps) {
             <div className="flex-1">
               <div className="flex items-center gap-2">
                 <p
-                  className={`text-sm font-medium ${isDragging ? "text-gray-500 dark:text-gray-400" : "text-gray-900 dark:text-white"}`}
+                  className={cn(
+                    "text-sm font-medium",
+                    isDragging
+                      ? "text-gray-500 dark:text-gray-400"
+                      : "text-gray-900 dark:text-white"
+                  )}
                 >
                   {color.hex}
                 </p>
@@ -170,7 +180,7 @@ export function ColorCard({ color, index }: ColorCardProps) {
         </div>
 
         {color.locked && (
-          <div className="absolute left-2 top-2 rounded-full bg-black bg-opacity-50 p-1">
+          <div className="absolute left-2 top-2 rounded-full bg-black/50 p-1">
             <Lock className="h-3 w-3 text-white" />
           </div>
         )}
