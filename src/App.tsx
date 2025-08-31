@@ -32,17 +32,18 @@ function App() {
               <Route path="/app" element={<DashboardPage />} />
               <Route path="/app/dashboard" element={<DashboardPage />} />
               <Route path="/app/palette-edit" element={<PaletteEditor />} />
-              <Route path="/app/color-test" element={<ColorNameTestPage />} />
+              <Route path="/app/palette-preview" element={<PalettePreviewPage />} />
 
               {/* <Route path="/app/test" element={<ThemeTest />} /> */}
               {/* <Route
                 path="/app/palette-preview"
                 element={<PaletteTabsPreview />}
-              /> */}
+                /> */}
+
+              {/* Test Routes - Make them private later */}
+              <Route path="/app/color-test" element={<ColorNameTestPage />} />
 
               <Route path="/app/tools" element={<ToolsPage />} />
-              <Route path="/app/palette-preview" element={<PalettePreviewPage />} />
-
               {/* Tools */}
               <Route
                 path="/app/tools/color-naming"

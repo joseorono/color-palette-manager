@@ -15,9 +15,12 @@ interface NavigationLink {
 const navigationLinks: NavigationLink[] = [
   { name: "Dashboard", href: "/app" },
   { name: "Palette Editor", href: "/app/palette-edit" },
+  { name: "Palette Preview", href: "/app/palette-preview"},
+  { name: "Tools", href: "/app/tools" },
+
+  // Test Routes - remove later
   { name: "Color Test", href: "/app/color-test" },
   { name: "Theme Test", href: "/app/test"},
-  { name: "Tools", href: "/app/tools" },
 ];
 
 export default function AppNavbar() {
@@ -60,11 +63,11 @@ export default function AppNavbar() {
           <Menubar className="border-none">
             {navigationLinks.map((link) => (
               <MenubarMenu key={link.name}>
-                <MenubarTrigger 
+                <MenubarTrigger
                   className={cn(
                     "font-medium transition-colors hover:text-primary",
-                    isActiveRoute(link.href) 
-                      ? "text-primary" 
+                    isActiveRoute(link.href)
+                      ? "text-primary"
                       : "text-muted-foreground"
                   )}
                 >
@@ -113,8 +116,8 @@ export default function AppNavbar() {
                     onClick={() => setIsMobileMenuOpen(false)} // Close menu on click
                     className={cn(
                       "w-full text-lg font-medium transition-colors hover:text-primary",
-                      isActiveRoute(link.href) 
-                        ? "text-primary" 
+                      isActiveRoute(link.href)
+                        ? "text-primary"
                         : "text-muted-foreground"
                     )}
                   >
