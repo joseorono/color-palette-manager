@@ -57,13 +57,6 @@ export function PalettePreviewPage() {
     }
   }, [paletteId]);
 
-
-  // Handle palette selection from selector
-  const handlePaletteSelect = () => {
-    // This function is kept for the PaletteSelector component compatibility
-    // but we don't need to store the colors in state anymore
-  };
-
   // Show loading state
   if (isLoading) {
     return (
@@ -96,7 +89,7 @@ export function PalettePreviewPage() {
       <div className="container mx-auto py-8">
         <div className="mb-6 flex flex-col items-start justify-between md:flex-row">
           <h1 className="mb-4 text-3xl font-bold md:mb-0">Color Scheme Preview</h1>
-          <PaletteSelector onPaletteSelect={handlePaletteSelect} />
+          <PaletteSelector currentPalette={currentPalette} />
         </div>
 
         <PaletteNotSelected />
@@ -109,8 +102,8 @@ export function PalettePreviewPage() {
       <div className="mb-6 flex flex-col items-start justify-between md:flex-row">
         <h1 className="mb-4 text-3xl font-bold md:mb-0">{title}</h1>
 
-        {/* Palette Selection Menu - only show if no specific palette is provided */}
-        {!currentPalette && <PaletteSelector onPaletteSelect={handlePaletteSelect} />}
+        {/* Palette Selection Menu - always show for palette switching */}
+        <PaletteSelector currentPalette={currentPalette} />
       </div>
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
