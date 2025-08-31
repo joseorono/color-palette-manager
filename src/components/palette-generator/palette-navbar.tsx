@@ -43,6 +43,9 @@ import { MAX_PALETTE_COLORS } from "@/constants/ui";
 import { PaletteMetadataSidebar } from "./palette-metadata-sidebar";
 import { Label } from "../ui/label";
 import SplitButton from "../shadcn-blocks/split-button";
+import { GenerationMethodDialog } from "./generation-method-dialog";
+import { HARMONY_PRESETS } from "@/constants/color-harmonies";
+import { HarmonyPreset } from "@/types/color-harmonies";
 
 export function PaletteNavbar() {
   const {
@@ -53,6 +56,8 @@ export function PaletteNavbar() {
     savePalette,
     hasUnsavedChanges,
     isGenerating,
+    selectedPreset,
+    setSelectedPreset,
   } = usePaletteStore();
 
   const [paletteSize, setPaletteSize] = useState(
@@ -64,6 +69,7 @@ export function PaletteNavbar() {
   const [isMetadataOpen, setIsMetadataOpen] = useState(false);
   const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [isGenerationMethodOpen, setIsGenerationMethodOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
@@ -191,6 +197,16 @@ export function PaletteNavbar() {
     setIsPreviewOpen(true);
   }
 
+  function handleOpenGenerationMethod() {
+    setIsGenerationMethodOpen(true);
+  }
+
+  function handleSelectGenerationMethod(preset: HarmonyPreset) {
+    setSelectedPreset(preset);
+    generateNewPalette(currentPalette?.colors.length);
+    setIsGenerationMethodOpen(false);
+  }
+
   useEffect(() => {
     // Add keyboard listeners
     window.addEventListener("keydown", handleKeyPress);
@@ -242,8 +258,7 @@ export function PaletteNavbar() {
                         id: "generation-method",
                         label: "Select Generation Method",
                         icon: Sliders,
-                        onClick: () =>
-                          console.log("Open generation method selector"),
+                        onClick: handleOpenGenerationMethod,
                       },
                     ]}
                     variant="ghost"
@@ -439,7 +454,7 @@ export function PaletteNavbar() {
                 <TooltipTrigger asChild>
                   <Button
                     onClick={() => setIsSaveOpen(true)}
-                    variant={hasUnsavedChanges ? "default" : "ghost"}
+                    variant="default"
                     size="sm"
                     className="h-9 px-2 2xl:h-10 2xl:px-3"
                   >
@@ -592,6 +607,14 @@ export function PaletteNavbar() {
           </div>
         </SheetContent>
       </Sheet>
+
+      {/* Generation Method Dialog */}
+      <GenerationMethodDialog
+        open={isGenerationMethodOpen}
+        onOpenChange={setIsGenerationMethodOpen}
+        onSelect={handleSelectGenerationMethod}
+        currentPreset={selectedPreset}
+      />
 
       {/* Metadata Sidebar (Sheet) */}
       <PaletteMetadataSidebar

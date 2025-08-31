@@ -40,7 +40,13 @@ export interface SplitButtonProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Icon for the dropdown trigger */
   dropdownIcon?: LucideIcon;
   /** Button variant for both buttons */
-  variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
+  variant?:
+    | "default"
+    | "destructive"
+    | "outline"
+    | "secondary"
+    | "ghost"
+    | "link";
   /** Button size for both buttons */
   size?: "default" | "sm" | "lg" | "icon";
   /** Whether the main button is disabled */
@@ -60,30 +66,33 @@ export interface SplitButtonProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const SplitButton = React.forwardRef<HTMLDivElement, SplitButtonProps>(
-  ({
-    mainButtonText,
-    mainButtonIcon: MainButtonIcon,
-    onMainButtonClick,
-    menuItems,
-    menuLabel,
-    dropdownIcon: DropdownIcon = ChevronDown,
-    variant = "default",
-    size = "default",
-    mainButtonDisabled = false,
-    dropdownDisabled = false,
-    mainButtonClassName,
-    dropdownButtonClassName,
-    dropdownContentClassName,
-    showCloseButton = false,
-    onCloseClick,
-    className,
-    ...props
-  }, ref) => {
+  (
+    {
+      mainButtonText,
+      mainButtonIcon: MainButtonIcon,
+      onMainButtonClick,
+      menuItems,
+      menuLabel,
+      dropdownIcon: DropdownIcon = ChevronDown,
+      variant = "default",
+      size = "default",
+      mainButtonDisabled = false,
+      dropdownDisabled = false,
+      mainButtonClassName,
+      dropdownButtonClassName,
+      dropdownContentClassName,
+      showCloseButton = false,
+      onCloseClick,
+      className,
+      ...props
+    },
+    ref
+  ) => {
     return (
-      <div 
+      <div
         ref={ref}
         className={cn(
-          "[&>*]:rounded-none [&>button:first-child]:rounded-l-md [&>button:last-child]:rounded-r-md divide-x divide-border/40",
+          "divide-x divide-border/40 [&>*]:rounded-none [&>button:first-child]:rounded-l-md [&>button:last-child]:rounded-r-md",
           className
         )}
         {...props}
@@ -98,28 +107,34 @@ const SplitButton = React.forwardRef<HTMLDivElement, SplitButtonProps>(
           {MainButtonIcon && <MainButtonIcon />}
           {mainButtonText}
         </Button>
-        <DropdownMenu>
+        <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
-            <Button 
+            <Button
               variant={variant}
-              size="icon" 
+              size="icon"
               disabled={dropdownDisabled}
               className={dropdownButtonClassName}
             >
               <DropdownIcon />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className={cn("min-w-52", dropdownContentClassName)}>
+          <DropdownMenuContent
+            className={cn("min-w-52", dropdownContentClassName)}
+          >
             {menuLabel && (
               <>
-                <DropdownMenuLabel className={cn(
-                  showCloseButton ? "flex items-center justify-between gap-2" : ""
-                )}>
+                <DropdownMenuLabel
+                  className={cn(
+                    showCloseButton
+                      ? "flex items-center justify-between gap-2"
+                      : ""
+                  )}
+                >
                   {menuLabel}
                   {showCloseButton && (
-                    <Button 
-                      size="icon" 
-                      variant="ghost" 
+                    <Button
+                      size="icon"
+                      variant="ghost"
                       className="h-5 w-5"
                       onClick={onCloseClick}
                     >
@@ -134,9 +149,9 @@ const SplitButton = React.forwardRef<HTMLDivElement, SplitButtonProps>(
               if (item.separator) {
                 return <DropdownMenuSeparator key={item.id} />;
               }
-              
+
               const ItemIcon = item.icon;
-              
+
               return (
                 <DropdownMenuItem
                   key={item.id}

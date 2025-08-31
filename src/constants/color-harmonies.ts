@@ -5,6 +5,17 @@ import {
     ColorHarmonyOption,
     HarmonyPriorityMap,
   } from "@/types/color-harmonies";
+import { 
+  Sparkles, 
+  CircleDashed, 
+  Circle, 
+  CircleDollarSign, 
+  Triangle, 
+  Square, 
+  GitFork, 
+  Grid2x2, 
+  Beaker 
+} from "lucide-react";
 
   // Color-theory constants (no "auto" here)
   export const COLOR_HARMONIES = {
@@ -55,54 +66,54 @@ import {
       prettyName: "Web-Friendly (Default)",
       description:
         "Smart mix of neutrals (white, black) and common harmonies (complementary, analogous) with tasteful variations. Perfect for web design.",
-      icon: "sparkles",
+      icon: Sparkles,
     },
     {
       value: COLOR_HARMONIES.ANALOGOUS,
       prettyName: "Analogous",
       description: "Colors that sit next to each other on the color wheel.",
-      icon: "circle-slice-3",
+      icon: CircleDashed,
     },
     {
       value: COLOR_HARMONIES.MONOCHROMATIC,
       prettyName: "Monochromatic",
       description: "Variations in lightness and saturation of a single hue.",
-      icon: "circle-half",
+      icon: Circle,
     },
     {
       value: COLOR_HARMONIES.COMPLEMENTARY,
       prettyName: "Complementary",
       description: "Colors opposite each other on the color wheel.",
-      icon: "circle-split-horizontal",
+      icon: CircleDollarSign,
     },
     {
       value: COLOR_HARMONIES.TRIADIC,
       prettyName: "Triadic",
       description: "Three colors evenly spaced on the color wheel.",
-      icon: "triangle",
+      icon: Triangle,
     },
     {
       value: COLOR_HARMONIES.TETRADIC,
       prettyName: "Tetradic",
       description: "Four colors arranged into two complementary pairs.",
-      icon: "square",
+      icon: Square,
     },
     {
       value: COLOR_HARMONIES.SPLIT_COMPLEMENTARY,
       prettyName: "Split Complementary",
       description: "A base color plus two adjacent to its complement.",
-      icon: "git-fork",
+      icon: GitFork,
     },
     {
       value: COLOR_HARMONIES.SQUARE,
       prettyName: "Square",
       description: "Four colors evenly spaced around the color wheel.",
-      icon: "grid",
+      icon: Grid2x2,
     },
     {
       value: COLOR_HARMONIES.COMPOUND,
       prettyName: "Compound",
       description: "A balanced mix using complementary and nearby hues.",
-      icon: "beaker",
+      icon: Beaker,
     },
   ];

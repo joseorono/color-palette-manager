@@ -1,3 +1,4 @@
+import { LucideIcon } from "lucide-react";
 
 // Strict color-theory harmonies (no presets here)
 export type ColorHarmony =
@@ -37,5 +38,5 @@ export interface ColorHarmonyOption {
   value: HarmonyPreset;
   prettyName: string;
   description: string;
-  icon: string; // react-lucide icon name
+  icon: LucideIcon;
 }
