@@ -46,22 +46,20 @@ export function ColorCard({ color, index }: ColorCardProps) {
   };
 
   const colorName = ColorUtils.getColorName(color.hex);
+  const actionBtnClass = cn(
+    "text-white transition-all duration-200 ease-out hover:scale-110 active:scale-95",
+    "hover:bg-white/20 active:bg-opacity-30"
+  );
+  const iconClass = "h-4 w-4 transition-transform duration-200";
 
   return (
     <>
       <div
         className={cn(
-          "group flex transform flex-col transition-all duration-300 ease-out",
-          "hover:scale-105 hover:shadow-xl hover:shadow-black/20",
-          !isDragging && [
-            "hover:shadow-lg hover:shadow-black/10",
-            "cursor-grab active:cursor-grabbing",
-          ],
-          isDragging && [
-            "z-50 cursor-grabbing opacity-90",
-            "z-10 rounded-lg border-4 border-dashed border-blue-500 bg-blue-500 bg-opacity-20",
-          ],
-          "transition-[transform,box-shadow,opacity,filter] duration-300"
+          "group relative flex flex-col rounded-lg bg-white shadow-md transition-all duration-300 ease-out hover:scale-105 hover:shadow-xl hover:shadow-black/20 dark:bg-gray-800",
+          "cursor-grab",
+          isDragging &&
+            "z-10 border-4 border-dashed border-blue-500 bg-blue-500/20 opacity-90"
         )}
         style={style}
         onMouseEnter={() => setIsHovered(true)}
@@ -71,115 +69,118 @@ export function ColorCard({ color, index }: ColorCardProps) {
         {...listeners}
       >
         <div
-          className="relative w-full cursor-pointer p-5 shadow-lg transition-all duration-300 ease-out hover:cursor-pointer hover:shadow-xl"
-          style={{ backgroundColor: color.hex }}
+          className={cn(
+            "flex flex-col items-end justify-start rounded-lg shadow-sm transition-all duration-300 ease-out"
+          )}
         >
+          {/* color square */}
           <div
             className={cn(
-              "flex flex-col items-end justify-start bg-white p-3 shadow-sm dark:bg-gray-800 md:h-72",
-              "transition-all duration-300 ease-out",
-              "dark:hover:bg-gray-750 hover:bg-gray-50 hover:shadow-md",
-              isDragging && "dark:bg-gray-750 bg-gray-50 shadow-lg"
+              "relative w-full rounded-t-lg transition-all duration-300 ease-out md:h-60",
+              isDragging && "contrast-105 brightness-110"
             )}
+            style={{ backgroundColor: color.hex }}
+            onClick={() => setIsPickerOpen(true)}
           >
+            {/* buttons */}
             <div
               className={cn(
-                "relative h-32 w-full cursor-pointer shadow-lg transition-all duration-300 ease-out hover:cursor-pointer hover:shadow-xl md:h-48",
-                isDragging &&
-                  "contrast-105 cursor-grabbing brightness-110 hover:cursor-grabbing"
+                "absolute inset-0 flex flex-col justify-between rounded-t-lg p-4 opacity-0 transition-all duration-300 ease-out",
+                isDragging ? "bg-black/30" : "bg-black/20",
+                (isHovered || isDragging) && "opacity-100",
+                isDragging && "backdrop-blur-md"
               )}
-              style={{ backgroundColor: color.hex }}
-              onClick={() => setIsPickerOpen(true)}
             >
-              <div
-                className={cn(
-                  "absolute inset-0 flex flex-col justify-between bg-black bg-opacity-20 p-4 opacity-0 backdrop-blur-sm transition-all duration-300 ease-out",
-                  (isHovered || isDragging) && "opacity-100",
-                  isDragging && "bg-opacity-30 backdrop-blur-md"
-                )}
-              >
-                <div className="flex items-start justify-between">
-                  <div className="flex flex-col items-start gap-1">
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleColorLock(index);
-                      }}
-                      className="text-white backdrop-blur-sm transition-all duration-200 ease-out hover:scale-110 hover:bg-white hover:bg-opacity-20 active:scale-95 active:bg-opacity-30"
-                    >
-                      {color.locked ? (
-                        <Lock className="h-4 w-4 transition-transform duration-200" />
-                      ) : (
-                        <Unlock className="h-4 w-4 transition-transform duration-200" />
-                      )}
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        copyToClipboard();
-                      }}
-                      className="text-white backdrop-blur-sm transition-all duration-200 ease-out hover:scale-110 hover:bg-white hover:bg-opacity-20 active:scale-95 active:bg-opacity-30"
-                    >
-                      <Copy className="h-4 w-4 transition-transform duration-200" />
-                    </Button>
-                  </div>
-
-                  {currentPalette && currentPalette.colors.length > 2 && (
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        removeColor(index);
-                      }}
-                      className="text-white backdrop-blur-sm transition-all duration-200 ease-out hover:scale-110 hover:bg-red-500 hover:bg-opacity-50 active:scale-95 active:bg-red-600 active:bg-opacity-60"
-                    >
-                      <Trash2 className="h-4 w-4 transition-transform duration-200 hover:rotate-12" />
-                    </Button>
-                  )}
+              <div className="flex items-start justify-between">
+                <div className="flex flex-col items-start gap-1">
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleColorLock(index);
+                    }}
+                    className={actionBtnClass}
+                  >
+                    {color.locked ? (
+                      <Lock className={iconClass} />
+                    ) : (
+                      <Unlock className={iconClass} />
+                    )}
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      copyToClipboard();
+                    }}
+                    className={actionBtnClass}
+                  >
+                    <Copy className={iconClass} />
+                  </Button>
                 </div>
+
+                {currentPalette && currentPalette.colors.length > 2 && (
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      removeColor(index);
+                    }}
+                    className={cn(
+                      "text-white transition-all duration-200 ease-out hover:scale-110 active:scale-95",
+                      "hover:bg-red-500/50 active:bg-red-600/60"
+                    )}
+                  >
+                    <Trash2 className={cn(iconClass, "hover:rotate-12")} />
+                  </Button>
+                )}
               </div>
             </div>
-            <div className="flex h-20 w-full items-start pt-2">
-              <div className="flex-1">
-                <div className="flex items-center gap-2">
-                  <p
-                    className={`text-sm font-medium ${isDragging ? "text-gray-500 dark:text-gray-400" : "text-gray-900 dark:text-white"}`}
-                  >
-                    {color.hex}
-                  </p>
-                  {color.role && (
-                    <span className="inline-flex items-center rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-                      {color.role}
-                    </span>
+          </div>
+          {/* card color footer */}
+          <div className="flex h-20 w-full items-start px-4 pt-2">
+            <div className="flex-1">
+              <div className="flex items-center gap-2">
+                <p
+                  className={cn(
+                    "text-sm font-medium",
+                    isDragging
+                      ? "text-gray-500 dark:text-gray-400"
+                      : "text-gray-900 dark:text-white"
                   )}
-                </div>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
-                  {colorName}
+                >
+                  {color.hex}
                 </p>
+                {color.role && (
+                  <span className="inline-flex items-center rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                    {color.role}
+                  </span>
+                )}
               </div>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                {colorName}
+              </p>
+            </div>
 
-              <div className="flex items-center gap-1">
-                <RoleAssigner
-                  currentRole={color.role}
-                  onRoleAssign={(role: ColorRole | undefined) =>
-                    updateColor(index, { role })
-                  }
-                  assignedRoles={PaletteUtils.getAssignedRoles(
-                    currentPalette?.colors || []
-                  )}
-                />
-              </div>
+            <div className="flex items-center gap-1">
+              <RoleAssigner
+                currentRole={color.role}
+                onRoleAssign={(role: ColorRole | undefined) =>
+                  updateColor(index, { role })
+                }
+                assignedRoles={PaletteUtils.getAssignedRoles(
+                  currentPalette?.colors || []
+                )}
+              />
             </div>
           </div>
         </div>
 
         {color.locked && (
-          <div className="absolute left-2 top-2 rounded-full bg-black bg-opacity-50 p-1">
+          <div className="absolute left-2 top-2 rounded-full bg-black/50 p-1">
             <Lock className="h-3 w-3 text-white" />
           </div>
         )}
