@@ -18,6 +18,8 @@ import {
 } from "@/constants/palette-constants";
 import { ColorUtils } from "@/lib/color-utils";
 import { nanoidPaletteId } from "@/constants/nanoid";
+import { COLOR_HARMONIES, DEFAULT_HARMONY_PRESET } from "@/constants/color-harmonies";
+import { HarmonyPreset } from "@/types/color-harmonies";
 
 export class PaletteUtils {
   static generateHarmoniousHexCsv_legacy(
@@ -102,7 +104,8 @@ export class PaletteUtils {
   static generateHarmoniousHexCsv(
     baseColorHex?: string,
     count: number = 5,
-    existingColorHexArray: HexColorString[] = []
+    existingColorHexArray: HexColorString[] = [],
+    preset: HarmonyPreset = DEFAULT_HARMONY_PRESET,
   ): HexColorString[] {
     console.log("In generateHarmoniousHexCsv got baseColorHex:", baseColorHex, "count:", count, "existingColorHexArray:", existingColorHexArray);
     console.log("Existing color hex array:", existingColorHexArray);
