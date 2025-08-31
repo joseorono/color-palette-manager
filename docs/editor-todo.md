@@ -1,7 +1,7 @@
 ## High Priority
 
 - [ ] Settle on a **final design for the Color Cards**
-- [ ] **Fix Creating new palette from the editor** It doesn't work. Weird!.
+- [x] **Fix Creating new palette from the editor** It doesn't work. Weird!.
 - [ ] Fix **responsive issues**
   - There may be others, but the most salient one happens at around 888px x 631px (feasible for a small tablet or windowed Electron app)
 
