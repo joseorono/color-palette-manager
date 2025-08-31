@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { usePaletteStore } from "@/stores/palette-store";
 import { Button } from "../ui/button";
 
@@ -29,6 +29,7 @@ import {
   Keyboard,
   Info,
   Grid3X3,
+  ExternalLink,
 } from "lucide-react";
 import { toast } from "sonner";
 import { ImageUploader } from "../image-uploader";
@@ -46,7 +47,6 @@ export function PaletteNavbar() {
     regenerateUnlocked,
     addColor,
     savePalette,
-    isSaved,
     hasUnsavedChanges,
     isGenerating,
   } = usePaletteStore();
@@ -59,6 +59,7 @@ export function PaletteNavbar() {
   const [isSizeControlOpen, setIsSizeControlOpen] = useState(false);
   const [isMetadataOpen, setIsMetadataOpen] = useState(false);
   const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     setPaletteSize(currentPalette?.colors.length || 5);
@@ -106,9 +107,17 @@ export function PaletteNavbar() {
           ? "Palette updated successfully!"
           : "Palette saved successfully!"
       );
+      setIsSaving(true);
+
+      // Reset saving state after 2 seconds
+      setTimeout(() => {
+        setIsSaving(false);
+      }, 2000);
+
       setIsSaveOpen(false);
       setIsMetadataOpen(false);
     } catch (error) {
+      setIsSaving(false);
       toast.error("Failed to save palette");
     }
   };
@@ -135,6 +144,39 @@ export function PaletteNavbar() {
       toast.success(result.message);
     }
   };
+
+  const handleKeyPress = useCallback(
+    (e: KeyboardEvent) => {
+      const dialogOrSheetOpen = !!document.querySelector(
+        '[role="dialog"][data-state="open"]'
+      );
+
+      // Space - Regenerate unlocked colors
+      if (e.code === "Space" && !e.repeat && !dialogOrSheetOpen) {
+        e.preventDefault();
+        regenerateUnlocked();
+      }
+      // Shift + A - Add new color
+      else if (e.key === "A" && e.shiftKey && !dialogOrSheetOpen) {
+        e.preventDefault();
+        if (currentPalette) {
+          addColor();
+        }
+      }
+      // Shift + S - Save palette
+      else if (e.key === "S" && e.shiftKey && !dialogOrSheetOpen) {
+        e.preventDefault();
+        setIsSaveOpen(true);
+      }
+    },
+    [regenerateUnlocked, currentPalette, addColor]
+  );
+
+  useEffect(() => {
+    // Add keyboard listeners
+    window.addEventListener("keydown", handleKeyPress);
+    return () => window.removeEventListener("keydown", handleKeyPress);
+  }, [handleKeyPress]);
 
   return (
     <>
@@ -266,7 +308,7 @@ export function PaletteNavbar() {
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Add new color</p>
+                  <p>Add new color (Shift + A)</p>
                 </TooltipContent>
               </Tooltip>
 
@@ -290,41 +332,6 @@ export function PaletteNavbar() {
 
             {/* Right Section - Actions */}
             <div className="flex items-center gap-1 2xl:justify-self-end">
-              {/* View/Preview */}
-              <DropdownMenu>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-9 px-2 2xl:h-10 2xl:px-3"
-                      >
-                        <Eye className="mr-2 h-4 w-4" />
-                        <span className="hidden 2xl:inline">Preview</span>
-                        <ChevronDown className="ml-1 h-3 w-3" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Preview palette</p>
-                  </TooltipContent>
-                </Tooltip>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem>
-                    <Eye className="mr-2 h-4 w-4" />
-                    Full Screen Preview
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Palette className="mr-2 h-4 w-4" />
-                    Color Details
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-              {/* Export */}
-              <ExportModal />
-
               {/* Share */}
               <DropdownMenu>
                 <Tooltip>
@@ -357,6 +364,57 @@ export function PaletteNavbar() {
                 </DropdownMenuContent>
               </DropdownMenu>
 
+              {/* View/Preview */}
+              <DropdownMenu>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-9 px-2 2xl:h-10 2xl:px-3"
+                      >
+                        <Eye className="mr-2 h-4 w-4" />
+                        <span className="hidden 2xl:inline">Preview</span>
+                        <ChevronDown className="ml-1 h-3 w-3" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Preview palette options</p>
+                  </TooltipContent>
+                </Tooltip>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem
+                    onClick={() => {
+                      // Open side pane to the right
+                      // This will need to be implemented with your state management
+                      console.log("Open side pane preview");
+                    }}
+                  >
+                    <Eye className="mr-2 h-4 w-4" />
+                    Preview Palette
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      // Open new tab with palette ID
+                      if (currentPalette?.id) {
+                        window.open(
+                          `/app/palette-preview/${currentPalette.id}`,
+                          "_blank"
+                        );
+                      }
+                    }}
+                  >
+                    <ExternalLink className="mr-2 h-4 w-4" />
+                    Full-Screen Preview
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              {/* Export */}
+              <ExportModal />
+
               {/* Save */}
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -366,11 +424,12 @@ export function PaletteNavbar() {
                     size="sm"
                     className="h-9 px-2 2xl:h-10 2xl:px-3"
                   >
-                    {isSaved && !hasUnsavedChanges ? (
+                    {isSaving ? (
                       <Check className="mr-2 h-4 w-4" />
                     ) : (
                       <Save className="mr-2 h-4 w-4" />
                     )}
+
                     <span className="hidden 2xl:inline">Save</span>
                     {hasUnsavedChanges && (
                       <span className="ml-1 text-xs">•</span>
@@ -383,7 +442,7 @@ export function PaletteNavbar() {
               </Tooltip>
 
               {/* More Menu */}
-              <DropdownMenu>
+              <DropdownMenu modal={false}>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <DropdownMenuTrigger asChild>
@@ -401,21 +460,12 @@ export function PaletteNavbar() {
                   </TooltipContent>
                 </Tooltip>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={() => setIsShortcutsOpen(true)}>
+                  <DropdownMenuItem
+                    onClick={() => setIsShortcutsOpen(true)}
+                    className="cursor-pointer"
+                  >
                     <Keyboard className="mr-2 h-4 w-4" />
                     Keyboard Shortcuts
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Sliders className="mr-2 h-4 w-4" />
-                    Adjust Colors
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Redo className="mr-2 h-4 w-4" />
-                    History
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Info className="mr-2 h-4 w-4" />
-                    About
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -464,31 +514,46 @@ export function PaletteNavbar() {
       <Dialog open={isShortcutsOpen} onOpenChange={setIsShortcutsOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle>Keyboard Shortcuts</DialogTitle>
+            <DialogTitle className="flex items-center gap-2">
+              <Keyboard className="h-5 w-5" />
+              <span>Keyboard Shortcuts</span>
+            </DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-sm">Generate new palette</span>
-                <kbd className="rounded border bg-gray-100 px-2 py-1 text-xs dark:bg-gray-800">
+                <kbd className="rounded border bg-gray-100 px-2 py-1 text-xs font-medium dark:bg-gray-800">
                   Space
                 </kbd>
               </div>
               <div className="flex items-center justify-between">
+                <span className="text-sm">Add new color</span>
+                <kbd className="rounded border bg-gray-100 px-2 py-1 text-xs font-medium dark:bg-gray-800">
+                  Shift + A
+                </kbd>
+              </div>
+              <div className="flex items-center justify-between">
                 <span className="text-sm">Copy color hex</span>
-                <kbd className="rounded border bg-gray-100 px-2 py-1 text-xs dark:bg-gray-800">
+                <kbd className="rounded border bg-gray-100 px-2 py-1 text-xs font-medium dark:bg-gray-800">
                   Click
                 </kbd>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm">Save palette</span>
-                <kbd className="rounded border bg-gray-100 px-2 py-1 text-xs dark:bg-gray-800">
+                <kbd className="rounded border bg-gray-100 px-2 py-1 text-xs font-medium dark:bg-gray-800">
                   Ctrl+S
                 </kbd>
               </div>
             </div>
-            <div className="flex justify-end">
-              <Button onClick={() => setIsShortcutsOpen(false)}>Close</Button>
+            <div className="flex justify-end pt-2">
+              <Button
+                variant="outline"
+                onClick={() => setIsShortcutsOpen(false)}
+                className="w-full sm:w-auto"
+              >
+                Close
+              </Button>
             </div>
           </div>
         </DialogContent>

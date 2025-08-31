@@ -6,6 +6,7 @@ import { PaletteUtils } from "@/lib/palette-utils";
 import { PaletteUrlUtils } from "@/lib/palette-url-utils";
 import { PaletteDBQueries } from "@/db/queries";
 import { arrayMove } from "@dnd-kit/sortable";
+import { MAX_PALETTE_COLORS } from "@/constants/ui";
 
 interface PaletteStore {
   currentPalette: Palette;
@@ -149,7 +150,7 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
 
   addColor: () => {
     const { currentPalette } = get();
-    if (!currentPalette || currentPalette.colors.length >= 16) return;
+    if (!currentPalette || currentPalette.colors.length >= MAX_PALETTE_COLORS) return;
 
     const newColor: Color = {
       id: nanoidColorId(),

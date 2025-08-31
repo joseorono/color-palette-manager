@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { usePaletteStore } from "@/stores/palette-store";
 import { ColorCard } from "./color-card";
 import { PaletteNavbar } from "./palette-navbar";
@@ -20,30 +20,14 @@ import { ColorUtils } from "@/lib/color-utils";
 import { DRAG_ACTIVATION_DISTANCE } from "@/constants/ui";
 
 export function PaletteGenerator() {
-  const {
-    currentPalette,
-    generateNewPalette,
-    regenerateUnlocked,
-    reorderColors,
-  } = usePaletteStore();
+  const { currentPalette, generateNewPalette, reorderColors } =
+    usePaletteStore();
 
   const [activeId, setActiveId] = useState<string | null>(null);
 
-  const handleKeyPress = useCallback(
-    (event: KeyboardEvent) => {
-      if (event.code === "Space" && !event.repeat) {
-        const dialogOrSheetOpen = !!document.querySelector(
-          '[role="dialog"][data-state="open"]'
-        );
-
-        if (dialogOrSheetOpen) return;
-
-        event.preventDefault();
-        regenerateUnlocked();
-      }
-    },
-    [regenerateUnlocked]
-  );
+  function handleDragStart(event: any) {
+    setActiveId(event.active.id);
+  }
 
   useEffect(() => {
     // Generate initial palette
@@ -51,17 +35,6 @@ export function PaletteGenerator() {
       generateNewPalette();
     }
   }, []);
-
-  useEffect(() => {
-    // Add keyboard listeners
-    window.addEventListener("keydown", handleKeyPress);
-    return () => window.removeEventListener("keydown", handleKeyPress);
-  }, [handleKeyPress, generateNewPalette, currentPalette]);
-
-  function handleDragStart(event: any) {
-    setActiveId(event.active.id);
-  }
-
   // this may be the cause of the bug where if you drag from right to left
   // the drag overlay teleports from the left to the right container.
   function handleDragEnd(event: any) {
@@ -94,7 +67,7 @@ export function PaletteGenerator() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-[calc(100vh-65px)] bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       {/* Navigation Bar */}
       <PaletteNavbar />
 
