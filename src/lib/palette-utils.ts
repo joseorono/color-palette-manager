@@ -84,7 +84,7 @@ export class PaletteUtils {
   static createEmptyPalette(): Palette {
     const now = new Date();
     return {
-      id: nanoidPaletteId(),
+      id: '',
       name: "Untitled Palette",
       colors: [],
       createdAt: now,
