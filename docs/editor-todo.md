@@ -6,6 +6,7 @@
 ## Navbar Improvements
 
 ### High Priority
+- [ ] **Fix bug with the Save Icon**, it changes to a checkmark when saving but doesn't go back to the floppy disk icon a few seconds after saving.
 - [ ] **Reorder navbar actions**: Share - View - Export - Save (primary)
 - [ ] **Update Preview button** with two options:
   - Preview Palette (opens side pane to the right)
@@ -34,3 +35,4 @@
 - Extract From Image button keeps camera icon
 - Generate and Extract buttons should be icon buttons
 - Save button should be primary action in navbar
+

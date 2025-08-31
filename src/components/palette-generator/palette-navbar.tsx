@@ -481,12 +481,6 @@ export function PaletteNavbar() {
                 </kbd>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm">Lock/unlock color</span>
-                <kbd className="rounded border bg-gray-100 px-2 py-1 text-xs dark:bg-gray-800">
-                  L
-                </kbd>
-              </div>
-              <div className="flex items-center justify-between">
                 <span className="text-sm">Save palette</span>
                 <kbd className="rounded border bg-gray-100 px-2 py-1 text-xs dark:bg-gray-800">
                   Ctrl+S
