@@ -68,11 +68,11 @@ export function PaletteGenerator() {
   );
 
   return (
-    <div className="min-h-[calc(100vh-65px)] bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-fullvh-with-navbar bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       {/* Navigation Bar */}
       <PaletteNavbar />
 
-      <div className="container mx-auto px-4 py-2">
+      <div id="palette-editor-main" className="container mx-auto px-4 py-2">
         {/* Header */}
         <div className="mb-8 text-center max-w-screen-lg mx-auto">
           <p className="mb-6 text-gray-600 dark:text-gray-300">

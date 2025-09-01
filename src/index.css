@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 :root {
+  --fullvh-with-navbar: calc(100vh - (4rem + 1px)); /* 4rem to match the h-16 used in the navbar, roughly 64px */
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;

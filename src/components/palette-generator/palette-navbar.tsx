@@ -215,7 +215,7 @@ export function PaletteNavbar() {
 
   return (
     <>
-      <div className="sticky z-50 border-b bg-white/80 backdrop-blur-md dark:border-gray-800 dark:bg-gray-900/80">
+      <div id="palette-navbar" className="sticky z-50 border-b bg-white/80 backdrop-blur-md dark:border-gray-800 dark:bg-gray-900/80">
         <div className="container mx-auto px-2 2xl:px-4">
           <div className="flex flex-wrap items-center justify-between gap-2 py-4 2xl:grid 2xl:h-16 2xl:grid-cols-3">
             {/* Left Section - Palette Name */}
