@@ -15,6 +15,7 @@ import { EbookPreviewCard } from "@/components/preview-views/ebook-preview-card"
 import { MobileUIPreviewCard } from "@/components/preview-views/mobile-ui-preview-card";
 import { injectColorVariablesObjectToCSS } from "@/lib/preview-utils";
 import { PaletteUtils } from "@/lib/palette-utils";
+import { InvalidColorPaletteMessage } from "@/components/preview-views/invalid-color-palette-message";
 
 /**
  * PaletteTabsPreview Component
@@ -65,7 +66,7 @@ export function PaletteTabsPreview({
   title,
   initialView = "desktop",
   className = "",
-  previewHeight = 800,
+  previewHeight = 200,
   containerClassName = "",
 }: PropsPreviewProps) {
   const [currentView, setCurrentView] = useState<PreviewViewType>(initialView);
@@ -95,46 +96,17 @@ export function PaletteTabsPreview({
     colorVariables = colorVars;
   }
 
-  // // Validate the color variables
-  // const validationResult = colorVariables
-  //   ? PaletteUtils.validateColorRolesObject(colorVariables)
-  //   : { isValid: false, missingRoles: ColorRoles, invalidRoles: [] };
+  // Validate the color variables
+  const validationResult = colorVariables
+    ? PaletteUtils.validateColorRolesObject(colorVariables)
+    : { isValid: false, missingRoles: [...ColorRoles], invalidRoles: [] };
 
-  // console.log(colorVariables);
+  console.log(colorVariables);
 
-  // // Show error message if validation fails
-  // if (!validationResult.isValid) {
-  //   return (
-  //     <div className="rounded-md border border-red-300 bg-red-50 p-4 lg:col-span-2">
-  //       <h3 className="mb-2 text-lg font-medium text-red-800">
-  //         Invalid Color Palette
-  //       </h3>
-  //       <p className="mb-4 text-sm text-red-700">
-  //         The palette is missing required color roles needed for proper display.
-  //       </p>
-  //       {validationResult.missingRoles.length > 0 && (
-  //         <div className="mb-2">
-  //           <h4 className="text-sm font-medium text-red-800">Missing Roles:</h4>
-  //           <ul className="list-inside list-disc text-sm text-red-700">
-  //             {validationResult.missingRoles.map((role) => (
-  //               <li key={role}>{role}</li>
-  //             ))}
-  //           </ul>
-  //         </div>
-  //       )}
-  //       {validationResult.invalidRoles.length > 0 && (
-  //         <div>
-  //           <h4 className="text-sm font-medium text-red-800">Invalid Roles:</h4>
-  //           <ul className="list-inside list-disc text-sm text-red-700">
-  //             {validationResult.invalidRoles.map((role) => (
-  //               <li key={role}>{role}</li>
-  //             ))}
-  //           </ul>
-  //         </div>
-  //       )}
-  //     </div>
-  //   );
-  // }
+  // Show error message if validation fails
+  if (!validationResult.isValid) {
+    return <InvalidColorPaletteMessage validationResult={validationResult} />;
+  }
 
   // Apply the colors to CSS variables
   useEffect(() => {
@@ -153,13 +125,18 @@ export function PaletteTabsPreview({
           onViewChange={handleViewChange}
         />
       }
-      <div className="relative" style={{ minHeight: `${previewHeight}px` }}>
+      <div className="relative" style={{ height: `${previewHeight}px` }}>
         {/* Desktop View */}
         {
           <div
             className={`absolute left-0 top-0 w-full transform transition-all duration-200 ease-in-out ${currentView === "desktop" ? "z-10 translate-y-0 opacity-100" : "pointer-events-none z-0 -translate-y-4 opacity-0"}`}
           >
-            <UIPreviewCard currentColors={colorVariables} />
+            <div
+              className="scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300 hover:scrollbar-thumb-gray-400 dark:scrollbar-thumb-gray-600 dark:hover:scrollbar-thumb-gray-500 overflow-y-auto pr-4"
+              style={{ height: `${previewHeight}px` }}
+            >
+              <UIPreviewCard currentColors={colorVariables} />
+            </div>
           </div>
         }
         {/* Ebook View */}
@@ -167,7 +144,12 @@ export function PaletteTabsPreview({
           <div
             className={`absolute left-0 top-0 w-full transform transition-all duration-200 ease-in-out ${currentView === "ebook" ? "z-10 translate-y-0 opacity-100" : "pointer-events-none z-0 -translate-y-4 opacity-0"}`}
           >
-            <EbookPreviewCard currentColors={colorVariables} />
+            <div
+              className="scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300 hover:scrollbar-thumb-gray-400 dark:scrollbar-thumb-gray-600 dark:hover:scrollbar-thumb-gray-500 overflow-y-auto pr-4"
+              style={{ height: `${previewHeight}px` }}
+            >
+              <EbookPreviewCard currentColors={colorVariables} />
+            </div>
           </div>
         }
         {/* Mobile View */}
@@ -176,7 +158,12 @@ export function PaletteTabsPreview({
             className={`absolute left-0 top-0 flex w-full transform justify-center transition-all duration-200 ease-in-out ${currentView === "mobile" ? "z-10 translate-y-0 opacity-100" : "pointer-events-none z-0 -translate-y-4 opacity-0"}`}
           >
             <div className="w-[375px] overflow-hidden rounded-lg border-4 border-gray-800 shadow-lg">
-              <MobileUIPreviewCard currentColors={colorVariables} />
+              <div
+                className="scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300 hover:scrollbar-thumb-gray-400 dark:scrollbar-thumb-gray-600 dark:hover:scrollbar-thumb-gray-500 overflow-y-auto"
+                style={{ height: `${previewHeight}px` }}
+              >
+                <MobileUIPreviewCard currentColors={colorVariables} />
+              </div>
             </div>
           </div>
         }
