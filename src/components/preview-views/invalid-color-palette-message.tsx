@@ -7,7 +7,7 @@ interface InvalidColorPaletteMessageProps {
 
 export function InvalidColorPaletteMessage({
   validationResult,
-  height = "25%",
+  height = "400px",
 }: InvalidColorPaletteMessageProps) {
   return (
     <div className="relative" style={{ height }}>
@@ -36,7 +36,7 @@ export function InvalidColorPaletteMessage({
         <p className="mb-2 text-xs text-muted-foreground">
           The palette is missing required color roles needed for proper display.
         </p>
-        <div className="flex w-full max-w-xs flex-col gap-2 overflow-auto">
+        <div className="flex w-full max-w-md flex-col gap-2 overflow-auto">
           {validationResult.missingRoles.length > 0 && (
             <div className="w-full rounded-md bg-muted/50 p-2 text-left">
               <h4 className="mb-1 text-xs font-medium">Missing Roles:</h4>

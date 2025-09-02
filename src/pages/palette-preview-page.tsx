@@ -60,9 +60,9 @@ export function PalettePreviewPage() {
   // Show loading state
   if (isLoading) {
     return (
-      <div className="container mx-auto py-8 flex items-center justify-center">
+      <div className="container mx-auto flex items-center justify-center py-8">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+          <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-b-2 border-primary"></div>
           <p className="text-muted-foreground">Loading palette...</p>
         </div>
       </div>
@@ -74,7 +74,7 @@ export function PalettePreviewPage() {
     return (
       <div className="container mx-auto py-8">
         <div className="text-center text-red-600">
-          <p className="text-lg font-semibold mb-2">Error</p>
+          <p className="mb-2 text-lg font-semibold">Error</p>
           <p>{error}</p>
         </div>
       </div>
@@ -88,7 +88,9 @@ export function PalettePreviewPage() {
     return (
       <div className="container mx-auto py-8">
         <div className="mb-6 flex flex-col items-start justify-between md:flex-row">
-          <h1 className="mb-4 text-3xl font-bold md:mb-0">Color Scheme Preview</h1>
+          <h1 className="mb-4 text-3xl font-bold md:mb-0">
+            Color Scheme Preview
+          </h1>
           <PaletteSelector currentPalette={currentPalette} />
         </div>
 
@@ -114,9 +116,8 @@ export function PalettePreviewPage() {
         <PaletteTabsPreview
           palette={currentPalette}
           initialView="desktop"
-          className="lg:col-span-2"
-          previewHeight={800}
-          containerClassName=""
+          className="mt-4"
+          classNameForViews="h-[800px]"
         />
       </div>
     </div>

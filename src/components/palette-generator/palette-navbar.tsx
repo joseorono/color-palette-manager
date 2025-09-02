@@ -603,7 +603,10 @@ export function PaletteNavbar() {
             <SheetTitle>Preview Palette</SheetTitle>
           </SheetHeader>
           <div className="h-[calc(100%-4rem)]">
-            <PaletteTabsPreview />
+            <PaletteTabsPreview 
+              palette={currentPalette}
+              classNameForViews="h-full"
+            />
           </div>
         </SheetContent>
       </Sheet>
