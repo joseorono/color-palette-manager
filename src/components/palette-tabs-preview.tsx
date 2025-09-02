@@ -1,5 +1,11 @@
-import { useEffect, useState } from "react";
-import { CSSColorVariablesObject, Palette } from "@/types/palette";
+import { useEffect, useState, useMemo } from "react";
+import {
+  CSSColorVariablesObject,
+  Palette,
+  ColorRole,
+  ColorRoles,
+  Color,
+} from "@/types/palette";
 import { UIPreviewCard } from "@/components/preview-views/ui-preview-card";
 import {
   ViewSelector,
@@ -8,6 +14,7 @@ import {
 import { EbookPreviewCard } from "@/components/preview-views/ebook-preview-card";
 import { MobileUIPreviewCard } from "@/components/preview-views/mobile-ui-preview-card";
 import { injectColorVariablesObjectToCSS } from "@/lib/preview-utils";
+import { PaletteUtils } from "@/lib/palette-utils";
 
 /**
  * PaletteTabsPreview Component
@@ -68,13 +75,74 @@ export function PaletteTabsPreview({
     setCurrentView(view);
   };
 
+  // Get color variables from palette or initialColors
+  let colorVariables: CSSColorVariablesObject | undefined;
+
+  if (palette?.colors) {
+    // Create a default object with empty strings
+    const colorVars = ColorRoles.reduce((acc, role) => {
+      acc[role] = "";
+      return acc;
+    }, {} as CSSColorVariablesObject);
+
+    // Fill in values from palette colors that have roles
+    palette.colors.forEach((color) => {
+      if (color.role) {
+        colorVars[color.role] = color.hex;
+      }
+    });
+
+    colorVariables = colorVars;
+  }
+
+  // // Validate the color variables
+  // const validationResult = colorVariables
+  //   ? PaletteUtils.validateColorRolesObject(colorVariables)
+  //   : { isValid: false, missingRoles: ColorRoles, invalidRoles: [] };
+
+  // console.log(colorVariables);
+
+  // // Show error message if validation fails
+  // if (!validationResult.isValid) {
+  //   return (
+  //     <div className="rounded-md border border-red-300 bg-red-50 p-4 lg:col-span-2">
+  //       <h3 className="mb-2 text-lg font-medium text-red-800">
+  //         Invalid Color Palette
+  //       </h3>
+  //       <p className="mb-4 text-sm text-red-700">
+  //         The palette is missing required color roles needed for proper display.
+  //       </p>
+  //       {validationResult.missingRoles.length > 0 && (
+  //         <div className="mb-2">
+  //           <h4 className="text-sm font-medium text-red-800">Missing Roles:</h4>
+  //           <ul className="list-inside list-disc text-sm text-red-700">
+  //             {validationResult.missingRoles.map((role) => (
+  //               <li key={role}>{role}</li>
+  //             ))}
+  //           </ul>
+  //         </div>
+  //       )}
+  //       {validationResult.invalidRoles.length > 0 && (
+  //         <div>
+  //           <h4 className="text-sm font-medium text-red-800">Invalid Roles:</h4>
+  //           <ul className="list-inside list-disc text-sm text-red-700">
+  //             {validationResult.invalidRoles.map((role) => (
+  //               <li key={role}>{role}</li>
+  //             ))}
+  //           </ul>
+  //         </div>
+  //       )}
+  //     </div>
+  //   );
+  // }
+
   // Apply the colors to CSS variables
   useEffect(() => {
-    if (initialColors) {
+    if (colorVariables) {
       // Inject colors to CSS variables
-      injectColorVariablesObjectToCSS(initialColors);
+      injectColorVariablesObjectToCSS(colorVariables);
     }
-  }, [initialColors]);
+  }, [colorVariables]);
 
   return (
     <div className="lg:col-span-2">
@@ -91,7 +159,7 @@ export function PaletteTabsPreview({
           <div
             className={`absolute left-0 top-0 w-full transform transition-all duration-200 ease-in-out ${currentView === "desktop" ? "z-10 translate-y-0 opacity-100" : "pointer-events-none z-0 -translate-y-4 opacity-0"}`}
           >
-            <UIPreviewCard currentColors={initialColors} />
+            <UIPreviewCard currentColors={colorVariables} />
           </div>
         }
         {/* Ebook View */}
@@ -99,7 +167,7 @@ export function PaletteTabsPreview({
           <div
             className={`absolute left-0 top-0 w-full transform transition-all duration-200 ease-in-out ${currentView === "ebook" ? "z-10 translate-y-0 opacity-100" : "pointer-events-none z-0 -translate-y-4 opacity-0"}`}
           >
-            <EbookPreviewCard currentColors={initialColors} />
+            <EbookPreviewCard currentColors={colorVariables} />
           </div>
         }
         {/* Mobile View */}
@@ -108,7 +176,7 @@ export function PaletteTabsPreview({
             className={`absolute left-0 top-0 flex w-full transform justify-center transition-all duration-200 ease-in-out ${currentView === "mobile" ? "z-10 translate-y-0 opacity-100" : "pointer-events-none z-0 -translate-y-4 opacity-0"}`}
           >
             <div className="w-[375px] overflow-hidden rounded-lg border-4 border-gray-800 shadow-lg">
-              <MobileUIPreviewCard currentColors={initialColors} />
+              <MobileUIPreviewCard currentColors={colorVariables} />
             </div>
           </div>
         }
