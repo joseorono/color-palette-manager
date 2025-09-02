@@ -31,6 +31,25 @@ export const ColorRoles = [
   "muted-foreground",
 ] as const;
 
+export const MandatoryColorRoles = [
+  "primary",
+  "secondary",
+  "accent",
+  "background",
+  "foreground",
+  "card",
+  "border",
+  "muted",
+] as const;
+
+export const OptionalColorRoles = [
+  "primary-foreground",
+  "secondary-foreground",
+  "accent-foreground",
+  "card-foreground",
+  "muted-foreground",
+] as const;
+
 export type ColorRole = (typeof ColorRoles)[number];
 export type CSSColorVariablesObject = Record<ColorRole, string>;
 

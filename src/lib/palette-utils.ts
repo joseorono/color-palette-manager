@@ -10,6 +10,8 @@ import {
   Palette,
   ColorRoleValidationResult,
   ColorRolesConversionResult,
+  OptionalColorRoles,
+  MandatoryColorRoles,
 } from "@/types/palette";
 import {
   PALETTE_GENERATION_PRIORITIES,
@@ -252,7 +254,7 @@ export class PaletteUtils {
     const invalidRoles: string[] = [];
 
     // Check for missing required roles
-    for (const role of ColorRoles) {
+    for (const role of MandatoryColorRoles) {
       if (!colorRolesObject[role]) {
         missingRoles.push(role);
       }
@@ -284,6 +286,15 @@ export class PaletteUtils {
         colorRolesObject[color.role] = color.hex;
       }
     });
+
+    // All optional roles, if undefined, can be safely set to foreground
+    // Will need to update this if we add more optional roles
+    OptionalColorRoles.forEach((role) => {
+      if (!colorRolesObject[role]) {
+        colorRolesObject[role] = colorRolesObject["foreground"];
+      }
+    });
+
 
     // Validate the resulting object
     const validation = this.validateColorRolesObject(colorRolesObject as CSSColorVariablesObject);
