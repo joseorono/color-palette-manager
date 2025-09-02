@@ -293,7 +293,7 @@ export function PaletteDashboard({
 
       {/* Palettes Grid */}
       {filteredPalettes.length === 0 ? (
-        <div className="py-12 text-center">
+        <div className="py-6 text-center">
           <div className="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
             <LayoutGrid className="h-12 w-12 text-gray-400" />
           </div>
@@ -313,7 +313,7 @@ export function PaletteDashboard({
           )}
         </div>
       ) : (
-        <div className={`grid gap-6 ${getGridClasses()}`}>
+        <div className={`grid gap-6 max-sm:justify-items-center ${getGridClasses()}`}>
           {filteredPalettes.map((palette) => (
             <PaletteCard
               key={palette.id}
