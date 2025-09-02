@@ -37,7 +37,7 @@
 ### Medium Priority
 
 - [x] **Fix unnecessary scroll** in palette editor (height/flex issue - use flex instead of min-height 100%)
-- [ ] **create height variable for navbar height** (should be around 4rem / 64 px)
+
 
 ## Notes
 
