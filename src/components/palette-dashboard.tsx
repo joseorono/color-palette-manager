@@ -220,20 +220,21 @@ export function PaletteDashboard({
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+      <div className="flex flex-col max-sm:text-center max-sm:items-center gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="mb-2 text-3xl font-bold">My Palettes</h1>
-          <p className="ml-1 text-muted-foreground">
+          <h1 className="mb-2 text-3xl font-bold ">My Palettes</h1>
+          <p className="text-muted-foreground">
             {filteredPalettes.length} of {palettes.length} palettes
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex max-sm:flex-col max-sm:w-[50%] max-sm:items-center max-sm:justify-center gap-2">
           {/* View Mode Toggle */}
-          <div className="flex gap-1 rounded-lg border p-1">
+          <div className="flex max-sm:w-full gap-1 rounded-lg border p-1">
             <Button
               variant={localViewMode === "grid" ? "default" : "ghost"}
               size="sm"
+              className="max-sm:flex-1"
               onClick={() => setLocalViewMode("grid")}
             >
               <LayoutGrid className="h-4 w-4" />
@@ -241,6 +242,7 @@ export function PaletteDashboard({
             <Button
               variant={localViewMode === "compact" ? "default" : "ghost"}
               size="sm"
+              className="max-sm:flex-1"
               onClick={() => setLocalViewMode("compact")}
             >
               <Grid3X3 className="h-4 w-4" />
@@ -248,6 +250,7 @@ export function PaletteDashboard({
             <Button
               variant={localViewMode === "list" ? "default" : "ghost"}
               size="sm"
+              className="max-sm:flex-1"
               onClick={() => setLocalViewMode("list")}
             >
               <List className="h-4 w-4" />
@@ -264,7 +267,7 @@ export function PaletteDashboard({
             variant="outline"
             size="lg"
             onClick={() => setImportModalOpen(true)}
-            className="ml-2"
+            className="max-sm:w-full ml-2"
           >
             <Upload className="mr-2 h-4 w-4" />
             Import Palette
@@ -290,7 +293,7 @@ export function PaletteDashboard({
 
       {/* Palettes Grid */}
       {filteredPalettes.length === 0 ? (
-        <div className="py-12 text-center">
+        <div className="py-6 text-center">
           <div className="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
             <LayoutGrid className="h-12 w-12 text-gray-400" />
           </div>
@@ -310,7 +313,7 @@ export function PaletteDashboard({
           )}
         </div>
       ) : (
-        <div className={`grid gap-6 ${getGridClasses()}`}>
+        <div className={`grid gap-6 max-sm:justify-items-center ${getGridClasses()}`}>
           {filteredPalettes.map((palette) => (
             <PaletteCard
               key={palette.id}

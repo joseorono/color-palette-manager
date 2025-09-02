@@ -86,16 +86,16 @@ export function PaletteFilters({
     filters.search || filters.tags.length > 0 || filters.showFavoritesOnly;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 max-sm:ml-24">
       <div className="flex flex-col gap-4 sm:flex-row">
         {/* Search */}
-        <div className="relative flex-1">
+        <div className="relative flex-1 max-sm:w-[200px] max-sm:ml-10">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 transform text-muted-foreground" />
           <Input
             placeholder="Search palettes..."
             value={filters.search}
             onChange={(e) => handleSearchChange(e.target.value)}
-            className="pl-10"
+            className="pl-10 "
           />
         </div>
 
@@ -104,7 +104,7 @@ export function PaletteFilters({
           value={`${filters.sortBy}-${filters.sortOrder}`}
           onValueChange={handleSortChange}
         >
-          <SelectTrigger className="w-full sm:w-[200px]">
+          <SelectTrigger className="max-sm:ml-10 max-sm:w-[200px]">
             <div className="flex items-center">
               {filters.sortOrder === "asc" ? (
                 <SortAsc className="mr-2 h-4 w-4" />
@@ -127,10 +127,11 @@ export function PaletteFilters({
         </Select>
 
         {/* Filters */}
-        <div className="flex gap-2">
+        <div className="flex max-sm:w-[200px] max-sm:ml-10 gap-2">
           <Button
             variant={filters.showFavoritesOnly ? "default" : "outline"}
             size="sm"
+            className="max-sm:w-full"
             onClick={handleFavoritesToggle}
           >
             <Heart
@@ -141,20 +142,20 @@ export function PaletteFilters({
 
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" className="max-sm:w-full">
                 <Filter className="mr-2 h-4 w-4" />
                 Tags
                 {filters.tags.length > 0 && (
                   <Badge
                     variant="secondary"
-                    className="ml-2 h-5 w-5 p-0 text-xs"
+                    className="ml-2 h-5 w-5 p-1.5 text-xs"
                   >
                     {filters.tags.length}
                   </Badge>
                 )}
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-80" align="end">
+            <PopoverContent className="w-80  max-sm:w-[400px] max-sm:ml-10" align="end">
               <div className="space-y-4">
                 <div>
                   <h4 className="mb-2 font-medium">Filter by Tags</h4>
@@ -190,11 +191,14 @@ export function PaletteFilters({
 
       {/* Active Filters */}
       {hasActiveFilters && (
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="text-sm text-muted-foreground">Active filters:</span>
+        <div className="space-y-2 max-sm:ml-24">
+          <div className="flex items-center justify-between">
+          <span className="text-sm text-black">Active filters :</span>
+          
+          </div>
 
           {filters.showFavoritesOnly && (
-            <Badge variant="secondary" className="flex items-center gap-1">
+            <Badge variant="secondary" className="flex items-center gap-1 max-sm:w-[150px] hover:bg-secondary/80">
               <Heart className="h-3 w-3 fill-current" />
               Favorites
               <X
@@ -208,7 +212,7 @@ export function PaletteFilters({
             <Badge
               key={tag}
               variant="secondary"
-              className="flex items-center gap-1"
+              className="flex items-center gap-1 max-sm:w-[150px] hover:bg-secondary/80"
             >
               {tag}
               <X
@@ -218,7 +222,7 @@ export function PaletteFilters({
             </Badge>
           ))}
 
-          <Button variant="ghost" size="sm" onClick={clearAllFilters}>
+          <Button variant="ghost" size="sm" className="max-sm:w-[150px] max-sm:mt-2" onClick={clearAllFilters}>
             Clear all
           </Button>
         </div>

@@ -162,9 +162,9 @@ export function CreatePaletteModal({
 
   return (
     <Dialog open={open} onOpenChange={handleModalClose}>
-      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-[500px]">
+      <DialogContent className="max-h-[90vh] overflow-y-auto rounded-md max-sm:max-w-[400px]">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
+          <DialogTitle className="flex items-center max-sm:justify-center mb-5 gap-2">
             <PaletteIcon className="h-5 w-5" />
             Create New Palette
           </DialogTitle>
@@ -389,7 +389,15 @@ export function CreatePaletteModal({
             </div>
 
             {/* Submit Button */}
-            <div className="flex justify-end space-x-2 pt-2">
+            <div className="flex justify-end space-x-2 pt-2 max-sm:justify-center">
+            <LoadingButton
+                type="submit"
+                loading={isPending}
+                loadingText="Creating..."
+                className="min-w-[140px]"
+              >
+                Let's Create it!
+              </LoadingButton>
               <Button
                 type="button"
                 variant="outline"
@@ -398,14 +406,7 @@ export function CreatePaletteModal({
               >
                 Cancel
               </Button>
-              <LoadingButton
-                type="submit"
-                loading={isPending}
-                loadingText="Creating..."
-                className="min-w-[140px]"
-              >
-                Let's Create it!
-              </LoadingButton>
+              
             </div>
           </form>
         </Form>
