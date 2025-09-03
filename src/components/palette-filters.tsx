@@ -86,10 +86,10 @@ export function PaletteFilters({
     filters.search || filters.tags.length > 0 || filters.showFavoritesOnly;
 
   return (
-    <div className="space-y-4 max-sm:ml-24">
-      <div className="flex flex-col gap-4 sm:flex-row">
+    <div className="space-y-4 ml-24 sm:ml-0">
+      <div className="flex flex-col gap-4 sm:flex-row sm:w-auto sm:mr-8">
         {/* Search */}
-        <div className="relative flex-1 max-sm:w-[200px] max-sm:ml-10">
+        <div className="relative flex-1 min-w-[280px] sm:min-w-[200px] ml-10">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 transform text-muted-foreground" />
           <Input
             placeholder="Search palettes..."
@@ -191,14 +191,13 @@ export function PaletteFilters({
 
       {/* Active Filters */}
       {hasActiveFilters && (
-        <div className="space-y-2 max-sm:ml-24">
+        <div className="space-y-2 flex flex-col items-center">
           <div className="flex items-center justify-between">
           <span className="text-sm text-black">Active filters :</span>
-          
           </div>
 
           {filters.showFavoritesOnly && (
-            <Badge variant="secondary" className="flex items-center gap-1 max-sm:w-[150px] hover:bg-secondary/80">
+            <Badge variant="secondary" className="flex items-center gap-1 w-auto max-w-fit">
               <Heart className="h-3 w-3 fill-current" />
               Favorites
               <X
@@ -212,7 +211,7 @@ export function PaletteFilters({
             <Badge
               key={tag}
               variant="secondary"
-              className="flex items-center gap-1 max-sm:w-[150px] hover:bg-secondary/80"
+              className="flex items-center gap-1 w-auto max-w-fit hover:bg-secondary/80"
             >
               {tag}
               <X

@@ -99,7 +99,7 @@ export function PaletteCard({
 
   return (
     <Card
-      className="group cursor-pointer transition-all max-sm:w-[450px] duration-500 hover:scale-[1.02] hover:shadow-lg"
+      className="group cursor-pointer transition-all w-auto sm:w-[85%] ml-2 mr-2 sm:ml-8 duration-500 hover:scale-[1.02] hover:shadow-lg"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => onView?.(palette)}

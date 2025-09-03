@@ -135,9 +135,9 @@ export default function ImportPaletteModal({
 
   return (
     <Dialog open={open} onOpenChange={handleModalClose}>
-      <DialogContent className="max-h-[90vh] overflow-y-auto rounded-md max-sm:max-w-[400px]">
+      <DialogContent className="max-h-[90vh] overflow-y-auto rounded-md w-[600px]">
         <DialogHeader>
-          <DialogTitle className="flex items-center max-sm:justify-center mb-5 gap-2">
+          <DialogTitle className="flex items-center justify-center mb-5 gap-2">
             <Upload className="h-5 w-5" />
             Import Palette
           </DialogTitle>
@@ -222,7 +222,7 @@ export default function ImportPaletteModal({
             />
 
             {/* Submit Button */}
-            <div className="flex justify-end space-x-2 pt-4 max-sm:justify-center">
+            <div className="flex space-x-2 pt-4 justify-center">
             <LoadingButton
                 type="submit"
                 loading={isPending}
