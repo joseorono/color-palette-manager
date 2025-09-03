@@ -228,7 +228,7 @@ export function PaletteDashboard({
           </p>
         </div>
 
-        <div className="flex flex-col gap-3 sm:flex-row sm:gap-2">
+        <div className="flex flex-col gap-4 sm:flex-row sm:gap-2">
           {/* View Mode Toggle */}
           <div className="flex w-full gap-1 rounded-lg border p-1 sm:w-auto">
             <Button
@@ -266,12 +266,12 @@ export function PaletteDashboard({
           </Button> */}
           {/* Replace the old create button with the new trigger */}
 
-          <div className="flex w-full gap-2 sm:w-auto sm:ml-2 sm:mr-7">
+          <div className="flex w-[50%] ml-2 gap-2 sm:ml-2 sm:mr-7">
             <Button
               variant="outline"
               size="sm"
               onClick={() => setImportModalOpen(true)}
-              className="flex-1 sm:flex-initial sm:size-lg"
+              className="flex-1"
             >
               <Upload className="mr-2 h-4 w-4" />
               <span className="hidden sm:inline">Import Palette</span>
