@@ -15,6 +15,7 @@ import { GradientGeneratorTool } from "./pages/tools/gradient-generator-tool";
 import { ColorConverterTool } from "./pages/tools/color-converter-tool";
 import { ImagePaletteExtractorTool } from "@/pages/image-palette-extractor-tool";
 import { HslColorPickerTool } from "./pages/tools/hsl-color-picker-tool";
+import { ContrastCheckerTool } from "./pages/tools/contrast-checker-tool";
 import ToolsPage from "./pages/tools-page";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import NotFoundPage from "./pages/not-found-page";
@@ -69,6 +70,10 @@ function App() {
               <Route
                 path="/app/tools/hsl-color-picker"
                 element={<HslColorPickerTool />}
+              />
+              <Route
+                path="/app/tools/contrast-checker"
+                element={<ContrastCheckerTool />}
               />
             </Route>
 

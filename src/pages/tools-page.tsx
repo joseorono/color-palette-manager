@@ -104,7 +104,8 @@ const accessibilityTools: Tool[] = [
     name: "Text & Background Contrast Checker",
     description: "Check if color combinations meet WCAG contrast guidelines for both normal and large text.",
     icon: Type,
-    status: "coming-soon"
+    status: "available",
+    link: "/app/tools/contrast-checker"
   },
 
   {
