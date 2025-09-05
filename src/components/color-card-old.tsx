@@ -45,8 +45,6 @@ export function ColorCard({ color, index }: ColorCardProps) {
     }
   };
 
-  // const textColor =
-  //   getContrastRatio(color.hex, "#ffffff") > 3 ? "#ffffff" : "#000000";
   const colorName = ColorUtils.getColorName(color.hex);
 
   return (
@@ -240,8 +238,6 @@ export function ColorCardOld({ color, index }: ColorCardProps) {
     }
   };
 
-  // const textColor =
-  //   getContrastRatio(color.hex, "#ffffff") > 3 ? "#ffffff" : "#000000";
   const colorName = ColorUtils.getColorName(color.hex);
 
   return (
