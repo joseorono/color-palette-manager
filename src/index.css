@@ -59,7 +59,7 @@
     --background: 0 0% 3.9%; /* dark gray */
     --foreground: 0 0% 98%; /* white */
     --card: 0 0% 3.9%; /* dark gray */
-    --card-foreground: 0 0% 98%; /* white */
+    --card-foreground: 0 0% 100%; /* white */
     --popover: 0 0% 3.9%; /* dark gray */
     --popover-foreground: 0 0% 98%; /* white */
     --primary: 190 71% 35%; /* blue-munsell */
@@ -67,13 +67,13 @@
     --secondary: 0 0% 14.9%; /* darker gray */
     --secondary-foreground: 0 0% 98%; /* white */
     --muted: 0 0% 14.9%; /* darker gray */
-    --muted-foreground: 0 0% 63.9%; /* medium gray */
+    --muted-foreground: 0 0% 100%; /* medium gray */
     --accent: 186 74% 76%; /* electric-blue */
     --accent-foreground: 0 0% 9%; /* dark text on light accent */
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%; /* dark gray border */
-    --input: 0 0% 14.9%; /* dark gray input */
+    --border: 0 0% 100%; /* dark gray border */
+    --input: 0 0% 100%; /* dark gray input */
     --ring: 190 71% 35%; /* blue-munsell */
     --chart-1: 189 76% 59%; /* vivid-sky-blue */
     --chart-2: 186 74% 76%; /* electric-blue */
