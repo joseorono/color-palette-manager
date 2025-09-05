@@ -15,7 +15,7 @@ export default function NotFoundPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md border-0 shadow-2xl bg-card/80 backdrop-blur-sm">
+      <Card className="w-full max-w-md border border-muted-foreground/20 shadow-2xl bg-card/80 backdrop-blur-sm">
         <CardContent className="p-8 text-center space-y-6">
           {/* 404 Number with gradient */}
           <div className="relative">
