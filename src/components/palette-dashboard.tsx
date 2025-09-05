@@ -201,7 +201,7 @@ export function PaletteDashboard({
   const getGridClasses = () => {
     switch (localViewMode) {
       case "compact":
-        return "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5";
+        return "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 2xl:grid-cols-6";
       case "list":
         return "grid-cols-1";
       default:
@@ -218,42 +218,45 @@ export function PaletteDashboard({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6 px-2 sm:px-0">
       {/* Header */}
-      <div className="flex flex-col max-sm:text-center max-sm:items-center gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="mb-2 text-3xl font-bold ">My Palettes</h1>
-          <p className="text-muted-foreground">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="text-center sm:text-left">
+          <h1 className="mb-2 text-2xl font-bold sm:text-3xl sm:mx-9">My Palettes</h1>
+          <p className="text-sm text-muted-foreground sm:text-base sm:mx-9">
             {filteredPalettes.length} of {palettes.length} palettes
           </p>
         </div>
 
-        <div className="flex max-sm:flex-col max-sm:w-[50%] max-sm:items-center max-sm:justify-center gap-2">
+        <div className="flex flex-col gap-4 sm:flex-row sm:gap-2">
           {/* View Mode Toggle */}
-          <div className="flex max-sm:w-full gap-1 rounded-lg border p-1">
+          <div className="flex w-full gap-1 rounded-lg border p-1 sm:w-auto">
             <Button
               variant={localViewMode === "grid" ? "default" : "ghost"}
               size="sm"
-              className="max-sm:flex-1"
+              className="flex-1 sm:flex-initial"
               onClick={() => setLocalViewMode("grid")}
             >
               <LayoutGrid className="h-4 w-4" />
+              <span className="ml-1 text-xs sm:hidden">Grid</span>
             </Button>
             <Button
               variant={localViewMode === "compact" ? "default" : "ghost"}
               size="sm"
-              className="max-sm:flex-1"
+              className="flex-1 sm:flex-initial"
               onClick={() => setLocalViewMode("compact")}
             >
               <Grid3X3 className="h-4 w-4" />
+              <span className="ml-1 text-xs sm:hidden">Compact</span>
             </Button>
             <Button
               variant={localViewMode === "list" ? "default" : "ghost"}
               size="sm"
-              className="max-sm:flex-1"
+              className="flex-1 sm:flex-initial"
               onClick={() => setLocalViewMode("list")}
             >
               <List className="h-4 w-4" />
+              <span className="ml-1 text-xs sm:hidden">List</span>
             </Button>
           </div>
 
@@ -263,24 +266,31 @@ export function PaletteDashboard({
           </Button> */}
           {/* Replace the old create button with the new trigger */}
 
-          <Button
-            variant="outline"
-            size="lg"
-            onClick={() => setImportModalOpen(true)}
-            className="max-sm:w-full ml-2"
-          >
-            <Upload className="mr-2 h-4 w-4" />
-            Import Palette
-          </Button>
+          <div className="flex w-[50%] ml-2 gap-2 sm:ml-2 sm:mr-7">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setImportModalOpen(true)}
+              className="flex-1"
+            >
+              <Upload className="mr-2 h-4 w-4" />
+              <span className="hidden sm:inline">Import Palette</span>
+              <span className="sm:hidden">Import</span>
+            </Button>
+
+            <div className="flex-1 sm:flex-initial">
+              <CreatePaletteTrigger size="sm">
+                <span className="mr-2">🎨</span>
+                <span className="hidden sm:inline">Create Palette</span>
+                <span className="sm:hidden">Create</span>
+              </CreatePaletteTrigger>
+            </div>
+          </div>
 
           <ImportPaletteModal
             open={importModalOpen}
             onOpenChange={setImportModalOpen}
           />
-          <CreatePaletteTrigger size="lg">
-            <span className="mr-2">🎨</span>
-            Create Palette
-          </CreatePaletteTrigger>
         </div>
       </div>
 
@@ -293,12 +303,12 @@ export function PaletteDashboard({
 
       {/* Palettes Grid */}
       {filteredPalettes.length === 0 ? (
-        <div className="py-6 text-center">
-          <div className="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
-            <LayoutGrid className="h-12 w-12 text-gray-400" />
+        <div className="py-8 text-center px-4">
+          <div className="mx-auto mb-4 flex h-16 w-16 sm:h-24 sm:w-24 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
+            <LayoutGrid className="h-8 w-8 sm:h-12 sm:w-12 text-gray-400" />
           </div>
-          <h3 className="mb-2 text-lg font-medium">No palettes found</h3>
-          <p className="mb-4 text-muted-foreground">
+          <h3 className="mb-2 text-base sm:text-lg font-medium">No palettes found</h3>
+          <p className="mb-4 text-sm sm:text-base text-muted-foreground max-w-md mx-auto">
             {filters.search ||
             filters.tags.length > 0 ||
             filters.showFavoritesOnly
@@ -306,14 +316,14 @@ export function PaletteDashboard({
               : "Create your first color palette to get started."}
           </p>
           {onCreateNew && (
-            <Button onClick={onCreateNew}>
+            <Button onClick={onCreateNew} size="sm" className="sm:size-default">
               <Plus className="mr-2 h-4 w-4" />
               Create Your First Palette
             </Button>
           )}
         </div>
       ) : (
-        <div className={`grid gap-6 max-sm:justify-items-center ${getGridClasses()}`}>
+        <div className={`grid gap-2 sm:gap-3 md:gap-4 ${getGridClasses()}`}>
           {filteredPalettes.map((palette) => (
             <PaletteCard
               key={palette.id}

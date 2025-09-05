@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
+import { cn } from "@/lib/utils";
 import {
   CSSColorVariablesObject,
   Palette,
@@ -56,7 +57,7 @@ interface PropsPreviewProps {
   initialView?: PreviewViewType;
   availableViews?: PreviewViewType[];
   className?: string;
-  previewHeight?: number;
+  classNameForViews?: string;
   containerClassName?: string;
 }
 
@@ -66,7 +67,7 @@ export function PaletteTabsPreview({
   title,
   initialView = "desktop",
   className = "",
-  previewHeight = 200,
+  classNameForViews = "",
   containerClassName = "",
 }: PropsPreviewProps) {
   const [currentView, setCurrentView] = useState<PreviewViewType>(initialView);
@@ -105,7 +106,14 @@ export function PaletteTabsPreview({
 
   // Show error message if validation fails
   if (!validationResult.isValid) {
-    return <InvalidColorPaletteMessage validationResult={validationResult} />;
+    return (
+      <div>
+        <InvalidColorPaletteMessage
+          validationResult={validationResult}
+          height={400}
+        />
+      </div>
+    );
   }
 
   // Apply the colors to CSS variables
@@ -125,15 +133,17 @@ export function PaletteTabsPreview({
           onViewChange={handleViewChange}
         />
       }
-      <div className="relative" style={{ height: `${previewHeight}px` }}>
+      <div className="relative">
         {/* Desktop View */}
         {
           <div
             className={`absolute left-0 top-0 w-full transform transition-all duration-200 ease-in-out ${currentView === "desktop" ? "z-10 translate-y-0 opacity-100" : "pointer-events-none z-0 -translate-y-4 opacity-0"}`}
           >
             <div
-              className="scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300 hover:scrollbar-thumb-gray-400 dark:scrollbar-thumb-gray-600 dark:hover:scrollbar-thumb-gray-500 overflow-y-auto pr-4"
-              style={{ height: `${previewHeight}px` }}
+              className={cn(
+                "scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300 hover:scrollbar-thumb-gray-400 dark:scrollbar-thumb-gray-600 dark:hover:scrollbar-thumb-gray-500 overflow-y-auto pr-4",
+                classNameForViews
+              )}
             >
               <UIPreviewCard currentColors={colorVariables} />
             </div>
@@ -145,8 +155,10 @@ export function PaletteTabsPreview({
             className={`absolute left-0 top-0 w-full transform transition-all duration-200 ease-in-out ${currentView === "ebook" ? "z-10 translate-y-0 opacity-100" : "pointer-events-none z-0 -translate-y-4 opacity-0"}`}
           >
             <div
-              className="scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300 hover:scrollbar-thumb-gray-400 dark:scrollbar-thumb-gray-600 dark:hover:scrollbar-thumb-gray-500 overflow-y-auto pr-4"
-              style={{ height: `${previewHeight}px` }}
+              className={cn(
+                "scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300 hover:scrollbar-thumb-gray-400 dark:scrollbar-thumb-gray-600 dark:hover:scrollbar-thumb-gray-500 overflow-y-auto pr-4",
+                classNameForViews
+              )}
             >
               <EbookPreviewCard currentColors={colorVariables} />
             </div>
@@ -159,8 +171,10 @@ export function PaletteTabsPreview({
           >
             <div className="w-[375px] overflow-hidden rounded-lg border-4 border-gray-800 shadow-lg">
               <div
-                className="scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300 hover:scrollbar-thumb-gray-400 dark:scrollbar-thumb-gray-600 dark:hover:scrollbar-thumb-gray-500 overflow-y-auto"
-                style={{ height: `${previewHeight}px` }}
+                className={cn(
+                  "scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300 hover:scrollbar-thumb-gray-400 dark:scrollbar-thumb-gray-600 dark:hover:scrollbar-thumb-gray-500 overflow-y-auto",
+                  classNameForViews
+                )}
               >
                 <MobileUIPreviewCard currentColors={colorVariables} />
               </div>
