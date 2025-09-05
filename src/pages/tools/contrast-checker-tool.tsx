@@ -181,7 +181,7 @@ export const ContrastCheckerTool: React.FC = () => {
           </Card>
 
           {/* Live Preview Card */}
-          <Card className="shadow-xl border-0 bg-card/50 backdrop-blur-sm">
+          <Card className="shadow-xl border-0 bg-card/50 backdrop-blur-sm !mt-0">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Eye className="h-5 w-5" />
@@ -233,7 +233,7 @@ export const ContrastCheckerTool: React.FC = () => {
           </Card>
 
           {/* Contrast Results Card */}
-          <Card className="shadow-xl border-0 bg-card/50 backdrop-blur-sm">
+          <Card className="shadow-xl border-0 bg-card/50 backdrop-blur-sm !mt-0">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Info className="h-5 w-5" />
