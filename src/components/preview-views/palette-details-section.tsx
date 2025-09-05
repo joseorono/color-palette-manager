@@ -25,7 +25,7 @@ export function PaletteDetailsSection({ palette }: PaletteDetailsSectionProps) {
                   {color.hex.toUpperCase()}
                 </p>
                 {color.role && (
-                  <p className="text-xs text-blue-600 capitalize">
+                  <p className="text-xs text-foreground capitalize">
                     {color.role}
                   </p>
                 )}
