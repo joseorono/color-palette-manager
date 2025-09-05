@@ -4,6 +4,7 @@
 - No server needed, no database needed, no auth.
 - Use Electron for desktop app.
 - This is also a Progressive Web App (PWA).
+- For logic, always look for existing functions and classes in /src/lib/ before writing new ones.
 
 # General Code Style & Formatting
 - Use kebab-case for React component file names (e.g., user-card.tsx, not UserCard.tsx).
