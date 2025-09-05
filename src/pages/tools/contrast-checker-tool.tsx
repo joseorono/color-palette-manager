@@ -3,6 +3,7 @@ import { ToolHeroSection } from '@/components/reusable-sections/tool-hero-sectio
 import { ToolSectionHeading } from '@/components/reusable-sections/tool-section-heading';
 import { ToolFeatureCard } from '@/components/reusable-sections/tool-feature-card';
 import { ColorUtils } from '@/lib/color-utils';
+import { AccessibilityUtils } from '@/lib/accessibility-utils';
 import { HexColorString, WCAGContrastLevel } from '@/types/palette';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -28,7 +29,7 @@ export const ContrastCheckerTool: React.FC = () => {
 
   // Calculate contrast when colors change
   useEffect(() => {
-    const ratio = ColorUtils.getContrastRatio(textColor, backgroundColor);
+    const ratio = AccessibilityUtils.getContrastRatio(textColor, backgroundColor);
     setContrastRatio(ratio);
   }, [textColor, backgroundColor]);
 
@@ -47,7 +48,7 @@ export const ContrastCheckerTool: React.FC = () => {
   };
 
   const getContrastBadge = (ratio: number) => {
-    const level = ColorUtils.getAccessibilityLevel(ratio);
+    const level = AccessibilityUtils.getAccessibilityLevel(ratio);
     if (level === WCAGContrastLevel.AAA) {
       return (
         <Badge variant="default" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100">
@@ -72,14 +73,14 @@ export const ContrastCheckerTool: React.FC = () => {
     }
   };
 
-  // Use existing ColorUtils functions for WCAG compliance
+  // Use AccessibilityUtils functions for WCAG compliance
   const normalTextCompliance = {
-    aa: ColorUtils.meetsWCAGContrast(textColor, backgroundColor, WCAGContrastLevel.AA, false),
-    aaa: ColorUtils.meetsWCAGContrast(textColor, backgroundColor, WCAGContrastLevel.AAA, false)
+    aa: AccessibilityUtils.meetsWCAGContrast(textColor, backgroundColor, WCAGContrastLevel.AA, false),
+    aaa: AccessibilityUtils.meetsWCAGContrast(textColor, backgroundColor, WCAGContrastLevel.AAA, false)
   };
   const largeTextCompliance = {
-    aa: ColorUtils.meetsWCAGContrast(textColor, backgroundColor, WCAGContrastLevel.AA, true),
-    aaa: ColorUtils.meetsWCAGContrast(textColor, backgroundColor, WCAGContrastLevel.AAA, true)
+    aa: AccessibilityUtils.meetsWCAGContrast(textColor, backgroundColor, WCAGContrastLevel.AA, true),
+    aaa: AccessibilityUtils.meetsWCAGContrast(textColor, backgroundColor, WCAGContrastLevel.AAA, true)
   };
 
   return (

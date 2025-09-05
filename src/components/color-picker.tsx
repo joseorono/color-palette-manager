@@ -23,6 +23,7 @@ import {
   History,
 } from "lucide-react";
 import { ColorUtils } from "@/lib/color-utils";
+import { AccessibilityUtils } from "@/lib/accessibility-utils";
 import type { HexColorString } from "@/types/palette";
 import { toast } from "sonner";
 
@@ -144,8 +145,8 @@ export function ColorPicker({
   };
 
   const colorName = ColorUtils.getColorName(tempColor);
-  const contrastWhite = ColorUtils.getContrastRatio(tempColor, "#ffffff");
-  const contrastBlack = ColorUtils.getContrastRatio(tempColor, "#000000");
+  const contrastWhite = AccessibilityUtils.getContrastRatio(tempColor, "#ffffff");
+  const contrastBlack = AccessibilityUtils.getContrastRatio(tempColor, "#000000");
   const isLightColor = contrastBlack > contrastWhite;
 
   const ColorSwatch = ({
