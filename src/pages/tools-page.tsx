@@ -35,6 +35,14 @@ const colorTools: Tool[] = [
     link: "/app/tools/color-mixer"
   },
   {
+    id: "gradient-generator",
+    name: "Gradient Generator",
+    description: "Create smooth color gradients between multiple colors with adjustable steps. Perfect for backgrounds and design systems.",
+    icon: Blend,
+    status: "available",
+    link: "/app/tools/gradient-generator"
+  },
+  {
     id: "color-naming",
     name: "Color Naming Tool",
     description: "Input any color and instantly see its descriptive name. Perfect for identifying colors quickly.",

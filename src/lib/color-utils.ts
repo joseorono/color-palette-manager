@@ -1044,4 +1044,52 @@ export class ColorUtils {
       return null;
     }
   }
+
+  /**
+   * Generate a gradient between multiple colors
+   * @param colors - Array of colors in hexadecimal format (minimum 2 colors)
+   * @param steps - Number of colors to generate in the gradient
+   * @returns Array of hex color strings representing the gradient
+   */
+  static generateGradient(
+    colors: HexColorString[],
+    steps: number = 10
+  ): HexColorString[] {
+    if (colors.length < 2) {
+      throw new Error("At least 2 colors are required to generate a gradient");
+    }
+    
+    if (steps < 2) {
+      throw new Error("At least 2 steps are required for a gradient");
+    }
+
+    const gradient: HexColorString[] = [];
+    const segments = colors.length - 1;
+    const stepsPerSegment = (steps - 1) / segments;
+
+    for (let i = 0; i < steps; i++) {
+      if (i === 0) {
+        // First color
+        gradient.push(colors[0]);
+      } else if (i === steps - 1) {
+        // Last color
+        gradient.push(colors[colors.length - 1]);
+      } else {
+        // Calculate which segment we're in and the position within that segment
+        const segmentIndex = Math.floor((i - 1) / stepsPerSegment);
+        const segmentPosition = ((i - 1) % stepsPerSegment) / stepsPerSegment;
+        
+        // Ensure we don't go beyond the available colors
+        const actualSegmentIndex = Math.min(segmentIndex, segments - 1);
+        const color1 = colors[actualSegmentIndex];
+        const color2 = colors[actualSegmentIndex + 1];
+        
+        // Interpolate between the two colors
+        const interpolatedColor = ColorUtils.lerpColors(color1, color2, segmentPosition);
+        gradient.push(interpolatedColor as HexColorString);
+      }
+    }
+
+    return gradient;
+  }
 }

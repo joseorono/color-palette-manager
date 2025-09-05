@@ -11,6 +11,7 @@ import { ColorNameTestPage } from "./pages/tools/color-name-test";
 import { ColorNamingTool } from "./pages/tools/color-naming-tool";
 import { ColorMixerTool } from "./pages/tools/color-mixer-tool";
 import { ShadeGeneratorTool } from "./pages/tools/shade-generator-tool";
+import { GradientGeneratorTool } from "./pages/tools/gradient-generator-tool";
 import { ColorConverterTool } from "./pages/tools/color-converter-tool";
 import { ImagePaletteExtractorTool } from "@/pages/image-palette-extractor-tool";
 import { HslColorPickerTool } from "./pages/tools/hsl-color-picker-tool";
@@ -52,6 +53,10 @@ function App() {
               <Route
                 path="/app/tools/shade-generator"
                 element={<ShadeGeneratorTool />}
+              />
+              <Route
+                path="/app/tools/gradient-generator"
+                element={<GradientGeneratorTool />}
               />
               <Route
                 path="/app/tools/color-converter"
