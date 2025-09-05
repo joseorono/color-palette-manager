@@ -109,7 +109,11 @@ export function ColorPreviewCard({ palette }: PreviewComponentProps) {
                       backgroundColor: palette.colors.find(c => c.role === 'background')?.hex || '#ffffff'
                     }}
                   >
-                    <p className="mb-2 text-sm font-medium">On Background</p>
+                    <p className="mb-2 text-sm font-medium" style={{ 
+                        color: palette.colors.find(c => c.role === 'foreground')?.hex || '#000000'
+                      }}>On Background
+                      
+                    </p>
                     <p
                       className="font-medium"
                       style={{ 
@@ -133,7 +137,9 @@ export function ColorPreviewCard({ palette }: PreviewComponentProps) {
                       backgroundColor: palette.colors.find(c => c.role === 'card')?.hex || '#f8fafc'
                     }}
                   >
-                    <p className="mb-2 text-sm font-medium">On Card</p>
+                    <p className="mb-2 text-sm font-medium" style={{ 
+                       color: palette.colors.find(c => c.role === 'card-foreground')?.hex || '#000000'
+                      }}>On Card</p>
                     <p
                       className="font-medium"
                       style={{ 
