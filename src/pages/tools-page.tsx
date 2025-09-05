@@ -12,8 +12,7 @@ import {
   Layers,
   Eye,
   Type,
-  Sliders,
-  Contrast
+  Sliders
 } from "lucide-react";
 
 interface Tool {
@@ -93,28 +92,20 @@ const colorTools: Tool[] = [
 
 const accessibilityTools: Tool[] = [
   {
+    id: "contrast-checker",
+    name: "WCAG Contrast Checker",
+    description: "Professional accessibility testing with full WCAG AA and AAA compliance checking for both normal and large text. Real-time contrast analysis with detailed pass/fail results.",
+    icon: Type,
+    status: "available",
+    link: "/app/tools/contrast-checker"
+  },
+  {
     id: "colorblind-simulator",
     name: "Color Blindness Simulator",
     description: "Simulate how your palettes appear to users with different types of color blindness for better accessibility.",
     icon: Eye,
     status: "coming-soon"
   },
-  {
-    id: "contrast-checker",
-    name: "Text & Background Contrast Checker",
-    description: "Check if color combinations meet WCAG contrast guidelines for both normal and large text.",
-    icon: Type,
-    status: "available",
-    link: "/app/tools/contrast-checker"
-  },
-
-  {
-    id: "wcag-checker",
-    name: "WCAG Compliance Checker",
-    description: "Advanced contrast checker with AA and AAA level compliance testing for professional accessibility standards.",
-    icon: Contrast,
-    status: "coming-soon"
-  }
 ];
 
 const getStatusBadge = (status: Tool["status"]) => {
