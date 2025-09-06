@@ -222,15 +222,15 @@ export function PaletteDashboard({
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="text-center sm:text-left">
-          <h1 className="mb-2 text-2xl font-bold sm:text-3xl sm:mx-9">My Palettes</h1>
-          <p className="text-sm text-muted-foreground sm:text-base sm:mx-9">
+          <h1 className="mb-2 text-2xl font-bold sm:text-3xl">My Palettes</h1>
+          <p className="text-sm text-muted-foreground">
             {filteredPalettes.length} of {palettes.length} palettes
           </p>
         </div>
 
-        <div className="flex flex-col gap-3 sm:flex-row sm:gap-2">
+        <div className="flex flex-col gap-3 sm:flex-row">
           {/* View Mode Toggle */}
-          <div className="flex w-full gap-1 rounded-lg border p-1 sm:w-auto">
+          <div className="flex w-full gap-1 rounded-lg border p-1">
             <Button
               variant={localViewMode === "grid" ? "default" : "ghost"}
               size="sm"
@@ -266,7 +266,7 @@ export function PaletteDashboard({
           </Button> */}
           {/* Replace the old create button with the new trigger */}
 
-          <div className="flex justify-center gap-2 mx-auto max-w-md w-full sm:w-auto">
+          <div className="flex justify-center gap-2 mx-auto max-w-md w-full">
             <Button
               variant="outline"
               size="sm"
@@ -278,10 +278,10 @@ export function PaletteDashboard({
               <span className="sm:hidden">Import</span>
             </Button>
 
-            <div className="flex-1 sm:flex-initial">
+            <div className="flex-1 sm:flex-initial ">
               <CreatePaletteTrigger size="sm">
                 <span className="mr-2">🎨</span>
-                <span className="hidden sm:inline">Create Palette</span>
+                <span className="hidden sm:inline p-1">Create Palette</span>
                 <span className="sm:hidden">Create</span>
               </CreatePaletteTrigger>
             </div>
@@ -323,7 +323,7 @@ export function PaletteDashboard({
           )}
         </div>
       ) : (
-        <div className={`grid gap-2 sm:gap-3 md:gap-4 ${getGridClasses()}`}>
+        <div className={`grid gap-4 sm:gap-5 md:gap-6 ${getGridClasses()}`}>
           {filteredPalettes.map((palette) => (
             <PaletteCard
               key={palette.id}
