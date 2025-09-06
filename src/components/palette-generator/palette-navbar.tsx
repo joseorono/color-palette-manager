@@ -53,6 +53,8 @@ export function PaletteNavbar() {
     generateNewPalette,
     regenerateUnlocked,
     addColor,
+    addHarmoniousColor,
+    removeColor,
     savePalette,
     hasUnsavedChanges,
     isGenerating,
@@ -77,8 +79,24 @@ export function PaletteNavbar() {
   }, [currentPalette]);
 
   const handleSizeChange = (value: number[]) => {
-    generateNewPalette(value[0]);
-    setPaletteSize(value[0]);
+    const newSize = value[0];
+    const currentSize = currentPalette?.colors.length || 0;
+    
+    if (newSize > currentSize) {
+      // Add harmonious colors to reach the new size
+      const colorsToAdd = newSize - currentSize;
+      for (let i = 0; i < colorsToAdd; i++) {
+        addHarmoniousColor();
+      }
+    } else if (newSize < currentSize) {
+      // Remove colors from the end to reach the new size
+      const colorsToRemove = currentSize - newSize;
+      for (let i = 0; i < colorsToRemove; i++) {
+        removeColor(currentSize - 1 - i);
+      }
+    }
+    
+    setPaletteSize(newSize);
   };
 
   type MetadataValues = {

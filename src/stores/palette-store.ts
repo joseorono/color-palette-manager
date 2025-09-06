@@ -32,6 +32,7 @@ interface PaletteStore {
     updates: Partial<Pick<Color, "hex" | "role" | "name">>
   ) => void;
   addColor: () => void;
+  addHarmoniousColor: () => void;
   removeColor: (index: number) => void;
   reorderColors: (dragIndex: number, hoverIndex: number) => void;
   savePalette: (
@@ -196,6 +197,43 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
     const newColor: Color = {
       id: nanoidColorId(),
       hex: ColorUtils.generateRandomColorHex(),
+      locked: false,
+    };
+
+    const updatedPalette: Palette = {
+      ...currentPalette,
+      colors: [...currentPalette.colors, newColor],
+      updatedAt: new Date(),
+    };
+
+    set({
+      currentPalette: updatedPalette,
+      hasUnsavedChanges: true,
+    });
+  },
+
+  addHarmoniousColor: () => {
+    const { currentPalette, selectedPreset } = get();
+    if (!currentPalette || currentPalette.colors.length >= MAX_PALETTE_COLORS)
+      return;
+
+    // Extract existing hex colors
+    const existingHexColors = currentPalette.colors.map(color => color.hex);
+    
+    // Generate one additional harmonious color
+    const newColors = PaletteUtils.generateHarmoniousHexCsv(
+      undefined, // Let it determine base color from existing colors
+      currentPalette.colors.length + 1, // Current count + 1
+      existingHexColors, // Pass existing colors
+      selectedPreset || DEFAULT_HARMONY_PRESET
+    );
+
+    // Get the new color (should be the last one in the array)
+    const newHex = newColors[newColors.length - 1];
+    
+    const newColor: Color = {
+      id: nanoidColorId(),
+      hex: newHex,
       locked: false,
     };
 
