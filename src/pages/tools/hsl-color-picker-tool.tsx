@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { colord } from 'colord';
-import { ToolHeroSection } from '@/components/reusable-sections/tool-hero-section';
-import { ColorUtils } from '@/lib/color-utils';
-import { PaletteUrlUtils } from '@/lib/palette-url-utils';
-import { HexColorString } from '@/types/palette';
-import useCopyToClipboard from '@/hooks/use-copy-to-clipboard';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Slider } from '@/components/ui/slider';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { ToolSectionHeading } from '@/components/reusable-sections/tool-section-heading';
-import { ToolFeatureCard } from '@/components/reusable-sections/tool-feature-card';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { colord } from "colord";
+import { ToolHeroSection } from "@/components/reusable-sections/tool-hero-section";
+import { ColorUtils } from "@/lib/color-utils";
+import { PaletteUrlUtils } from "@/lib/palette-url-utils";
+import { HexColorString } from "@/types/palette";
+import useCopyToClipboard from "@/hooks/use-copy-to-clipboard";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Slider } from "@/components/ui/slider";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { ToolSectionHeading } from "@/components/reusable-sections/tool-section-heading";
+import { ToolFeatureCard } from "@/components/reusable-sections/tool-feature-card";
 import {
   Sparkles,
   RotateCcw,
@@ -21,13 +21,13 @@ import {
   Copy,
   Sun,
   Droplet,
-  Circle
-} from 'lucide-react';
+  Circle,
+} from "lucide-react";
 
 export const HslColorPickerTool: React.FC = () => {
   const navigate = useNavigate();
   const { copyToClipboard } = useCopyToClipboard({ showToast: true });
-  
+
   // HSL state values (0-360 for hue, 0-100 for saturation and lightness)
   const [hue, setHue] = useState<number>(220);
   const [saturation, setSaturation] = useState<number>(90);
@@ -96,7 +96,7 @@ export const HslColorPickerTool: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
-      <div className="container mx-auto px-4 py-12 max-w-4xl">
+      <div className="container mx-auto max-w-4xl px-4 py-12">
         {/* Hero Section */}
         <ToolHeroSection
           icon={Sliders}
@@ -104,9 +104,9 @@ export const HslColorPickerTool: React.FC = () => {
           description="Explore the color space with interactive Hue, Saturation, and Lightness sliders. Perfect for understanding how HSL properties affect color appearance."
         />
 
-        <div className="grid lg:grid-cols-2 gap-8">
+        <div className="grid gap-8 lg:grid-cols-2">
           {/* Color Preview */}
-          <Card className="shadow-xl border-0 bg-card/50 backdrop-blur-sm">
+          <Card className="border-0 bg-card/50 shadow-xl backdrop-blur-sm">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Circle className="h-5 w-5" />
@@ -117,13 +117,13 @@ export const HslColorPickerTool: React.FC = () => {
               {/* Large Color Display */}
               <div className="space-y-4">
                 <div
-                  className="w-full h-32 rounded-lg shadow-md border-2 border-border transition-colors duration-200"
+                  className="h-32 w-full rounded-lg border-2 border-border shadow-md transition-colors duration-200"
                   style={{ backgroundColor: currentColor }}
                 />
-                
+
                 {/* Color Name */}
                 <div className="text-center">
-                  <h3 className="text-lg font-semibold mb-1">
+                  <h3 className="mb-1 text-lg font-semibold">
                     {ColorUtils.getColorName(currentColor)}
                   </h3>
                   <p className="text-sm text-muted-foreground">
@@ -141,7 +141,7 @@ export const HslColorPickerTool: React.FC = () => {
                     type="color"
                     value={currentColor}
                     onChange={(e) => handleHexInput(e.target.value)}
-                    className="w-16 h-10 p-1 rounded border cursor-pointer"
+                    className="h-10 w-16 cursor-pointer rounded border p-1"
                   />
                   <Input
                     type="text"
@@ -161,7 +161,7 @@ export const HslColorPickerTool: React.FC = () => {
                   onClick={handleResetToDefault}
                   className="flex-1"
                 >
-                  <RotateCcw className="h-4 w-4 mr-2" />
+                  <RotateCcw className="mr-2 h-4 w-4" />
                   Reset
                 </Button>
                 <Button
@@ -170,7 +170,7 @@ export const HslColorPickerTool: React.FC = () => {
                   onClick={handleRandomColor}
                   className="flex-1"
                 >
-                  <Shuffle className="h-4 w-4 mr-2" />
+                  <Shuffle className="mr-2 h-4 w-4" />
                   Random
                 </Button>
               </div>
@@ -180,14 +180,14 @@ export const HslColorPickerTool: React.FC = () => {
                 className="w-full"
                 size="lg"
               >
-                <Sparkles className="h-4 w-4 mr-2" />
+                <Sparkles className="mr-2 h-4 w-4" />
                 Generate Palette
               </Button>
             </CardContent>
           </Card>
 
           {/* HSL Controls */}
-          <Card className="shadow-xl border-0 bg-card/50 backdrop-blur-sm">
+          <Card className="border-0 bg-card/50 shadow-xl backdrop-blur-sm">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Sliders className="h-5 w-5" />
@@ -212,7 +212,7 @@ export const HslColorPickerTool: React.FC = () => {
                     max={360}
                     min={0}
                     step={1}
-                    className="absolute inset-0 opacity-0"
+                    className="absolute inset-0"
                   />
                 </div>
                 <div className="flex justify-between text-xs text-muted-foreground">
@@ -242,7 +242,7 @@ export const HslColorPickerTool: React.FC = () => {
                     max={100}
                     min={0}
                     step={1}
-                    className="absolute inset-0 opacity-0"
+                    className="absolute inset-0"
                   />
                 </div>
                 <div className="flex justify-between text-xs text-muted-foreground">
@@ -268,7 +268,7 @@ export const HslColorPickerTool: React.FC = () => {
                     max={100}
                     min={0}
                     step={1}
-                    className="absolute inset-0 opacity-0"
+                    className="absolute inset-0"
                   />
                 </div>
                 <div className="flex justify-between text-xs text-muted-foreground">
@@ -282,7 +282,7 @@ export const HslColorPickerTool: React.FC = () => {
         </div>
 
         {/* Color Formats */}
-        <Card className="shadow-xl border-0 bg-card/50 backdrop-blur-sm mt-8">
+        <Card className="mt-8 border-0 bg-card/50 shadow-xl backdrop-blur-sm">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Copy className="h-5 w-5" />
@@ -290,9 +290,14 @@ export const HslColorPickerTool: React.FC = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {Object.entries(ColorUtils.getAllColorFormatsFromHex(currentColor)).map(([format, value]) => (
-                <div key={format} className="p-3 rounded-lg bg-muted/50 space-y-2">
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {Object.entries(
+                ColorUtils.getAllColorFormatsFromHex(currentColor)
+              ).map(([format, value]) => (
+                <div
+                  key={format}
+                  className="space-y-2 rounded-lg bg-muted/50 p-3"
+                >
                   <div className="flex items-center justify-between">
                     <div className="text-sm font-medium uppercase text-muted-foreground">
                       {format}
@@ -300,15 +305,18 @@ export const HslColorPickerTool: React.FC = () => {
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => copyToClipboard(value, `${format.toUpperCase()} color copied: ${value}`)}
+                      onClick={() =>
+                        copyToClipboard(
+                          value,
+                          `${format.toUpperCase()} color copied: ${value}`
+                        )
+                      }
                       className="h-6 w-6 p-0"
                     >
                       <Copy className="h-3 w-3" />
                     </Button>
                   </div>
-                  <div className="font-mono text-sm break-all">
-                    {value}
-                  </div>
+                  <div className="break-all font-mono text-sm">{value}</div>
                 </div>
               ))}
             </div>
@@ -321,7 +329,7 @@ export const HslColorPickerTool: React.FC = () => {
         />
 
         {/* Educational Features Section */}
-        <div className="grid md:grid-cols-3 gap-6 mt-16 mb-16">
+        <div className="mb-16 mt-16 grid gap-6 md:grid-cols-3">
           <ToolFeatureCard
             icon={Circle}
             title="Hue Control"
