@@ -4,17 +4,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Card, CardContent } from "@/components/ui/card";
+import { Check } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { HarmonyPreset } from "@/types/color-harmonies";
 import { COLOR_HARMONY_OPTIONS } from "@/constants/color-harmonies";
+import { cn } from "@/lib/utils";
 
 export function GenerationMethodDialog({
   open,
@@ -27,80 +22,66 @@ export function GenerationMethodDialog({
   onSelect: (preset: HarmonyPreset) => void;
   currentPreset: HarmonyPreset | null;
 }) {
-  const currentPresetPretty = COLOR_HARMONY_OPTIONS.find(
-    (o) => o.value === currentPreset
-  );
+  const handleSelect = (preset: HarmonyPreset) => {
+    onSelect(preset);
+    onOpenChange(false);
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[30rem]">
+      <DialogContent className="sm:max-w-4xl max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Select Generation Method</DialogTitle>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <Select
-            value={currentPreset || undefined}
-            onValueChange={(value: HarmonyPreset) => onSelect(value)}
-          >
-            <SelectTrigger className="col-span-3">
-              <SelectValue className="text-start">
-                {(() => {
-                  const Icon = currentPresetPretty?.icon;
-                  if (!currentPresetPretty) {
-                    return <span>Select a generation method</span>;
-                  }
-                  return (
-                    <div className="flex w-full items-center justify-start gap-2 text-ellipsis text-start">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 py-4">
+          {COLOR_HARMONY_OPTIONS.map((option) => {
+            const Icon = option.icon as LucideIcon;
+            const isSelected = currentPreset === option.value;
+            
+            return (
+              <Card
+                key={option.value}
+                className={cn(
+                  "cursor-pointer transition-all duration-200 hover:shadow-md hover:scale-[1.02]",
+                  isSelected 
+                    ? "ring-2 ring-primary bg-primary/5" 
+                    : "hover:bg-muted/50"
+                )}
+                onClick={() => handleSelect(option.value)}
+              >
+                <CardContent className="p-4">
+                  <div className="flex items-start gap-3">
+                    <div className="flex-shrink-0 mt-1">
                       {Icon && (
                         <Icon
-                          size={16}
-                          className="mt-0.5 flex-shrink-0 text-muted-foreground"
+                          size={20}
+                          className={cn(
+                            "transition-colors",
+                            isSelected 
+                              ? "text-primary" 
+                              : "text-muted-foreground"
+                          )}
                         />
                       )}
-                      <div className="flex w-80 flex-col gap-1">
-                        <span className="font-medium">
-                          {currentPresetPretty.prettyName}
-                        </span>
-                        {currentPresetPretty.description && (
-                          <span className="truncate text-xs text-muted-foreground">
-                            {currentPresetPretty.description}
-                          </span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-2">
+                        <h3 className="font-medium text-sm leading-tight">
+                          {option.prettyName}
+                        </h3>
+                        {isSelected && (
+                          <Check size={16} className="text-primary flex-shrink-0" />
                         )}
                       </div>
+                      <p className="text-xs text-muted-foreground leading-relaxed">
+                        {option.description}
+                      </p>
                     </div>
-                  );
-                })()}
-              </SelectValue>
-            </SelectTrigger>
-            <SelectContent className="w-[30rem]">
-              {COLOR_HARMONY_OPTIONS.map((option) => {
-                const Icon = option.icon as LucideIcon;
-                return (
-                  <SelectItem
-                    key={option.value}
-                    value={option.value}
-                    className="w-[30rem]"
-                  >
-                    <div className="flex w-full items-center justify-start gap-2">
-                      {Icon && (
-                        <Icon
-                          size={16}
-                          className="mt-0.5 flex-shrink-0 text-muted-foreground"
-                        />
-                      )}
-                      <div className="flex w-full flex-col gap-1">
-                        <span className="font-medium">{option.prettyName}</span>
-                        {option.description && (
-                          <span className="text-xs leading-tight text-muted-foreground">
-                            {option.description}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </SelectItem>
-                );
-              })}
-            </SelectContent>
-          </Select>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
       </DialogContent>
     </Dialog>
