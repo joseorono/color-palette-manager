@@ -86,10 +86,10 @@ export function PaletteFilters({
     filters.search || filters.tags.length > 0 || filters.showFavoritesOnly;
 
   return (
-    <div className="space-y-4 ml-24 sm:ml-0">
-      <div className="flex flex-col gap-4 sm:flex-row sm:w-auto sm:mr-8">
+    <div className="space-y-4">
+      <div className="flex flex-col gap-4 sm:flex-row">
         {/* Search */}
-        <div className="relative flex-1 ml-10">
+        <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 transform text-muted-foreground" />
           <Input
             placeholder="Search palettes..."
@@ -104,7 +104,7 @@ export function PaletteFilters({
           value={`${filters.sortBy}-${filters.sortOrder}`}
           onValueChange={handleSortChange}
         >
-          <SelectTrigger className="ml-10 w-[200px]">
+          <SelectTrigger className="">
             <div className="flex items-center">
               {filters.sortOrder === "asc" ? (
                 <SortAsc className="mr-2 h-4 w-4" />
@@ -127,7 +127,7 @@ export function PaletteFilters({
         </Select>
 
         {/* Filters */}
-        <div className="flex w-[200px] ml-10 gap-2">
+        <div className="flex w-auto gap-3">
           <Button
             variant={filters.showFavoritesOnly ? "default" : "outline"}
             size="sm"
@@ -142,7 +142,7 @@ export function PaletteFilters({
 
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="outline" size="sm" className="w-full">
+              <Button variant="outline" size="sm" className="w-auto">
                 <Filter className="mr-2 h-4 w-4" />
                 Tags
                 {filters.tags.length > 0 && (
@@ -155,7 +155,7 @@ export function PaletteFilters({
                 )}
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-full ml-10" align="end">
+            <PopoverContent className="w-full" align="end">
               <div className="space-y-4">
                 <div>
                   <h4 className="mb-2 font-medium">Filter by Tags</h4>
