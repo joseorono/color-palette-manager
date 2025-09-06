@@ -42,9 +42,11 @@ export default function Hero() {
             </a>
             <a
               href="/app"
+              target="_blank"
+              rel="noopener"
               className="btn-secondary border-brand-teal text-brand-teal hover:bg-brand-teal rounded-xl border-2 px-8 py-4 text-lg font-semibold transition-all duration-300 hover:-translate-y-1 hover:transform hover:text-white"
             >
-              Try the Web App
+              Try it out
             </a>
           </div>
         </div>
