@@ -89,7 +89,7 @@ export function PaletteFilters({
     <div className="space-y-4 ml-24 sm:ml-0">
       <div className="flex flex-col gap-4 sm:flex-row sm:w-auto sm:mr-8">
         {/* Search */}
-        <div className="relative flex-1 ml-8">
+        <div className="relative flex-1 min-w-[280px] sm:min-w-[200px] ml-10">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 transform text-muted-foreground" />
           <Input
             placeholder="Search palettes..."
@@ -104,7 +104,7 @@ export function PaletteFilters({
           value={`${filters.sortBy}-${filters.sortOrder}`}
           onValueChange={handleSortChange}
         >
-          <SelectTrigger className="ml-10 w-[200px] md:w-[220px] lg:w-[360px] xl:w-[440px]">
+          <SelectTrigger className="max-sm:ml-10 max-sm:w-[200px]">
             <div className="flex items-center">
               {filters.sortOrder === "asc" ? (
                 <SortAsc className="mr-2 h-4 w-4" />
