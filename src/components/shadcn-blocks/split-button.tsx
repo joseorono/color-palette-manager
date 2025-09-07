@@ -103,7 +103,7 @@ const SplitButton = React.forwardRef<HTMLDivElement, SplitButtonProps>(
           onClick={onMainButtonClick}
           className={mainButtonClassName}
         >
-          {MainButtonIcon && <MainButtonIcon />}
+          {MainButtonIcon && <MainButtonIcon className="h-4 w-4" />}
           <span>{mainButtonText}</span>
         </Button>
         <DropdownMenu modal={false}>

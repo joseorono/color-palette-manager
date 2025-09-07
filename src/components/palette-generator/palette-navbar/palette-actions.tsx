@@ -84,6 +84,7 @@ export function PaletteActions({
             <SplitButton
               mainButtonText="Preview"
               mainButtonIcon={Eye}
+              mainButtonIconClassName="h-4 w-4"
               onMainButtonClick={onOpenPreview}
               menuItems={[
                 {
