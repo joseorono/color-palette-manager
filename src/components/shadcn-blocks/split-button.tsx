@@ -31,6 +31,8 @@ export interface SplitButtonProps extends React.HTMLAttributes<HTMLDivElement> {
   mainButtonText: React.ReactNode;
   /** Icon for the main button */
   mainButtonIcon?: LucideIcon;
+  /** Classes for the main button icon */
+  mainButtonIconClassName?: string;
   /** Click handler for the main button */
   onMainButtonClick?: () => void;
   /** Array of dropdown menu items */
@@ -70,6 +72,7 @@ const SplitButton = React.forwardRef<HTMLDivElement, SplitButtonProps>(
     {
       mainButtonText,
       mainButtonIcon: MainButtonIcon,
+      mainButtonIconClassName,
       onMainButtonClick,
       menuItems,
       menuLabel,
@@ -103,7 +106,7 @@ const SplitButton = React.forwardRef<HTMLDivElement, SplitButtonProps>(
           onClick={onMainButtonClick}
           className={mainButtonClassName}
         >
-          {MainButtonIcon && <MainButtonIcon className="h-4 w-4" />}
+          {MainButtonIcon && <MainButtonIcon className={mainButtonIconClassName} />}
           <span>{mainButtonText}</span>
         </Button>
         <DropdownMenu modal={false}>
