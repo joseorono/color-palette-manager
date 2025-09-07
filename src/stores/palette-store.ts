@@ -54,7 +54,7 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
   selectedPreset: null,
 
   generateNewPalette: (count = 5, preset?: HarmonyPreset) => {
-    const { selectedPreset } = get();
+    const { selectedPreset, currentPalette } = get();
     const usePreset = preset || selectedPreset || DEFAULT_HARMONY_PRESET;
 
     set({ isGenerating: true });
@@ -73,17 +73,30 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
       }
     }
 
+    // Preserve locked colors when generating new palette
+    const lockedColors = currentPalette ? PaletteUtils.getLockedColors(currentPalette.colors) : [];
+    
     const colors = PaletteUtils.generateHarmoniousHexCsv(
       undefined,
       count,
-      [],
+      lockedColors, // Pass locked Color objects directly
       usePreset || undefined
     );
-    const paletteColors: Color[] = colors.map((hex) => ({
-      id: nanoidColorId(),
-      hex,
-      locked: false,
-    }));
+    
+    // Create new palette colors, preserving locked colors with their original properties
+    const paletteColors: Color[] = colors.map((hex) => {
+      // Check if this hex matches a locked color
+      const existingLockedColor = lockedColors.find(lockedColor => lockedColor.hex === hex);
+      if (existingLockedColor) {
+        return existingLockedColor; // Keep the original locked color with all its properties
+      }
+      
+      return {
+        id: nanoidColorId(),
+        hex,
+        locked: false,
+      };
+    });
 
     const newPalette: Palette = {
       ...get().currentPalette,
@@ -105,8 +118,12 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
     set({ isGenerating: true });
 
     setTimeout(() => {
+      // Use PaletteUtils to identify locked and unlocked colors
       const newColors = currentPalette.colors.map((color) => {
-        if (color.locked) return color;
+        // Keep locked colors unchanged, regenerate unlocked ones
+        if (color.locked) {
+          return color;
+        }
         return { ...color, hex: ColorUtils.generateRandomColorHex() };
       });
 
@@ -222,14 +239,11 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
     if (!currentPalette || currentPalette.colors.length >= MAX_PALETTE_COLORS)
       return;
 
-    // Extract existing hex colors
-    const existingHexColors = currentPalette.colors.map(color => color.hex);
-
-    // Generate one additional harmonious color
+    // Generate one additional harmonious color, considering all existing colors
     const newColors = PaletteUtils.generateHarmoniousHexCsv(
       undefined, // Let it determine base color from existing colors
       currentPalette.colors.length + 1, // Current count + 1
-      existingHexColors, // Pass existing colors
+      currentPalette.colors, // Pass all existing Color objects directly
       selectedPreset || DEFAULT_HARMONY_PRESET
     );
 
