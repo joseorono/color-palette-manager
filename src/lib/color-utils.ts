@@ -622,12 +622,21 @@ export class ColorUtils {
   }
 
   /**
-   * Get the base color hex from an array of hex color strings
-   * @param colorHexArray - Array of hex color strings
-   * @returns The first color hex, or a random color if array is empty
+   * Get the base color hex from an array of Color objects
+   * @param colors - Array of Color objects
+   * @returns The primary role color hex if available, otherwise the first color hex
    */
-  static getBaseColorHex(colorHexArray: HexColorString[]): string {
-    return colorHexArray.length > 0 ? colorHexArray[0] : formatHex(random());
+  static getBaseColorHex(colors: Color[]): string {
+    if (colors.length === 0) {
+      return formatHex(random());
+    }
+
+    const primaryColor = colors.find(color => color.role === "primary");
+    if (primaryColor) {
+      return primaryColor.hex;
+    }
+    
+    return colors[0].hex;
   }
   /**
    * Get the RGB distance between two colors

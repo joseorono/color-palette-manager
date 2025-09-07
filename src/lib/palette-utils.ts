@@ -100,23 +100,27 @@ export class PaletteUtils {
    * Generate a harmonious color palette based on color theory principles
    * @param baseColorHex - Optional base color in hexadecimal format
    * @param count - Number of colors to generate (default: 5)
-   * @param existingColorHexArray - Array of existing colors in hexadecimal format
+   * @param existingColors - Array of existing Color objects
    * @returns Array of hex color strings forming a harmonious palette
    */
   static generateHarmoniousHexCsv(
     baseColorHex?: string,
     count: number = 5,
-    existingColorHexArray: HexColorString[] = [],
+    existingColors: Color[] = [],
     preset: HarmonyPreset = DEFAULT_HARMONY_PRESET,
   ): HexColorString[] {
-    console.log("In generateHarmoniousHexCsv got baseColorHex:", baseColorHex, "count:", count, "existingColorHexArray:", existingColorHexArray);
+    console.log("In generateHarmoniousHexCsv got baseColorHex:", baseColorHex, "count:", count, "existingColors:", existingColors);
+    
+    // Extract hex colors from existing Color objects
+    const existingColorHexArray = existingColors.map(color => color.hex);
     console.log("Existing color hex array:", existingColorHexArray);
     console.log("Base color hex:", baseColorHex);
-    // Get or generate base color
+    
+    // Get or generate base color using the new getBaseColorHex method
     const baseColor =
       baseColorHex ||
-      (existingColorHexArray.length > 0
-        ? ColorUtils.getBaseColorHex(existingColorHexArray)
+      (existingColors.length > 0
+        ? ColorUtils.getBaseColorHex(existingColors)
         : formatHex(random()));
 
     console.log("generateHarmoniousHexCsv::Base color determined to be:", baseColor);
