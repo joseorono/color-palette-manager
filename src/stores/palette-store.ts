@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { nanoidColorId } from "@/constants/nanoid";
 import { Color, Palette } from "@/types/palette";
 import { ColorUtils } from "@/lib/color-utils";
 import { PaletteUtils } from "@/lib/palette-utils";
@@ -75,14 +74,14 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
 
     // Preserve locked colors when generating new palette
     const lockedColors = currentPalette ? PaletteUtils.getLockedColors(currentPalette.colors) : [];
-    
+
     const colors = PaletteUtils.generateHarmoniousHexCsv(
       undefined,
       count,
       lockedColors, // Pass locked Color objects directly
       usePreset || undefined
     );
-    
+
     // Create new palette colors, preserving locked colors with their original properties
     const paletteColors: Color[] = colors.map((hex) => {
       // Check if this hex matches a locked color
@@ -90,12 +89,8 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
       if (existingLockedColor) {
         return existingLockedColor; // Keep the original locked color with all its properties
       }
-      
-      return {
-        id: nanoidColorId(),
-        hex,
-        locked: false,
-      };
+
+      return ColorUtils.HexToColor(hex);
     });
 
     const newPalette: Palette = {
@@ -118,13 +113,30 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
     set({ isGenerating: true });
 
     setTimeout(() => {
-      // Use PaletteUtils to identify locked and unlocked colors
-      const newColors = currentPalette.colors.map((color) => {
-        // Keep locked colors unchanged, regenerate unlocked ones
-        if (color.locked) {
-          return color;
+      const { selectedPreset } = get();
+
+      // Get only locked colors to pass to generateHarmoniousHexCsv
+      const lockedColors = PaletteUtils.getLockedColors(currentPalette.colors);
+
+      // Generate harmonious colors, letting the method handle locked color preservation
+      const harmoniousHexColors = PaletteUtils.generateHarmoniousHexCsv(
+        undefined, // Let it determine base color from locked colors
+        currentPalette.colors.length,
+        lockedColors, // Pass only locked colors
+        selectedPreset || DEFAULT_HARMONY_PRESET
+      );
+
+      // Convert hex colors back to Color objects, preserving original properties for locked colors
+      const newColors = harmoniousHexColors.map((hex, index) => {
+        const originalColor = currentPalette.colors[index];
+        if (originalColor && originalColor.locked) {
+          return originalColor; // Keep locked colors unchanged
         }
-        return { ...color, hex: ColorUtils.generateRandomColorHex() };
+        // Create new color object for unlocked positions
+        return {
+          ...originalColor,
+          hex: hex,
+        };
       });
 
       const updatedPalette: Palette = {
@@ -216,11 +228,7 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
     if (!currentPalette || currentPalette.colors.length >= MAX_PALETTE_COLORS)
       return;
 
-    const newColor: Color = {
-      id: nanoidColorId(),
-      hex: ColorUtils.generateRandomColorHex(),
-      locked: false,
-    };
+    const newColor = ColorUtils.HexToColor(ColorUtils.generateRandomColorHex());
 
     const updatedPalette: Palette = {
       ...currentPalette,
@@ -250,11 +258,7 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
     // Get the new color (should be the last one in the array)
     const newHex = newColors[newColors.length - 1];
 
-    const newColor: Color = {
-      id: nanoidColorId(),
-      hex: newHex,
-      locked: false,
-    };
+    const newColor = ColorUtils.HexToColor(newHex);
 
     const updatedPalette: Palette = {
       ...currentPalette,
