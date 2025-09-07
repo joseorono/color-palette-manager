@@ -135,13 +135,18 @@ export function PaletteControls({
         <Tooltip>
           <TooltipTrigger asChild>
             <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
+              <Button size="sm" className="h-9 gap-2 px-2 lg:hidden">
+                <Grid3X3 className="h-4 w-4" />
+                <span>Adjust palette size</span>
+              </Button>
+              {/* <Button
+                variant="default"
                 size="sm"
-                className="block h-9 w-9 lg:hidden"
+                className="h-9 px-2 2xl:h-10 2xl:px-3"
               >
                 <Grid3X3 className="h-4 w-4" />
-              </Button>
+                <span>Export</span>
+              </Button> */}
             </DropdownMenuTrigger>
           </TooltipTrigger>
           <TooltipContent>
