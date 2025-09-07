@@ -115,10 +115,10 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
     setTimeout(() => {
       const { selectedPreset } = get();
 
-      // Get only locked colors to pass to generateHarmoniousHexCsv
       const lockedColors = PaletteUtils.getLockedColors(currentPalette.colors);
+      const lockedHexes = new Set(lockedColors.map(color => color.hex));
 
-      // Generate harmonious colors, letting the method handle locked color preservation
+      // Generate harmonious colors for the entire palette
       const harmoniousHexColors = PaletteUtils.generateHarmoniousHexCsv(
         undefined, // Let it determine base color from locked colors
         currentPalette.colors.length,
@@ -126,18 +126,25 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
         selectedPreset || DEFAULT_HARMONY_PRESET
       );
 
-      // Convert hex colors back to Color objects, preserving original properties for locked colors
-      const newColors = harmoniousHexColors.map((hex, index) => {
-        const originalColor = currentPalette.colors[index];
-        if (originalColor && originalColor.locked) {
-          return originalColor; // Keep locked colors unchanged
+
+      // Start with locked colors, then append new harmonious colors
+      const newColors = [...lockedColors];
+
+      // Add harmonious colors that aren't duplicates of locked colors
+      for (const hex of harmoniousHexColors) {
+        if (!lockedHexes.has(hex) && newColors.length < currentPalette.colors.length) {
+          newColors.push(ColorUtils.HexToColor(hex));
         }
-        // Create new color object for unlocked positions
-        return {
-          ...originalColor,
-          hex: hex,
-        };
-      });
+      }
+
+      // If we still need more colors, generate additional ones
+      while (newColors.length < currentPalette.colors.length) {
+        console.log("If you see this, it means GenerateHarmoniousHexCsv is not generating enough colors. Contact Jose.")
+        const randomHex = ColorUtils.generateRandomColorHex();
+        if (!lockedHexes.has(randomHex)) {
+          newColors.push(ColorUtils.HexToColor(randomHex));
+        }
+      }
 
       const updatedPalette: Palette = {
         ...currentPalette,
