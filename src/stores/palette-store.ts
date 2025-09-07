@@ -189,6 +189,11 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
     });
   },
 
+  getColorCount: () => {
+    const { currentPalette } = get();
+    return currentPalette?.colors.length || 0;
+  },
+
   addColor: () => {
     const { currentPalette } = get();
     if (!currentPalette || currentPalette.colors.length >= MAX_PALETTE_COLORS)
@@ -219,7 +224,7 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
 
     // Extract existing hex colors
     const existingHexColors = currentPalette.colors.map(color => color.hex);
-    
+
     // Generate one additional harmonious color
     const newColors = PaletteUtils.generateHarmoniousHexCsv(
       undefined, // Let it determine base color from existing colors
@@ -230,7 +235,7 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
 
     // Get the new color (should be the last one in the array)
     const newHex = newColors[newColors.length - 1];
-    
+
     const newColor: Color = {
       id: nanoidColorId(),
       hex: newHex,
