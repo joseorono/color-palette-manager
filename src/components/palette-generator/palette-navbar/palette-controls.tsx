@@ -150,9 +150,6 @@ export function PaletteControls({
         </Tooltip>
         <DropdownMenuContent align="center" className="w-64 p-4">
           <div className="space-y-2">
-            <Label className="text-sm font-medium">
-              Palette Size: {paletteSize}
-            </Label>
             <DebouncedSlider
               value={[paletteSize]}
               onChange={handleSizeChange}
