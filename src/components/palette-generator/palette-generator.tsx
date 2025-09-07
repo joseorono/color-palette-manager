@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { usePaletteStore } from "@/stores/palette-store";
 import { ColorCard } from "./color-card";
-import { PaletteEditorUI } from "@/components/palette-generator/palette-ui";
+import { PaletteEditorUI } from "./palette-editor-ui";
 import {
   rectSortingStrategy,
   SortableContext,
@@ -71,7 +71,7 @@ export function PaletteGenerator() {
     <PaletteEditorUI>
       <div id="palette-editor-main" className="container mx-auto px-4 py-2">
         {/* Header */}
-        <div className="mb-8 text-center max-w-screen-lg mx-auto">
+        <div className="mx-auto mb-8 max-w-screen-lg text-center">
           <p className="mb-6 text-gray-600 dark:text-gray-300">
             Regenerate all non-locked colors by pressing{" "}
             <kbd className="rounded border bg-gray-100 px-2 py-1 text-xs dark:bg-gray-800">
