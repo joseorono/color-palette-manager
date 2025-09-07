@@ -26,6 +26,8 @@ export function PaletteUI({ children }: PaletteUIProps) {
     generateNewPalette,
     selectedPreset,
     setSelectedPreset,
+    regenerateUnlocked,
+    addColor,
   } = usePaletteStore();
 
   const [isSaveOpen, setIsSaveOpen] = React.useState(false);
@@ -48,6 +50,33 @@ export function PaletteUI({ children }: PaletteUIProps) {
     generateNewPalette(currentPalette?.colors.length);
     setIsGenerationMethodOpen(false);
   };
+
+  React.useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      const dialogOrSheetOpen = !!document.querySelector(
+        '[role="dialog"][data-state="open"]'
+      );
+      if (dialogOrSheetOpen) return;
+
+      // Space - Regenerate unlocked colors
+      if (e.code === "Space" && !e.repeat) {
+        e.preventDefault();
+        regenerateUnlocked();
+      }
+      // Shift + A - Add new color
+      else if (e.key === "A" && e.shiftKey) {
+        e.preventDefault();
+        addColor();
+      }
+      // Shift + S - Open save dialog
+      else if (e.key === "S" && e.shiftKey && !e.repeat) {
+        e.preventDefault();
+        setIsSaveOpen(true);
+      }
+    };
+    window.addEventListener("keydown", handleKeyPress);
+    return () => window.removeEventListener("keydown", handleKeyPress);
+  }, [regenerateUnlocked, addColor, setIsSaveOpen]);
 
   const handleMetadataSubmit = async (values?: MetadataValues) => {
     const trimmedName = values ? values.name?.trim() : currentPalette.name.trim();
