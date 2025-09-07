@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { usePaletteStore } from "@/stores/palette-store";
 import { ColorCard } from "./color-card";
-import { PaletteUI } from "@/components/palette-generator/palette-ui";
+import { PaletteEditorUI } from "@/components/palette-generator/palette-ui";
 import {
   rectSortingStrategy,
   SortableContext,
@@ -68,7 +68,7 @@ export function PaletteGenerator() {
   );
 
   return (
-    <PaletteUI>
+    <PaletteEditorUI>
       <div id="palette-editor-main" className="container mx-auto px-4 py-2">
         {/* Header */}
         <div className="mb-8 text-center max-w-screen-lg mx-auto">
@@ -122,6 +122,6 @@ export function PaletteGenerator() {
           </div>
         </div>
       </div>
-    </PaletteUI>
+    </PaletteEditorUI>
   );
 }

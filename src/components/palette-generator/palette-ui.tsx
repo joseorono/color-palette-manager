@@ -14,11 +14,11 @@ import { ImageUploader } from "@/components/image-uploader";
 import { GenerationMethodDialog } from "@/components/palette-generator/generation-method-dialog";
 import { HarmonyPreset } from "@/types/color-harmonies";
 
-interface PaletteUIProps {
+interface PaletteEditorUIProps {
   children: React.ReactNode;
 }
 
-export function PaletteUI({ children }: PaletteUIProps) {
+export function PaletteEditorUI({ children }: PaletteEditorUIProps) {
   const isMobile = useIsMobile();
   const {
     currentPalette,
@@ -280,7 +280,7 @@ function MobileActionBar({
   onOpenGenerationMethod: () => void;
   onOpenUpload: () => void;
 }) {
-  // For mobile, reuse PaletteControls and wire to shared dialogs in PaletteUI
+  // For mobile, reuse PaletteControls and wire to shared dialogs in PaletteEditorUI
   return (
     <div className="w-full">
       <PaletteControls
