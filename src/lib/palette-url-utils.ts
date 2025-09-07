@@ -2,7 +2,7 @@ import { Color, Palette, paletteSchema } from "@/types/palette";
 import { ColorUtils } from "@/lib/color-utils";
 import { PaletteUtils } from "@/lib/palette-utils";
 import { PaletteDBQueries } from "@/db/queries";
-import { nanoidPaletteId, nanoidColorId } from "@/constants/nanoid";
+import { nanoidPaletteId } from "@/constants/nanoid";
 
 /**
  * Utility class for handling palette operations via URL parameters.
@@ -112,16 +112,11 @@ export class PaletteUrlUtils {
         return null;
       }
 
-      // Validate and normalize hex colors
+      // Validate and create Color objects
       const validColors: Color[] = [];
       for (const hex of hexColors) {
         if (ColorUtils.isValidHex(hex)) {
-          const normalizedHex = ColorUtils.normalizeHex(hex);
-          validColors.push({
-            id: nanoidColorId(),
-            hex: normalizedHex,
-            locked: false,
-          });
+          validColors.push(ColorUtils.HexToColor(hex));
         }
       }
 
@@ -285,10 +280,9 @@ export class PaletteUrlUtils {
       const palette: Palette = {
         ...validationResult.data,
         id: nanoidPaletteId(),
-        colors: validationResult.data.colors.map((color) => ({
-          ...color,
-          id: nanoidColorId(),
-        })),
+        colors: validationResult.data.colors.map((color) =>
+          ColorUtils.HexToColor(color.hex, color.name, color.locked)
+        ),
         createdAt: new Date(),
         updatedAt: new Date(),
       };
