@@ -60,9 +60,13 @@ export function ExportModal() {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button className="gap-2">
+        <Button
+          variant="default"
+          size="sm"
+          className="h-9 px-2 2xl:h-10 2xl:px-3"
+        >
           <Download className="h-4 w-4" />
-          <span className="hidden lg:block">Export Palette</span>
+          <span>Export</span>
         </Button>
       </DialogTrigger>
 

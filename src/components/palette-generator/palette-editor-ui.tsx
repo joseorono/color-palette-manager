@@ -3,9 +3,19 @@ import { PaletteNavbar } from "@/components/palette-generator/palette-navbar";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { PaletteControls } from "@/components/palette-generator/palette-navbar/palette-controls";
 import { usePaletteStore } from "@/stores/palette-store";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import { PaletteTabsPreview } from "@/components/palette-tabs-preview";
 import { PaletteMetadataSidebar } from "@/components/palette-generator/palette-metadata-sidebar";
 import { toast } from "sonner";
@@ -35,7 +45,8 @@ export function PaletteEditorUI({ children }: PaletteEditorUIProps) {
   const [isPreviewOpen, setIsPreviewOpen] = React.useState(false);
   const [isMetadataOpen, setIsMetadataOpen] = React.useState(false);
   const [isUploadOpen, setIsUploadOpen] = React.useState(false);
-  const [isGenerationMethodOpen, setIsGenerationMethodOpen] = React.useState(false);
+  const [isGenerationMethodOpen, setIsGenerationMethodOpen] =
+    React.useState(false);
 
   type MetadataValues = {
     name: string;
@@ -79,7 +90,9 @@ export function PaletteEditorUI({ children }: PaletteEditorUIProps) {
   }, [regenerateUnlocked, addColor, setIsSaveOpen]);
 
   const handleMetadataSubmit = async (values?: MetadataValues) => {
-    const trimmedName = values ? values.name?.trim() : currentPalette.name.trim();
+    const trimmedName = values
+      ? values.name?.trim()
+      : currentPalette.name.trim();
     if (!trimmedName) {
       toast.error("Please enter a palette name");
       return;
@@ -101,7 +114,9 @@ export function PaletteEditorUI({ children }: PaletteEditorUIProps) {
       );
 
       toast.success(
-        currentPalette?.id ? "Palette updated successfully!" : "Palette saved successfully!"
+        currentPalette?.id
+          ? "Palette updated successfully!"
+          : "Palette saved successfully!"
       );
       setIsSaveOpen(false);
       setIsMetadataOpen(false);
@@ -135,7 +150,10 @@ export function PaletteEditorUI({ children }: PaletteEditorUIProps) {
 
   const handleOpenPreviewNewTab = () => {
     if (currentPalette?.id) {
-      window.open(`/app/palette-preview?paletteId=${currentPalette.id}`, "_blank");
+      window.open(
+        `/app/palette-preview?paletteId=${currentPalette.id}`,
+        "_blank"
+      );
     }
   };
   return (
@@ -158,7 +176,7 @@ export function PaletteEditorUI({ children }: PaletteEditorUIProps) {
 
       {/* Mobile Bottom Bar */}
       {isMobile && (
-        <div className="fixed inset-x-0 bottom-0 z-50 border-t bg-white/85 backdrop-blur-md dark:border-gray-800 dark:bg-gray-900/85 sm:hidden">
+        <div className="fixed inset-x-0 bottom-0 z-50 border-t bg-white/85 backdrop-blur-md dark:border-gray-800 dark:bg-gray-900/85">
           <div className="mx-auto flex max-w-7xl items-center justify-around px-2 py-2">
             <MobileActionBar
               onOpenGenerationMethod={() => setIsGenerationMethodOpen(true)}
@@ -177,14 +195,18 @@ export function PaletteEditorUI({ children }: PaletteEditorUIProps) {
           <div className="space-y-4">
             <p className="text-sm text-gray-600 dark:text-gray-400">
               This will save your current changes to{" "}
-              <span className="font-medium">{currentPalette?.name || "Untitled Palette"}</span>
+              <span className="font-medium">
+                {currentPalette?.name || "Untitled Palette"}
+              </span>
               . Do you want to proceed?
             </p>
             <div className="flex justify-end gap-3">
               <Button variant="outline" onClick={() => setIsSaveOpen(false)}>
                 Cancel
               </Button>
-              <Button onClick={() => handleMetadataSubmit()}>Save Changes</Button>
+              <Button onClick={() => handleMetadataSubmit()}>
+                Save Changes
+              </Button>
             </div>
           </div>
         </DialogContent>
@@ -194,7 +216,9 @@ export function PaletteEditorUI({ children }: PaletteEditorUIProps) {
       <Dialog open={isShortcutsOpen} onOpenChange={setIsShortcutsOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">Keyboard Shortcuts</DialogTitle>
+            <DialogTitle className="flex items-center gap-2">
+              Keyboard Shortcuts
+            </DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-3">
@@ -218,7 +242,11 @@ export function PaletteEditorUI({ children }: PaletteEditorUIProps) {
               </div>
             </div>
             <div className="flex justify-end pt-2">
-              <Button variant="outline" onClick={() => setIsShortcutsOpen(false)} className="w-full sm:w-auto">
+              <Button
+                variant="outline"
+                onClick={() => setIsShortcutsOpen(false)}
+                className="w-full sm:w-auto"
+              >
                 Close
               </Button>
             </div>
@@ -228,12 +256,18 @@ export function PaletteEditorUI({ children }: PaletteEditorUIProps) {
 
       {/* Preview Sheet */}
       <Sheet open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
-        <SheetContent side="right" className="w-full overflow-y-auto sm:max-w-5xl">
+        <SheetContent
+          side="right"
+          className="w-full overflow-y-auto sm:max-w-5xl"
+        >
           <SheetHeader className="mb-6">
             <SheetTitle>Preview Palette</SheetTitle>
           </SheetHeader>
           <div className="h-[calc(100%-4rem)]">
-            <PaletteTabsPreview palette={currentPalette} classNameForViews="h-full" />
+            <PaletteTabsPreview
+              palette={currentPalette}
+              classNameForViews="h-full"
+            />
           </div>
         </SheetContent>
       </Sheet>

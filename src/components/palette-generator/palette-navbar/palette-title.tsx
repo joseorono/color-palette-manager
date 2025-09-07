@@ -14,7 +14,7 @@ export function PaletteTitle({ onOpenMetadata }: PaletteTitleProps) {
       <Button
         onClick={onOpenMetadata}
         variant="ghost"
-        className="flex items-center gap-3 text-left hover:bg-gray-100 dark:hover:bg-gray-800"
+        className="flex items-center gap-3 pl-2 text-left hover:bg-gray-100 dark:hover:bg-gray-800"
       >
         <Palette className="h-6 w-6 text-gray-500" />
         <div className="flex flex-col">
