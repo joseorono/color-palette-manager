@@ -43,7 +43,7 @@ export function DebouncedSlider({
 
   return (
     <>
-      <Label className="mb-2 block text-sm font-medium">
+      <Label className="mb-2 block text-center text-sm font-medium">
         Palette Size: {internalValue[0]} colors
       </Label>
       <Slider
