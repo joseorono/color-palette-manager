@@ -25,14 +25,13 @@ export class PaletteImport {
       const rawData = JSON.parse(jsonString);
       const data = exportedPaletteJSONSchema.parse(rawData);
 
-      // Convert exported colors to Color objects with normalized hex values
+      // Convert exported colors to Color objects
       const colors: Color[] = data.colors.map((exportedColor) => {
-        const color: Color = {
-          id: nanoidColorId(),
-          hex: ColorUtils.normalizeHex(exportedColor.hex),
-          locked: exportedColor.locked,
-          name: exportedColor.name || undefined,
-        };
+        const color = ColorUtils.HexToColor(
+          exportedColor.hex,
+          exportedColor.name,
+          exportedColor.locked
+        );
 
         // Validate color using schema (additional safety check)
         return colorSchema.parse(color);
