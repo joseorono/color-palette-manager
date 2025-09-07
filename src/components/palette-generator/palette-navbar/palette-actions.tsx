@@ -100,9 +100,9 @@ export function PaletteActions({
                 },
               ]}
               variant="ghost"
-              size="lg"
+              size="sm"
               dropdownButtonClassName="h-9 w-9"
-              mainButtonClassName="h-9 w-9"
+              mainButtonClassName="w-full gap-2 items-center"
             />
           </TooltipTrigger>
           <TooltipContent>

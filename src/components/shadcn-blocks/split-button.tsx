@@ -92,8 +92,7 @@ const SplitButton = React.forwardRef<HTMLDivElement, SplitButtonProps>(
       <div
         ref={ref}
         className={cn(
-          "flex divide-x divide-border/40 [&>*]:rounded-none [&>button:first-child]:rounded-l-md [&>button:last-child]:rounded-r-md",
-          className
+          "flex divide-x divide-border/40 [&>*]:rounded-none [&>button:first-child]:rounded-l-md [&>button:last-child]:rounded-r-md"
         )}
         {...props}
       >
@@ -105,8 +104,7 @@ const SplitButton = React.forwardRef<HTMLDivElement, SplitButtonProps>(
           className={mainButtonClassName}
         >
           {MainButtonIcon && <MainButtonIcon />}
-
-          {mainButtonText}
+          <span>{mainButtonText}</span>
         </Button>
         <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>

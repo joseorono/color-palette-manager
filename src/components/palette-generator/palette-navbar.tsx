@@ -26,8 +26,6 @@ export function PaletteNavbar({
   onOpenGenerationMethod,
   onOpenUpload,
 }: PaletteNavbarProps) {
-  const isMobile = useIsMobile();
-
   return (
     <>
       <div
@@ -35,7 +33,7 @@ export function PaletteNavbar({
         className="sticky top-0 z-50 border-b bg-white/80 backdrop-blur-md dark:border-gray-800 dark:bg-gray-900/80"
       >
         <div className="container mx-auto px-2 2xl:px-4">
-          <div className="flex flex-wrap items-center justify-between gap-2 py-4">
+          <div className="flex flex-wrap items-center justify-between gap-2 py-4 xl:grid xl:grid-cols-3">
             {/* Title Section */}
             <PaletteTitle onOpenMetadata={onOpenMetadata} />
 
