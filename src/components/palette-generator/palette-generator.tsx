@@ -84,7 +84,7 @@ export function PaletteGenerator() {
 
         {/* Palette Display */}
         <div className="mx-auto mb-8 max-w-7xl">
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
             <DndContext
               sensors={sensors}
               collisionDetection={closestCorners}

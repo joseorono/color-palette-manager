@@ -76,7 +76,7 @@ export function ColorCard({ color, index }: ColorCardProps) {
           {/* color square */}
           <div
             className={cn(
-              "relative w-full rounded-t-lg transition-all duration-300 ease-out md:h-60",
+              "relative h-32 w-full rounded-t-lg transition-all duration-300 ease-out md:h-60",
               isDragging && "contrast-105 brightness-110"
             )}
             style={{ backgroundColor: color.hex }}
