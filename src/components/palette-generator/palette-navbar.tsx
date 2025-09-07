@@ -1,4 +1,3 @@
-import { usePaletteStore } from "@/stores/palette-store";
 import { PaletteTitle } from "@/components/palette-generator/palette-navbar/palette-title";
 import { PaletteControls } from "@/components/palette-generator/palette-navbar/palette-controls";
 import { PaletteActions } from "@/components/palette-generator/palette-navbar/palette-actions";
@@ -36,27 +35,28 @@ export function PaletteNavbar({
         className="sticky top-0 z-50 border-b bg-white/80 backdrop-blur-md dark:border-gray-800 dark:bg-gray-900/80"
       >
         <div className="container mx-auto px-2 2xl:px-4">
-          <div className="flex flex-wrap items-center justify-between gap-2 py-4 2xl:grid 2xl:h-16 2xl:grid-cols-3">
+          <div className="flex flex-wrap items-center justify-between gap-2 py-4">
             {/* Title Section */}
             <PaletteTitle onOpenMetadata={onOpenMetadata} />
 
             {/* Controls Section */}
-            {!isMobile && (
-              <PaletteControls
-                onOpenGenerationMethod={onOpenGenerationMethod}
-                onOpenUpload={onOpenUpload}
-              />
-            )}
+
+            <PaletteControls
+              onOpenGenerationMethod={onOpenGenerationMethod}
+              onOpenUpload={onOpenUpload}
+            />
 
             {/* Actions Section */}
-            <PaletteActions
-              onShare={onShare}
-              onCopyUrl={onCopyUrl}
-              onOpenPreview={onOpenPreview}
-              onOpenPreviewNewTab={onOpenPreviewNewTab}
-              onOpenSave={onOpenSave}
-              onOpenShortcuts={onOpenShortcuts}
-            />
+            <div className="hidden lg:contents">
+              <PaletteActions
+                onShare={onShare}
+                onCopyUrl={onCopyUrl}
+                onOpenPreview={onOpenPreview}
+                onOpenPreviewNewTab={onOpenPreviewNewTab}
+                onOpenSave={onOpenSave}
+                onOpenShortcuts={onOpenShortcuts}
+              />
+            </div>
           </div>
         </div>
       </div>

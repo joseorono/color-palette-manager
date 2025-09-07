@@ -23,6 +23,7 @@ import { ShareUtils } from "@/lib/share-utils";
 import { ImageUploader } from "@/components/image-uploader";
 import { GenerationMethodDialog } from "@/components/palette-generator/generation-method-dialog";
 import { HarmonyPreset } from "@/types/color-harmonies";
+import { PaletteActions } from "./palette-navbar/palette-actions";
 
 interface PaletteEditorUIProps {
   children: React.ReactNode;
@@ -170,22 +171,21 @@ export function PaletteEditorUI({ children }: PaletteEditorUIProps) {
         onOpenGenerationMethod={() => setIsGenerationMethodOpen(true)}
         onOpenUpload={() => setIsUploadOpen(true)}
       />
-
       {/* Main content with bottom padding for mobile bottom bar height */}
       <div className="pb-16 sm:pb-0">{children}</div>
-
       {/* Mobile Bottom Bar */}
-      {isMobile && (
-        <div className="fixed inset-x-0 bottom-0 z-50 border-t bg-white/85 backdrop-blur-md dark:border-gray-800 dark:bg-gray-900/85">
-          <div className="mx-auto flex max-w-7xl items-center justify-around px-2 py-2">
-            <MobileActionBar
-              onOpenGenerationMethod={() => setIsGenerationMethodOpen(true)}
-              onOpenUpload={() => setIsUploadOpen(true)}
-            />
-          </div>
+      <div className="fixed inset-x-0 bottom-0 z-50 border-t bg-white/85 backdrop-blur-md dark:border-gray-800 dark:bg-gray-900/85 lg:hidden">
+        <div className="mx-auto flex max-w-7xl items-center justify-around px-2 py-2">
+          <PaletteActions
+            onShare={handleShare}
+            onCopyUrl={handleCopyUrl}
+            onOpenPreview={() => setIsPreviewOpen(true)}
+            onOpenPreviewNewTab={handleOpenPreviewNewTab}
+            onOpenSave={() => setIsSaveOpen(true)}
+            onOpenShortcuts={() => setIsShortcutsOpen(true)}
+          />
         </div>
-      )}
-
+      </div>
       {/* Save Dialog */}
       <Dialog open={isSaveOpen} onOpenChange={setIsSaveOpen}>
         <DialogContent>
@@ -211,7 +211,6 @@ export function PaletteEditorUI({ children }: PaletteEditorUIProps) {
           </div>
         </DialogContent>
       </Dialog>
-
       {/* Keyboard Shortcuts Dialog */}
       <Dialog open={isShortcutsOpen} onOpenChange={setIsShortcutsOpen}>
         <DialogContent className="max-w-md">
@@ -253,7 +252,6 @@ export function PaletteEditorUI({ children }: PaletteEditorUIProps) {
           </div>
         </DialogContent>
       </Dialog>
-
       {/* Preview Sheet */}
       <Sheet open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
         <SheetContent
@@ -271,7 +269,6 @@ export function PaletteEditorUI({ children }: PaletteEditorUIProps) {
           </div>
         </SheetContent>
       </Sheet>
-
       {/* Metadata Sidebar (Sheet) */}
       <PaletteMetadataSidebar
         open={isMetadataOpen}
@@ -285,7 +282,6 @@ export function PaletteEditorUI({ children }: PaletteEditorUIProps) {
           isFavorite: currentPalette?.isFavorite ?? false,
         }}
       />
-
       {/* Upload Image Dialog */}
       <Dialog open={isUploadOpen} onOpenChange={setIsUploadOpen}>
         <DialogContent className="max-w-lg">
@@ -295,7 +291,6 @@ export function PaletteEditorUI({ children }: PaletteEditorUIProps) {
           <ImageUploader onClose={() => setIsUploadOpen(false)} />
         </DialogContent>
       </Dialog>
-
       {/* Generation Method Dialog */}
       <GenerationMethodDialog
         open={isGenerationMethodOpen}

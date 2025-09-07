@@ -139,14 +139,6 @@ export function PaletteControls({
                 <Grid3X3 className="h-4 w-4" />
                 <span>Adjust palette size</span>
               </Button>
-              {/* <Button
-                variant="default"
-                size="sm"
-                className="h-9 px-2 2xl:h-10 2xl:px-3"
-              >
-                <Grid3X3 className="h-4 w-4" />
-                <span>Export</span>
-              </Button> */}
             </DropdownMenuTrigger>
           </TooltipTrigger>
           <TooltipContent>

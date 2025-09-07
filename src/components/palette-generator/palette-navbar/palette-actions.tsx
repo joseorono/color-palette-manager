@@ -43,7 +43,7 @@ export function PaletteActions({
 }: PaletteActionsProps) {
   const { hasUnsavedChanges } = usePaletteStore();
   return (
-    <div className="flex w-full items-center justify-between gap-2 md:w-auto 2xl:justify-self-end">
+    <div className="flex w-full items-center justify-between gap-2 lg:w-auto 2xl:justify-self-end">
       {/* Left actions (mobile: align start) */}
       <div className="flex items-center gap-1">
         {/* Share */}
