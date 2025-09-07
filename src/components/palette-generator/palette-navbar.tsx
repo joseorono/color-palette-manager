@@ -81,7 +81,7 @@ export function PaletteNavbar() {
   const handleSizeChange = (value: number[]) => {
     const newSize = value[0];
     const currentSize = currentPalette?.colors.length || 0;
-    
+
     if (newSize > currentSize) {
       // Add harmonious colors to reach the new size
       const colorsToAdd = newSize - currentSize;
@@ -95,7 +95,7 @@ export function PaletteNavbar() {
         removeColor(currentSize - 1 - i);
       }
     }
-    
+
     setPaletteSize(newSize);
   };
 
@@ -233,7 +233,10 @@ export function PaletteNavbar() {
 
   return (
     <>
-      <div id="palette-navbar" className="sticky z-50 border-b bg-white/80 backdrop-blur-md dark:border-gray-800 dark:bg-gray-900/80">
+      <div
+        id="palette-navbar"
+        className="sticky z-50 border-b bg-white/80 backdrop-blur-md dark:border-gray-800 dark:bg-gray-900/80"
+      >
         <div className="container mx-auto px-2 2xl:px-4">
           <div className="flex flex-wrap items-center justify-between gap-2 py-4 2xl:grid 2xl:h-16 2xl:grid-cols-3">
             {/* Left Section - Palette Name */}
@@ -453,9 +456,9 @@ export function PaletteNavbar() {
                         onClick: palettePreviewNewTab,
                       },
                     ]}
-                    variant="outline"
-                    size="sm"
-                    dropdownButtonClassName="h-9 w-8"
+                    variant="ghost"
+                    size="lg"
+                    dropdownButtonClassName="h-9 w-9"
                     mainButtonClassName="h-9 w-9"
                   />
                 </TooltipTrigger>
@@ -621,7 +624,7 @@ export function PaletteNavbar() {
             <SheetTitle>Preview Palette</SheetTitle>
           </SheetHeader>
           <div className="h-[calc(100%-4rem)]">
-            <PaletteTabsPreview 
+            <PaletteTabsPreview
               palette={currentPalette}
               classNameForViews="h-full"
             />

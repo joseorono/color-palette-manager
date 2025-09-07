@@ -92,7 +92,7 @@ const SplitButton = React.forwardRef<HTMLDivElement, SplitButtonProps>(
       <div
         ref={ref}
         className={cn(
-          "divide-x divide-border/40 [&>*]:rounded-none [&>button:first-child]:rounded-l-md [&>button:last-child]:rounded-r-md",
+          "flex divide-x divide-border/40 [&>*]:rounded-none [&>button:first-child]:rounded-l-md [&>button:last-child]:rounded-r-md",
           className
         )}
         {...props}
