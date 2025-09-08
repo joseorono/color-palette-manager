@@ -1,6 +1,17 @@
 import chroma from "chroma-js";
 import { colord } from "colord";
-import { WCAGContrastLevel } from "@/types/palette";
+import { WCAGContrastLevel, HexColorString } from "@/types/palette";
+import { 
+  ColorBlindnessType, 
+  ColorVisionDeficiencyInfo, 
+  SimulationMatrix,
+  PaletteSimulationResult 
+} from "@/types/accessibility";
+import { 
+  COLOR_VISION_DEFICIENCY_INFO, 
+  SIMULATION_MATRICES, 
+  SEVERITY_SUPPORTED_TYPES
+} from "@/constants/accessibility";
 
 /**
  * Utility class for accessibility-related color operations and WCAG compliance checking
@@ -173,6 +184,122 @@ export class AccessibilityUtils {
         aa: AccessibilityUtils.meetsWCAGContrast(textColor, backgroundColor, WCAGContrastLevel.AA, true),
         aaa: AccessibilityUtils.meetsWCAGContrast(textColor, backgroundColor, WCAGContrastLevel.AAA, true)
       }
+    };
+  }
+
+  // === COLOR BLINDNESS SIMULATION METHODS ===
+
+  /**
+   * Get information about a specific color vision deficiency type
+   * @param type Color blindness type
+   * @returns Information object with name, description, prevalence, etc.
+   */
+  static getColorBlindnessInfo(type: ColorBlindnessType): ColorVisionDeficiencyInfo {
+    return COLOR_VISION_DEFICIENCY_INFO[type];
+  }
+
+  /**
+   * Check if a vision type supports severity adjustment
+   * @param type Color blindness type
+   * @returns Whether severity can be adjusted for this type
+   */
+  static supportsSeverityAdjustment(type: ColorBlindnessType): boolean {
+    return SEVERITY_SUPPORTED_TYPES.includes(type);
+  }
+
+  /**
+   * Apply a 3x3 transformation matrix to RGB values
+   * @param rgb RGB values [r, g, b] (0-255)
+   * @param matrix 3x3 transformation matrix
+   * @returns Transformed RGB values
+   */
+  private static applyMatrix(rgb: [number, number, number], matrix: SimulationMatrix): [number, number, number] {
+    const [r, g, b] = rgb.map(v => v / 255); // Normalize to 0-1
+    
+    const newR = matrix[0][0] * r + matrix[0][1] * g + matrix[0][2] * b;
+    const newG = matrix[1][0] * r + matrix[1][1] * g + matrix[1][2] * b;
+    const newB = matrix[2][0] * r + matrix[2][1] * g + matrix[2][2] * b;
+    
+    // Clamp and denormalize
+    return [
+      Math.max(0, Math.min(255, Math.round(newR * 255))),
+      Math.max(0, Math.min(255, Math.round(newG * 255))),
+      Math.max(0, Math.min(255, Math.round(newB * 255)))
+    ];
+  }
+
+  /**
+   * Simulate color blindness for a single color
+   * @param hexColor Color in hex format
+   * @param type Type of color vision deficiency
+   * @param severity Severity level (0-1, only for anomalous trichromacy)
+   * @returns Simulated color in hex format
+   */
+  static simulateColorBlindness(
+    hexColor: HexColorString, 
+    type: ColorBlindnessType,
+    severity: number = 1.0
+  ): HexColorString {
+    if (type === ColorBlindnessType.NORMAL) {
+      return hexColor;
+    }
+
+    const matrix = SIMULATION_MATRICES[type];
+    if (!matrix) {
+      return hexColor;
+    }
+
+    const rgb = colord(hexColor).toRgb();
+    const originalRgb: [number, number, number] = [rgb.r, rgb.g, rgb.b];
+    
+    let simulatedRgb = AccessibilityUtils.applyMatrix(originalRgb, matrix);
+    
+    // Apply severity interpolation for anomalous trichromacy
+    if (AccessibilityUtils.supportsSeverityAdjustment(type) && severity < 1.0) {
+      simulatedRgb = [
+        Math.round(originalRgb[0] * (1 - severity) + simulatedRgb[0] * severity),
+        Math.round(originalRgb[1] * (1 - severity) + simulatedRgb[1] * severity),
+        Math.round(originalRgb[2] * (1 - severity) + simulatedRgb[2] * severity)
+      ];
+    }
+    
+    return colord({ r: simulatedRgb[0], g: simulatedRgb[1], b: simulatedRgb[2] }).toHex();
+  }
+
+  /**
+   * Simulate color blindness for an entire palette
+   * @param palette Array of hex colors
+   * @param type Type of color vision deficiency
+   * @param severity Severity level (0-1, only for anomalous trichromacy)
+   * @returns Array of simulated hex colors
+   */
+  static simulateColorBlindnessForPalette(
+    palette: HexColorString[], 
+    type: ColorBlindnessType,
+    severity: number = 1.0
+  ): HexColorString[] {
+    return palette.map(color => 
+      AccessibilityUtils.simulateColorBlindness(color, type, severity)
+    );
+  }
+
+  /**
+   * Get a complete simulation result for a palette
+   * @param palette Array of hex colors
+   * @param type Type of color vision deficiency
+   * @param severity Severity level (0-1, only for anomalous trichromacy)
+   * @returns Complete simulation result object
+   */
+  static getPaletteSimulationResult(
+    palette: HexColorString[],
+    type: ColorBlindnessType,
+    severity: number = 1.0
+  ): PaletteSimulationResult {
+    return {
+      originalPalette: palette,
+      simulatedPalette: AccessibilityUtils.simulateColorBlindnessForPalette(palette, type, severity),
+      visionType: type,
+      severity: AccessibilityUtils.supportsSeverityAdjustment(type) ? severity : undefined
     };
   }
 }

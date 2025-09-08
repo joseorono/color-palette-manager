@@ -16,6 +16,7 @@ import { ColorConverterTool } from "./pages/tools/color-converter-tool";
 import { ImagePaletteExtractorTool } from "@/pages/image-palette-extractor-tool";
 import { HslColorPickerTool } from "./pages/tools/hsl-color-picker-tool";
 import { ContrastCheckerTool } from "./pages/tools/contrast-checker-tool";
+import { ColorBlindnessSimulatorTool } from "./pages/tools/color-blindness-simulator-tool";
 import ToolsPage from "./pages/tools-page";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import NotFoundPage from "./pages/not-found-page";
@@ -74,6 +75,10 @@ function App() {
               <Route
                 path="/app/tools/contrast-checker"
                 element={<ContrastCheckerTool />}
+              />
+              <Route
+                path="/app/tools/color-blindness-simulator"
+                element={<ColorBlindnessSimulatorTool />}
               />
             </Route>
 

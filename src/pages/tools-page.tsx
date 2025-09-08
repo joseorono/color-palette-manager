@@ -104,7 +104,8 @@ const accessibilityTools: Tool[] = [
     name: "Color Blindness Simulator",
     description: "Simulate how your palettes appear to users with different types of color blindness for better accessibility.",
     icon: Eye,
-    status: "coming-soon"
+    status: "available",
+    link: "/app/tools/color-blindness-simulator"
   },
 ];
 

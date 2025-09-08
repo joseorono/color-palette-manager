@@ -110,12 +110,12 @@ export class PaletteUtils {
     preset: HarmonyPreset = DEFAULT_HARMONY_PRESET,
   ): HexColorString[] {
     console.log("In generateHarmoniousHexCsv got baseColorHex:", baseColorHex, "count:", count, "existingColors:", existingColors);
-    
+
+    console.log("In generateHarmoniousHexCsv got preset:", preset);
+
     // Extract hex colors from existing Color objects
     const existingColorHexArray = existingColors.map(color => color.hex);
-    console.log("Existing color hex array:", existingColorHexArray);
-    console.log("Base color hex:", baseColorHex);
-    
+
     // Get or generate base color using the new getBaseColorHex method
     const baseColor =
       baseColorHex ||
