@@ -31,11 +31,11 @@ export const ColorBlindnessSimulatorTool: React.FC = () => {
   const [paletteColors, setPaletteColors] = useState<HexColorString[]>([
     "#FF6B6B", "#4ECDC4", "#45B7D1", "#96CEB4", "#FFEAA7", "#DDA0DD"
   ]);
-  
+
   // State for vision simulation
   const [selectedVisionType, setSelectedVisionType] = useState<ColorBlindnessType>(ColorBlindnessType.DEUTERANOPIA);
   const [severity, setSeverity] = useState<number>(1.0);
-  
+
   // State for palette input
   const [paletteInput, setPaletteInput] = useState<string>("");
 
@@ -55,7 +55,7 @@ export const ColorBlindnessSimulatorTool: React.FC = () => {
 
   // Get information about the selected vision type
   const visionInfo = AccessibilityUtils.getColorBlindnessInfo(selectedVisionType);
-  
+
   // Check if severity adjustment is supported
   const supportsSeverity = AccessibilityUtils.supportsSeverityAdjustment(selectedVisionType);
 
@@ -92,11 +92,6 @@ export const ColorBlindnessSimulatorTool: React.FC = () => {
 
         {/* Controls Section - Desktop: Side by side, Mobile: Stacked */}
         <section className="mb-8">
-          <ToolSectionHeading 
-            title="Configuration" 
-            description="Set up your simulation parameters and input your color palette"
-          />
-          
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Simulation Controls */}
             <Card className="h-fit">
@@ -119,21 +114,21 @@ export const ColorBlindnessSimulatorTool: React.FC = () => {
                         <SelectLabel>Normal Vision</SelectLabel>
                         <SelectItem value={ColorBlindnessType.NORMAL}>Trichromatic (Normal)</SelectItem>
                       </SelectGroup>
-                      
+
                       <SelectGroup>
                         <SelectLabel>Anomalous Trichromacy</SelectLabel>
                         <SelectItem value={ColorBlindnessType.PROTANOMALY}>Protanomaly (Red-Weak)</SelectItem>
                         <SelectItem value={ColorBlindnessType.DEUTERANOMALY}>Deuteranomaly (Green-Weak)</SelectItem>
                         <SelectItem value={ColorBlindnessType.TRITANOMALY}>Tritanomaly (Blue-Weak)</SelectItem>
                       </SelectGroup>
-                      
+
                       <SelectGroup>
                         <SelectLabel>Dichromacy</SelectLabel>
                         <SelectItem value={ColorBlindnessType.PROTANOPIA}>Protanopia (No Red)</SelectItem>
                         <SelectItem value={ColorBlindnessType.DEUTERANOPIA}>Deuteranopia (No Green)</SelectItem>
                         <SelectItem value={ColorBlindnessType.TRITANOPIA}>Tritanopia (No Blue)</SelectItem>
                       </SelectGroup>
-                      
+
                       <SelectGroup>
                         <SelectLabel>Monochromacy</SelectLabel>
                         <SelectItem value={ColorBlindnessType.ACHROMATOPSIA}>Achromatopsia (Complete)</SelectItem>
@@ -204,9 +199,9 @@ export const ColorBlindnessSimulatorTool: React.FC = () => {
                     className="min-h-[140px] font-mono text-sm resize-none focus:ring-2 focus:ring-primary/20"
                   />
                 </div>
-                
+
                 <div className="flex flex-col sm:flex-row gap-3">
-                  <Button 
+                  <Button
                     onClick={handleGenerateRandomPalette}
                     variant="outline"
                     className="flex items-center justify-center gap-2 flex-1 hover:bg-primary/5"
@@ -232,11 +227,6 @@ export const ColorBlindnessSimulatorTool: React.FC = () => {
         {/* Palette Comparison */}
         {paletteColors.length > 0 && (
           <section className="mb-8">
-            <ToolSectionHeading 
-              title="Palette Comparison" 
-              description="See how your palette appears with normal vision vs. the selected color vision deficiency"
-            />
-            
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -289,11 +279,11 @@ export const ColorBlindnessSimulatorTool: React.FC = () => {
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
                   {paletteColors.map((originalHex: string, index: number) => {
                     const simulatedHex = AccessibilityUtils.simulateColorBlindness(
-                      originalHex, 
-                      selectedVisionType, 
+                      originalHex,
+                      selectedVisionType,
                       severity
                     );
-                    
+
                     return (
                       <div key={index} className="space-y-2">
                         {/* Original Color */}
@@ -302,19 +292,19 @@ export const ColorBlindnessSimulatorTool: React.FC = () => {
                           style={{ backgroundColor: originalHex }}
                           title={`Original: ${originalHex.toUpperCase()}`}
                         />
-                        
+
                         {/* Arrow */}
                         <div className="flex justify-center">
                           <ArrowRight className="h-3 w-3 text-muted-foreground" />
                         </div>
-                        
+
                         {/* Simulated Color */}
                         <div
                           className="h-12 rounded-lg border-2 border-gray-300 cursor-pointer hover:scale-105 transition-transform"
                           style={{ backgroundColor: simulatedHex }}
                           title={`${visionInfo.name}: ${simulatedHex.toUpperCase()}`}
                         />
-                        
+
                         {/* Color Names */}
                         <div className="text-xs text-center space-y-1">
                           <div className="font-medium">{ColorUtils.getColorName(originalHex)}</div>
