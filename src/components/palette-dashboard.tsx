@@ -218,7 +218,7 @@ export function PaletteDashboard({
   }
 
   return (
-    <div className="space-y-4 px-2">
+    <div className="space-y-4 px-4 sm:px-6 lg:px-8">
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="text-center sm:text-left">
