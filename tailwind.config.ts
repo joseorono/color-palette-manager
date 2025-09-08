@@ -10,10 +10,10 @@ const config: Config = {
   theme: {
   	extend: {
 		height: {
-			'fullvh-with-navbar': 'var(--fullvh-with-navbar)', // 100vh - 65px (navbar height)
+			'fullvh-with-navbar': 'var(--fullvh-with-navbar)', // 100dvh - 65px (navbar height)
 		},
 		minHeight: {
-			'fullvh-with-navbar': 'var(--fullvh-with-navbar)', // 100vh - 65px (navbar height)
+			'fullvh-with-navbar': 'var(--fullvh-with-navbar)', // 100dvh - 65px (navbar height)
 		},
   		backgroundImage: {
   			'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
