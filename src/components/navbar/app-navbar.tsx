@@ -17,10 +17,6 @@ const navigationLinks: NavigationLink[] = [
   { name: "Palette Editor", href: "/app/palette-edit" },
   { name: "Palette Preview", href: "/app/palette-preview"},
   { name: "Tools", href: "/app/tools" },
-
-  // Test Routes - remove later
-  { name: "Color Test", href: "/app/color-test" },
-  { name: "Theme Test", href: "/app/test"},
 ];
 
 export default function AppNavbar() {
@@ -59,7 +55,7 @@ export default function AppNavbar() {
         </div>
 
         {/* --- Desktop Navigation (Hidden on small screens) --- */}
-        <div className="hidden md:flex md:items-center md:space-x-8">
+        <div className="hidden lg:flex lg:items-center lg:space-x-8">
           <Menubar className="border-none">
             {navigationLinks.map((link) => (
               <MenubarMenu key={link.name}>
@@ -79,7 +75,7 @@ export default function AppNavbar() {
         </div>
 
         {/* --- Mobile Navigation Trigger (Hidden on medium/large screens) --- */}
-        <div className="flex md:hidden">
+        <div className="flex lg:hidden">
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>
               <Button
@@ -140,7 +136,7 @@ export default function AppNavbar() {
         </div>
 
         {/* --- Back to Landing Button and Theme Toggle (Visible on desktop) --- */}
-        <div className="hidden items-center gap-3 md:flex">
+        <div className="hidden items-center gap-3 lg:flex">
           <ThemeToggle />
           <Link to="/">
             <Button className="rounded-full px-6" variant="secondary">Back to Landing</Button>
