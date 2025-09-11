@@ -32,7 +32,8 @@ export function InvalidColorPaletteMessage({
             <path d="M12 10v4" />
           </svg>
         </div>
-        <h3 className="mb-1 text-base font-medium">Invalid Color Palette</h3>
+        <h3 className="mb-1 text-base font-medium">Invalid Colors Palette</h3>
+        <hr className="mb-2 w-full border border-black"/>
         <p className="mb-2 text-xs text-muted-foreground">
           The palette is missing required color roles needed for proper display.
         </p>
