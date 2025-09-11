@@ -41,9 +41,9 @@ export function PaletteSelector({ currentPalette }: PaletteSelectorProps) {
   const selectedPaletteId = currentPalette?.id || paletteId;
 
   return (
-    <div className="w-full md:w-64">
+    <div className="w-full md:w-64 flex flex-col justify-center items-center text-white">
       <Select value={selectedPaletteId} onValueChange={handlePaletteChange}>
-        <SelectTrigger className="h-10 w-full rounded-md bg-primary px-4 py-2 font-medium shadow-sm transition-all hover:opacity-90">
+        <SelectTrigger className="h-10 w-auto text-1xl rounded-md bg-primary px-4 py-2 font-medium shadow-sm transition-all hover:opacity-90">
           <span className="mr-2">🎨</span>
           <SelectValue placeholder="Select a palette">
             {currentPalette && !palettes?.length ? currentPalette.name : undefined}
