@@ -66,7 +66,7 @@ export function ExportModal() {
           className="h-9 px-2 2xl:h-10 2xl:px-3"
         >
           <Download className="h-4 w-4" />
-          <span>Export</span>
+          <span className="ml-2">Export</span>
         </Button>
       </DialogTrigger>
 
