@@ -8,7 +8,7 @@ export default function AppLayout() {
   return (
     <ThemeProvider>
       <NuqsAdapter>
-        <main className="mx-auto">
+        <main className="mx-auto bg-red-500 sm:bg-blue-500 md:bg-green-500 lg:bg-yellow-500">
           <AppNavbar />
           <Outlet />
           <Toaster />

@@ -131,7 +131,7 @@ export function PaletteFilters({
           <Button
             variant={filters.showFavoritesOnly ? "default" : "outline"}
             size="sm"
-            className="flex-1"
+            className="flex-1 "
             onClick={handleFavoritesToggle}
           >
             <Heart
@@ -193,11 +193,11 @@ export function PaletteFilters({
       {hasActiveFilters && (
         <div className="space-y-2 flex flex-col items-center">
           <div className="flex items-center justify-between">
-          <span className="text-sm text-black">Active filters :</span>
+          <span className="text-1xl font-medium text-black">Active filters :</span>
           </div>
 
           {filters.showFavoritesOnly && (
-            <Badge variant="secondary" className="flex items-center gap-1 w-auto max-w-fit">
+            <Badge variant="secondary" className="flex items-center text-1xl gap-1 w-auto max-w-fit">
               <Heart className="h-3 w-3 fill-current" />
               Favorites
               <X
@@ -211,7 +211,7 @@ export function PaletteFilters({
             <Badge
               key={tag}
               variant="secondary"
-              className="flex items-center gap-1 w-auto max-w-fit hover:bg-secondary/80"
+              className="flex items-center text-1xl gap-1 w-auto max-w-fit hover:bg-secondary/80"
             >
               {tag}
               <X
@@ -221,7 +221,7 @@ export function PaletteFilters({
             </Badge>
           ))}
 
-          <Button variant="ghost" size="sm" className="max-sm:w-[150px] max-sm:mt-2" onClick={clearAllFilters}>
+          <Button variant="ghost" size="sm" className="w-auto max-w-fit text-1xl" onClick={clearAllFilters}>
             Clear all
           </Button>
         </div>
