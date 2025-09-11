@@ -18,8 +18,8 @@ export function ColorPreviewCard({ palette }: PreviewComponentProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{palette?.name || "Color Preview"}</CardTitle>
-        <CardDescription>
+        <CardTitle className="text-center">{palette?.name || "Color Preview"}</CardTitle>
+        <CardDescription className="text-center">
           {palette ? `${palette.colors.length} colors in this palette` : "No palette selected"}
         </CardDescription>
       </CardHeader>
@@ -33,7 +33,8 @@ export function ColorPreviewCard({ palette }: PreviewComponentProps) {
             <>
               {/* Base Colors */}
               <div>
-                <h3 className="mb-3 text-lg font-medium">Base Colors</h3>
+                <h3 className="mb-3 text-base font-medium text-center">Base Colors</h3>
+        <hr className="mb-6 border border-black"/>
                 <div className="grid grid-cols-3 gap-4">
                   <div>
                     <p className="mb-2 text-sm font-medium">Primary</p>
@@ -67,7 +68,8 @@ export function ColorPreviewCard({ palette }: PreviewComponentProps) {
 
               {/* UI Colors */}
               <div>
-                <h3 className="mb-3 text-lg font-medium">UI Colors</h3>
+                <h3 className="mb-3 text-base font-medium text-center">UI Colors</h3>
+        <hr className="mb-6 border border-black"/>
                 <div className="grid grid-cols-3 gap-4">
                   <div>
                     <p className="mb-2 text-sm font-medium">Background</p>
@@ -101,7 +103,8 @@ export function ColorPreviewCard({ palette }: PreviewComponentProps) {
 
               {/* Text Colors */}
               <div>
-                <h3 className="mb-3 text-lg font-medium">Text Colors</h3>
+                <h3 className="mb-3 text-base font-medium text-center">Text Colors</h3>
+                <hr className="mb-6 border border-black"/>
                 <div className="grid grid-cols-2 gap-4">
                   <div
                     className="rounded-md p-3 border"
@@ -162,7 +165,8 @@ export function ColorPreviewCard({ palette }: PreviewComponentProps) {
 
               {/* Button Examples */}
               <div>
-                <h3 className="mb-3 text-lg font-medium">Button Examples</h3>
+                <h3 className="mb-3 text-base font-medium text-center">Button Examples</h3>
+                <hr className="mb-6 border border-black"/>
                 <div className="grid grid-cols-3 gap-4">
                   <div className="flex flex-col items-center justify-center rounded-md p-3">
                     <p className="mb-2 text-sm font-medium">Primary</p>
@@ -205,7 +209,8 @@ export function ColorPreviewCard({ palette }: PreviewComponentProps) {
 
               {/* Border Examples */}
               <div>
-                <h3 className="mb-3 text-lg font-medium">Border Examples</h3>
+                <h3 className="mb-3 text-base font-medium text-center">Border Examples</h3>
+                <hr className="mb-6 border border-black"/>
                 <div className="grid grid-cols-4 gap-4">
                   <div className="flex flex-col items-center justify-center">
                     <p className="mb-2 text-sm font-medium">Default</p>
