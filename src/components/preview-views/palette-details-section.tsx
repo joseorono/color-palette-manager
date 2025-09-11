@@ -8,8 +8,9 @@ export function PaletteDetailsSection({ palette }: PaletteDetailsSectionProps) {
   return (
     <>
       {/* Palette Colors */}
-      <div>
-        <h3 className="mb-3 text-lg font-medium">Palette Colors</h3>
+      <div className="flex flex-col">
+        <h3 className="mb-3 text-base font-medium text-center">Palette Colors</h3>
+        <hr className="mb-6 border border-black"/>
         <div className="grid grid-cols-2 gap-3">
           {palette.colors.map((color, index) => (
             <div key={color.id || index} className="flex items-center space-x-3">
@@ -37,7 +38,8 @@ export function PaletteDetailsSection({ palette }: PaletteDetailsSectionProps) {
 
       {/* Palette Information */}
       <div>
-        <h3 className="mb-3 text-lg font-medium">Palette Information</h3>
+        <h3 className="mb-3 text-base font-medium text-center">Palette Information</h3>
+        <hr className="mb-6 border border-black"/>
         <div className="space-y-2 text-sm">
           <div className="flex justify-between">
             <span className="text-muted-foreground">Created:</span>
