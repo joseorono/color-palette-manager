@@ -131,7 +131,7 @@ export function PaletteFilters({
           <Button
             variant={filters.showFavoritesOnly ? "default" : "outline"}
             size="sm"
-            className="w-full"
+            className="flex-1"
             onClick={handleFavoritesToggle}
           >
             <Heart
@@ -142,7 +142,7 @@ export function PaletteFilters({
 
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="outline" size="sm" className="w-auto">
+              <Button variant="outline" size="sm" className="flex-1">
                 <Filter className="mr-2 h-4 w-4" />
                 Tags
                 {filters.tags.length > 0 && (

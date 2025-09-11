@@ -266,7 +266,7 @@ export function PaletteDashboard({
           </Button> */}
           {/* Replace the old create button with the new trigger */}
 
-          <div className="flex justify-center gap-2 mx-auto max-w-md w-full">
+          <div className="flex justify-center gap-2 mx-auto max-w-md">
             <Button
               variant="outline"
               size="sm"
@@ -274,8 +274,8 @@ export function PaletteDashboard({
               className="flex-1 sm:flex-initial"
             >
               <Upload className="mr-2 h-4 w-4" />
-              <span className="hidden sm:inline">Import Palette</span>
-              <span className="sm:hidden">Import</span>
+              <span className="hidden sm:inline p-1">Import Palette</span>
+              <span className="sm:hidden p-1">Import</span>
             </Button>
 
             <div className="flex-1 sm:flex-initial ">
