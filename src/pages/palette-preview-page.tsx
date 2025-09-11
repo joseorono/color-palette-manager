@@ -87,8 +87,8 @@ export function PalettePreviewPage() {
   if (!currentPalette && !isLoading && !error) {
     return (
       <div className="container mx-auto py-8">
-        <div className="mb-6 flex flex-col items-start justify-between md:flex-row">
-          <h1 className="mb-4 text-3xl font-bold md:mb-0">
+        <div className="mb-6 flex flex-col items-center justify-between md:flex-row">
+          <h1 className="mb-4 text-2xl sm:text-3xl font-bold md:mb-0">
             Color Scheme Preview
           </h1>
           <PaletteSelector currentPalette={currentPalette} />
@@ -101,8 +101,8 @@ export function PalettePreviewPage() {
 
   return (
     <div className="container mx-auto py-8">
-      <div className="mb-6 flex flex-col items-start justify-between md:flex-row">
-        <h1 className="mb-4 text-3xl font-bold md:mb-0">{title}</h1>
+      <div className="mb-6 flex flex-col items-center justify-between md:flex-row">
+        <h1 className="mb-4 text-2xl sm:text-3xl font-bold md:mb-0">{title}</h1>
 
         {/* Palette Selection Menu - always show for palette switching */}
         <PaletteSelector currentPalette={currentPalette} />
