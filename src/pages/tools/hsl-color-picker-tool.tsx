@@ -36,8 +36,26 @@ export const HslColorPickerTool: React.FC = () => {
 
   // Update color when HSL values change
   useEffect(() => {
-    const color = colord({ h: hue, s: saturation / 100, l: lightness / 100 });
-    setCurrentColor(color.toHex().toUpperCase() as HexColorString);
+    try {
+      // Ensure valid HSL values with simple bounds checking
+      const validHue = Math.max(0, Math.min(360, hue || 220));
+      const validSaturation = Math.max(0, Math.min(100, saturation || 90));
+      const validLightness = Math.max(0, Math.min(100, lightness || 56));
+
+      // Use direct HSL string conversion
+      const hslString = `hsl(${validHue}, ${validSaturation}%, ${validLightness}%)`;
+      const color = colord(hslString);
+
+      if (color.isValid()) {
+        const hexColor = color.toHex().toUpperCase() as HexColorString;
+        // Prevent black colors
+        if (hexColor !== "#000000" && hexColor !== "#010101") {
+          setCurrentColor(hexColor);
+        }
+      }
+    } catch (error) {
+      console.error("Error updating color:", error);
+    }
   }, [hue, saturation, lightness]);
 
   const handleGeneratePalette = () => {
@@ -60,13 +78,22 @@ export const HslColorPickerTool: React.FC = () => {
     try {
       const color = colord(hexValue);
       if (color.isValid()) {
+        // Store the original hex value
+        setCurrentColor(color.toHex().toUpperCase() as HexColorString);
+
+        // Get HSL values with fallbacks
         const hsl = color.toHsl();
-        setHue(Math.round(hsl.h || 0));
-        setSaturation(Math.round(hsl.s * 100));
-        setLightness(Math.round(hsl.l * 100));
+        const h = hsl.h ?? 220;
+        const s = hsl.s ?? 0.9;
+        const l = hsl.l ?? 0.56;
+        
+        // Update HSL state values
+        setHue(Math.round(h));
+        setSaturation(Math.round(s * 100));
+        setLightness(Math.round(l * 100));
       }
     } catch (error) {
-      // Invalid color input, ignore
+      console.error("Error parsing color:", error);
     }
   };
 
