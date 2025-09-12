@@ -9,8 +9,8 @@ import useCopyToClipboard from "@/hooks/use-copy-to-clipboard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { ColorInput } from "@/components/color-input";
 import { ToolSectionHeading } from "@/components/reusable-sections/tool-section-heading";
 import { ToolFeatureCard } from "@/components/reusable-sections/tool-feature-card";
 import {
@@ -86,7 +86,7 @@ export const HslColorPickerTool: React.FC = () => {
         const h = hsl.h ?? 220;
         const s = hsl.s ?? 0.9;
         const l = hsl.l ?? 0.56;
-        
+
         // Update HSL state values
         setHue(Math.round(h));
         setSaturation(Math.round(s * 100));
@@ -160,25 +160,12 @@ export const HslColorPickerTool: React.FC = () => {
               </div>
 
               {/* Hex Input */}
-              <div className="space-y-2">
-                <Label htmlFor="hex-input">Hex Color</Label>
-                <div className="flex items-center gap-2">
-                  <Input
-                    id="hex-input"
-                    type="color"
-                    value={currentColor}
-                    onChange={(e) => handleHexInput(e.target.value)}
-                    className="h-10 w-16 cursor-pointer rounded border p-1"
-                  />
-                  <Input
-                    type="text"
-                    value={currentColor}
-                    onChange={(e) => handleHexInput(e.target.value)}
-                    className="font-mono text-sm"
-                    placeholder="#3B82F6"
-                  />
-                </div>
-              </div>
+              <ColorInput
+                value={currentColor}
+                onChange={handleHexInput}
+                label="Hex Color"
+                placeholder="#3B82F6"
+              />
 
               {/* Action Buttons */}
               <div className="flex gap-2">
