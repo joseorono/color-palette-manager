@@ -185,16 +185,22 @@ export const InlineColorPicker = React.forwardRef<
                 </div>
 
                 {/* Action buttons */}
-                <div className="flex justify-end gap-2">
+                <div className="flex gap-2">
                   <Button
                     type="button"
                     variant="outline"
                     size="sm"
                     onClick={handleCancel}
+                    className="flex-1"
                   >
                     Cancel
                   </Button>
-                  <Button type="button" size="sm" onClick={handleApplyColor}>
+                  <Button
+                    type="button"
+                    className="flex-1"
+                    size="sm"
+                    onClick={handleApplyColor}
+                  >
                     Apply
                   </Button>
                 </div>
