@@ -227,6 +227,7 @@ export const HslColorPickerTool: React.FC = () => {
                     min={0}
                     step={1}
                     className="absolute inset-0"
+                    hideTrack={true}
                   />
                 </div>
                 <div className="flex justify-between text-xs text-muted-foreground">
@@ -257,6 +258,7 @@ export const HslColorPickerTool: React.FC = () => {
                     min={0}
                     step={1}
                     className="absolute inset-0"
+                    hideTrack={true}
                   />
                 </div>
                 <div className="flex justify-between text-xs text-muted-foreground">
@@ -283,6 +285,7 @@ export const HslColorPickerTool: React.FC = () => {
                     min={0}
                     step={1}
                     className="absolute inset-0"
+                    hideTrack={true}
                   />
                 </div>
                 <div className="flex justify-between text-xs text-muted-foreground">
