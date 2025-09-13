@@ -34,7 +34,7 @@ export function ColorPreviewCard({ palette }: PreviewComponentProps) {
               {/* Base Colors */}
               <div>
                 <h3 className="mb-3 text-base font-medium text-center">Base Colors</h3>
-        <hr className="mb-6 border border-black"/>
+                <hr className="mb-6 border border-black"/>
                 <div className="grid grid-cols-3 gap-4">
                   <div>
                     <p className="mb-2 text-sm font-medium">Primary</p>
@@ -69,7 +69,7 @@ export function ColorPreviewCard({ palette }: PreviewComponentProps) {
               {/* UI Colors */}
               <div>
                 <h3 className="mb-3 text-base font-medium text-center">UI Colors</h3>
-        <hr className="mb-6 border border-black"/>
+                <hr className="mb-6 border border-black"/>
                 <div className="grid grid-cols-3 gap-4">
                   <div>
                     <p className="mb-2 text-sm font-medium">Background</p>
