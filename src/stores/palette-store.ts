@@ -4,6 +4,7 @@ import { ColorUtils } from "@/lib/color-utils";
 import { PaletteUtils } from "@/lib/palette-utils";
 import { PaletteUrlUtils } from "@/lib/palette-url-utils";
 import { PaletteDBQueries } from "@/db/queries";
+import { UrlUtils } from "@/lib/url-utils";
 import { arrayMove } from "@dnd-kit/sortable";
 import { MAX_PALETTE_COLORS } from "@/constants/ui";
 import { HarmonyPreset } from "@/types/color-harmonies";
@@ -373,9 +374,7 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
 
   loadPaletteFromUrl: async (url: string) => {
     try {
-      // Extract URLSearchParams from the URL string
-      const urlObject = new URL(url, window.location.origin);
-      const urlParams = urlObject.searchParams;
+      const urlParams = UrlUtils.getUrlParams(url);
 
       const palette = await PaletteUrlUtils.paletteFromUrlParams(urlParams);
       if (palette) {
