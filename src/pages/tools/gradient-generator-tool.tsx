@@ -5,6 +5,7 @@ import { ToolSectionHeading } from '@/components/reusable-sections/tool-section-
 import { ToolFeatureCard } from '@/components/reusable-sections/tool-feature-card';
 import { PalettePreview } from '@/components/palette-preview';
 import { ColorUtils } from '@/lib/color-utils';
+import { PaletteUrlUtils } from '@/lib/palette-url-utils';
 import { HexColorString, Color } from '@/types/palette';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -53,8 +54,7 @@ export const GradientGeneratorTool: React.FC = () => {
   }, [gradientColors, gradientSteps]);
 
   const handleGeneratePalette = () => {
-    const hexColors = generatedGradient.map(color => color.hex).join(',');
-    navigate(`/app/palette-edit/?colors=${encodeURIComponent(hexColors)}`);
+    navigate(PaletteUrlUtils.generateHexCsvUrl(generatedGradient));
   };
 
   const handleRandomColors = () => {

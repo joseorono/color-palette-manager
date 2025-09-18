@@ -3,6 +3,7 @@ import { ColorUtils } from "@/lib/color-utils";
 import { PaletteUtils } from "@/lib/palette-utils";
 import { PaletteDBQueries } from "@/db/queries";
 import { nanoidPaletteId } from "@/constants/nanoid";
+import { UrlUtils } from "@/lib/url-utils";
 
 /**
  * Utility class for handling palette operations via URL parameters.
@@ -214,7 +215,9 @@ export class PaletteUrlUtils {
    */
   static generateHexCsvUrl(colors: Color[]): string {
     const hexColors = colors.map((color) => color.hex).join(",");
-    return `/app/palette-edit/?colors=${encodeURIComponent(hexColors)}`;
+    return UrlUtils.buildUrl("/app/palette-edit", {
+      colors: hexColors
+    });
   }
 
   /**
@@ -223,7 +226,9 @@ export class PaletteUrlUtils {
    * @returns string - URL with paletteId parameter
    */
   static generatePaletteIdPreviewUrl(paletteId: string): string {
-    return `/app/palette-preview/?paletteId=${encodeURIComponent(paletteId)}`;
+    return UrlUtils.buildUrl("/app/palette-preview", {
+      paletteId: paletteId
+    });
   }
 
   /**
@@ -232,7 +237,9 @@ export class PaletteUrlUtils {
    * @returns string - URL with paletteId parameter
    */
   static generatePaletteIdUrl(paletteId: string): string {
-    return `/app/palette-edit/?paletteId=${encodeURIComponent(paletteId)}`;
+    return UrlUtils.buildUrl("/app/palette-edit", {
+      paletteId: paletteId
+    });
   }
 
   /**
@@ -301,10 +308,14 @@ export class PaletteUrlUtils {
    */
   static generateShareableUrl(palette: Palette): string {
     const encodedData = this.encodeShareableUrl(palette);
-    return `/app/palette-edit/?share=${encodedData}`;
+    return UrlUtils.buildUrl("/app/palette-edit", {
+      share: encodedData
+    });
   }
 
   static generateUrlToPaletteFromBaseColor(baseColor: string): string {
-    return `/app/palette-edit/?basedOnColor=${baseColor}`;
+    return UrlUtils.buildUrl("/app/palette-edit", {
+      basedOnColor: baseColor
+    });
   }
 }

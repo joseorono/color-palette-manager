@@ -4,6 +4,9 @@ import { ToolHeroSection } from '@/components/reusable-sections/tool-hero-sectio
 import { ToolSectionHeading } from '@/components/reusable-sections/tool-section-heading';
 import { PalettePreview } from '@/components/palette-preview';
 import { useImageColorExtraction } from '@/hooks/use-image-color-extraction';
+import { ColorUtils } from '@/lib/color-utils';
+import { PaletteUrlUtils } from '@/lib/palette-url-utils';
+import { Color } from '@/types/palette';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Label } from '@/components/ui/label';
@@ -39,8 +42,8 @@ export const ImagePaletteExtractorTool: React.FC = () => {
 
   const handleOpenInEditor = () => {
     if (extractedColors.length === 0) return;
-    const hexColors = extractedColors.join(',');
-    navigate(`/app/palette-edit/?colors=${encodeURIComponent(hexColors)}`);
+    const colorObjects: Color[] = extractedColors.map(hex => ColorUtils.HexToColor(hex));
+    navigate(PaletteUrlUtils.generateHexCsvUrl(colorObjects));
   };
 
   return (
