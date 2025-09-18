@@ -86,13 +86,13 @@ export function PalettePreviewPage() {
   // Show palette not selected state when no palette is available
   if (!currentPalette && !isLoading && !error) {
     return (
-      <div className="container mx-auto py-8 px-5">
+      <div className="container mx-auto px-5 py-8">
         <div className="flex flex-col items-center">
-          <h1 className="text-2xl sm:text-3xl font-bold">
+          <h1 className="text-2xl font-bold sm:text-3xl">
             Color Scheme Preview
           </h1>
         </div>
-        <div className="py-3 justify-center flex">
+        <div className="flex justify-center py-3">
           <PaletteSelector currentPalette={currentPalette} />
         </div>
         <PaletteNotSelected />
@@ -103,13 +103,13 @@ export function PalettePreviewPage() {
   return (
     <div className="container mx-auto py-8">
       <div className="flex flex-col items-center justify-between px-5 md:flex-row">
-        <h1 className="text-2xl sm:text-3xl font-bold mb-3">{title}</h1>
+        <h1 className="mb-3 text-2xl font-bold sm:text-3xl">{title}</h1>
 
         {/* Palette Selection Menu - always show for palette switching */}
         <PaletteSelector currentPalette={currentPalette} />
       </div>
 
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 px-5 py-5">
+      <div className="grid grid-cols-1 gap-8 px-5 py-5 lg:grid-cols-3">
         <ColorPreviewCard palette={currentPalette} />
 
         <PaletteTabsPreview
