@@ -67,7 +67,7 @@
 ## ⚙️ `/lib` Functions
 - [x] Generate shades
 - [x] Generate gradients
-- [ ] Accessibility utilities (contrast checker, WCAG compliance)
+- [x] Accessibility utilities (contrast checker, WCAG compliance)
 - [x] Abstract palette preview generation (currently tied to a modal)
 - [x] Abstract export functions for all formats (refactored to class-based structure)
 - [x] Database queries abstraction (refactored to class-based structure with static methods)
@@ -92,7 +92,7 @@ Only mark once it's feature-complete and prepared for beta-testing.
 ---
 
 ## Future Features
-- [ ] **Gradient Generation** - Not sure if this is needed. Do not tackle yet.
+- [x] **Gradient Generation** - Not sure if this is needed. Do not tackle yet.
 - [x] **Shade Generation**, with 9 or 10 shades for each color so it's usable for Tailwind Colors.
 
 ---
