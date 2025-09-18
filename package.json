@@ -23,9 +23,9 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
     "electron": "electron .",
+    "electron:dev": "cross-env NODE_ENV=development electron .",
     "electron-dev": "concurrently \"npm run dev\" \"wait-on http://localhost:5173 && electron .\"",
-    "electron-build": "npm run build && electron-builder",
-    "electron-build-all": "npm run build && electron-builder --win --mac --linux"
+    "electron-build": "npm run build && electron-builder"
   },
   "dependencies": {
     "@auth/core": "^0.40.0",
@@ -103,6 +103,7 @@
     "zustand": "^5.0.6"
   },
   "devDependencies": {
+    "@electron-forge/cli": "^7.9.0",
     "@tailwindcss/forms": "^0.5.9",
     "@tailwindcss/typography": "^0.5.15",
     "@testing-library/react": "^16.0.1",
@@ -115,8 +116,10 @@
     "@vitest/ui": "^2.1.9",
     "autoprefixer": "^10.4.19",
     "concurrently": "^9.2.0",
+    "cross-env": "^10.0.0",
     "electron": "^37.2.6",
     "electron-builder": "^26.0.12",
+    "electron-vite": "^4.0.0",
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
@@ -133,7 +136,7 @@
     "vitest": "^2.1.1",
     "wait-on": "^8.0.4"
   },
-  "main": "electron/main.js",
+  "main": "electron/main.cjs",
   "homepage": "./",
   "build": {
     "appId": "com.colorpalette.manager",
@@ -143,8 +146,16 @@
     },
     "files": [
       "dist/**/*",
-      "electron/**/*",
-      "node_modules/**/*"
+      "electron/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "resources",
+        "to": "resources",
+        "filter": [
+          "**/*"
+        ]
+      }
     ],
     "mac": {
       "category": "public.app-category.graphics-design",
