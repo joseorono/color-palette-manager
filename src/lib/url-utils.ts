@@ -1,5 +1,8 @@
 import { isElectron } from "@/lib/electron-detector";
 
+// Cache the Electron detection result since it only changes during app initialization
+const IS_ELECTRON = isElectron();
+
 /**
  * Utility class for handling URL operations across different routing environments.
  * Supports both BrowserRouter (web) and HashRouter (Electron) URL structures.
@@ -7,10 +10,10 @@ import { isElectron } from "@/lib/electron-detector";
 export class UrlUtils {
   /**
    * Extract URLSearchParams from a URL string, handling both BrowserRouter and HashRouter.
-   * 
+   *
    * @param url - The URL string to parse
    * @returns URLSearchParams object containing the query parameters
-   * 
+   *
    * @example
    * // Web (BrowserRouter): https://example.com/app/palette-edit?colors=...
    * // Electron (HashRouter): file:///.../index.html#/app/palette-edit?colors=...
@@ -18,7 +21,7 @@ export class UrlUtils {
   static getUrlParams(url: string): URLSearchParams {
     try {
       // Check if we're in Electron (HashRouter) or web (BrowserRouter)
-      if (isElectron()) {
+      if (IS_ELECTRON) {
         // In Electron with HashRouter, parameters come after the hash
         // Example: file:///.../index.html#/app/palette-edit?colors=...
         const hashIndex = url.indexOf('#');
@@ -45,7 +48,7 @@ export class UrlUtils {
   /**
    * Get the current URL parameters from the browser's location.
    * Handles both BrowserRouter and HashRouter environments.
-   * 
+   *
    * @returns URLSearchParams object containing current URL parameters
    */
   static getCurrentUrlParams(): URLSearchParams {
@@ -58,11 +61,11 @@ export class UrlUtils {
 
   /**
    * Build a URL with parameters appropriate for the current routing environment.
-   * 
+   *
    * @param path - The path portion of the URL (e.g., '/app/palette-edit')
    * @param params - Object containing key-value pairs for URL parameters
    * @returns Complete URL string appropriate for current environment
-   * 
+   *
    * @example
    * // Web: /app/palette-edit?colors=red,blue,green
    * // Electron: #/app/palette-edit?colors=red,blue,green
@@ -70,8 +73,8 @@ export class UrlUtils {
   static buildUrl(path: string, params: Record<string, string> = {}): string {
     const searchParams = new URLSearchParams(params);
     const queryString = searchParams.toString();
-    
-    if (isElectron()) {
+
+    if (IS_ELECTRON) {
       // HashRouter format
       return queryString ? `#${path}?${queryString}` : `#${path}`;
     } else {
@@ -82,17 +85,17 @@ export class UrlUtils {
 
   /**
    * Extract the path portion from a URL, handling both routing environments.
-   * 
+   *
    * @param url - The URL to extract the path from
    * @returns The path portion of the URL
-   * 
+   *
    * @example
    * // Web: https://example.com/app/palette-edit?colors=... → /app/palette-edit
    * // Electron: file:///.../index.html#/app/palette-edit?colors=... → /app/palette-edit
    */
   static getPathFromUrl(url: string): string {
     try {
-      if (isElectron()) {
+      if (IS_ELECTRON) {
         const hashIndex = url.indexOf('#');
         if (hashIndex !== -1) {
           const hashPart = url.substring(hashIndex + 1);
