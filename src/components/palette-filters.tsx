@@ -104,7 +104,7 @@ export function PaletteFilters({
           value={`${filters.sortBy}-${filters.sortOrder}`}
           onValueChange={handleSortChange}
         >
-          <SelectTrigger className="">
+          <SelectTrigger className="w-auto">
             <div className="flex items-center">
               {filters.sortOrder === "asc" ? (
                 <SortAsc className="mr-2 h-4 w-4" />
