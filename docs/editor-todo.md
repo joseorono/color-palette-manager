@@ -1,8 +1,8 @@
 ## High Priority
 
-- [ ] Settle on a **final design for the Color Cards**
+- [x] Settle on a **final design for the Color Cards**
 - [x] **Fix Creating new palette from the editor** It doesn't work. Weird!.
-- [ ] Fix **responsive issues**
+- [x] Fix **responsive issues**
   - There may be others, but the most salient one happens at around 888px x 631px (feasible for a small tablet or windowed Electron app)
 
 ## Navbar Improvements
@@ -23,7 +23,7 @@
 
 ### Medium Priority
 
-- [ ] **Create mobile bottom bar** for mobile navigation
+- [x] **Create mobile bottom bar** for mobile navigation
 - [x] **Change save icon** from checkmark to floppy disk
 - [x] **Remove unused hamburger menu options** (keep only keyboard shortcuts)
 
@@ -31,8 +31,8 @@
 
 ### High Priority
 
-- [ ] **Implement GenerateHarmonious** with palette type props and respect locked colors - Jose: I'll do this but I need the UI/store to pass the palette type to the GenerateHarmonious function. It already takes the argument.
-- [ ] **Create method** to filter only locked colors from Color[] array
+- [x] **Implement GenerateHarmonious** with palette type props and respect locked colors - Jose: I'll do this but I need the UI/store to pass the palette type to the GenerateHarmonious function. It already takes the argument.
+- [x] Create method to filter only locked colors from Color[] array
 
 ### Medium Priority
 
