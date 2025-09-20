@@ -165,7 +165,7 @@ export function ImageUploader({ onClose }: ImageUploaderProps) {
       </div>
 
       {/* Actions */}
-      <div className="flex justify-end">
+      <div className="flex justify-center">
         <Button
           onClick={handleExtractAndUse}
           disabled={extractedColors.length === 0 || isProcessing}
