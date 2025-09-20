@@ -18,11 +18,11 @@ export function PaletteTitle({ onOpenMetadata }: PaletteTitleProps) {
         variant="ghost"
         className="flex max-w-full items-center gap-3 pl-2 text-left hover:bg-gray-100 dark:hover:bg-gray-800"
       >
-        <Palette className="h-6 w-6 text-gray-500" />
+        <Palette className="h-6 w-6" />
         <div className="flex min-w-0 flex-1 flex-col">
           <span className="block truncate text-2xl font-medium">{name}</span>
         </div>
-        <Pencil className="h-3 w-3 text-gray-400" />
+        <Pencil className="h-6 w-6" />
       </Button>
     </div>
   );
