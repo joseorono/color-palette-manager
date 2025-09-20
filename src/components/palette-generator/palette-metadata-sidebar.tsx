@@ -92,7 +92,7 @@ export function PaletteMetadataSidebar({
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="left" className="w-full overflow-auto sm:max-w-md">
+      <SheetContent side="left" className="max-h-[90vh] rounded-md overflow-auto max-sm:max-w-[400px]">
         <SheetHeader>
           <SheetTitle>Edit Palette Metadata</SheetTitle>
         </SheetHeader>
@@ -218,7 +218,8 @@ export function PaletteMetadataSidebar({
               />
 
               {/* Actions */}
-              <div className="flex justify-end gap-3 pt-2">
+              <div className="flex justify-center gap-3 pt-2">
+                <Button type="submit">Save Changes</Button>
                 <Button
                   type="button"
                   variant="outline"
@@ -226,7 +227,6 @@ export function PaletteMetadataSidebar({
                 >
                   Cancel
                 </Button>
-                <Button type="submit">Save Changes</Button>
               </div>
             </form>
           </Form>
