@@ -92,7 +92,7 @@ export function PaletteMetadataSidebar({
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="left" className="max-h-[90vh] rounded-md overflow-auto max-sm:max-w-[400px]">
+      <SheetContent side="left" className="rounded-md overflow-auto max-sm:max-w-[400px]">
         <SheetHeader>
           <SheetTitle>Edit Palette Metadata</SheetTitle>
         </SheetHeader>
