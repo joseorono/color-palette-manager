@@ -127,7 +127,7 @@ export class PaletteUrlUtils {
 
       // Create palette with generated colors
       const palette: Palette = {
-        id: nanoidPaletteId(),
+        id: "",
         name: `URL Palette (${validColors.length} colors)`,
         description: `Generated from URL colors: ${validColors.map((c) => c.hex).join(", ")}`,
         colors: validColors,
