@@ -71,10 +71,10 @@ export function ExportModal() {
       </DialogTrigger>
 
       <DialogContent
-        className={`${isMobile ? "max-h-[90vh] max-w-[95vw]" : "max-w-5xl"} overflow-hidden`}
+        className={`${isMobile ? "max-h-[90vh] sm:w-[95%] md:max-w-3xl md:w-[50%] lg:max-w-5xl rounded-md w-[90%]" : "max-w-5xl rounded-md"}`}
       >
         <DialogHeader>
-          <DialogTitle>Export</DialogTitle>
+          <DialogTitle className="text-center">Export</DialogTitle>
         </DialogHeader>
 
         <div
@@ -120,12 +120,12 @@ export function ExportModal() {
             </div>
 
             {/* Actions */}
-            <div className="flex justify-end gap-3">
-              <Button variant="outline" onClick={() => setIsOpen(false)}>
-                Cancel
-              </Button>
+            <div className="flex justify-center gap-3">
               <Button onClick={handleExport} disabled={isExporting}>
                 {isExporting ? "Exporting..." : "Export"}
+              </Button>
+              <Button variant="outline" onClick={() => setIsOpen(false)}>
+                Cancel
               </Button>
             </div>
           </div>
