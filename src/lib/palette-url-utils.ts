@@ -287,6 +287,7 @@ export class PaletteUrlUtils {
       const palette: Palette = {
         ...validationResult.data,
         id: nanoidPaletteId(),
+        name: validationResult.data.name + " (Shared)",
         colors: validationResult.data.colors.map((color) =>
           ColorUtils.HexToColor(color.hex, color.name, color.locked)
         ),
