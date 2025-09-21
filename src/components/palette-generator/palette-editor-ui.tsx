@@ -187,9 +187,9 @@ export function PaletteEditorUI({ children }: PaletteEditorUIProps) {
       </div>
       {/* Save Dialog */}
       <Dialog open={isSaveOpen} onOpenChange={setIsSaveOpen}>
-        <DialogContent>
+        <DialogContent className="max-sm:max-w-[400px] rounded-md">
           <DialogHeader>
-            <DialogTitle>Save Changes?</DialogTitle>
+            <DialogTitle className="text-center ">Save Changes?</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <p className="text-sm text-gray-600 dark:text-gray-400">
