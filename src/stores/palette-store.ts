@@ -380,7 +380,9 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
       if (palette) {
         // Determine if this is an existing saved palette (has a real ID from DB)
         const isExistingPalette = urlParams.has("paletteId");
-
+        // A palette with an empty ID is a new palette that hasn't been saved yet
+        const isExistingPalette = !!palette.id;
+        
         set({
           currentPalette: palette,
           isSaved: isExistingPalette,
