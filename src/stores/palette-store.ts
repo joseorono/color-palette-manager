@@ -317,7 +317,7 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
   },
 
   savePalette: async (nameOrPalette: string | Palette, isPublic = false) => {
-    const { currentPalette } = get();
+    const { currentPalette, isSaved } = get();
     if (!currentPalette) throw new Error("No palette to save");
 
     try {
@@ -337,9 +337,11 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
               updatedAt: new Date(),
             };
 
+      // Only pass the ID if the palette is already saved in the database
+      // If isSaved is false, existingId will be undefined (new palette)
       const savedId = await PaletteDBQueries.savePalette(
         paletteToSave,
-        paletteToSave.id
+        isSaved ? paletteToSave.id : undefined
       );
 
       const savedPalette: Palette = {
@@ -375,11 +377,9 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
   loadPaletteFromUrl: async (url: string) => {
     try {
       const urlParams = UrlUtils.getUrlParams(url);
-
       const palette = await PaletteUrlUtils.paletteFromUrlParams(urlParams);
+      
       if (palette) {
-        // Determine if this is an existing saved palette (has a real ID from DB)
-        const isExistingPalette = urlParams.has("paletteId");
         // A palette with an empty ID is a new palette that hasn't been saved yet
         const isExistingPalette = !!palette.id;
         
