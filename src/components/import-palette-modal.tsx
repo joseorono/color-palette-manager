@@ -135,9 +135,9 @@ export default function ImportPaletteModal({
 
   return (
     <Dialog open={open} onOpenChange={handleModalClose}>
-      <DialogContent className="max-h-[90vh] overflow-y-auto rounded-md w-[600px]">
+      <DialogContent className="max-h-[90vh] overflow-y-auto rounded-md max-sm:max-w-[400px]">
         <DialogHeader>
-          <DialogTitle className="flex items-center justify-center mb-5 gap-2">
+          <DialogTitle className="flex items-center px-5 justify-center mb-5 gap-2">
             <Upload className="h-5 w-5" />
             Import Palette
           </DialogTitle>

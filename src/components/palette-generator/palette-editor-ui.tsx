@@ -187,9 +187,9 @@ export function PaletteEditorUI({ children }: PaletteEditorUIProps) {
       </div>
       {/* Save Dialog */}
       <Dialog open={isSaveOpen} onOpenChange={setIsSaveOpen}>
-        <DialogContent>
+        <DialogContent className="max-sm:max-w-[400px] rounded-md">
           <DialogHeader>
-            <DialogTitle>Save Changes?</DialogTitle>
+            <DialogTitle className="text-center ">Save Changes?</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -199,12 +199,12 @@ export function PaletteEditorUI({ children }: PaletteEditorUIProps) {
               </span>
               . Do you want to proceed?
             </p>
-            <div className="flex justify-end gap-3">
-              <Button variant="outline" onClick={() => setIsSaveOpen(false)}>
-                Cancel
-              </Button>
+            <div className="flex justify-center gap-3">
               <Button onClick={() => handleMetadataSubmit()}>
                 Save Changes
+              </Button>
+              <Button variant="outline" onClick={() => setIsSaveOpen(false)}>
+                Cancel
               </Button>
             </div>
           </div>
@@ -283,9 +283,9 @@ export function PaletteEditorUI({ children }: PaletteEditorUIProps) {
       />
       {/* Upload Image Dialog */}
       <Dialog open={isUploadOpen} onOpenChange={setIsUploadOpen}>
-        <DialogContent className="max-w-lg">
+        <DialogContent className="max-w-lg  max-h-[90vh] overflow-y-auto rounded-md max-sm:max-w-[400px]">
           <DialogHeader>
-            <DialogTitle>Extract Colors from Image</DialogTitle>
+            <DialogTitle className="flex items-center justify-center">Extract Colors from Image</DialogTitle>
           </DialogHeader>
           <ImageUploader onClose={() => setIsUploadOpen(false)} />
         </DialogContent>
