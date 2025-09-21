@@ -284,6 +284,7 @@ export class PaletteUrlUtils {
       }
 
       // Generate new IDs for the shared palette to avoid conflicts
+      const now = new Date();
       const palette: Palette = {
         ...validationResult.data,
         id: nanoidPaletteId(),
@@ -291,8 +292,8 @@ export class PaletteUrlUtils {
         colors: validationResult.data.colors.map((color) =>
           ColorUtils.HexToColor(color.hex, color.name, color.locked)
         ),
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        createdAt: now,
+        updatedAt: now,
       };
 
       return palette;
