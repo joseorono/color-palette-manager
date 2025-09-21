@@ -10,18 +10,20 @@ import {
   Palette,
   ColorRoleValidationResult,
   ColorRolesConversionResult,
-  OptionalColorRoles,
   MandatoryColorRoles,
+  OptionalColorRoles,
 } from "@/types/palette";
 import {
-  PALETTE_GENERATION_PRIORITIES,
-  KMEANS_CONSTANTS,
   PALETTE_DEFAULTS,
+  KMEANS_CONSTANTS,
 } from "@/constants/palette-constants";
+import {
+  HARMONY_GENERATION_PRIORITIES,
+  DEFAULT_HARMONY_PRESET,
+} from "@/constants/color-harmonies";
+import type { HarmonyPreset } from "@/types/color-harmonies";
 import { ColorUtils } from "@/lib/color-utils";
 import { nanoidPaletteId } from "@/constants/nanoid";
-import { COLOR_HARMONIES, DEFAULT_HARMONY_PRESET } from "@/constants/color-harmonies";
-import { HarmonyPreset } from "@/types/color-harmonies";
 
 export class PaletteUtils {
   static generateHarmoniousHexCsv_legacy(
@@ -110,7 +112,6 @@ export class PaletteUtils {
     preset: HarmonyPreset = DEFAULT_HARMONY_PRESET,
   ): HexColorString[] {
     console.log("In generateHarmoniousHexCsv got baseColorHex:", baseColorHex, "count:", count, "existingColors:", existingColors);
-
     console.log("In generateHarmoniousHexCsv got preset:", preset);
 
     // Extract hex colors from existing Color objects
@@ -145,9 +146,8 @@ export class PaletteUtils {
     let countToGenerate = count - colors.length;
     console.log("generateHarmoniousHexCsv::Count to generate:", countToGenerate);
 
-    // Priority order for color generation
-    // ToDo: Make this configurable or based on the type of palette requested (e.g. monochrome, triadic, etc.)
-    const priorityColorsDuringGeneration = PALETTE_GENERATION_PRIORITIES;
+    // Get generation priorities based on the preset
+    const priorityColorsDuringGeneration = HARMONY_GENERATION_PRIORITIES[preset];
 
     // Generate colors by priority
     for (const priority of priorityColorsDuringGeneration) {
