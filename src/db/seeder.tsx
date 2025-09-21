@@ -106,6 +106,51 @@ const samplePalettes: Omit<Palette, "id" | "createdAt" | "updatedAt">[] = [
     isFavorite: true,
   },
   {
+    name: "Logo Colors",
+    description: "Colors used in the logo",
+    colors: [
+      {
+        id: nanoidColorId(),
+        hex: "#ec6321",
+        locked: false,
+        name: "Red Logo",
+        role: undefined
+      },
+      {
+        id: nanoidColorId(),
+        hex: "#037bb4",
+        locked: false,
+        name: "Blue Logo",
+        role: undefined
+      },
+      {
+        id: nanoidColorId(),
+        hex: "#fbb926",
+        locked: false,
+        name: "Yellow Logo",
+        role: undefined
+      },
+      {
+        id: nanoidColorId(),
+        hex: "#70b74a",
+        locked: false,
+        name: "Green Logo",
+        role: undefined
+      },
+      {
+        id: nanoidColorId(),
+        hex: "#eed399",
+        locked: false,
+        name: "Cyan Logo",
+        role: undefined
+      }
+    ],
+    isPublic: true,
+    tags: ["logo", "internal"],
+    favoriteCount: 38,
+    isFavorite: true,
+  },
+  {
     name: "Super Secret Palette",
     description:
       "A secret palette that only you know about (actually the one used by the app).",
@@ -161,7 +206,7 @@ const samplePalettes: Omit<Palette, "id" | "createdAt" | "updatedAt">[] = [
       },
     ],
     isPublic: false,
-    tags: ["secret", "own"],
+    tags: ["secret", "internal"],
     favoriteCount: 38,
     isFavorite: true,
   },
