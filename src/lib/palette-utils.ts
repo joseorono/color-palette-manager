@@ -164,7 +164,6 @@ export class PaletteUtils {
         }
 
         case "black": {
-          if (countToGenerate <= 0) break;
           const blackVariant = ColorUtils.generateBlack(baseColor);
           if (!ColorUtils.isColorSimilar(blackVariant, colors)) {
             colors.push(blackVariant);
@@ -174,7 +173,6 @@ export class PaletteUtils {
         }
 
         case "complementary": {
-          if (countToGenerate <= 0) break;
           const complementary = ColorUtils.generateComplementary(baseColor);
           if (!ColorUtils.isColorSimilar(complementary, colors)) {
             colors.push(complementary);
@@ -184,7 +182,6 @@ export class PaletteUtils {
         }
 
         case "analogous": {
-          if (countToGenerate <= 0) break;
           const analogousColors = ColorUtils.generateAnalogous(baseColor);
           for (const analogousColor of analogousColors) {
             if (countToGenerate <= 0) break;
@@ -197,7 +194,6 @@ export class PaletteUtils {
         }
 
         case "variations": {
-          if (countToGenerate <= 0) break;
           const variations = ColorUtils.generateVariations(baseColor);
           for (const variation of variations) {
             if (countToGenerate <= 0) break;
