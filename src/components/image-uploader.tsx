@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { usePaletteStore } from "@/stores/palette-store";
 import { useImageColorExtraction } from "@/hooks/use-image-color-extraction";
 import { Button } from "./ui/button";
@@ -16,7 +16,8 @@ interface ImageUploaderProps {
 
 export function ImageUploader({ onClose }: ImageUploaderProps) {
   const { loadPaletteFromUrl } = usePaletteStore();
-  
+  const [hasError, setHasError] = useState(false);
+
   const {
     colorCount,
     setColorCount,
@@ -31,18 +32,36 @@ export function ImageUploader({ onClose }: ImageUploaderProps) {
     isDragActive,
   } = useImageColorExtraction({
     initialColorCount: 5,
-    initialAlgorithm: 'new',
-    autoExtractOnUpload: true
+    initialAlgorithm: "new",
+    autoExtractOnUpload: true,
   });
+
+  // Set error state when extraction fails
+  useEffect(() => {
+    if (previewUrl && !isProcessing && extractedColors.length === 0) {
+      setHasError(true);
+    }
+    if (previewUrl && extractedColors.length > 0) {
+      setHasError(false);
+    }
+  }, [previewUrl, isProcessing, extractedColors.length]);
 
   const handleExtractAndUse = useCallback(() => {
     // ToDo: Rewrite this some it doesn't create a whole new palette why overriding the existing one
-    if (extractedColors.length === 0) return;
+    if (extractedColors.length === 0) {
+      toast.error("No colors available to use");
+      return;
+    }
 
-    const url = `?colors=${encodeURIComponent(extractedColors.join(','))}`;
-    loadPaletteFromUrl(url);
-    toast.success("Palette loaded successfully!");
-    onClose();
+    try {
+      const url = `?colors=${encodeURIComponent(extractedColors.join(","))}`;
+      loadPaletteFromUrl(url);
+      toast.success("Palette loaded successfully!");
+      onClose();
+    } catch (error) {
+      console.error("Error loading palette from extracted colors:", error);
+      toast.error("Failed to load palette from extracted colors");
+    }
   }, [extractedColors, loadPaletteFromUrl, onClose]);
 
   return (
@@ -52,22 +71,27 @@ export function ImageUploader({ onClose }: ImageUploaderProps) {
         <RadioGroup value={algorithm} onValueChange={setAlgorithm}>
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="new" id="new" />
-            <Label htmlFor="new" className="text-sm cursor-pointer mt-4">
+            <Label htmlFor="new" className="mt-4 cursor-pointer text-sm">
               <div>
-                <div className="font-medium">Advanced Algorithm (Recommended)</div>
+                <div className="font-medium">
+                  Advanced Algorithm (Recommended)
+                </div>
                 <div className="text-xs text-muted-foreground">
-                  Intelligent analysis with adaptive sampling and color deduplication. Very accurate, but might not get the "vibe" of larger images.
+                  Intelligent analysis with adaptive sampling and color
+                  deduplication. Very accurate, but might not get the "vibe" of
+                  larger images.
                 </div>
               </div>
             </Label>
           </div>
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="old" id="old" />
-            <Label htmlFor="old" className="text-sm cursor-pointer">
+            <Label htmlFor="old" className="cursor-pointer text-sm">
               <div>
                 <div className="font-medium">Averaging Algorithm</div>
                 <div className="text-xs text-muted-foreground">
-                  Simple K-means clustering - faster but less sophisticated. Gets the general "vibe", as opposed the exact colors.
+                  Simple K-means clustering - faster but less sophisticated.
+                  Gets the general "vibe", as opposed the exact colors.
                 </div>
               </div>
             </Label>
@@ -100,7 +124,7 @@ export function ImageUploader({ onClose }: ImageUploaderProps) {
             colors={extractedColors.map((hex, index) => ({
               id: `preview-${index}`,
               hex,
-              locked: false
+              locked: false,
             }))}
             height="4rem"
             showTooltips={true}
@@ -113,7 +137,7 @@ export function ImageUploader({ onClose }: ImageUploaderProps) {
       {/* Image Upload Area */}
       <div
         {...getRootProps()}
-        className={`cursor-pointer rounded-lg border-2 border-dashed p-4 text-center transition-colors ${isDragActive ? "border-blue-500 bg-blue-50 dark:bg-blue-950" : "border-gray-300 dark:border-gray-600"} ${isProcessing ? "cursor-not-allowed opacity-50" : "hover:border-gray-400"} `}
+        className={`cursor-pointer rounded-lg border-2 border-dashed p-4 text-center transition-colors ${isDragActive ? "border-blue-500 bg-blue-50 dark:bg-blue-950" : hasError ? "border-red-500 bg-red-50 dark:bg-red-950" : "border-gray-300 dark:border-gray-600"} ${isProcessing ? "cursor-not-allowed opacity-50" : "hover:border-gray-400"} `}
       >
         <input {...getInputProps()} />
 

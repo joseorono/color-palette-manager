@@ -27,7 +27,7 @@ export function PaletteSelector({ currentPalette }: PaletteSelectorProps) {
     try {
       return await PaletteDBQueries.getAllPalettes();
     } catch (error) {
-      console.error('Failed to fetch palettes:', error);
+      console.error("Failed to fetch palettes:", error);
       return [];
     }
   }, []);
@@ -41,12 +41,14 @@ export function PaletteSelector({ currentPalette }: PaletteSelectorProps) {
   const selectedPaletteId = currentPalette?.id || paletteId;
 
   return (
-    <div className="w-full md:w-64 flex flex-col justify-center items-center text-white">
+    <div className="flex w-full flex-col items-center justify-center text-white md:w-64">
       <Select value={selectedPaletteId} onValueChange={handlePaletteChange}>
-        <SelectTrigger className="h-10 w-auto text-1xl rounded-md bg-primary px-4 py-2 font-medium shadow-sm transition-all hover:opacity-90">
+        <SelectTrigger className="text-1xl h-10 w-auto rounded-md bg-primary px-4 py-2 font-medium shadow-sm transition-all hover:opacity-90">
           <span className="mr-2">🎨</span>
           <SelectValue placeholder="Select a palette">
-            {currentPalette && !palettes?.length ? currentPalette.name : undefined}
+            {currentPalette && !palettes?.length
+              ? currentPalette.name
+              : undefined}
           </SelectValue>
         </SelectTrigger>
         <SelectContent>
