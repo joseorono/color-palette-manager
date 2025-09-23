@@ -284,6 +284,19 @@ export const usePaletteStore = create<PaletteStore>((set, get) => ({
     const { currentPalette } = get();
     if (!currentPalette || currentPalette.colors.length <= 2) return;
 
+    // If we're trying to remove a locked color and there are unlocked colors available,
+    // find an unlocked color to remove instead
+    if (currentPalette.colors[index]?.locked) {
+      // Look for an unlocked color to remove instead
+      const unlockedIndex = currentPalette.colors.findIndex(color => !color.locked);
+      
+      // If we found an unlocked color, remove that one instead
+      if (unlockedIndex !== -1) {
+        index = unlockedIndex;
+      }
+      // Otherwise, we'll proceed with removing the locked color as requested
+    }
+
     const newColors = currentPalette.colors.filter((_, i) => i !== index);
 
     const updatedPalette: Palette = {

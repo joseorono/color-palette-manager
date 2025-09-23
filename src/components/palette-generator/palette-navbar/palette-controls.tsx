@@ -12,9 +12,8 @@ import {
 import { DebouncedSlider } from "@/components/ui/debounced-slider";
 import SplitButton from "@/components/shadcn-blocks/split-button";
 import { Shuffle, Sliders, Undo, Plus, Camera, Grid3X3 } from "lucide-react";
-import { Label } from "@/components/ui/label";
 import { usePaletteStore } from "@/stores/palette-store";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { MAX_PALETTE_COLORS } from "@/constants/ui";
 
 interface PaletteControlsProps {
@@ -41,20 +40,77 @@ export function PaletteControls({
   );
   const [isSizeControlOpen, setIsSizeControlOpen] = useState(false);
 
-  useEffect(() => {
-    setPaletteSize(currentPalette?.colors.length || 5);
+  // Calculate minimum palette size based on locked colors
+  const getMinPaletteSize = useCallback(() => {
+    const lockedColors =
+      currentPalette?.colors.filter((color) => color.locked) || [];
+    const lockedCount = lockedColors.length;
+    // If there are more than 3 locked colors, minimum size is the number of locked colors
+    // Otherwise, minimum is 2 (default)
+    return lockedCount > 3 ? lockedCount : 2;
   }, [currentPalette]);
 
+  const minPaletteSize = getMinPaletteSize();
+
+  useEffect(() => {
+    setPaletteSize(currentPalette?.colors.length || 5);
+    if (paletteSize < minPaletteSize) {
+      setPaletteSize(minPaletteSize);
+    }
+  }, [currentPalette, minPaletteSize, paletteSize]);
+
   const handleSizeChange = (value: number[]) => {
-    const newSize = value[0];
+    let newSize = value[0];
     const currentSize = currentPalette?.colors.length || 0;
 
+    // Count locked colors
+    const lockedColors =
+      currentPalette?.colors.filter((color) => color.locked) || [];
+    const lockedCount = lockedColors.length;
+
+    // If there are more than 3 locked colors, ensure we don't go below that number
+    const minSize = lockedCount > 3 ? lockedCount : 2;
+
+    // Adjust newSize if it's below the minimum
+    if (newSize < minSize) {
+      newSize = minSize;
+      // Update the slider value visually
+      setPaletteSize(minSize);
+      return; // Exit early since we can't reduce below the minimum
+    }
+
     if (newSize > currentSize) {
+      // Adding colors - use addHarmoniousColor to maintain harmony
       const colorsToAdd = newSize - currentSize;
       for (let i = 0; i < colorsToAdd; i++) addHarmoniousColor();
     } else if (newSize < currentSize) {
+      // Removing colors - prioritize removing unlocked colors first
       const colorsToRemove = currentSize - newSize;
-      for (let i = 0; i < colorsToRemove; i++) removeColor(currentSize - 1 - i);
+
+      // Get indices of unlocked colors first, then locked colors
+      const unlockedIndices = currentPalette.colors
+        .map((color, index) => ({ index, locked: !!color.locked }))
+        .filter((item) => !item.locked)
+        .map((item) => item.index)
+        .reverse(); // Start from the end
+
+      // Only include locked indices if we absolutely need to (which shouldn't happen with our min check)
+      const lockedIndices = currentPalette.colors
+        .map((color, index) => ({ index, locked: !!color.locked }))
+        .filter((item) => item.locked)
+        .map((item) => item.index)
+        .reverse(); // Start from the end
+
+      // Combine them, prioritizing unlocked colors for removal
+      const removalOrder = [...unlockedIndices, ...lockedIndices];
+
+      // Calculate how many colors we can actually remove (don't go below locked count)
+      const maxRemovable = Math.min(colorsToRemove, currentSize - lockedCount);
+
+      // Remove colors in the determined order, but only up to maxRemovable
+      for (let i = 0; i < maxRemovable && i < removalOrder.length; i++) {
+        removeColor(removalOrder[i]);
+      }
     }
 
     setPaletteSize(newSize);
@@ -122,7 +178,7 @@ export function PaletteControls({
           onChange={handleSizeChange}
           debounce={500}
           max={MAX_PALETTE_COLORS}
-          min={2}
+          min={minPaletteSize}
           step={1}
           className="w-40 cursor-grab 2xl:w-32"
         />
@@ -152,7 +208,7 @@ export function PaletteControls({
               onChange={handleSizeChange}
               debounce={300}
               max={MAX_PALETTE_COLORS}
-              min={2}
+              min={minPaletteSize}
               step={1}
               className="w-full"
             />
