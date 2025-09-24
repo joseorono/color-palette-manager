@@ -145,8 +145,14 @@ export function ColorPicker({
   };
 
   const colorName = ColorUtils.getColorName(tempColor);
-  const contrastWhite = AccessibilityUtils.getContrastRatio(tempColor, "#ffffff");
-  const contrastBlack = AccessibilityUtils.getContrastRatio(tempColor, "#000000");
+  const contrastWhite = AccessibilityUtils.getContrastRatio(
+    tempColor,
+    "#ffffff"
+  );
+  const contrastBlack = AccessibilityUtils.getContrastRatio(
+    tempColor,
+    "#000000"
+  );
   const isLightColor = contrastBlack > contrastWhite;
 
   const ColorSwatch = ({
@@ -341,10 +347,21 @@ export function ColorPicker({
                           max="255"
                           value={rgbValues.r}
                           onChange={(e) => {
-                            const newR = Number.parseInt(e.target.value) || 0;
+                            const newR = Math.max(
+                              0,
+                              Math.min(
+                                255,
+                                Number.parseInt(e.target.value) || 0
+                              )
+                            );
                             const newRgb = { ...rgbValues, r: newR };
                             setRgbValues(newRgb);
-                            // setTempColor(ColorUtils.rgbToHex(newRgb.r, newRgb.g, newRgb.b));
+                            const newHex = colord({
+                              r: newR,
+                              g: newRgb.g,
+                              b: newRgb.b,
+                            }).toHex();
+                            setTempColor(newHex);
                           }}
                           className="flex-1"
                         />
@@ -357,12 +374,21 @@ export function ColorPicker({
                           max="255"
                           value={rgbValues.g}
                           onChange={(e) => {
-                            const newG = Number.parseInt(e.target.value) || 0;
+                            const newG = Math.max(
+                              0,
+                              Math.min(
+                                255,
+                                Number.parseInt(e.target.value) || 0
+                              )
+                            );
                             const newRgb = { ...rgbValues, g: newG };
                             setRgbValues(newRgb);
-                            // setTempColor(
-                            //   ColorUtils.rgbToHex(newRgb.r, newRgb.g, newRgb.b)
-                            // );
+                            const newHex = colord({
+                              r: newRgb.r,
+                              g: newG,
+                              b: newRgb.b,
+                            }).toHex();
+                            setTempColor(newHex);
                           }}
                           className="flex-1"
                         />
@@ -375,7 +401,13 @@ export function ColorPicker({
                           max="255"
                           value={rgbValues.b}
                           onChange={(e) => {
-                            const newB = Number.parseInt(e.target.value) || 0;
+                            const newB = Math.max(
+                              0,
+                              Math.min(
+                                255,
+                                Number.parseInt(e.target.value) || 0
+                              )
+                            );
                             const newRgb = { ...rgbValues, b: newB };
                             setRgbValues(newRgb);
                             // setTempColor(
