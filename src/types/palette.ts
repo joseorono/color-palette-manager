@@ -78,7 +78,7 @@ export type Color = z.infer<typeof colorSchema>;
 
 export const paletteFieldsZod = {
   name: z.string().min(1).max(48),
-  description: z.string().min(1).max(256).optional(),
+  description: z.string().max(256).optional().or(z.literal('')),
   colors: z.array(colorSchema),
   createdAt: z.date(),
   updatedAt: z.date(),
