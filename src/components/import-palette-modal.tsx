@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
-import { Upload, AlertCircle, FileJson, Info } from "lucide-react";
+import { Upload, AlertCircle, FileJson, Info, FileUp } from "lucide-react";
 
 import {
   Dialog,
@@ -13,6 +13,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Form,
   FormControl,
@@ -66,6 +67,10 @@ export default function ImportPaletteModal({
   const navigate = useNavigate();
   const [formError, setFormError] = useState<string | null>(null);
   const [isValidJson, setIsValidJson] = useState<boolean | null>(null);
+  const [activeTab, setActiveTab] = useState<string>("text");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [fileContent, setFileContent] = useState<string | null>(null);
 
   const form = useForm<ImportPaletteFormValues>({
     resolver: zodResolver(importPaletteFormSchema),
@@ -115,6 +120,42 @@ export default function ImportPaletteModal({
     }
   };
 
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Check if file is JSON
+    if (file.type !== "application/json" && !file.name.endsWith(".json")) {
+      setFormError("Please upload a valid JSON file");
+      return;
+    }
+
+    try {
+      setFormError(null);
+      const content = await file.text();
+      
+      // Validate JSON
+      const isValid = validateJson(content);
+      if (isValid) {
+        // Store the file and content for later use
+        setSelectedFile(file);
+        setFileContent(content);
+        // Set the JSON content in the form
+        form.setValue("jsonData", content);
+      }
+    } catch (error) {
+      setFormError(
+        error instanceof Error ? error.message : "Failed to read the file"
+      );
+    }
+  };
+
+  const handleImportFile = () => {
+    if (fileContent) {
+      importPalette({ jsonData: fileContent });
+    }
+  };
+
   const handleModalClose = (newOpen: boolean) => {
     if (!isPending) {
       onOpenChange(newOpen);
@@ -123,6 +164,13 @@ export default function ImportPaletteModal({
         form.reset();
         setFormError(null);
         setIsValidJson(null);
+        setActiveTab("text");
+        setSelectedFile(null);
+        setFileContent(null);
+        // Reset file input
+        if (fileInputRef.current) {
+          fileInputRef.current.value = "";
+        }
       }
     }
   };
@@ -147,8 +195,20 @@ export default function ImportPaletteModal({
           </DialogDescription>
         </DialogHeader>
 
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <Tabs defaultValue="text" value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-2 mb-6">
+            <TabsTrigger value="text" className="flex items-center gap-2">
+              <FileJson className="h-4 w-4" />
+              Paste JSON
+            </TabsTrigger>
+            <TabsTrigger value="file" className="flex items-center gap-2">
+              <FileUp className="h-4 w-4" />
+              Upload File
+            </TabsTrigger>
+          </TabsList>
+
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             {/* General Form Error Alert */}
             {formError && (
               <Alert variant="destructive" className="mb-6">
@@ -182,68 +242,137 @@ export default function ImportPaletteModal({
               </Alert>
             )}
 
-            {/* JSON Data Field */}
-            <FormField
-              control={form.control}
-              name="jsonData"
-              render={({ field, fieldState }) => (
-                <FormItem>
-                  <FormLabel className="flex items-center gap-2">
-                    <FileJson className="h-4 w-4" />
-                    Palette JSON Data
-                  </FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder='Paste JSON data here... (e.g., {"name":"My Palette","colors":[{"hex":"#ff0000","locked":false}]})'
-                      className={`min-h-[200px] font-mono text-sm ${
-                        fieldState.error
-                          ? "border-red-500 focus-visible:ring-red-500"
-                          : ""
-                      }`}
-                      {...field}
-                      onChange={(e) => {
-                        field.onChange(e);
-                        if (e.target.value) {
-                          validateJson(e.target.value);
-                        } else {
-                          setIsValidJson(null);
-                        }
-                      }}
-                      disabled={isPending}
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    Paste the JSON data exported from this application or
-                    another compatible source
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <TabsContent value="text" className="space-y-4">
+              {/* JSON Data Field */}
+              <FormField
+                control={form.control}
+                name="jsonData"
+                render={({ field, fieldState }) => (
+                  <FormItem>
+                    <FormLabel className="flex items-center gap-2">
+                      <FileJson className="h-4 w-4" />
+                      Palette JSON Data
+                    </FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder='Paste JSON data here... (e.g., {"name":"My Palette","colors":[{"hex":"#ff0000","locked":false}]})'
+                        className={`min-h-[200px] font-mono text-sm ${
+                          fieldState.error
+                            ? "border-red-500 focus-visible:ring-red-500"
+                            : ""
+                        }`}
+                        {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          if (e.target.value) {
+                            validateJson(e.target.value);
+                          } else {
+                            setIsValidJson(null);
+                          }
+                        }}
+                        disabled={isPending}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      Paste the JSON data exported from this application or
+                      another compatible source
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </TabsContent>
 
-            {/* Submit Button */}
-            <div className="flex space-x-2 pt-4 justify-center">
-            <LoadingButton
-                type="submit"
-                loading={isPending}
-                loadingText="Importing..."
-                className="min-w-[140px]"
-                disabled={isPending || isValidJson === false}
-              >
-                Import Palette
-              </LoadingButton>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => handleModalClose(false)}
-                disabled={isPending}
-              >
-                Cancel
-              </Button>
-              
-            </div>
+            <TabsContent value="file" className="space-y-4">
+              <div className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-12 text-center">
+                <FileUp className="h-8 w-8 mb-4 text-gray-400" />
+                <h3 className="text-lg font-medium mb-2">Upload JSON File</h3>
+                {selectedFile ? (
+                  <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-md">
+                    <p className="text-sm font-medium text-green-800">
+                      File selected: {selectedFile.name}
+                    </p>
+                    <p className="text-xs text-green-600 mt-1">
+                      {(selectedFile.size / 1024).toFixed(1)} KB • Ready to import
+                    </p>
+                  </div>
+                ) : (
+                  <p className="text-sm text-gray-500 mb-4">
+                    Select a .json file containing palette data
+                  </p>
+                )}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".json,application/json"
+                  onChange={handleFileUpload}
+                  className="hidden"
+                  disabled={isPending}
+                />
+                <Button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={isPending}
+                  className="flex items-center gap-2"
+                >
+                  <Upload className="h-4 w-4" />
+                  {selectedFile ? "Change File" : "Select File"}
+                </Button>
+                <p className="text-xs text-gray-400 mt-4">
+                  Maximum file size: 1MB
+                </p>
+              </div>
+            </TabsContent>
+
+            {/* Submit Button - Only show for text tab */}
+            {activeTab === "text" && (
+              <div className="flex space-x-2 pt-4 justify-center">
+                <LoadingButton
+                  type="submit"
+                  loading={isPending}
+                  loadingText="Importing..."
+                  className="min-w-[140px]"
+                  disabled={isPending || isValidJson === false}
+                >
+                  Import Palette
+                </LoadingButton>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => handleModalClose(false)}
+                  disabled={isPending}
+                >
+                  Cancel
+                </Button>
+              </div>
+            )}
+
+            {/* Import and Cancel Buttons for file tab */}
+            {activeTab === "file" && (
+              <div className="flex space-x-2 pt-4 justify-center">
+                <LoadingButton
+                  type="button"
+                  loading={isPending}
+                  loadingText="Importing..."
+                  onClick={handleImportFile}
+                  disabled={isPending || !selectedFile || isValidJson !== true}
+                  className="min-w-[140px]"
+                >
+                  Import Palette
+                </LoadingButton>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => handleModalClose(false)}
+                  disabled={isPending}
+                >
+                  Cancel
+                </Button>
+              </div>
+            )}
           </form>
         </Form>
+        </Tabs>
       </DialogContent>
     </Dialog>
   );
