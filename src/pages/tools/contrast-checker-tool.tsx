@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { ToolHeroSection } from '@/components/reusable-sections/tool-hero-section';
 import { ToolSectionHeading } from '@/components/reusable-sections/tool-section-heading';
 import { ToolFeatureCard } from '@/components/reusable-sections/tool-feature-card';
@@ -11,6 +11,13 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import { toast } from 'sonner';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import {
   Type,
   Eye,
@@ -19,7 +26,8 @@ import {
   XCircle,
   AlertTriangle,
   Palette,
-  Info
+  Info,
+  Copy
 } from 'lucide-react';
 
 export const ContrastCheckerTool: React.FC = () => {
@@ -46,6 +54,16 @@ export const ContrastCheckerTool: React.FC = () => {
     setTextColor(backgroundColor);
     setBackgroundColor(temp);
   };
+
+  const handleCopyToClipboard = useCallback((text: string) => {
+    navigator.clipboard.writeText(text)
+      .then(() => {
+        toast.success(`Color ${text} copied to clipboard`);
+      })
+      .catch(() => {
+        toast.error('Failed to copy to clipboard');
+      });
+  }, []);
 
   const getContrastBadge = (ratio: number) => {
     const level = AccessibilityUtils.getAccessibilityLevel(ratio);
@@ -115,20 +133,40 @@ export const ContrastCheckerTool: React.FC = () => {
                       onChange={(e) => setTextColor(e.target.value as HexColorString)}
                       className="w-20 h-12 p-1 rounded border cursor-pointer"
                     />
-                    <Input
-                      type="text"
-                      value={textColor}
-                      onChange={(e) => setTextColor(e.target.value as HexColorString)}
-                      className="font-mono text-sm flex-1"
-                      placeholder="#000000"
-                    />
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={handleRandomTextColor}
-                    >
-                      <Shuffle className="h-4 w-4" />
-                    </Button>
+                    <div className="relative flex-1">
+                      <Input
+                        type="text"
+                        value={textColor}
+                        readOnly
+                        className="font-mono text-sm flex-1 cursor-default pr-8"
+                        placeholder="#000000"
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        className="absolute right-0 top-0 h-full px-2"
+                        onClick={() => handleCopyToClipboard(textColor)}
+                      >
+                        <Copy className="h-4 w-4" />
+                      </Button>
+                    </div>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={handleRandomTextColor}
+                          >
+                            <Shuffle className="h-4 w-4" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Generate random text color</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                   </div>
                   <div className="text-xs text-muted-foreground">
                     {ColorUtils.getColorName(textColor)}
@@ -146,20 +184,40 @@ export const ContrastCheckerTool: React.FC = () => {
                       onChange={(e) => setBackgroundColor(e.target.value as HexColorString)}
                       className="w-20 h-12 p-1 rounded border cursor-pointer"
                     />
-                    <Input
-                      type="text"
-                      value={backgroundColor}
-                      onChange={(e) => setBackgroundColor(e.target.value as HexColorString)}
-                      className="font-mono text-sm flex-1"
-                      placeholder="#FFFFFF"
-                    />
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={handleRandomBackgroundColor}
-                    >
-                      <Shuffle className="h-4 w-4" />
-                    </Button>
+                    <div className="relative flex-1">
+                      <Input
+                        type="text"
+                        value={backgroundColor}
+                        readOnly
+                        className="font-mono text-sm flex-1 cursor-default pr-8"
+                        placeholder="#FFFFFF"
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        className="absolute right-0 top-0 h-full px-2"
+                        onClick={() => handleCopyToClipboard(backgroundColor)}
+                      >
+                        <Copy className="h-4 w-4" />
+                      </Button>
+                    </div>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={handleRandomBackgroundColor}
+                          >
+                            <Shuffle className="h-4 w-4" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Generate random background color</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                   </div>
                   <div className="text-xs text-muted-foreground">
                     {ColorUtils.getColorName(backgroundColor)}
@@ -169,14 +227,23 @@ export const ContrastCheckerTool: React.FC = () => {
 
               {/* Swap Colors Button */}
               <div className="flex justify-center">
-                <Button
-                  variant="outline"
-                  onClick={handleSwapColors}
-                  className="gap-2"
-                >
-                  <Eye className="h-4 w-4" />
-                  Swap Colors
-                </Button>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        onClick={handleSwapColors}
+                        className="gap-2"
+                      >
+                        <Eye className="h-4 w-4" />
+                        Swap Colors
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Swap text and background colors</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </div>
             </CardContent>
           </Card>
