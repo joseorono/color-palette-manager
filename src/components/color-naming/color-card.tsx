@@ -1,7 +1,10 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Copy, Check } from 'lucide-react';
 import { HexColorString } from '@/types/palette';
+import useCopyToClipboard from '@/hooks/use-copy-to-clipboard';
 
 export interface ColorCardProps {
   hex: HexColorString;
@@ -18,6 +21,10 @@ export const ColorCard: React.FC<ColorCardProps> = ({
   showType = true,
   className = ""
 }) => {
+  const { isCopied, copyToClipboard } = useCopyToClipboard({ 
+    showToast: true,
+    successMessage: `Color ${hex} copied to clipboard!`
+  });
   const getTypeColor = (type: string) => {
     switch (type) {
       case 'exact': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
@@ -36,8 +43,19 @@ export const ColorCard: React.FC<ColorCardProps> = ({
         style={{ backgroundColor: hex }}
       />
       <CardContent className="p-3">
-        <div className="font-mono text-xs text-muted-foreground mb-1">
-          {hex}
+        <div className="flex items-center justify-between">
+          <div className="font-mono text-xs text-muted-foreground mb-1">
+            {hex}
+          </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-6 w-6 p-0"
+            onClick={() => copyToClipboard(hex)}
+            title="Copy color code"
+          >
+            {isCopied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
+          </Button>
         </div>
         <div className="font-semibold text-sm text-foreground mb-2">
           {colorName}

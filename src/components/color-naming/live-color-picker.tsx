@@ -1,8 +1,11 @@
 import React, { useState, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { HexColorPicker } from 'react-colorful';
 import { ColorUtils } from '@/lib/color-utils';
 import { HexColorString } from '@/types/palette';
+import { Copy, Check } from 'lucide-react';
+import useCopyToClipboard from '@/hooks/use-copy-to-clipboard';
 
 interface LiveColorPickerProps {
   initialColor?: HexColorString;
@@ -21,6 +24,10 @@ export const LiveColorPicker: React.FC<LiveColorPickerProps> = ({
 }) => {
   const [selectedColor, setSelectedColor] = useState<HexColorString>(initialColor);
   const colorName = ColorUtils.getColorName(selectedColor);
+  const { isCopied, copyToClipboard } = useCopyToClipboard({
+    showToast: true,
+    successMessage: `Color ${selectedColor} copied to clipboard!`
+  });
 
   const handleColorChange = useCallback((color: string) => {
     const hexColor = color as HexColorString;
@@ -52,8 +59,19 @@ export const LiveColorPicker: React.FC<LiveColorPickerProps> = ({
                   style={{ backgroundColor: selectedColor }}
                 />
                 <div>
-                  <div className="font-mono text-sm text-muted-foreground">
-                    {selectedColor}
+                  <div className="flex items-center gap-2">
+                    <div className="font-mono text-sm text-muted-foreground">
+                      {selectedColor}
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-6 w-6 p-0"
+                      onClick={() => copyToClipboard(selectedColor)}
+                      title="Copy color code"
+                    >
+                      {isCopied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
+                    </Button>
                   </div>
                   <div className="text-lg font-semibold text-foreground">
                     {colorName}

@@ -9,7 +9,8 @@ import { HexColorString } from '@/types/palette';
 import { Button } from '@/components/ui/button';
 import { ToolSectionHeading } from '@/components/reusable-sections/tool-section-heading';
 import { ToolFeatureCard } from '@/components/reusable-sections/tool-feature-card';
-import { Palette, Sparkles, Eye } from 'lucide-react';
+import { Palette, Sparkles, Eye, Copy } from 'lucide-react';
+import useCopyToClipboard from '@/hooks/use-copy-to-clipboard';
 
 // Featured color examples to showcase the naming system
 const featuredColors: HexColorString[] = [
@@ -25,6 +26,10 @@ export const ColorNamingTool: React.FC = () => {
   const [currentColorName, setCurrentColorName] = useState<string>(
     ColorUtils.getColorName("#FF6B6B")
   );
+  const { copyToClipboard } = useCopyToClipboard({
+    showToast: true,
+    successMessage: "Color copied to clipboard!"
+  });
 
   const handleColorChange = (color: HexColorString, colorName: string) => {
     setCurrentColor(color);
@@ -66,8 +71,19 @@ export const ColorNamingTool: React.FC = () => {
               style={{ backgroundColor: currentColor }}
             />
             <div className="text-left">
-              <div className="text-sm text-muted-foreground font-mono">
-                {currentColor}
+              <div className="flex items-center gap-2">
+                <div className="text-sm text-muted-foreground font-mono">
+                  {currentColor}
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-6 w-6 p-0"
+                  onClick={() => copyToClipboard(currentColor)}
+                  title="Copy color code"
+                >
+                  <Copy className="h-3 w-3" />
+                </Button>
               </div>
               <div className="text-2xl font-bold text-foreground">
                 {currentColorName}
