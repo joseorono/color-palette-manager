@@ -1,23 +1,23 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { ToolHeroSection } from '@/components/reusable-sections/tool-hero-section';
-import { ToolSectionHeading } from '@/components/reusable-sections/tool-section-heading';
-import { ToolFeatureCard } from '@/components/reusable-sections/tool-feature-card';
-import { ColorUtils } from '@/lib/color-utils';
-import { AccessibilityUtils } from '@/lib/accessibility-utils';
-import { HexColorString, WCAGContrastLevel } from '@/types/palette';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
-import { toast } from 'sonner';
+import React, { useState, useEffect, useCallback, ChangeEvent } from "react";
+import { ToolHeroSection } from "@/components/reusable-sections/tool-hero-section";
+import { ToolSectionHeading } from "@/components/reusable-sections/tool-section-heading";
+import { ToolFeatureCard } from "@/components/reusable-sections/tool-feature-card";
+import { ColorUtils } from "@/lib/color-utils";
+import { AccessibilityUtils } from "@/lib/accessibility-utils";
+import { HexColorString, WCAGContrastLevel } from "@/types/palette";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { toast } from "sonner";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@/components/ui/tooltip';
+} from "@/components/ui/tooltip";
 import {
   Type,
   Eye,
@@ -27,41 +27,156 @@ import {
   AlertTriangle,
   Palette,
   Info,
-  Copy
-} from 'lucide-react';
+  Copy,
+} from "lucide-react";
 
 export const ContrastCheckerTool: React.FC = () => {
+  // Main color states
   const [textColor, setTextColor] = useState<HexColorString>("#000000");
-  const [backgroundColor, setBackgroundColor] = useState<HexColorString>("#FFFFFF");
+  const [backgroundColor, setBackgroundColor] =
+    useState<HexColorString>("#FFFFFF");
   const [contrastRatio, setContrastRatio] = useState<number>(21);
+
+  // Input state with validation
+  const [inputState, setInputState] = useState({
+    text: {
+      value: "#000000",
+      isValid: true,
+      isFocused: false,
+    },
+    background: {
+      value: "#FFFFFF",
+      isValid: true,
+      isFocused: false,
+    },
+  });
 
   // Calculate contrast when colors change
   useEffect(() => {
-    const ratio = AccessibilityUtils.getContrastRatio(textColor, backgroundColor);
+    const ratio = AccessibilityUtils.getContrastRatio(
+      textColor,
+      backgroundColor
+    );
     setContrastRatio(ratio);
+
+    // Update input fields when colors change from pickers, but only if the user isn't actively editing
+    setInputState((prev) => ({
+      text: {
+        ...prev.text,
+        value: prev.text.isFocused ? prev.text.value : textColor,
+        isValid: true,
+      },
+      background: {
+        ...prev.background,
+        value: prev.background.isFocused
+          ? prev.background.value
+          : backgroundColor,
+        isValid: true,
+      },
+    }));
   }, [textColor, backgroundColor]);
 
+  // Handle hex input changes with validation and normalization
+  const handleHexInputChange = useCallback(
+    (value: string, isTextColor: boolean) => {
+      // Check if it's a valid hex color
+      const isValid = value === "" || ColorUtils.isValidHex(value);
+
+      // Update the input state
+      setInputState((prev) => {
+        if (isTextColor) {
+          return {
+            ...prev,
+            text: {
+              ...prev.text,
+              value,
+              isValid,
+            },
+          };
+        } else {
+          return {
+            ...prev,
+            background: {
+              ...prev.background,
+              value,
+              isValid,
+            },
+          };
+        }
+      });
+
+      // If valid and not empty, update the actual color
+      if (ColorUtils.isValidHex(value)) {
+        const normalizedHex = ColorUtils.normalizeHex(value) as HexColorString;
+        if (isTextColor) {
+          setTextColor(normalizedHex);
+        } else {
+          setBackgroundColor(normalizedHex);
+        }
+      }
+    },
+    []
+  );
+
   const handleRandomTextColor = () => {
-    setTextColor(ColorUtils.generateRandomColorHex());
+    const randomColor = ColorUtils.generateRandomColorHex();
+    setTextColor(randomColor);
+
+    // Only update the input if user isn't actively editing it
+    setInputState((prev) => ({
+      ...prev,
+      text: {
+        ...prev.text,
+        value: prev.text.isFocused ? prev.text.value : randomColor,
+        isValid: true,
+      },
+    }));
   };
 
   const handleRandomBackgroundColor = () => {
-    setBackgroundColor(ColorUtils.generateRandomColorHex());
+    const randomColor = ColorUtils.generateRandomColorHex();
+    setBackgroundColor(randomColor);
+
+    // Only update the input if user isn't actively editing it
+    setInputState((prev) => ({
+      ...prev,
+      background: {
+        ...prev.background,
+        value: prev.background.isFocused ? prev.background.value : randomColor,
+        isValid: true,
+      },
+    }));
   };
 
   const handleSwapColors = () => {
-    const temp = textColor;
+    const tempColor = textColor;
+
     setTextColor(backgroundColor);
-    setBackgroundColor(temp);
+    setBackgroundColor(tempColor);
+
+    // Only update the inputs if user isn't actively editing them
+    setInputState((prev) => ({
+      text: {
+        ...prev.text,
+        value: prev.text.isFocused ? prev.text.value : backgroundColor,
+        isValid: true,
+      },
+      background: {
+        ...prev.background,
+        value: prev.background.isFocused ? prev.background.value : tempColor,
+        isValid: true,
+      },
+    }));
   };
 
   const handleCopyToClipboard = useCallback((text: string) => {
-    navigator.clipboard.writeText(text)
+    navigator.clipboard
+      .writeText(text)
       .then(() => {
         toast.success(`Color ${text} copied to clipboard`);
       })
       .catch(() => {
-        toast.error('Failed to copy to clipboard');
+        toast.error("Failed to copy to clipboard");
       });
   }, []);
 
@@ -69,22 +184,28 @@ export const ContrastCheckerTool: React.FC = () => {
     const level = AccessibilityUtils.getAccessibilityLevel(ratio);
     if (level === WCAGContrastLevel.AAA) {
       return (
-        <Badge variant="default" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100">
-          <CheckCircle className="h-3 w-3 mr-1" />
+        <Badge
+          variant="default"
+          className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100"
+        >
+          <CheckCircle className="mr-1 h-3 w-3" />
           AAA ({ratio.toFixed(2)}:1)
         </Badge>
       );
     } else if (level === WCAGContrastLevel.AA) {
       return (
-        <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-100">
-          <AlertTriangle className="h-3 w-3 mr-1" />
+        <Badge
+          variant="secondary"
+          className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-100"
+        >
+          <AlertTriangle className="mr-1 h-3 w-3" />
           AA ({ratio.toFixed(2)}:1)
         </Badge>
       );
     } else {
       return (
         <Badge variant="destructive">
-          <XCircle className="h-3 w-3 mr-1" />
+          <XCircle className="mr-1 h-3 w-3" />
           Fail ({ratio.toFixed(2)}:1)
         </Badge>
       );
@@ -93,17 +214,37 @@ export const ContrastCheckerTool: React.FC = () => {
 
   // Use AccessibilityUtils functions for WCAG compliance
   const normalTextCompliance = {
-    aa: AccessibilityUtils.meetsWCAGContrast(textColor, backgroundColor, WCAGContrastLevel.AA, false),
-    aaa: AccessibilityUtils.meetsWCAGContrast(textColor, backgroundColor, WCAGContrastLevel.AAA, false)
+    aa: AccessibilityUtils.meetsWCAGContrast(
+      textColor,
+      backgroundColor,
+      WCAGContrastLevel.AA,
+      false
+    ),
+    aaa: AccessibilityUtils.meetsWCAGContrast(
+      textColor,
+      backgroundColor,
+      WCAGContrastLevel.AAA,
+      false
+    ),
   };
   const largeTextCompliance = {
-    aa: AccessibilityUtils.meetsWCAGContrast(textColor, backgroundColor, WCAGContrastLevel.AA, true),
-    aaa: AccessibilityUtils.meetsWCAGContrast(textColor, backgroundColor, WCAGContrastLevel.AAA, true)
+    aa: AccessibilityUtils.meetsWCAGContrast(
+      textColor,
+      backgroundColor,
+      WCAGContrastLevel.AA,
+      true
+    ),
+    aaa: AccessibilityUtils.meetsWCAGContrast(
+      textColor,
+      backgroundColor,
+      WCAGContrastLevel.AAA,
+      true
+    ),
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
-      <div className="container mx-auto px-4 py-12 max-w-4xl">
+      <div className="container mx-auto max-w-4xl px-4 py-12">
         {/* Hero Section */}
         <ToolHeroSection
           icon={Type}
@@ -113,7 +254,7 @@ export const ContrastCheckerTool: React.FC = () => {
 
         <div className="space-y-8">
           {/* Color Controls Card */}
-          <Card className="shadow-xl border-0 bg-card/50 backdrop-blur-sm">
+          <Card className="border-0 bg-card/50 shadow-xl backdrop-blur-sm">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Palette className="h-5 w-5" />
@@ -121,7 +262,7 @@ export const ContrastCheckerTool: React.FC = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="grid gap-6 md:grid-cols-2">
                 {/* Text Color */}
                 <div className="space-y-2">
                   <Label htmlFor="textColor">Text Color</Label>
@@ -130,17 +271,70 @@ export const ContrastCheckerTool: React.FC = () => {
                       id="textColor"
                       type="color"
                       value={textColor}
-                      onChange={(e) => setTextColor(e.target.value as HexColorString)}
-                      className="w-20 h-12 p-1 rounded border cursor-pointer"
+                      onChange={(e) => {
+                        const newColor = e.target.value as HexColorString;
+                        setTextColor(newColor);
+                        // Only update the input if user isn't actively editing it
+                        setInputState((prev) => ({
+                          ...prev,
+                          text: {
+                            ...prev.text,
+                            value: prev.text.isFocused
+                              ? prev.text.value
+                              : newColor,
+                            isValid: true,
+                          },
+                        }));
+                      }}
+                      className="h-12 w-20 cursor-pointer rounded border p-1"
                     />
                     <div className="relative flex-1">
-                      <Input
-                        type="text"
-                        value={textColor}
-                        readOnly
-                        className="font-mono text-sm flex-1 cursor-default pr-8"
-                        placeholder="#000000"
-                      />
+                      <TooltipProvider>
+                        <Tooltip open={!inputState.text.isValid}>
+                          <TooltipTrigger asChild>
+                            <Input
+                              type="text"
+                              value={inputState.text.value}
+                              onFocus={() => {
+                                setInputState((prev) => ({
+                                  ...prev,
+                                  text: { ...prev.text, isFocused: true },
+                                }));
+                              }}
+                              onBlur={() => {
+                                setInputState((prev) => ({
+                                  ...prev,
+                                  text: { ...prev.text, isFocused: false },
+                                }));
+                                // When losing focus, if the value is valid, update the color
+                                if (
+                                  ColorUtils.isValidHex(inputState.text.value)
+                                ) {
+                                  setTextColor(
+                                    ColorUtils.normalizeHex(
+                                      inputState.text.value
+                                    ) as HexColorString
+                                  );
+                                }
+                              }}
+                              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                                handleHexInputChange(e.target.value, true);
+                              }}
+                              className={`flex-1 pr-8 font-mono text-sm ${!inputState.text.isValid ? "border-red-500 focus-visible:ring-red-500" : ""}`}
+                              placeholder="#000000"
+                            />
+                          </TooltipTrigger>
+                          <TooltipContent
+                            side="bottom"
+                            className="border border-red-200 bg-red-50 text-red-600"
+                          >
+                            <p>
+                              Please enter a valid hex color (e.g., #FF5500 or
+                              #F50)
+                            </p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
                       <Button
                         type="button"
                         variant="ghost"
@@ -181,17 +375,78 @@ export const ContrastCheckerTool: React.FC = () => {
                       id="backgroundColor"
                       type="color"
                       value={backgroundColor}
-                      onChange={(e) => setBackgroundColor(e.target.value as HexColorString)}
-                      className="w-20 h-12 p-1 rounded border cursor-pointer"
+                      onChange={(e) => {
+                        const newColor = e.target.value as HexColorString;
+                        setBackgroundColor(newColor);
+                        // Only update the input if user isn't actively editing it
+                        setInputState((prev) => ({
+                          ...prev,
+                          background: {
+                            ...prev.background,
+                            value: prev.background.isFocused
+                              ? prev.background.value
+                              : newColor,
+                            isValid: true,
+                          },
+                        }));
+                      }}
+                      className="h-12 w-20 cursor-pointer rounded border p-1"
                     />
                     <div className="relative flex-1">
-                      <Input
-                        type="text"
-                        value={backgroundColor}
-                        readOnly
-                        className="font-mono text-sm flex-1 cursor-default pr-8"
-                        placeholder="#FFFFFF"
-                      />
+                      <TooltipProvider>
+                        <Tooltip open={!inputState.background.isValid}>
+                          <TooltipTrigger asChild>
+                            <Input
+                              type="text"
+                              value={inputState.background.value}
+                              onFocus={() => {
+                                setInputState((prev) => ({
+                                  ...prev,
+                                  background: {
+                                    ...prev.background,
+                                    isFocused: true,
+                                  },
+                                }));
+                              }}
+                              onBlur={() => {
+                                setInputState((prev) => ({
+                                  ...prev,
+                                  background: {
+                                    ...prev.background,
+                                    isFocused: false,
+                                  },
+                                }));
+                                // When losing focus, if the value is valid, update the color
+                                if (
+                                  ColorUtils.isValidHex(
+                                    inputState.background.value
+                                  )
+                                ) {
+                                  setBackgroundColor(
+                                    ColorUtils.normalizeHex(
+                                      inputState.background.value
+                                    ) as HexColorString
+                                  );
+                                }
+                              }}
+                              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                                handleHexInputChange(e.target.value, false);
+                              }}
+                              className={`flex-1 pr-8 font-mono text-sm ${!inputState.background.isValid ? "border-red-500 focus-visible:ring-red-500" : ""}`}
+                              placeholder="#FFFFFF"
+                            />
+                          </TooltipTrigger>
+                          <TooltipContent
+                            side="bottom"
+                            className="border border-red-200 bg-red-50 text-red-600"
+                          >
+                            <p>
+                              Please enter a valid hex color (e.g., #FF5500 or
+                              #F50)
+                            </p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
                       <Button
                         type="button"
                         variant="ghost"
@@ -249,7 +504,7 @@ export const ContrastCheckerTool: React.FC = () => {
           </Card>
 
           {/* Live Preview Card */}
-          <Card className="shadow-xl border-0 bg-card/50 backdrop-blur-sm !mt-0">
+          <Card className="!mt-0 border-0 bg-card/50 shadow-xl backdrop-blur-sm">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Eye className="h-5 w-5" />
@@ -258,19 +513,21 @@ export const ContrastCheckerTool: React.FC = () => {
             </CardHeader>
             <CardContent className="space-y-6">
               {/* Preview Samples */}
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="grid gap-6 md:grid-cols-2">
                 {/* Normal Text Preview */}
                 <div className="space-y-3">
                   <Label>Normal Text (16px)</Label>
                   <div
-                    className="p-6 rounded-lg border-2 border-dashed border-gray-300"
+                    className="rounded-lg border-2 border-dashed border-gray-300 p-6"
                     style={{ backgroundColor: backgroundColor }}
                   >
                     <p
                       className="text-base leading-relaxed"
                       style={{ color: textColor }}
                     >
-                      The quick brown fox jumps over the lazy dog. This is a sample of normal text at 16px size to test readability and contrast.
+                      The quick brown fox jumps over the lazy dog. This is a
+                      sample of normal text at 16px size to test readability and
+                      contrast.
                     </p>
                   </div>
                 </div>
@@ -279,11 +536,11 @@ export const ContrastCheckerTool: React.FC = () => {
                 <div className="space-y-3">
                   <Label>Large Text (18px+)</Label>
                   <div
-                    className="p-6 rounded-lg border-2 border-dashed border-gray-300"
+                    className="rounded-lg border-2 border-dashed border-gray-300 p-6"
                     style={{ backgroundColor: backgroundColor }}
                   >
                     <h2
-                      className="text-xl font-semibold mb-2"
+                      className="mb-2 text-xl font-semibold"
                       style={{ color: textColor }}
                     >
                       Large Heading
@@ -292,7 +549,8 @@ export const ContrastCheckerTool: React.FC = () => {
                       className="text-lg leading-relaxed"
                       style={{ color: textColor }}
                     >
-                      This is large text at 18px+ size for testing accessibility compliance.
+                      This is large text at 18px+ size for testing accessibility
+                      compliance.
                     </p>
                   </div>
                 </div>
@@ -301,7 +559,7 @@ export const ContrastCheckerTool: React.FC = () => {
           </Card>
 
           {/* Contrast Results Card */}
-          <Card className="shadow-xl border-0 bg-card/50 backdrop-blur-sm !mt-0">
+          <Card className="!mt-0 border-0 bg-card/50 shadow-xl backdrop-blur-sm">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Info className="h-5 w-5" />
@@ -310,7 +568,7 @@ export const ContrastCheckerTool: React.FC = () => {
             </CardHeader>
             <CardContent className="space-y-6">
               {/* Overall Contrast Ratio */}
-              <div className="text-center space-y-2">
+              <div className="space-y-2 text-center">
                 <div className="text-3xl font-bold">
                   {contrastRatio.toFixed(2)}:1
                 </div>
@@ -323,11 +581,11 @@ export const ContrastCheckerTool: React.FC = () => {
               <Separator />
 
               {/* WCAG Compliance Details */}
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="grid gap-6 md:grid-cols-2">
                 {/* Normal Text Compliance */}
                 <Card>
-                  <CardContent className="p-4 space-y-3">
-                    <h4 className="font-medium flex items-center gap-2">
+                  <CardContent className="space-y-3 p-4">
+                    <h4 className="flex items-center gap-2 font-medium">
                       <Type className="h-4 w-4" />
                       Normal Text (16px)
                     </h4>
@@ -335,26 +593,50 @@ export const ContrastCheckerTool: React.FC = () => {
                       <div className="flex items-center justify-between">
                         <span className="text-sm">WCAG AA (4.5:1):</span>
                         <Badge
-                          variant={normalTextCompliance.aa ? "default" : "destructive"}
-                          className={normalTextCompliance.aa ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100" : ""}
+                          variant={
+                            normalTextCompliance.aa ? "default" : "destructive"
+                          }
+                          className={
+                            normalTextCompliance.aa
+                              ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100"
+                              : ""
+                          }
                         >
                           {normalTextCompliance.aa ? (
-                            <><CheckCircle className="h-3 w-3 mr-1" />Pass</>
+                            <>
+                              <CheckCircle className="mr-1 h-3 w-3" />
+                              Pass
+                            </>
                           ) : (
-                            <><XCircle className="h-3 w-3 mr-1" />Fail</>
+                            <>
+                              <XCircle className="mr-1 h-3 w-3" />
+                              Fail
+                            </>
                           )}
                         </Badge>
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-sm">WCAG AAA (7:1):</span>
                         <Badge
-                          variant={normalTextCompliance.aaa ? "default" : "destructive"}
-                          className={normalTextCompliance.aaa ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100" : ""}
+                          variant={
+                            normalTextCompliance.aaa ? "default" : "destructive"
+                          }
+                          className={
+                            normalTextCompliance.aaa
+                              ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100"
+                              : ""
+                          }
                         >
                           {normalTextCompliance.aaa ? (
-                            <><CheckCircle className="h-3 w-3 mr-1" />Pass</>
+                            <>
+                              <CheckCircle className="mr-1 h-3 w-3" />
+                              Pass
+                            </>
                           ) : (
-                            <><XCircle className="h-3 w-3 mr-1" />Fail</>
+                            <>
+                              <XCircle className="mr-1 h-3 w-3" />
+                              Fail
+                            </>
                           )}
                         </Badge>
                       </div>
@@ -364,8 +646,8 @@ export const ContrastCheckerTool: React.FC = () => {
 
                 {/* Large Text Compliance */}
                 <Card>
-                  <CardContent className="p-4 space-y-3">
-                    <h4 className="font-medium flex items-center gap-2">
+                  <CardContent className="space-y-3 p-4">
+                    <h4 className="flex items-center gap-2 font-medium">
                       <Type className="h-4 w-4" />
                       Large Text (18px+)
                     </h4>
@@ -373,26 +655,50 @@ export const ContrastCheckerTool: React.FC = () => {
                       <div className="flex items-center justify-between">
                         <span className="text-sm">WCAG AA (3:1):</span>
                         <Badge
-                          variant={largeTextCompliance.aa ? "default" : "destructive"}
-                          className={largeTextCompliance.aa ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100" : ""}
+                          variant={
+                            largeTextCompliance.aa ? "default" : "destructive"
+                          }
+                          className={
+                            largeTextCompliance.aa
+                              ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100"
+                              : ""
+                          }
                         >
                           {largeTextCompliance.aa ? (
-                            <><CheckCircle className="h-3 w-3 mr-1" />Pass</>
+                            <>
+                              <CheckCircle className="mr-1 h-3 w-3" />
+                              Pass
+                            </>
                           ) : (
-                            <><XCircle className="h-3 w-3 mr-1" />Fail</>
+                            <>
+                              <XCircle className="mr-1 h-3 w-3" />
+                              Fail
+                            </>
                           )}
                         </Badge>
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-sm">WCAG AAA (4.5:1):</span>
                         <Badge
-                          variant={largeTextCompliance.aaa ? "default" : "destructive"}
-                          className={largeTextCompliance.aaa ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100" : ""}
+                          variant={
+                            largeTextCompliance.aaa ? "default" : "destructive"
+                          }
+                          className={
+                            largeTextCompliance.aaa
+                              ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100"
+                              : ""
+                          }
                         >
                           {largeTextCompliance.aaa ? (
-                            <><CheckCircle className="h-3 w-3 mr-1" />Pass</>
+                            <>
+                              <CheckCircle className="mr-1 h-3 w-3" />
+                              Pass
+                            </>
                           ) : (
-                            <><XCircle className="h-3 w-3 mr-1" />Fail</>
+                            <>
+                              <XCircle className="mr-1 h-3 w-3" />
+                              Fail
+                            </>
                           )}
                         </Badge>
                       </div>
@@ -410,7 +716,7 @@ export const ContrastCheckerTool: React.FC = () => {
         />
 
         {/* Features Section */}
-        <div className="grid md:grid-cols-2 gap-8 mt-16 mb-16">
+        <div className="mb-16 mt-16 grid gap-8 md:grid-cols-2">
           <ToolFeatureCard
             icon={CheckCircle}
             title="WCAG AA Compliance"
