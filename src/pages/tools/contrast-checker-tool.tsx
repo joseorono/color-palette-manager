@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback, ChangeEvent } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { EnhancedColorInput } from "@/components/enhanced-color-input";
 import { ToolHeroSection } from "@/components/reusable-sections/tool-hero-section";
 import { ToolSectionHeading } from "@/components/reusable-sections/tool-section-heading";
 import { ToolFeatureCard } from "@/components/reusable-sections/tool-feature-card";
@@ -7,7 +8,6 @@ import { AccessibilityUtils } from "@/lib/accessibility-utils";
 import { HexColorString, WCAGContrastLevel } from "@/types/palette";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -27,7 +27,6 @@ import {
   AlertTriangle,
   Palette,
   Info,
-  Copy,
 } from "lucide-react";
 
 export const ContrastCheckerTool: React.FC = () => {
@@ -37,20 +36,6 @@ export const ContrastCheckerTool: React.FC = () => {
     useState<HexColorString>("#FFFFFF");
   const [contrastRatio, setContrastRatio] = useState<number>(21);
 
-  // Input state with validation
-  const [inputState, setInputState] = useState({
-    text: {
-      value: "#000000",
-      isValid: true,
-      isFocused: false,
-    },
-    background: {
-      value: "#FFFFFF",
-      isValid: true,
-      isFocused: false,
-    },
-  });
-
   // Calculate contrast when colors change
   useEffect(() => {
     const ratio = AccessibilityUtils.getContrastRatio(
@@ -58,115 +43,22 @@ export const ContrastCheckerTool: React.FC = () => {
       backgroundColor
     );
     setContrastRatio(ratio);
-
-    // Update input fields when colors change from pickers, but only if the user isn't actively editing
-    setInputState((prev) => ({
-      text: {
-        ...prev.text,
-        value: prev.text.isFocused ? prev.text.value : textColor,
-        isValid: true,
-      },
-      background: {
-        ...prev.background,
-        value: prev.background.isFocused
-          ? prev.background.value
-          : backgroundColor,
-        isValid: true,
-      },
-    }));
   }, [textColor, backgroundColor]);
-
-  // Handle hex input changes with validation and normalization
-  const handleHexInputChange = useCallback(
-    (value: string, isTextColor: boolean) => {
-      // Check if it's a valid hex color
-      const isValid = value === "" || ColorUtils.isValidHex(value);
-
-      // Update the input state
-      setInputState((prev) => {
-        if (isTextColor) {
-          return {
-            ...prev,
-            text: {
-              ...prev.text,
-              value,
-              isValid,
-            },
-          };
-        } else {
-          return {
-            ...prev,
-            background: {
-              ...prev.background,
-              value,
-              isValid,
-            },
-          };
-        }
-      });
-
-      // If valid and not empty, update the actual color
-      if (ColorUtils.isValidHex(value)) {
-        const normalizedHex = ColorUtils.normalizeHex(value) as HexColorString;
-        if (isTextColor) {
-          setTextColor(normalizedHex);
-        } else {
-          setBackgroundColor(normalizedHex);
-        }
-      }
-    },
-    []
-  );
 
   const handleRandomTextColor = () => {
     const randomColor = ColorUtils.generateRandomColorHex();
     setTextColor(randomColor);
-
-    // Only update the input if user isn't actively editing it
-    setInputState((prev) => ({
-      ...prev,
-      text: {
-        ...prev.text,
-        value: prev.text.isFocused ? prev.text.value : randomColor,
-        isValid: true,
-      },
-    }));
   };
 
   const handleRandomBackgroundColor = () => {
     const randomColor = ColorUtils.generateRandomColorHex();
     setBackgroundColor(randomColor);
-
-    // Only update the input if user isn't actively editing it
-    setInputState((prev) => ({
-      ...prev,
-      background: {
-        ...prev.background,
-        value: prev.background.isFocused ? prev.background.value : randomColor,
-        isValid: true,
-      },
-    }));
   };
 
   const handleSwapColors = () => {
     const tempColor = textColor;
-
     setTextColor(backgroundColor);
     setBackgroundColor(tempColor);
-
-    // Only update the inputs if user isn't actively editing them
-    setInputState((prev) => ({
-      text: {
-        ...prev.text,
-        value: prev.text.isFocused ? prev.text.value : backgroundColor,
-        isValid: true,
-      },
-      background: {
-        ...prev.background,
-        value: prev.background.isFocused ? prev.background.value : tempColor,
-        isValid: true,
-      },
-    }));
   };
 
   const handleCopyToClipboard = useCallback((text: string) => {
@@ -265,218 +157,34 @@ export const ContrastCheckerTool: React.FC = () => {
               <div className="grid gap-6 md:grid-cols-2">
                 {/* Text Color */}
                 <div className="space-y-2">
-                  <Label htmlFor="textColor">Text Color</Label>
-                  <div className="flex items-center gap-4">
-                    <Input
-                      id="textColor"
-                      type="color"
-                      value={textColor}
-                      onChange={(e) => {
-                        const newColor = e.target.value as HexColorString;
-                        setTextColor(newColor);
-                        // Only update the input if user isn't actively editing it
-                        setInputState((prev) => ({
-                          ...prev,
-                          text: {
-                            ...prev.text,
-                            value: prev.text.isFocused
-                              ? prev.text.value
-                              : newColor,
-                            isValid: true,
-                          },
-                        }));
-                      }}
-                      className="h-12 w-20 cursor-pointer rounded border p-1"
-                    />
-                    <div className="relative flex-1">
-                      <TooltipProvider>
-                        <Tooltip open={!inputState.text.isValid}>
-                          <TooltipTrigger asChild>
-                            <Input
-                              type="text"
-                              value={inputState.text.value}
-                              onFocus={() => {
-                                setInputState((prev) => ({
-                                  ...prev,
-                                  text: { ...prev.text, isFocused: true },
-                                }));
-                              }}
-                              onBlur={() => {
-                                setInputState((prev) => ({
-                                  ...prev,
-                                  text: { ...prev.text, isFocused: false },
-                                }));
-                                // When losing focus, if the value is valid, update the color
-                                if (
-                                  ColorUtils.isValidHex(inputState.text.value)
-                                ) {
-                                  setTextColor(
-                                    ColorUtils.normalizeHex(
-                                      inputState.text.value
-                                    ) as HexColorString
-                                  );
-                                }
-                              }}
-                              onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                                handleHexInputChange(e.target.value, true);
-                              }}
-                              className={`flex-1 pr-8 font-mono text-sm ${!inputState.text.isValid ? "border-red-500 focus-visible:ring-red-500" : ""}`}
-                              placeholder="#000000"
-                            />
-                          </TooltipTrigger>
-                          <TooltipContent
-                            side="bottom"
-                            className="border border-red-200 bg-red-50 text-red-600"
-                          >
-                            <p>
-                              Please enter a valid hex color (e.g., #FF5500 or
-                              #F50)
-                            </p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        className="absolute right-0 top-0 h-full px-2"
-                        onClick={() => handleCopyToClipboard(textColor)}
-                      >
-                        <Copy className="h-4 w-4" />
-                      </Button>
-                    </div>
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={handleRandomTextColor}
-                          >
-                            <Shuffle className="h-4 w-4" />
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Generate random text color</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </div>
-                  <div className="text-xs text-muted-foreground">
-                    {ColorUtils.getColorName(textColor)}
-                  </div>
+                  <EnhancedColorInput
+                    label="Text Color"
+                    value={textColor}
+                    onChange={setTextColor}
+                    placeholder="#000000"
+                    showCopyButton
+                    showRandomButton
+                    showColorName
+                    onCopy={handleCopyToClipboard}
+                    onRandomColor={handleRandomTextColor}
+                    className="flex-1"
+                  />
                 </div>
 
                 {/* Background Color */}
                 <div className="space-y-2">
-                  <Label htmlFor="backgroundColor">Background Color</Label>
-                  <div className="flex items-center gap-4">
-                    <Input
-                      id="backgroundColor"
-                      type="color"
-                      value={backgroundColor}
-                      onChange={(e) => {
-                        const newColor = e.target.value as HexColorString;
-                        setBackgroundColor(newColor);
-                        // Only update the input if user isn't actively editing it
-                        setInputState((prev) => ({
-                          ...prev,
-                          background: {
-                            ...prev.background,
-                            value: prev.background.isFocused
-                              ? prev.background.value
-                              : newColor,
-                            isValid: true,
-                          },
-                        }));
-                      }}
-                      className="h-12 w-20 cursor-pointer rounded border p-1"
-                    />
-                    <div className="relative flex-1">
-                      <TooltipProvider>
-                        <Tooltip open={!inputState.background.isValid}>
-                          <TooltipTrigger asChild>
-                            <Input
-                              type="text"
-                              value={inputState.background.value}
-                              onFocus={() => {
-                                setInputState((prev) => ({
-                                  ...prev,
-                                  background: {
-                                    ...prev.background,
-                                    isFocused: true,
-                                  },
-                                }));
-                              }}
-                              onBlur={() => {
-                                setInputState((prev) => ({
-                                  ...prev,
-                                  background: {
-                                    ...prev.background,
-                                    isFocused: false,
-                                  },
-                                }));
-                                // When losing focus, if the value is valid, update the color
-                                if (
-                                  ColorUtils.isValidHex(
-                                    inputState.background.value
-                                  )
-                                ) {
-                                  setBackgroundColor(
-                                    ColorUtils.normalizeHex(
-                                      inputState.background.value
-                                    ) as HexColorString
-                                  );
-                                }
-                              }}
-                              onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                                handleHexInputChange(e.target.value, false);
-                              }}
-                              className={`flex-1 pr-8 font-mono text-sm ${!inputState.background.isValid ? "border-red-500 focus-visible:ring-red-500" : ""}`}
-                              placeholder="#FFFFFF"
-                            />
-                          </TooltipTrigger>
-                          <TooltipContent
-                            side="bottom"
-                            className="border border-red-200 bg-red-50 text-red-600"
-                          >
-                            <p>
-                              Please enter a valid hex color (e.g., #FF5500 or
-                              #F50)
-                            </p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        className="absolute right-0 top-0 h-full px-2"
-                        onClick={() => handleCopyToClipboard(backgroundColor)}
-                      >
-                        <Copy className="h-4 w-4" />
-                      </Button>
-                    </div>
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={handleRandomBackgroundColor}
-                          >
-                            <Shuffle className="h-4 w-4" />
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Generate random background color</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </div>
-                  <div className="text-xs text-muted-foreground">
-                    {ColorUtils.getColorName(backgroundColor)}
-                  </div>
+                  <EnhancedColorInput
+                    label="Background Color"
+                    value={backgroundColor}
+                    onChange={setBackgroundColor}
+                    placeholder="#FFFFFF"
+                    showCopyButton
+                    showRandomButton
+                    showColorName
+                    onCopy={handleCopyToClipboard}
+                    onRandomColor={handleRandomBackgroundColor}
+                    className="flex-1"
+                  />
                 </div>
               </div>
 
