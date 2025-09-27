@@ -12,13 +12,13 @@ export default function LandingNavbar() {
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center space-x-3">
             <img
-              src="/logo-v2.png"
+              src="/logo-32x32.png"
               alt="Color Palette Manager Logo"
               width={32}
               height={32}
               className="h-8 w-8"
             />
-            <span className="text-foreground text-xl font-semibold">
+            <span className="text-xl font-semibold text-foreground">
               Color Palette Manager
             </span>
           </div>
@@ -29,7 +29,7 @@ export default function LandingNavbar() {
               href="https://github.com/joseorono/color-palette-manager"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-muted-foreground hover:text-primary font-medium transition-colors duration-200"
+              className="font-medium text-muted-foreground transition-colors duration-200 hover:text-primary"
               aria-label="View project on GitHub"
             >
               GitHub
@@ -70,7 +70,7 @@ export default function LandingNavbar() {
                 href="https://github.com/joseorono/color-palette-manager"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-primary font-medium transition-colors duration-200"
+                className="font-medium text-muted-foreground transition-colors duration-200 hover:text-primary"
               >
                 GitHub
               </a>

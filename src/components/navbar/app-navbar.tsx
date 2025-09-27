@@ -15,7 +15,7 @@ interface NavigationLink {
 const navigationLinks: NavigationLink[] = [
   { name: "Dashboard", href: "/app" },
   { name: "Palette Editor", href: "/app/palette-edit" },
-  { name: "Palette Preview", href: "/app/palette-preview"},
+  { name: "Palette Preview", href: "/app/palette-preview" },
   { name: "Tools", href: "/app/tools" },
 ];
 
@@ -27,7 +27,9 @@ export default function AppNavbar() {
   const isActiveRoute = (href: string) => {
     if (href === "/app") {
       // For dashboard, match exact path or /app/dashboard
-      return location.pathname === "/app" || location.pathname === "/app/dashboard";
+      return (
+        location.pathname === "/app" || location.pathname === "/app/dashboard"
+      );
     }
     return location.pathname === href;
   };
@@ -39,16 +41,16 @@ export default function AppNavbar() {
         <div className="flex-shrink-0">
           <Link
             to="/app"
-            className="flex items-center space-x-2 text-2xl font-bold p-1"
+            className="flex items-center space-x-2 p-1 text-2xl font-bold"
           >
             <img
-              src="/logo-v2.png"
+              src="/logo-32x32.png"
               alt="Color Palette Manager Logo"
               width={32}
               height={32}
               className="h-8 w-8"
             />
-            <span className="text-foreground text-xl font-semibold">
+            <span className="text-xl font-semibold text-foreground">
               Color Palette Manager
             </span>
           </Link>
@@ -92,10 +94,10 @@ export default function AppNavbar() {
               <div className="flex-shrink-0 border-b pb-4">
                 <Link
                   to="/app"
-                  className="flex items-center space-x-2 text-2xl font-bold p-1"
+                  className="flex items-center space-x-2 p-1 text-2xl font-bold"
                 >
                   <img
-                    src="/logo-v2.png"
+                    src="/logo-32x32.png"
                     alt="Color Palette Manager Logo"
                     width={24}
                     height={24}
@@ -139,7 +141,9 @@ export default function AppNavbar() {
         <div className="hidden items-center gap-3 lg:flex">
           <ThemeToggle />
           <Link to="/">
-            <Button className="rounded-full px-6" variant="secondary">Back to Landing</Button>
+            <Button className="rounded-full px-6" variant="secondary">
+              Back to Landing
+            </Button>
           </Link>
         </div>
       </div>
