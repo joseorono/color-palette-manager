@@ -116,7 +116,7 @@ export default function Features() {
   ];
 
   return (
-    <section className="bg-white dark:bg-slate-900 py-20">
+    <section id="features" className="bg-white dark:bg-slate-900 py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-16 text-center">
           <h2 className="mb-4 text-3xl font-bold text-gray-900 dark:text-gray-100 sm:text-4xl">
