@@ -15,8 +15,8 @@ function FeatureCard({
       <div className="feature-icon mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-xl">
         {icon}
       </div>
-      <h3 className="mb-3 text-lg font-semibold text-gray-900">{title}</h3>
-      <p className="text-sm leading-relaxed text-gray-600">{description}</p>
+      <h3 className="mb-3 text-lg font-semibold text-gray-900 dark:text-gray-100">{title}</h3>
+      <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-300">{description}</p>
     </div>
   );
 }
@@ -116,13 +116,13 @@ export default function Features() {
   ];
 
   return (
-    <section className="bg-white py-20">
+    <section className="bg-white dark:bg-slate-900 py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-16 text-center">
-          <h2 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl">
+          <h2 className="mb-4 text-3xl font-bold text-gray-900 dark:text-gray-100 sm:text-4xl">
             Powerful Features for Every Designer
           </h2>
-          <p className="mx-auto max-w-2xl text-xl text-gray-600">
+          <p className="mx-auto max-w-2xl text-xl text-gray-600 dark:text-gray-300">
             Everything you need to create, manage, and export professional color
             palettes
           </p>

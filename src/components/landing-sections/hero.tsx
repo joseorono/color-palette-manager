@@ -5,19 +5,19 @@ export default function Hero() {
     <section className="hero-gradient py-20 lg:py-32">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <h1 className="mb-6 text-4xl font-bold leading-tight text-gray-900 sm:text-5xl lg:text-6xl">
+          <h1 className="mb-6 text-4xl font-bold leading-tight text-gray-900 dark:text-gray-100 sm:text-5xl lg:text-6xl">
             Create Beautiful
             <br />
             <span className="bg-gradient-to-r from-vivid-sky-blue to-blue-munsell bg-clip-text text-transparent">
               Color Palettes
             </span>
           </h1>
-          <p className="mx-auto mb-8 max-w-3xl text-xl leading-relaxed text-gray-600 sm:text-2xl">
+          <p className="mx-auto mb-8 max-w-3xl text-xl leading-relaxed text-gray-600 dark:text-gray-300 sm:text-2xl">
             A modern, offline-first color palette management application.
             Generate, edit, and export stunning color schemes for your design
             projects.
           </p>
-          <p className="mx-auto mb-12 max-w-4xl text-lg text-gray-500">
+          <p className="mx-auto mb-12 max-w-4xl text-lg text-gray-500 dark:text-gray-400">
             Built with React, TypeScript, and Tailwind CSS, Color Palette
             Manager is a powerful tool for designers and developers who need
             professional color palettes. Work completely offline and export to
