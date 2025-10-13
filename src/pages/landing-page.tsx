@@ -17,20 +17,24 @@ export default function LandingPage() {
         }
         
         .feature-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             background: white;
-            border: 2px solid #e0f2fe;
+            border: 1px solid #e5e7eb;
         }
         
         .feature-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 30px -8px rgba(14, 165, 233, 0.15), 0 10px 15px -5px rgba(6, 182, 212, 0.1);
-            border-color: #93e6ef;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px -4px rgba(0, 0, 0, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.04);
+            border-color: #d1d5db;
         }
         
         .feature-icon {
-            background: linear-gradient(135deg, #46cee6 0%, #0891b2 100%);
-            box-shadow: 0 8px 16px -4px rgba(70, 206, 230, 0.3);
+            background: #f0f9ff;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover .feature-icon {
+            background: #e0f2fe;
         }
         
         .btn-primary {

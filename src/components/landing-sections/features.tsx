@@ -11,12 +11,12 @@ function FeatureCard({
   description,
 }: FeatureProps) {
   return (
-    <div className="feature-card rounded-2xl p-8 text-center">
-      <div className="feature-icon mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl">
+    <div className="feature-card rounded-xl p-6 text-center">
+      <div className="feature-icon mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-xl">
         {icon}
       </div>
-      <h3 className="mb-4 text-xl font-semibold text-gray-900">{title}</h3>
-      <p className="leading-relaxed text-gray-600">{description}</p>
+      <h3 className="mb-3 text-lg font-semibold text-gray-900">{title}</h3>
+      <p className="text-sm leading-relaxed text-gray-600">{description}</p>
     </div>
   );
 }
@@ -26,7 +26,7 @@ export default function Features() {
     {
       icon: (
         <svg
-          className="h-8 w-8 text-white"
+          className="h-7 w-7 text-vivid-sky-blue"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -47,7 +47,7 @@ export default function Features() {
     {
       icon: (
         <svg
-          className="h-8 w-8 text-white"
+          className="h-7 w-7 text-blue-munsell"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -68,7 +68,7 @@ export default function Features() {
     {
       icon: (
         <svg
-          className="h-8 w-8 text-white"
+          className="h-7 w-7 text-midnight-green"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -89,7 +89,7 @@ export default function Features() {
     {
       icon: (
         <svg
-          className="h-8 w-8 text-white"
+          className="h-7 w-7 text-electric-blue"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
