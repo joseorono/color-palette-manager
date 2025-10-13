@@ -1,3 +1,5 @@
+import { Palette } from "lucide-react";
+
 export default function Hero() {
   return (
     <section className="hero-gradient py-20 lg:py-32">
@@ -23,14 +25,23 @@ export default function Hero() {
           </p>
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
             <a
+              href="/app"
+              target="_blank"
+              rel="noopener"
+              className="btn-primary inline-flex items-center gap-2 rounded-xl px-8 py-4 text-lg font-semibold text-white transition-all duration-300 hover:-translate-y-1 hover:transform"
+            >
+              <Palette className="h-5 w-5" />
+              <span>Try the App</span>
+            </a>
+            <a
               href="https://github.com/joseorono/color-palette-manager"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-primary inline-flex items-center justify-center rounded-xl p-4 text-lg font-semibold text-white transition-all duration-300 hover:-translate-y-1 hover:transform"
+              className="btn-secondary inline-flex items-center justify-center rounded-xl px-6 py-4 text-lg font-semibold text-vivid-sky-blue transition-all duration-300 hover:-translate-y-1 hover:transform hover:text-white"
               aria-label="View on GitHub"
             >
               <svg
-                className="h-6 w-6 mr-2"
+                className="h-5 w-5 mr-2"
                 fill="currentColor"
                 viewBox="0 0 20 20"
                 aria-hidden="true"
@@ -41,15 +52,7 @@ export default function Hero() {
                   clipRule="evenodd"
                 />
               </svg>
-              <span>View on GitHub</span>
-            </a>
-            <a
-              href="/app"
-              target="_blank"
-              rel="noopener"
-              className="btn-secondary rounded-xl px-8 py-4 text-lg font-semibold text-vivid-sky-blue transition-all duration-300 hover:-translate-y-1 hover:transform hover:text-white"
-            >
-              Try the App
+              <span>GitHub</span>
             </a>
           </div>
         </div>
