@@ -22,9 +22,8 @@
     "update-deps": "ncu -u && npm install",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
-    "electron": "electron .",
-    "electron:dev": "cross-env NODE_ENV=development electron .",
-    "electron-dev": "concurrently \"npm run dev\" \"wait-on http://localhost:5173 && electron .\"",
+    "electron": "wait-on http://localhost:5173 && electron .",
+    "electron-dev": "concurrently \"npm run dev\" \"npm run electron\"",
     "electron-build": "npm run build && electron-builder"
   },
   "dependencies": {
@@ -115,9 +114,9 @@
     "@vitejs/plugin-react": "^4.2.1",
     "@vitest/ui": "^2.1.9",
     "autoprefixer": "^10.4.19",
-    "concurrently": "^9.2.0",
+    "concurrently": "^9.2.1",
     "cross-env": "^10.0.0",
-    "electron": "^37.2.6",
+    "electron": "^37.5.1",
     "electron-builder": "^26.0.12",
     "electron-vite": "^4.0.0",
     "eslint": "^8.57.0",
@@ -134,7 +133,7 @@
     "vite-plugin-svgr": "^4.3.0",
     "vite-tsconfig-paths": "^5.0.1",
     "vitest": "^2.1.1",
-    "wait-on": "^8.0.4"
+    "wait-on": "^8.0.5"
   },
   "main": "electron/main.cjs",
   "homepage": "./",
