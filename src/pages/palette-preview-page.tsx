@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { useQueryState } from "nuqs";
 import { Palette } from "@/types/palette";
 import { injectColorVariablesObjectToCSS } from "@/lib/preview-utils";
-import { ColorPreviewCard } from "@/components/preview-views/color-preview-card";
-import { PaletteSelector } from "@/components/preview-views/palette-preview-selector";
+import { ColorPreviewCard } from "@/components/palette-preview/color-preview-card";
+import { PaletteSelector } from "@/components/palette-preview/palette-preview-selector";
 import { PaletteTabsPreview } from "@/components/palette-tabs-preview";
 import { PaletteDBQueries } from "@/db/queries";
-import { PaletteNotSelected } from "@/components/preview-views/palette-not-selected";
+import { PaletteNotSelected } from "@/components/palette-preview/palette-not-selected";
 
 /**
  * PalettePreviewPage Component

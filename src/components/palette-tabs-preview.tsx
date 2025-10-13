@@ -7,16 +7,16 @@ import {
   ColorRoles,
   Color,
 } from "@/types/palette";
-import { UIPreviewCard } from "@/components/preview-views/ui-preview-card";
+import { UIPreviewCard } from "@/components/palette-preview/views/ui-preview-card";
 import {
   ViewSelector,
   PreviewViewType,
-} from "@/components/preview-views/view-selector";
-import { EbookPreviewCard } from "@/components/preview-views/ebook-preview-card";
-import { MobileUIPreviewCard } from "@/components/preview-views/mobile-ui-preview-card";
+} from "@/components/palette-preview/view-selector";
+import { EbookPreviewCard } from "@/components/palette-preview/views/ebook-preview-card";
+import { MobileUIPreviewCard } from "@/components/palette-preview/views/mobile-ui-preview-card";
 import { injectColorVariablesObjectToCSS } from "@/lib/preview-utils";
 import { PaletteUtils } from "@/lib/palette-utils";
-import { InvalidColorPaletteMessage } from "@/components/preview-views/invalid-color-palette-message";
+import { InvalidColorPaletteMessage } from "@/components/palette-preview/invalid-color-palette-message";
 
 /**
  * PaletteTabsPreview Component
