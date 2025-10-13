@@ -15,6 +15,14 @@ export default function Footer() {
           </div>
           <div className="flex flex-col items-center space-y-4 sm:flex-row sm:space-x-8 sm:space-y-0">
             <a
+                href="https://github.com/joseorono/color-palette-manager/blob/main/LICENSE.md"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-300 transition-colors duration-200 hover:text-white"
+            >
+              GPL v3 License
+            </a>
+            <a
               href="https://github.com/joseorono/color-palette-manager"
               target="_blank"
               rel="noopener noreferrer"
@@ -34,30 +42,14 @@ export default function Footer() {
               </svg>
               <span>GitHub Repository</span>
             </a>
-            <a
-              href="/docs"
-              className="text-gray-300 transition-colors duration-200 hover:text-white"
-            >
-              Documentation
-            </a>
-            <a
-              href="/contributing"
-              className="text-gray-300 transition-colors duration-200 hover:text-white"
-            >
-              Contributing
-            </a>
-            <a
-              href="/license"
-              className="text-gray-300 transition-colors duration-200 hover:text-white"
-            >
-              GPL v3 License
-            </a>
           </div>
         </div>
         <div className="mt-8 border-t border-gray-700 pt-8 text-center">
           <p className="text-gray-400">
-            Open source color palette management tool. Built with ❤️ by the
-            community.
+            Open source color palette management tool. Built with ❤️ by&nbsp;
+            <a href="https://exologic.agency/" target="_blank" className="text-gray-300 transition-colors duration-200 hover:text-white">
+              The Exologic Team
+            </a>.
           </p>
         </div>
       </div>

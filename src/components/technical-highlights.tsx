@@ -32,10 +32,6 @@ export default function TechnicalHighlights() {
       description: "for responsive, utility-first styling",
     },
     { label: "Vite", description: "for lightning-fast development and builds" },
-    {
-      label: "Electron",
-      description: "for cross-platform desktop applications",
-    },
   ];
 
   const performanceFeatures = [
