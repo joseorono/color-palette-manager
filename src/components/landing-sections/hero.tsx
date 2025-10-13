@@ -49,7 +49,7 @@ export default function Hero() {
               rel="noopener"
               className="btn-secondary rounded-xl px-8 py-4 text-lg font-semibold text-vivid-sky-blue transition-all duration-300 hover:-translate-y-1 hover:transform hover:text-white"
             >
-              Try it out
+              Try the App
             </a>
           </div>
         </div>
