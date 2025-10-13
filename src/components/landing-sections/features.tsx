@@ -3,25 +3,19 @@ interface FeatureProps {
   icon: React.ReactNode;
   title: string;
   description: string;
-  gradientFrom: string;
-  gradientTo: string;
 }
 
 function FeatureCard({
   icon,
   title,
   description,
-  gradientFrom,
-  gradientTo,
 }: FeatureProps) {
   return (
-    <div className="feature-card rounded-2xl border border-gray-100 bg-white p-8 text-center transition-all duration-300 hover:-translate-y-1 hover:transform hover:shadow-xl">
-      <div
-        className={`h-16 w-16 bg-gradient-to-br ${gradientFrom} ${gradientTo} mx-auto mb-6 flex items-center justify-center rounded-2xl`}
-      >
+    <div className="feature-card rounded-2xl p-8 text-center">
+      <div className="feature-icon mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl">
         {icon}
       </div>
-      <h3 className="text-brand-dark mb-4 text-xl font-semibold">{title}</h3>
+      <h3 className="mb-4 text-xl font-semibold text-gray-900">{title}</h3>
       <p className="leading-relaxed text-gray-600">{description}</p>
     </div>
   );
@@ -49,8 +43,6 @@ export default function Features() {
       title: "Intelligent Color Generation",
       description:
         "Generate harmonious color palettes from scratch, based on specific colors, or extracted from images. Lock colors you love and regenerate the rest.",
-      gradientFrom: "from-blue-200",
-      gradientTo: "to-blue-400",
     },
     {
       icon: (
@@ -72,8 +64,6 @@ export default function Features() {
       title: "Export to Any Format",
       description:
         "Export your palettes in 8+ formats including PNG, SVG, CSS Variables, JSON, SCSS, Tailwind Config, and more. Perfect for any workflow.",
-      gradientFrom: "from-teal-400",
-      gradientTo: "to-teal-600",
     },
     {
       icon: (
@@ -95,8 +85,6 @@ export default function Features() {
       title: "Works Completely Offline",
       description:
         "No internet required, no data collection, no server dependencies. Your palettes are stored locally and always accessible.",
-      gradientFrom: "from-cyan-400",
-      gradientTo: "to-teal-500",
     },
     {
       icon: (
@@ -124,8 +112,6 @@ export default function Features() {
       title: "Professional Color Editing",
       description:
         "Fine-tune colors with HSL, RGB, and hex controls. Check accessibility compliance with built-in contrast checkers.",
-      gradientFrom: "from-teal-600",
-      gradientTo: "to-gray-700",
     },
   ];
 
@@ -133,7 +119,7 @@ export default function Features() {
     <section className="bg-white py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-16 text-center">
-          <h2 className="text-brand-dark mb-4 text-3xl font-bold sm:text-4xl">
+          <h2 className="mb-4 text-3xl font-bold text-gray-900 sm:text-4xl">
             Powerful Features for Every Designer
           </h2>
           <p className="mx-auto max-w-2xl text-xl text-gray-600">

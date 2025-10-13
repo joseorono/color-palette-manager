@@ -26,10 +26,11 @@ export default function Footer() {
               href="https://github.com/joseorono/color-palette-manager"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center space-x-2 text-gray-300 transition-colors duration-200 hover:text-white"
+              className="text-gray-300 transition-colors duration-200 hover:text-white"
+              aria-label="GitHub Repository"
             >
               <svg
-                className="h-5 w-5"
+                className="h-6 w-6"
                 fill="currentColor"
                 viewBox="0 0 20 20"
                 aria-hidden="true"
@@ -40,7 +41,6 @@ export default function Footer() {
                   clipRule="evenodd"
                 />
               </svg>
-              <span>GitHub Repository</span>
             </a>
           </div>
         </div>

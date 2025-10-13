@@ -3,10 +3,12 @@ export default function Hero() {
     <section className="hero-gradient py-20 lg:py-32">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <h1 className="text-brand-dark mb-6 text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl">
+          <h1 className="mb-6 text-4xl font-bold leading-tight text-gray-900 sm:text-5xl lg:text-6xl">
             Create Beautiful
             <br />
-            <span className="text-brand-teal">Color Palettes</span>
+            <span className="bg-gradient-to-r from-vivid-sky-blue to-blue-munsell bg-clip-text text-transparent">
+              Color Palettes
+            </span>
           </h1>
           <p className="mx-auto mb-8 max-w-3xl text-xl leading-relaxed text-gray-600 sm:text-2xl">
             A modern, offline-first color palette management application.
@@ -16,18 +18,19 @@ export default function Hero() {
           <p className="mx-auto mb-12 max-w-4xl text-lg text-gray-500">
             Built with React, TypeScript, and Tailwind CSS, Color Palette
             Manager is a powerful tool for designers and developers who need
-            professional color palettes. Work completely offline, export to
-            multiple formats, and enjoy a seamless desktop or web experience.
+            professional color palettes. Work completely offline and export to
+            multiple formats.
           </p>
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
             <a
               href="https://github.com/joseorono/color-palette-manager"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-primary inline-flex items-center space-x-2 rounded-xl px-8 py-4 text-lg font-semibold text-white transition-all duration-300 hover:-translate-y-1 hover:transform"
+              className="btn-primary inline-flex items-center justify-center rounded-xl p-4 text-lg font-semibold text-white transition-all duration-300 hover:-translate-y-1 hover:transform"
+              aria-label="View on GitHub"
             >
               <svg
-                className="h-5 w-5"
+                className="h-6 w-6 mr-2"
                 fill="currentColor"
                 viewBox="0 0 20 20"
                 aria-hidden="true"
@@ -44,7 +47,7 @@ export default function Hero() {
               href="/app"
               target="_blank"
               rel="noopener"
-              className="btn-secondary border-brand-teal text-brand-teal hover:bg-brand-teal rounded-xl border-2 px-8 py-4 text-lg font-semibold transition-all duration-300 hover:-translate-y-1 hover:transform hover:text-white"
+              className="btn-secondary rounded-xl px-8 py-4 text-lg font-semibold text-vivid-sky-blue transition-all duration-300 hover:-translate-y-1 hover:transform hover:text-white"
             >
               Try it out
             </a>
