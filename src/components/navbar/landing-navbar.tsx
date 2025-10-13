@@ -93,6 +93,15 @@ export default function LandingNavbar() {
         {isMenuOpen && (
           <div className="border-t py-4 md:hidden">
             <div className="flex flex-col space-y-4">
+              {navLinks.map((link) => (
+                <button
+                  key={link.sectionId}
+                  onClick={() => scrollToSection(link.sectionId)}
+                  className="font-medium text-muted-foreground transition-colors duration-200 hover:text-primary text-left"
+                >
+                  {link.label}
+                </button>
+              ))}
               <a
                 href="https://github.com/joseorono/color-palette-manager"
                 target="_blank"

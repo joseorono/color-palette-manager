@@ -8,6 +8,10 @@ export default function LandingPage() {
   return (
     <>
       <style>{`
+        html {
+            scroll-behavior: smooth;
+        }
+        
         .gradient-bg {
             background: linear-gradient(135deg, #e0f2fe 0%, #93e6ef 50%, #46cee6 100%);
         }
@@ -93,12 +97,10 @@ export default function LandingPage() {
         }
       `}</style>
       <div className="bg-white dark:bg-slate-950 text-gray-900 dark:text-gray-100">
-        <main>
-          <Hero />
-          <Features />
-          <TechnicalHighlights />
-          <CallToAction />
-        </main>
+        <Hero />
+        <Features />
+        <TechnicalHighlights />
+        <CallToAction />
         <Footer />
       </div>
     </>
