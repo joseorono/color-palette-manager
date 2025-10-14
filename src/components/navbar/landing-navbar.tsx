@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import ThemeToggle from "@/components/ui/theme-switcher-btn";
 import { Link } from "react-router-dom";
+import { Github } from "lucide-react";
 
 export default function LandingNavbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -59,7 +60,7 @@ export default function LandingNavbar() {
               className="font-medium text-muted-foreground transition-colors duration-200 hover:text-primary"
               aria-label="View project on GitHub"
             >
-              GitHub
+              <Github className="h-5 w-5" />
             </a>
             <ThemeToggle />
             <Link to="/app">
@@ -106,9 +107,11 @@ export default function LandingNavbar() {
                 href="https://github.com/joseorono/color-palette-manager"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-medium text-muted-foreground transition-colors duration-200 hover:text-primary"
+                className="font-medium text-muted-foreground transition-colors duration-200 hover:text-primary text-center"
               >
-                GitHub
+                <div className="flex items-center">
+                  <Github className="h-5 w-5" />&nbsp; GitHub
+                </div>
               </a>
               <div className="flex justify-center">
                 <ThemeToggle />
