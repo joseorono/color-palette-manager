@@ -3,6 +3,7 @@ import Features from "@/components/landing-sections/features";
 import TechnicalHighlights from "@/components/technical-highlights";
 import CallToAction from "@/components/landing-sections/call-to-action";
 import Footer from "@/components/landing-sections/footer";
+import { LandingSlider } from "@/components/landing-sections/slider";
 
 export default function LandingPage() {
   return (
@@ -96,10 +97,11 @@ export default function LandingPage() {
             box-shadow: 0 8px 16px -4px rgba(70, 206, 230, 0.3);
         }
       `}</style>
-      <div className="bg-white dark:bg-slate-950 text-gray-900 dark:text-gray-100">
+      <div className="bg-white text-gray-900 dark:bg-slate-950 dark:text-gray-100">
         <Hero />
         <Features />
         <TechnicalHighlights />
+        <LandingSlider />
         <CallToAction />
         <Footer />
       </div>
