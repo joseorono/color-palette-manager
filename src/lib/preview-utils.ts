@@ -1,4 +1,3 @@
-
 // CSSColorVariablesObject
 import { CSSColorVariablesObject } from "@/types/palette";
 
@@ -6,6 +5,7 @@ export function injectColorVariablesObjectToCSS(colors: CSSColorVariablesObject)
   const root = document.documentElement;
     root.style.setProperty('--preview-primary', colors.primary);
     root.style.setProperty('--preview-secondary', colors.secondary);
+    root.style.setProperty('--preview-accent', colors.accent);
     root.style.setProperty('--preview-background', colors.background);
     root.style.setProperty('--preview-foreground', colors.foreground);
     root.style.setProperty('--preview-card', colors.card);
