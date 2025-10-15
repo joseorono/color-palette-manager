@@ -3,7 +3,9 @@
 @tailwind utilities;
 
 :root {
-  --fullvh-with-navbar: calc(100dvh - (4rem + 1px)); /* 4rem to match the h-16 used in the navbar, roughly 64px */
+  --fullvh-with-navbar: calc(
+    100dvh - (4rem + 1px)
+  ); /* 4rem to match the h-16 used in the navbar, roughly 64px */
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
@@ -79,7 +81,15 @@
     --chart-2: 186 74% 76%; /* electric-blue */
     --chart-3: 190 71% 35%; /* blue-munsell */
     --chart-4: 189 83% 21%; /* midnight-green */
-    --chart-5: 228 33% 97%; /* antiflash-white */ --sidebar-background: 240 5.9% 10%; --sidebar-foreground: 240 4.8% 95.9%; --sidebar-primary: 224.3 76.3% 48%; --sidebar-primary-foreground: 0 0% 100%; --sidebar-accent: 240 3.7% 15.9%; --sidebar-accent-foreground: 240 4.8% 95.9%; --sidebar-border: 240 3.7% 15.9%; --sidebar-ring: 217.2 91.2% 59.8%;
+    --chart-5: 228 33% 97%; /* antiflash-white */
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
 
