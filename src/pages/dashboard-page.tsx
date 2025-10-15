@@ -21,19 +21,35 @@ export default function DashboardPage() {
 
   const handleDeletePalette = async (paletteId: string) => {
     const palette = palettes.find((p: { id: string }) => p.id === paletteId);
-    if (palette) {
+    if (!palette) {
+      toast.error("Palette not found.");
+      return;
+    }
+
+    try {
       await deletePalette(paletteId);
       toast.success(`"${palette.name}" has been deleted.`);
+    } catch (error) {
+      toast.error(`Failed to delete "${palette.name}". Please try again.`);
+      console.error("Delete palette error:", error);
     }
   };
 
-  const handleToggleFavorite = (paletteId: string) => {
+  const handleToggleFavorite = async (paletteId: string) => {
     const palette = palettes.find((p: { id: string }) => p.id === paletteId);
-    if (palette) {
-      toggleFavorite(paletteId);
+    if (!palette) {
+      toast.error("Palette not found.");
+      return;
+    }
+
+    try {
+      await toggleFavorite(paletteId);
       toast.success(
         `"${palette.name}" ${palette.isFavorite ? "removed from" : "added to"} favorites.`
       );
+    } catch (error) {
+      toast.error(`Failed to update "${palette.name}". Please try again.`);
+      console.error("Toggle favorite error:", error);
     }
   };
 
