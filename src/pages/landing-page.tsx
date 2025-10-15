@@ -100,8 +100,8 @@ export default function LandingPage() {
       <div className="bg-white text-gray-900 dark:bg-slate-950 dark:text-gray-100">
         <Hero />
         <Features />
-        <TechnicalHighlights />
         <LandingSlider />
+        <TechnicalHighlights />
         <CallToAction />
         <Footer />
       </div>
