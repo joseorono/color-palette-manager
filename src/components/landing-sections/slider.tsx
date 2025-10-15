@@ -40,14 +40,14 @@ export const LandingSlider = () => {
         {/* Slider */}
         <div className="slider-container mx-auto w-full max-w-6xl">
           <Slider {...settings}>
-            {Array.from({ length: 5 }).map((_, index) => (
+            {Array.from({ length: 6 }).map((_, index) => (
               <div className="px-3" key={index}>
                 <div className="group relative overflow-hidden rounded-2xl border-2 border-gray-200 bg-white p-6 shadow-xl transition-all duration-500 hover:border-vivid-sky-blue hover:shadow-2xl hover:shadow-vivid-sky-blue/20 dark:border-slate-700 dark:bg-slate-900 dark:hover:border-vivid-sky-blue">
                   <div className="absolute inset-0 bg-gradient-to-br from-vivid-sky-blue/0 to-vivid-sky-blue/5 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
                   <img
                     src={`/ColorPalette-${index + 1}.png`}
                     alt={`Color Palette ${index + 1}`}
-                    className="relative mx-auto w-full rounded-lg object-contain transition-transform duration-500 group-hover:scale-[1.02] md:h-[600px]"
+                    className="relative mx-auto w-full rounded-lg object-contain transition-transform duration-500 group-hover:scale-[1.02]"
                   />
                 </div>
               </div>
