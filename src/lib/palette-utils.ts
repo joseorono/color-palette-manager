@@ -71,8 +71,12 @@ export class PaletteUtils {
       const harmoniousHexColors = this.generateHarmoniousHexCsv(formValues.baseColor, 5);
       colors = harmoniousHexColors.map(hex => ColorUtils.HexToColor(hex));
     } else {
-      // Just use the base color
-      colors = [ColorUtils.HexToColor(formValues.baseColor, undefined, true)];
+      // Create palette with base color plus one harmonious color (minimum 2 colors)
+      const baseColor = ColorUtils.HexToColor(formValues.baseColor, undefined, true);
+      const harmoniousHexColors = this.generateHarmoniousHexCsv(formValues.baseColor, 2);
+      colors = harmoniousHexColors.map(hex => ColorUtils.HexToColor(hex));
+      // Ensure the base color is first and locked
+      colors[0] = baseColor;
     }
 
     return {

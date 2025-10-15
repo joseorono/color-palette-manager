@@ -53,11 +53,10 @@ export function PaletteControls({
   const minPaletteSize = getMinPaletteSize();
 
   useEffect(() => {
-    setPaletteSize(currentPalette?.colors.length || 5);
-    if (paletteSize < minPaletteSize) {
-      setPaletteSize(minPaletteSize);
-    }
-  }, [currentPalette, minPaletteSize, paletteSize]);
+    const currentSize = currentPalette?.colors.length || 5;
+    const adjustedSize = Math.max(currentSize, minPaletteSize);
+    setPaletteSize(adjustedSize);
+  }, [currentPalette?.colors.length, minPaletteSize]);
 
   const handleSizeChange = (value: number[]) => {
     let newSize = value[0];
