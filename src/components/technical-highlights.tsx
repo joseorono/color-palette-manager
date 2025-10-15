@@ -30,19 +30,19 @@ export default function TechnicalHighlights() {
         "Create harmonious color palettes from scratch, from a base color, or extract colors from images.",
     },
     {
-      icon: <Layers className="h-6 w-6 text-blue-munsell" />,
+      icon: <Layers className="h-6 w-6 text-vivid-sky-blue" />,
       title: "Shade Generator",
       description:
         "Generate complete shade scales from any color - perfect for design systems and UI frameworks.",
     },
     {
-      icon: <Blend className="h-6 w-6 text-midnight-green" />,
+      icon: <Blend className="h-6 w-6 text-vivid-sky-blue" />,
       title: "Gradient Generator",
       description:
         "Create smooth color gradients with multiple stops and adjustable interpolation for beautiful transitions.",
     },
     {
-      icon: <Contrast className="h-6 w-6 text-electric-blue" />,
+      icon: <Contrast className="h-6 w-6 text-vivid-sky-blue" />,
       title: "Contrast Checker",
       description:
         "Ensure your colors meet WCAG accessibility standards with real-time contrast ratio checking.",
@@ -54,7 +54,7 @@ export default function TechnicalHighlights() {
         "Preview your palettes as seen by people with different types of color vision deficiency.",
     },
     {
-      icon: <Boxes className="h-6 w-6 text-blue-munsell" />,
+      icon: <Boxes className="h-6 w-6 text-vivid-sky-blue" />,
       title: "Export & Integration",
       description:
         "Export to 8+ formats including CSS, SCSS, Tailwind, JSON, PNG, and SVG for seamless integration.",
