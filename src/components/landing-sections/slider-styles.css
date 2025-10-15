@@ -25,6 +25,7 @@
   font-size: 24px !important;
   color: rgba(75, 85, 99, 0.5) !important;
   opacity: 1 !important;
+  margin-bottom: -2px !important;
 }
 
 /* Dark mode styles */
