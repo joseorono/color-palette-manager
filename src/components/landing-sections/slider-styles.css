@@ -1,0 +1,52 @@
+/* Custom arrow styles matching workflow component icons */
+.slick-prev,
+.slick-next {
+  width: 48px !important;
+  height: 48px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 0.5rem !important;
+  background-color: rgb(240 249 255) !important;
+  z-index: 10 !important;
+  transition: all 0.3s ease !important;
+}
+
+.slick-prev:hover,
+.slick-next:hover {
+  background-color: rgb(224 242 254) !important;
+}
+
+.slick-prev:before,
+.slick-next:before {
+  font-size: 24px !important;
+  color: rgb(14 165 233) !important;
+  opacity: 1 !important;
+}
+
+/* Dark mode styles */
+@media (prefers-color-scheme: dark) {
+  .slick-prev,
+  .slick-next {
+    background-color: rgba(8, 47, 73, 0.3) !important;
+  }
+
+  .slick-prev:hover,
+  .slick-next:hover {
+    background-color: rgba(8, 47, 73, 0.5) !important;
+  }
+
+  .slick-prev:before,
+  .slick-next:before {
+    color: rgb(14 165 233) !important;
+  }
+}
+
+/* Position adjustments */
+.slick-prev {
+  left: -60px !important;
+}
+
+.slick-next {
+  right: -60px !important;
+}
