@@ -5,18 +5,18 @@ interface FeatureProps {
   description: string;
 }
 
-function FeatureCard({
-  icon,
-  title,
-  description,
-}: FeatureProps) {
+function FeatureCard({ icon, title, description }: FeatureProps) {
   return (
     <div className="feature-card rounded-xl p-6 text-center">
       <div className="feature-icon mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-xl">
         {icon}
       </div>
-      <h3 className="mb-3 text-lg font-semibold text-gray-900 dark:text-gray-100">{title}</h3>
-      <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-300">{description}</p>
+      <h3 className="mb-3 text-lg font-semibold text-gray-900 dark:text-gray-100">
+        {title}
+      </h3>
+      <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-300">
+        {description}
+      </p>
     </div>
   );
 }
@@ -47,7 +47,7 @@ export default function Features() {
     {
       icon: (
         <svg
-          className="h-7 w-7 text-blue-munsell"
+          className="h-7 w-7 text-vivid-sky-blue"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -68,7 +68,7 @@ export default function Features() {
     {
       icon: (
         <svg
-          className="h-7 w-7 text-midnight-green"
+          className="h-7 w-7 text-vivid-sky-blue"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -89,7 +89,7 @@ export default function Features() {
     {
       icon: (
         <svg
-          className="h-7 w-7 text-electric-blue"
+          className="h-7 w-7 text-vivid-sky-blue"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -116,7 +116,7 @@ export default function Features() {
   ];
 
   return (
-    <section id="features" className="bg-white dark:bg-slate-900 py-20">
+    <section id="features" className="bg-white py-20 dark:bg-slate-900">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-16 text-center">
           <h2 className="mb-4 text-3xl font-bold text-gray-900 dark:text-gray-100 sm:text-4xl">
