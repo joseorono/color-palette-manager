@@ -1,4 +1,4 @@
-/* Custom arrow styles matching workflow component icons */
+/* Custom arrow styles matching app button styles */
 .slick-prev,
 .slick-next {
   width: 48px !important;
@@ -6,29 +6,32 @@
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  border-radius: 0.5rem !important;
-  background-color: rgb(240 249 255) !important;
+  border-radius: 50% !important;
+  background: rgba(140, 228, 253, 0.05) !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
   z-index: 10 !important;
+  border: 1px solid rgba(75, 85, 99, 0.2) !important;
   transition: all 0.3s ease !important;
+  line-height: 0 !important;
 }
 
 .slick-prev:hover,
 .slick-next:hover {
-  background-color: rgb(224 242 254) !important;
+  background: rgba(8, 47, 73, 0.1) !important;
 }
 
 .slick-prev:before,
 .slick-next:before {
   font-size: 24px !important;
-  color: rgb(14 165 233) !important;
+  color: rgba(75, 85, 99, 0.5) !important;
   opacity: 1 !important;
 }
 
 /* Dark mode styles */
-@media (prefers-color-scheme: dark) {
+.dark {
   .slick-prev,
   .slick-next {
-    background-color: rgba(8, 47, 73, 0.3) !important;
+    background-color: rgba(70, 206, 230, 0.3) !important;
   }
 
   .slick-prev:hover,
@@ -38,7 +41,7 @@
 
   .slick-prev:before,
   .slick-next:before {
-    color: rgb(14 165 233) !important;
+    color: white !important;
   }
 }
 
