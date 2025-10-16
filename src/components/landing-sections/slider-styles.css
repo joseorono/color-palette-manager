@@ -54,3 +54,13 @@
 .slick-next {
   right: -60px !important;
 }
+
+@media (max-width: 768px) {
+  .slick-prev {
+    display: none !important;
+  }
+
+  .slick-next {
+    display: none !important;
+  }
+}
