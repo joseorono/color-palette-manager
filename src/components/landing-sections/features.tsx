@@ -1,3 +1,4 @@
+import { Sparkle, Sparkles } from "lucide-react";
 import type React from "react";
 interface FeatureProps {
   icon: React.ReactNode;
@@ -24,22 +25,7 @@ function FeatureCard({ icon, title, description }: FeatureProps) {
 export default function Features() {
   const features = [
     {
-      icon: (
-        <svg
-          className="h-7 w-7 text-vivid-sky-blue"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4h4a4 4 0 004-4V5z"
-          />
-        </svg>
-      ),
+      icon: <Sparkles className="h-7 w-7 text-vivid-sky-blue" />,
       title: "Intelligent Color Generation",
       description:
         "Generate harmonious color palettes from scratch, based on specific colors, or extracted from images. Lock colors you love and regenerate the rest.",
