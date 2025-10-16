@@ -1,3 +1,4 @@
+import { useTheme } from "@/components/theme-provider";
 import {
   Card,
   CardContent,
@@ -6,6 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { CSSColorVariablesObject, Palette } from "@/types/palette";
+import { useEffect, useState } from "react";
 
 interface PreviewComponentProps {
   palette?: Palette;
@@ -14,13 +16,30 @@ interface PreviewComponentProps {
 }
 
 export function UIPreviewCard({ currentColors }: PreviewComponentProps) {
+  const { theme } = useTheme();
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    // Determine the actual theme being applied
+    if (theme === "system") {
+      // Check system preference when theme is set to system
+      const systemPrefersDark = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+      ).matches;
+      setIsDarkMode(systemPrefersDark);
+    } else {
+      // Use the explicitly set theme (dark or light)
+      setIsDarkMode(theme === "dark");
+    }
+  }, [theme]);
+
+  console.log(isDarkMode);
+
   return (
     <Card>
       <CardHeader>
         <CardTitle>Preview</CardTitle>
-        <CardDescription>
-          See how your colors look in a real UI
-        </CardDescription>
+        <CardDescription>See how your colors look in a real UI</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="preview-container preview-bg-background overflow-hidden rounded-lg border shadow-md">
@@ -28,40 +47,25 @@ export function UIPreviewCard({ currentColors }: PreviewComponentProps) {
           <header className="preview-bg-card sticky top-0 z-10 flex items-center justify-between rounded-md p-4 shadow-sm">
             <div className="flex items-center gap-2">
               <div className="preview-bg-primary flex h-8 w-8 items-center justify-center rounded-md">
-                <span
-                  className="text-sm font-bold"
-                  style={{ color: "var(--preview-primary-foreground)" }}
-                >
+                <span className="text-sm font-bold dark:text-[var(--preview-primary-foreground)]">
                   CP
                 </span>
               </div>
-              <span
-                className="font-bold"
-                style={{ color: "var(--preview-card-foreground)" }}
-              >
+              <span className="font-bold dark:text-[var(--preview-primary-foreground)]">
                 Color Palette Manager
               </span>
             </div>
-            <nav
-              className="hidden items-center gap-4 md:flex"
-              style={{ color: "var(--preview-card)" }}
-            >
-              <button className="rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-[var(--preview-muted)]" style={{ color: "var(--preview-card-foreground)" }}>
+            <nav className="hidden items-center gap-4 dark:text-[var(--preview-card)] md:flex">
+              <button className="rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-[var(--preview-primary)] hover:text-[var(--preview-primary-foreground)] dark:hover:bg-[var(--preview-primary)]">
                 Features
               </button>
-              <button className="rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-[var(--preview-muted)]" style={{ color: "var(--preview-card-foreground)" }}>
+              <button className="rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-[var(--preview-primary)] hover:text-[var(--preview-primary-foreground)] dark:text-[var(--preview-primary-foreground)]">
                 Pricing
               </button>
-              <button className="rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-[var(--preview-muted)]" style={{ color: "var(--preview-card-foreground)" }}>
+              <button className="rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-[var(--preview-primary)] hover:text-[var(--preview-primary-foreground)] dark:text-[var(--preview-primary-foreground)]">
                 About
               </button>
-              <button
-                className="rounded-md px-4 py-2 text-sm font-medium transition-colors hover:opacity-90"
-                style={{
-                  backgroundColor: "var(--preview-secondary)",
-                  color: "var(--preview-primary-foreground)",
-                }}
-              >
+              <button className="rounded-md bg-[var(--preview-accent)] px-4 py-2 text-sm font-medium text-[var(--preview-primary-foreground)] transition-colors hover:bg-[var(--preview-primary)] hover:text-[var(--preview-primary-foreground)] dark:text-[var(--preview-primary-foreground)] dark:hover:bg-[var(--preview-accent)]">
                 Sign Up
               </button>
             </nav>
@@ -71,46 +75,22 @@ export function UIPreviewCard({ currentColors }: PreviewComponentProps) {
           <section className="px-4 py-16 text-center">
             <div className="mx-auto max-w-3xl space-y-8">
               <div className="space-y-2">
-                <span
-                  className="inline-block rounded-full px-3 py-1 text-xs font-medium"
-                  style={{
-                    color: "var(--preview-primary-foreground)",
-                    backgroundColor: "var(--preview-secondary)",
-                  }}
-                >
+                <span className="inline-block rounded-full bg-[var(--preview-accent)] px-3 py-1 text-xs font-medium text-[var(--preview-primary-foreground)] dark:bg-[var(--preview-accent)] dark:text-[var(--preview-accent-foreground)]">
                   New Features
                 </span>
-                <h1
-                  className="text-4xl font-bold tracking-tight sm:text-5xl"
-                  style={{ color: "var(--preview-foreground)" }}
-                >
+                <h1 className="text-4xl font-bold tracking-tight dark:text-[var(--preview-primary-foreground)] sm:text-5xl">
                   Create Beautiful Color Palettes
                 </h1>
               </div>
-              <p
-                className="text-lg"
-                style={{ color: "var(--preview-muted)" }}
-              >
-                Design, save, and share color schemes for your next
-                project with our intuitive tools.
+              <p className="text-lg dark:text-[var(--preview-muted)]">
+                Design, save, and share color schemes for your next project with
+                our intuitive tools.
               </p>
               <div className="flex flex-wrap justify-center gap-4">
-                <button
-                  className="h-10 min-w-[120px] rounded-md px-4 py-2 font-medium shadow-sm transition-all hover:opacity-90"
-                  style={{
-                    backgroundColor: "var(--preview-primary)",
-                    color: "var(--preview-primary-foreground)",
-                  }}
-                >
+                <button className="h-10 min-w-[120px] rounded-md bg-[var(--preview-primary)] px-4 py-2 font-medium text-[var(--preview-primary-foreground)] shadow-sm transition-all hover:opacity-90 dark:text-[var(--preview-primary-foreground)]">
                   Get Started
                 </button>
-                <button
-                  className="h-10 min-w-[120px] rounded-md border px-4 py-2 font-medium transition-all hover:bg-[var(--preview-primary)] hover:text-[var(--preview-primary-foreground)]"
-                  style={{
-                    borderColor: "var(--preview-border)",
-                    color: "var(--preview-card-foreground)",
-                  }}
-                >
+                <button className="h-10 min-w-[120px] rounded-md border border-[var(--preview-primary)] px-4 py-2 font-medium transition-all hover:bg-[var(--preview-primary)] hover:text-[var(--preview-primary-foreground)] dark:text-[var(--preview-primary-foreground)]">
                   Learn More
                 </button>
               </div>
@@ -118,105 +98,58 @@ export function UIPreviewCard({ currentColors }: PreviewComponentProps) {
           </section>
 
           {/* Features Section with Tabs - Using various preview classes */}
-          <section
-            className="my-8 rounded-lg px-6 py-16"
-            style={{ backgroundColor: "var(--preview-secondary)" }}
-          >
+          <section className="my-8 rounded-lg bg-[var(--preview-secondary)] px-6 py-16">
             <div className="mx-auto max-w-5xl">
               <div className="mb-12 text-center">
-                <span
-                  className="mb-2 inline-block rounded-full px-3 py-1 text-xs font-medium"
-                  style={{
-                    backgroundColor: "var(--preview-primary)",
-                    color: "var(--preview-primary-foreground)",
-                  }}
-                >
+                <span className="mb-2 inline-block rounded-full bg-[var(--preview-accent)] px-3 py-1 text-xs font-medium text-[var(--preview-primary-foreground)]">
                   What We Offer
                 </span>
-                <h2
-                  className="text-3xl font-bold"
-                  style={{ color: "var(--preview-card)" }}
-                >
+                <h2 className="text-3xl font-bold text-[var(--preview-card)]">
                   Key Features
                 </h2>
               </div>
 
               <div className="w-full">
-                <div
-                  className="mb-8 grid w-full grid-cols-3 gap-2 rounded-md p-1"
-                  style={{ backgroundColor: "var(--preview-muted)" }}
-                >
-                  <button className="rounded-md px-3 py-2 text-sm font-medium transition-colors" style={{ backgroundColor: "var(--preview-card)", color: "var(--preview-card-foreground)" }}>Create</button>
-                  <button className="rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-[var(--preview-card)]" style={{ color: "var(--preview-muted-foreground)" }}>Organize</button>
-                  <button className="rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-[var(--preview-card)]" style={{ color: "var(--preview-muted-foreground)" }}>Export</button>
+                <div className="mb-8 grid w-full grid-cols-3 gap-2 rounded-md bg-[var(--preview-muted)] p-1">
+                  <button className="rounded-md bg-[var(--preview-card)] px-3 py-2 text-sm font-medium text-[var(--preview-card-foreground)] transition-colors">
+                    Create
+                  </button>
+                  <button className="rounded-md px-3 py-2 text-sm font-medium text-[var(--preview-muted-foreground)] transition-colors hover:bg-[var(--preview-card)]">
+                    Organize
+                  </button>
+                  <button className="rounded-md px-3 py-2 text-sm font-medium text-[var(--preview-muted-foreground)] transition-colors hover:bg-[var(--preview-card)]">
+                    Export
+                  </button>
                 </div>
 
                 <div className="space-y-4">
-                  <div
-                    className="rounded-lg border shadow-sm"
-                    style={{ backgroundColor: "var(--preview-card)", borderColor: "var(--preview-border)" }}
-                  >
+                  <div className="rounded-lg border border-[var(--preview-border)] bg-[var(--preview-card)] shadow-sm">
                     <div className="p-6">
                       <h3
-                        className="text-2xl font-semibold leading-none tracking-tight"
+                        className="text-2xl font-semibold leading-none tracking-tight text-[var(--preview-card-foreground)]"
                         style={{
                           color: "var(--preview-card-foreground)",
                         }}
                       >
                         Color Generation
                       </h3>
-                      <p
-                        className="mt-2 text-sm"
-                        style={{
-                          color: "var(--preview-muted-foreground)",
-                        }}
-                      >
+                      <p className="mt-2 text-sm text-[var(--preview-muted-foreground)]">
                         Create harmonious color schemes instantly
                       </p>
                     </div>
                     <div className="px-6 pb-6">
-                      <div className="grid grid-cols-5 gap-2">
-                        <div
-                          className="h-12 rounded"
-                          style={{
-                            backgroundColor: "var(--preview-primary)",
-                          }}
-                        ></div>
-                        <div
-                          className="h-12 rounded"
-                          style={{
-                            backgroundColor: "var(--preview-secondary)",
-                          }}
-                        ></div>
-                        <div
-                          className="h-12 rounded"
-                          style={{
-                            backgroundColor:
-                              "var(--preview-accent-foreground)",
-                          }}
-                        ></div>
-                        <div
-                          className="h-12 rounded"
-                          style={{
-                            backgroundColor: "var(--preview-muted)",
-                          }}
-                        ></div>
-                        <div
-                          className="h-12 rounded"
-                          style={{
-                            backgroundColor: "var(--preview-foreground)",
-                          }}
-                        ></div>
+                      <div className="grid grid-cols-5 gap-2 bg-[var(--preview-muted)]">
+                        <div className="h-12 rounded bg-[var(--preview-primary)]"></div>
+                        <div className="h-12 rounded bg-[var(--preview-secondary)]"></div>
+                        <div className="h-12 rounded bg-[var(--preview-accent-foreground)]"></div>
+                        <div className="h-12 rounded bg-[var(--preview-muted)]"></div>
+                        <div className="h-12 rounded bg-[var(--preview-foreground)]"></div>
+                        <div className="h-12 rounded bg-[var(--preview-muted)]"></div>
+                        <div className="h-12 rounded bg-[var(--preview-foreground)]"></div>
                       </div>
                     </div>
                     <div className="flex items-center p-6 pt-0">
-                      <span
-                        className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors"
-                        style={{
-                          borderColor: "var(--preview-secondary)",
-                          color: "var(--preview-foreground)",
-                        }}
-                      >
+                      <span className="inline-flex items-center rounded-full border border-[var(--preview-secondary)] px-2.5 py-0.5 text-xs font-semibold text-[var(--preview-foreground)] transition-colors">
                         AI-Powered
                       </span>
                     </div>
@@ -230,34 +163,19 @@ export function UIPreviewCard({ currentColors }: PreviewComponentProps) {
           <section className="px-4 py-16">
             <div className="mx-auto max-w-3xl">
               <div className="mb-10 text-center">
-                <span
-                  className="mb-2 inline-block rounded-full px-3 py-1 text-xs font-medium"
-                  style={{
-                    backgroundColor: "var(--preview-accent)",
-                    color: "var(--preview-accent-foreground)",
-                  }}
-                >
+                <span className="mb-2 inline-block rounded-full bg-[var(--preview-accent)] px-3 py-1 text-xs font-medium text-[var(--preview-primary-foreground)] dark:text-[var(--preview-accent-foreground)]">
                   Personalization
                 </span>
-                <h2
-                  className="text-3xl font-bold"
-                  style={{ color: "var(--preview-foreground)" }}
-                >
+                <h2 className="text-3xl font-bold dark:text-[var(--preview-primary-foreground)]">
                   Customize Your Experience
                 </h2>
               </div>
-              <div className="rounded-lg border shadow-sm" style={{ backgroundColor: "var(--preview-card)", borderColor: "var(--preview-border)" }}>
+              <div className="rounded-lg border border-[var(--preview-border)] bg-[var(--preview-card)] shadow-sm">
                 <div className="p-6">
-                  <h3
-                    className="text-2xl font-semibold leading-none tracking-tight"
-                    style={{ color: "var(--preview-card-foreground)" }}
-                  >
+                  <h3 className="text-2xl font-semibold leading-none tracking-tight text-[var(--preview-card-foreground)]">
                     Settings
                   </h3>
-                  <p
-                    className="mt-2 text-sm"
-                    style={{ color: "var(--preview-muted-foreground)" }}
-                  >
+                  <p className="mt-2 text-sm text-[var(--preview-muted-foreground)]">
                     Manage your preferences
                   </p>
                 </div>
@@ -266,10 +184,7 @@ export function UIPreviewCard({ currentColors }: PreviewComponentProps) {
                     <div className="flex items-center justify-between">
                       <label
                         htmlFor="dark-mode"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                        style={{
-                          color: "var(--preview-card-foreground)",
-                        }}
+                        className="text-sm font-medium leading-none text-[var(--preview-card-foreground)] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                       >
                         Dark Mode
                       </label>
@@ -278,20 +193,16 @@ export function UIPreviewCard({ currentColors }: PreviewComponentProps) {
                         type="button"
                         role="switch"
                         aria-checked="false"
-                        className="peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                        style={{ backgroundColor: "var(--preview-muted)" }}
+                        className="peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent bg-[var(--preview-muted)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                       >
-                        <span className="pointer-events-none block h-5 w-5 rounded-full shadow-lg ring-0 transition-transform translate-x-0" style={{ backgroundColor: "var(--preview-card)" }}></span>
+                        <span className="pointer-events-none block h-5 w-5 translate-x-0 rounded-full bg-[var(--preview-card)] shadow-lg ring-0 transition-transform"></span>
                       </button>
                     </div>
-                    <div className="h-px w-full" style={{ backgroundColor: "var(--preview-border)" }}></div>
+                    <div className="h-px w-full bg-[var(--preview-border)]"></div>
                     <div className="flex items-center justify-between">
                       <label
                         htmlFor="auto-save"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                        style={{
-                          color: "var(--preview-card-foreground)",
-                        }}
+                        className="text-sm font-medium leading-none text-[var(--preview-card-foreground)] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                       >
                         Auto Save
                       </label>
@@ -300,20 +211,16 @@ export function UIPreviewCard({ currentColors }: PreviewComponentProps) {
                         type="button"
                         role="switch"
                         aria-checked="true"
-                        className="peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                        style={{ backgroundColor: "var(--preview-primary)" }}
+                        className="peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent bg-[var(--preview-primary)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                       >
-                        <span className="pointer-events-none block h-5 w-5 rounded-full shadow-lg ring-0 transition-transform translate-x-5" style={{ backgroundColor: "var(--preview-card)" }}></span>
+                        <span className="pointer-events-none block h-5 w-5 translate-x-5 rounded-full bg-[var(--preview-card)] shadow-lg ring-0 transition-transform"></span>
                       </button>
                     </div>
-                    <div className="h-px w-full" style={{ backgroundColor: "var(--preview-border)" }}></div>
+                    <div className="h-px w-full bg-[var(--preview-border)]"></div>
                     <div className="space-y-2">
                       <label
                         htmlFor="api-key"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                        style={{
-                          color: "var(--preview-card-foreground)",
-                        }}
+                        className="text-sm font-medium leading-none text-[var(--preview-card-foreground)] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                       >
                         API Key
                       </label>
@@ -321,18 +228,13 @@ export function UIPreviewCard({ currentColors }: PreviewComponentProps) {
                         id="api-key"
                         type="text"
                         placeholder="Enter your API key"
-                        className="flex h-10 w-full rounded-md border px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                        style={{
-                          borderColor: "var(--preview-border)",
-                          color: "var(--preview-card-foreground)",
-                          backgroundColor: "transparent",
-                        }}
+                        className="flex h-10 w-full rounded-md border border-[var(--preview-border)] bg-[var(--preview-card)] px-3 py-2 text-sm text-[var(--preview-card-foreground)] ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                       />
                     </div>
                   </div>
                 </div>
                 <div className="flex items-center p-6 pt-0">
-                  <button className="h-10 min-w-[120px] rounded-md px-4 py-2 font-medium shadow-sm transition-all hover:opacity-90" style={{ backgroundColor: "var(--preview-primary)", color: "var(--preview-primary-foreground)" }}>
+                  <button className="h-10 min-w-[120px] rounded-md bg-[var(--preview-primary)] px-4 py-2 font-medium text-[var(--preview-primary-foreground)] shadow-sm transition-all hover:opacity-90">
                     Save Changes
                   </button>
                 </div>
@@ -344,7 +246,7 @@ export function UIPreviewCard({ currentColors }: PreviewComponentProps) {
           <section className="preview-bg-muted my-12 rounded-lg px-6 py-16">
             <div className="mx-auto max-w-2xl space-y-6 text-center">
               <div>
-                <span className="preview-btn-secondary mb-2 inline-block rounded-full px-3 py-1 text-xs font-medium">
+                <span className="mb-2 inline-block rounded-full bg-[var(--preview-accent)] px-3 py-1 text-xs font-medium text-[var(--preview-primary-foreground)] dark:text-[var(--preview-accent-foreground)]">
                   Newsletter
                 </span>
                 <h2 className="preview-text-muted-foreground text-2xl font-bold">
@@ -352,27 +254,16 @@ export function UIPreviewCard({ currentColors }: PreviewComponentProps) {
                 </h2>
               </div>
               <p className="preview-text-muted-foreground">
-                Subscribe to our newsletter for the latest color trends
-                and features
+                Subscribe to our newsletter for the latest color trends and
+                features
               </p>
               <div className="mx-auto flex max-w-md gap-2">
                 <input
                   type="email"
                   placeholder="Enter your email"
-                  className="flex h-10 w-full rounded-md border-2 px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 shadow-sm"
-                  style={{
-                    borderColor: "var(--preview-primary)",
-                    color: "var(--preview-card-foreground)",
-                    backgroundColor: "var(--preview-card)",
-                  }}
+                  className="flex h-10 w-full rounded-md border-2 border-[var(--preview-border)] bg-[var(--preview-card)] px-3 py-2 text-sm text-[var(--preview-card-foreground)] shadow-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 />
-                <button
-                  className="min-w-[100px] rounded-md px-4 py-2 font-medium shadow-sm transition-all hover:opacity-90"
-                  style={{
-                    backgroundColor: "var(--preview-primary)",
-                    color: "var(--preview-primary-foreground)",
-                  }}
-                >
+                <button className="min-w-[100px] rounded-md bg-[var(--preview-primary)] px-4 py-2 font-medium text-[var(--preview-primary-foreground)] shadow-sm transition-all hover:opacity-90">
                   Subscribe
                 </button>
               </div>
@@ -396,22 +287,13 @@ export function UIPreviewCard({ currentColors }: PreviewComponentProps) {
                 2025 Color Palette Manager. All rights reserved.
               </p>
               <div className="flex gap-4">
-                <button
-                  className="rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-[var(--preview-muted)]"
-                  style={{ color: "var(--preview-card-foreground)" }}
-                >
+                <button className="rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-[var(--preview-primary)] hover:text-[var(--preview-primary-foreground)] dark:text-[var(--preview-primary-foreground)]">
                   Privacy
                 </button>
-                <button
-                  className="rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-[var(--preview-muted)]"
-                  style={{ color: "var(--preview-card-foreground)" }}
-                >
+                <button className="rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-[var(--preview-primary)] hover:text-[var(--preview-primary-foreground)] dark:text-[var(--preview-primary-foreground)]">
                   Terms
                 </button>
-                <button
-                  className="rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-[var(--preview-muted)]"
-                  style={{ color: "var(--preview-card-foreground)" }}
-                >
+                <button className="hover:bg rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-[var(--preview-muted)] hover:text-[var(--preview-primary-foreground)]">
                   Contact
                 </button>
               </div>
