@@ -68,15 +68,14 @@ export class PaletteUtils {
     let colors: Color[];
     if (formValues.generateFromBaseColor) {
       // Generate harmonious palette from base color
-      const harmoniousHexColors = this.generateHarmoniousHexCsv(formValues.baseColor, 5);
-      colors = harmoniousHexColors.map(hex => ColorUtils.HexToColor(hex));
+      const harmoniousHexColors = this.generateHarmoniousHexCsv(
+        formValues.baseColor,
+        5
+      );
+      colors = harmoniousHexColors.map((hex) => ColorUtils.HexToColor(hex));
     } else {
-      // Create palette with base color plus one harmonious color (minimum 2 colors)
-      const baseColor = ColorUtils.HexToColor(formValues.baseColor, undefined, true);
-      const harmoniousHexColors = this.generateHarmoniousHexCsv(formValues.baseColor, 2);
-      colors = harmoniousHexColors.map(hex => ColorUtils.HexToColor(hex));
-      // Ensure the base color is first and locked
-      colors[0] = baseColor;
+      // Just use the base color
+      colors = [ColorUtils.HexToColor(formValues.baseColor, undefined, true)];
     }
 
     return {
@@ -92,7 +91,7 @@ export class PaletteUtils {
   static createEmptyPalette(): Palette {
     const now = new Date();
     return {
-      id: '',
+      id: "",
       name: "Untitled Palette",
       colors: [],
       createdAt: now,
@@ -113,13 +112,20 @@ export class PaletteUtils {
     baseColorHex?: string,
     count: number = 5,
     existingColors: Color[] = [],
-    preset: HarmonyPreset = DEFAULT_HARMONY_PRESET,
+    preset: HarmonyPreset = DEFAULT_HARMONY_PRESET
   ): HexColorString[] {
-    console.log("In generateHarmoniousHexCsv got baseColorHex:", baseColorHex, "count:", count, "existingColors:", existingColors);
+    console.log(
+      "In generateHarmoniousHexCsv got baseColorHex:",
+      baseColorHex,
+      "count:",
+      count,
+      "existingColors:",
+      existingColors
+    );
     console.log("In generateHarmoniousHexCsv got preset:", preset);
 
     // Extract hex colors from existing Color objects
-    const existingColorHexArray = existingColors.map(color => color.hex);
+    const existingColorHexArray = existingColors.map((color) => color.hex);
 
     // Get or generate base color using the new getBaseColorHex method
     const baseColor =
@@ -128,7 +134,10 @@ export class PaletteUtils {
         ? ColorUtils.getBaseColorHex(existingColors)
         : formatHex(random()));
 
-    console.log("generateHarmoniousHexCsv::Base color determined to be:", baseColor);
+    console.log(
+      "generateHarmoniousHexCsv::Base color determined to be:",
+      baseColor
+    );
 
     // Initialize with existing colors
     let colors = [...existingColorHexArray];
@@ -148,10 +157,14 @@ export class PaletteUtils {
 
     // Calculate how many more colors we need
     let countToGenerate = count - colors.length;
-    console.log("generateHarmoniousHexCsv::Count to generate:", countToGenerate);
+    console.log(
+      "generateHarmoniousHexCsv::Count to generate:",
+      countToGenerate
+    );
 
     // Get generation priorities based on the preset
-    const priorityColorsDuringGeneration = HARMONY_GENERATION_PRIORITIES[preset];
+    const priorityColorsDuringGeneration =
+      HARMONY_GENERATION_PRIORITIES[preset];
 
     // Generate colors by priority
     for (const priority of priorityColorsDuringGeneration) {
@@ -238,7 +251,9 @@ export class PaletteUtils {
     return colors.slice(0, count);
   }
 
-  static generatePaletteFromColorHexArray(colorHexArray: HexColorString[]): Palette {
+  static generatePaletteFromColorHexArray(
+    colorHexArray: HexColorString[]
+  ): Palette {
     const now = new Date();
     const palette: Palette = {
       id: nanoidPaletteId(),
@@ -253,7 +268,9 @@ export class PaletteUtils {
     return palette;
   }
 
-  static validateColorRolesObject(colorRolesObject: CSSColorVariablesObject): ColorRoleValidationResult {
+  static validateColorRolesObject(
+    colorRolesObject: CSSColorVariablesObject
+  ): ColorRoleValidationResult {
     const missingRoles: ColorRole[] = [];
     const invalidRoles: string[] = [];
 
@@ -280,7 +297,9 @@ export class PaletteUtils {
     };
   }
 
-  static colorRolesObjectFromColors(colors: Color[]): ColorRolesConversionResult {
+  static colorRolesObjectFromColors(
+    colors: Color[]
+  ): ColorRolesConversionResult {
     let errorMessage: string | undefined;
     const colorRolesObject: Partial<CSSColorVariablesObject> = {};
 
@@ -299,18 +318,23 @@ export class PaletteUtils {
       }
     });
 
-
     // Validate the resulting object
-    const validation = this.validateColorRolesObject(colorRolesObject as CSSColorVariablesObject);
+    const validation = this.validateColorRolesObject(
+      colorRolesObject as CSSColorVariablesObject
+    );
 
     if (!validation.isValid) {
       const assignedRoles = this.getAssignedRoles(colors);
       errorMessage = [
         "Invalid color roles object:",
-        validation.missingRoles.length > 0 && `Missing roles: ${validation.missingRoles.join(', ')}`,
-        validation.invalidRoles.length > 0 && `Invalid roles: ${validation.invalidRoles.join(', ')}`,
-        `Currently assigned roles: ${Array.from(assignedRoles).join(', ') || 'none'}`
-      ].filter(Boolean).join(' ');
+        validation.missingRoles.length > 0 &&
+          `Missing roles: ${validation.missingRoles.join(", ")}`,
+        validation.invalidRoles.length > 0 &&
+          `Invalid roles: ${validation.invalidRoles.join(", ")}`,
+        `Currently assigned roles: ${Array.from(assignedRoles).join(", ") || "none"}`,
+      ]
+        .filter(Boolean)
+        .join(" ");
     }
 
     return {
@@ -327,7 +351,11 @@ export class PaletteUtils {
       () => pixels[Math.floor(Math.random() * pixels.length)]
     );
 
-    for (let iteration = 0; iteration < KMEANS_CONSTANTS.MAX_ITERATIONS; iteration++) {
+    for (
+      let iteration = 0;
+      iteration < KMEANS_CONSTANTS.MAX_ITERATIONS;
+      iteration++
+    ) {
       const clusters: number[][][] = Array.from({ length: k }, () => []);
 
       // Assign pixels to nearest centroid

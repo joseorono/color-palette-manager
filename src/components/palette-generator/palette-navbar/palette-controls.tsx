@@ -45,18 +45,19 @@ export function PaletteControls({
     const lockedColors =
       currentPalette?.colors.filter((color) => color.locked) || [];
     const lockedCount = lockedColors.length;
-    // If there are more than 3 locked colors, minimum size is the number of locked colors
-    // Otherwise, minimum is 2 (default)
-    return lockedCount > 3 ? lockedCount : 2;
+    // If there are locked colors, minimum size is the number of locked colors
+    // Otherwise, minimum is 1 (default)
+    return lockedCount ? lockedCount : 1;
   }, [currentPalette]);
 
   const minPaletteSize = getMinPaletteSize();
 
   useEffect(() => {
-    const currentSize = currentPalette?.colors.length || 5;
-    const adjustedSize = Math.max(currentSize, minPaletteSize);
-    setPaletteSize(adjustedSize);
-  }, [currentPalette?.colors.length, minPaletteSize]);
+    setPaletteSize(currentPalette?.colors.length || 5);
+    if (paletteSize < minPaletteSize) {
+      setPaletteSize(minPaletteSize);
+    }
+  }, [currentPalette, minPaletteSize, paletteSize]);
 
   const handleSizeChange = (value: number[]) => {
     let newSize = value[0];
@@ -68,7 +69,7 @@ export function PaletteControls({
     const lockedCount = lockedColors.length;
 
     // If there are more than 3 locked colors, ensure we don't go below that number
-    const minSize = lockedCount > 3 ? lockedCount : 2;
+    const minSize = lockedCount ? lockedCount : 1;
 
     // Adjust newSize if it's below the minimum
     if (newSize < minSize) {
