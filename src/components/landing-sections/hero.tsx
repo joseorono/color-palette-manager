@@ -1,10 +1,17 @@
-import { Palette } from "lucide-react";
+import { ChevronDown, Palette } from "lucide-react";
 
 export default function Hero() {
+  const handleScrollToFeatures = () => {
+    const el = document.getElementById("features");
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
   return (
     <section
       id="home"
-      className="hero-gradient min-h-[calc(100vh-3.5rem)] pb-20 pt-24 lg:pb-24 lg:pt-28"
+      className="hero-gradient relative min-h-[calc(100vh-3.5rem)] pb-20 pt-24 lg:pb-24 lg:pt-28"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center">
@@ -60,6 +67,14 @@ export default function Hero() {
           </div>
         </div>
       </div>
+      <button
+        type="button"
+        onClick={handleScrollToFeatures}
+        className="group absolute bottom-8 right-6 inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-200/70 bg-white/90 text-slate-700 shadow-lg ring-0 transition-all duration-300 hover:-translate-y-0.5 hover:bg-white dark:border-slate-700/70 dark:bg-slate-900/80 dark:text-slate-100"
+        aria-label="Scroll down to features"
+      >
+        <ChevronDown className="h-5 w-5 transition-all duration-300 group-hover:scale-110 group-hover:opacity-90" />
+      </button>
     </section>
   );
 }
