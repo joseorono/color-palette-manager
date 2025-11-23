@@ -8,7 +8,7 @@ export default function Hero() {
           <h1 className="mb-6 text-4xl font-bold leading-tight text-gray-900 dark:text-gray-100 sm:text-5xl lg:text-6xl">
             Create Beautiful
             <br />
-            <span className="bg-gradient-to-r from-vivid-sky-blue to-blue-munsell bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-vivid-sky-blue-500 to-blue-munsell bg-clip-text text-transparent">
               Color Palettes
             </span>
           </h1>
@@ -37,11 +37,11 @@ export default function Hero() {
               href="https://github.com/joseorono/color-palette-manager"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-secondary inline-flex items-center justify-center rounded-xl px-6 py-4 text-lg font-semibold text-vivid-sky-blue transition-all duration-300 hover:-translate-y-1 hover:transform hover:text-white"
+              className="btn-secondary inline-flex items-center justify-center rounded-xl px-6 py-4 text-lg font-semibold text-vivid-sky-blue-600 transition-all duration-300 hover:-translate-y-1 hover:transform hover:text-white"
               aria-label="View on GitHub"
             >
               <svg
-                className="h-5 w-5 mr-2"
+                className="mr-2 h-5 w-5"
                 fill="currentColor"
                 viewBox="0 0 20 20"
                 aria-hidden="true"

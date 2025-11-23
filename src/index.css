@@ -20,6 +20,9 @@
 }
 
 @layer base {
+  html {
+      scroll-behavior: smooth;
+    }
   :root {
     /* Light theme - standard readable colors with custom accents */
     --background: 0 0% 100%; /* white */

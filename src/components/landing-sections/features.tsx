@@ -1,4 +1,4 @@
-import { Sparkle, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import type React from "react";
 interface FeatureProps {
   icon: React.ReactNode;
@@ -25,7 +25,7 @@ function FeatureCard({ icon, title, description }: FeatureProps) {
 export default function Features() {
   const features = [
     {
-      icon: <Sparkles className="h-7 w-7 text-vivid-sky-blue" />,
+      icon: <Sparkles className="h-7 w-7 text-vivid-sky-blue-600" />,
       title: "Intelligent Color Generation",
       description:
         "Generate harmonious color palettes from scratch, based on specific colors, or extracted from images. Lock colors you love and regenerate the rest.",
@@ -33,7 +33,7 @@ export default function Features() {
     {
       icon: (
         <svg
-          className="h-7 w-7 text-vivid-sky-blue"
+          className="h-7 w-7 text-vivid-sky-blue-600"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -54,7 +54,7 @@ export default function Features() {
     {
       icon: (
         <svg
-          className="h-7 w-7 text-vivid-sky-blue"
+          className="h-7 w-7 text-vivid-sky-blue-600"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -75,7 +75,7 @@ export default function Features() {
     {
       icon: (
         <svg
-          className="h-7 w-7 text-vivid-sky-blue"
+          className="h-7 w-7 text-vivid-sky-blue-600"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -102,7 +102,10 @@ export default function Features() {
   ];
 
   return (
-    <section id="features" className="bg-white py-20 dark:bg-slate-900">
+    <section
+      id="features"
+      className="bg-gradient-to-b from-white to-slate-50 py-20 dark:bg-slate-900 dark:bg-none"
+    >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-16 text-center">
           <h2 className="mb-4 text-3xl font-bold text-gray-900 dark:text-gray-100 sm:text-4xl">

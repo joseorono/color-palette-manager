@@ -16,7 +16,7 @@ export const LandingSlider = () => {
   };
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-azure-web-50 via-white to-sky-50 py-20 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900">
+    <section className="relative overflow-hidden bg-gradient-to-br from-vivid-sky-blue-100 via-white to-electric-blue-100 py-20 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900">
       {/* Decorative background elements */}
       <div className="bg-grid-slate-100 dark:bg-grid-slate-700/25 absolute inset-0 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))]" />
 
