@@ -2,7 +2,10 @@ import { Palette } from "lucide-react";
 
 export default function Hero() {
   return (
-    <section id="home" className="hero-gradient py-20 lg:py-32">
+    <section
+      id="home"
+      className="hero-gradient min-h-[calc(100vh-3.5rem)] pb-20 pt-24 lg:pb-24 lg:pt-28"
+    >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <h1 className="mb-6 text-4xl font-bold leading-tight text-gray-900 dark:text-gray-100 sm:text-5xl lg:text-6xl">

@@ -21,7 +21,7 @@ export default function LandingNavbar() {
   ];
 
   return (
-    <header className="sticky top-4 z-50 px-4 transition-all duration-300">
+    <header className="fixed inset-x-0 top-0 z-50 flex justify-center px-4 pt-2 transition-all duration-300">
       <nav
         className={`mx-auto max-w-5xl transition-all duration-300 ${
           isMenuOpen
