@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Camera, Sparkles, Upload, X } from "lucide-react";
+import { Camera, RefreshCw, Sparkles, Upload, X } from "lucide-react";
 import { MAX_PALETTE_COLORS } from "@/constants/ui";
 
 export const ImagePaletteExtractorTool: React.FC = () => {
@@ -27,6 +27,7 @@ export const ImagePaletteExtractorTool: React.FC = () => {
     setAlgorithm,
     extractedColors,
     clearImage,
+    extractColors,
     getRootProps,
     getInputProps,
     isDragActive,
@@ -193,7 +194,7 @@ export const ImagePaletteExtractorTool: React.FC = () => {
           </div>
 
           {/* Actions */}
-          <div className="flex justify-center">
+          <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
             <Button
               onClick={handleOpenInEditor}
               disabled={extractedColors.length === 0 || isProcessing}
@@ -203,6 +204,20 @@ export const ImagePaletteExtractorTool: React.FC = () => {
               <Sparkles className="h-5 w-5" />
               Open in Palette Editor
             </Button>
+            {extractedColors.length > 0 && (
+              <Button
+                onClick={extractColors}
+                disabled={isProcessing || !previewUrl}
+                size="lg"
+                variant="outline"
+                className="gap-2"
+              >
+                <RefreshCw
+                  className={`h-5 w-5 ${isProcessing ? "animate-spin" : ""}`}
+                />
+                Regenerate
+              </Button>
+            )}
           </div>
         </div>
 

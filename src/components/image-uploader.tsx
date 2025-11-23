@@ -6,7 +6,7 @@ import { Label } from "./ui/label";
 import { Slider } from "./ui/slider";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { PalettePreview } from "./palette-preview";
-import { Upload, X } from "lucide-react";
+import { RefreshCw, Upload, X } from "lucide-react";
 import { toast } from "sonner";
 import { MAX_PALETTE_COLORS } from "@/constants/ui";
 
@@ -27,6 +27,7 @@ export function ImageUploader({ onClose }: ImageUploaderProps) {
     setAlgorithm,
     extractedColors,
     clearImage,
+    extractColors,
     getRootProps,
     getInputProps,
     isDragActive,
@@ -189,7 +190,7 @@ export function ImageUploader({ onClose }: ImageUploaderProps) {
       </div>
 
       {/* Actions */}
-      <div className="flex justify-center">
+      <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
         <Button
           onClick={handleExtractAndUse}
           disabled={extractedColors.length === 0 || isProcessing}
@@ -197,6 +198,19 @@ export function ImageUploader({ onClose }: ImageUploaderProps) {
         >
           Use This Palette
         </Button>
+        {extractedColors.length > 0 && (
+          <Button
+            onClick={extractColors}
+            disabled={isProcessing || !previewUrl}
+            variant="outline"
+            className="gap-2"
+          >
+            <RefreshCw
+              className={`h-4 w-4 ${isProcessing ? "animate-spin" : ""}`}
+            />
+            Regenerate
+          </Button>
+        )}
       </div>
     </div>
   );
