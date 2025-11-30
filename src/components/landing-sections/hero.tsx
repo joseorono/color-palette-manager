@@ -76,12 +76,13 @@ export default function Hero() {
         </div>
       </div>
       <button
+        id="scroll-down-button"
         type="button"
         onClick={handleScrollToFeatures}
-        className="group absolute bottom-8 right-6 inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-200/70 bg-white/90 text-slate-700 shadow-lg ring-0 transition-all duration-300 hover:-translate-y-0.5 hover:bg-white dark:border-slate-700/70 dark:bg-slate-900/80 dark:text-slate-100"
+        className="group absolute bottom-8 right-6 inline-flex h-14 w-14 items-center justify-center rounded-full border border-slate-200/70 bg-white/90 text-slate-700 shadow-lg ring-0 transition-all duration-300 hover:-translate-y-0.5 hover:bg-white dark:border-slate-700/70 dark:bg-slate-900/80 dark:text-slate-100"
         aria-label="Scroll down to features"
       >
-        <ChevronDown className="h-5 w-5 transition-all duration-300 group-hover:scale-110 group-hover:opacity-90" />
+        <ChevronDown className="h-6 w-6 transition-all duration-300 group-hover:scale-110 group-hover:opacity-90" />
       </button>
     </section>
   );

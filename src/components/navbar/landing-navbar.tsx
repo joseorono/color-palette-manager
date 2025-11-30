@@ -33,7 +33,7 @@ export default function LandingNavbar() {
           <div className="flex items-center">
             <button
               onClick={() => scrollToSection("home")}
-              className="flex items-center space-x-2 transition-opacity hover:opacity-80"
+              className="flex items-center transition-opacity hover:opacity-80"
             >
               <img
                 src="/logo-32x32.png"
@@ -42,7 +42,7 @@ export default function LandingNavbar() {
                 height={32}
                 className="h-8 w-8"
               />
-              <span className="hidden text-lg font-semibold text-gray-900 dark:text-gray-100 sm:block">
+              <span className="text-md mx-2 inline-flex items-center font-semibold text-gray-900 dark:text-gray-100">
                 ChromaLockr
               </span>
             </button>
