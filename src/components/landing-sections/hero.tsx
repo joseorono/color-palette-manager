@@ -15,6 +15,15 @@ export default function Hero() {
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center">
+          <div>
+            <svg
+              className="mx-auto mb-8 h-48 w-48"
+              viewBox="0 0 512 512"
+              preserveAspectRatio="xMidYMid meet"
+            >
+              <image href="/favicon-app.svg" width="512" height="512" />
+            </svg>
+          </div>
           <h1 className="mb-6 text-4xl font-bold leading-tight text-gray-900 dark:text-gray-100 sm:text-5xl lg:text-6xl">
             Create Beautiful
             <br />
