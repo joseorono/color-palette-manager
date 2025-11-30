@@ -12,6 +12,8 @@ export default defineConfig({
     VitePWA({
       registerType: "prompt",
       strategies: "injectManifest",
+      srcDir: "public",
+      filename: "sw.js",
       workbox: {
         globPatterns: ["**/*.{js,css,html,ico,png,svg}"],
         runtimeCaching: [
