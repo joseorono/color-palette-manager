@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -14,6 +14,24 @@ export const LandingSlider = () => {
     pauseOnHover: true,
     arrows: true,
   };
+
+  // Preload slider images after page load
+  useEffect(() => {
+    const preloadImages = () => {
+      for (let i = 1; i <= 6; i++) {
+        const img = new Image();
+        img.src = `/ColorPalette-${i}.png`;
+      }
+    };
+
+    // Start preloading after page is fully loaded
+    if (document.readyState === "complete") {
+      preloadImages();
+    } else {
+      window.addEventListener("load", preloadImages);
+      return () => window.removeEventListener("load", preloadImages);
+    }
+  }, []);
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-vivid-sky-blue-100 via-white to-electric-blue-100 py-20 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900">
@@ -47,7 +65,6 @@ export const LandingSlider = () => {
                   <img
                     src={`/ColorPalette-${index + 1}.png`}
                     alt={`Color Palette ${index + 1}`}
-                    loading="lazy"
                     className="relative mx-auto w-full rounded-lg object-contain transition-transform duration-500 group-hover:scale-[1.02]"
                   />
                 </div>
