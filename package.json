@@ -4,6 +4,9 @@
   "private": true,
   "type": "module",
   "license": "GPL-3.0-or-later",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
     "test-cli": "vitest --run --reporter verbose",
     "test": "vitest --ui",
