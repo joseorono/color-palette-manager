@@ -47,6 +47,7 @@ export const LandingSlider = () => {
                   <img
                     src={`/ColorPalette-${index + 1}.png`}
                     alt={`Color Palette ${index + 1}`}
+                    loading="lazy"
                     className="relative mx-auto w-full rounded-lg object-contain transition-transform duration-500 group-hover:scale-[1.02]"
                   />
                 </div>

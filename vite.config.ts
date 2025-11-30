@@ -10,9 +10,23 @@ export default defineConfig({
     react(),
     svgr(),
     VitePWA({
-      registerType: "autoUpdate",
+      registerType: "prompt",
+      strategies: "injectManifest",
       workbox: {
         globPatterns: ["**/*.{js,css,html,ico,png,svg}"],
+        runtimeCaching: [
+          {
+            urlPattern: /^https:\/\/.*\.(png|jpg|jpeg|gif|webp|svg)$/,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "images",
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+              },
+            },
+          },
+        ],
       },
       includeAssets: ["favicon.ico", "apple-touch-icon.png", "masked-icon.svg"],
       manifest: {
@@ -46,6 +60,13 @@ export default defineConfig({
   build: {
     outDir: "dist",
     assetsDir: "assets",
+    cssCodeSplit: true,
+    minify: "terser",
+    terserOptions: {
+      compress: {
+        drop_console: true,
+      },
+    },
     rollupOptions: {
       external: [
         "electron",
@@ -53,6 +74,13 @@ export default defineConfig({
         "@electron-forge/cli",
         "electron-vite",
       ],
+      output: {
+        manualChunks: {
+          "vendor-react": ["react", "react-dom"],
+          "vendor-ui": ["@radix-ui/react-dialog", "@radix-ui/react-dropdown-menu", "@radix-ui/react-select"],
+          "vendor-utils": ["react-router-dom", "zustand", "dexie"],
+        },
+      },
     },
   },
   server: {
