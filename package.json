@@ -146,8 +146,8 @@
   "main": "electron/main.cjs",
   "homepage": "./",
   "build": {
-    "appId": "com.colorpalette.manager",
-    "productName": "Color Palette Manager",
+    "appId": "com.chromalockr.app",
+    "productName": "ChromaLockr",
     "directories": {
       "output": "dist-electron"
     },

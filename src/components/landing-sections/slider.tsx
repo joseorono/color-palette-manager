@@ -29,7 +29,7 @@ export const LandingSlider = () => {
             </span>
           </div>
           <h2 className="text-center text-4xl font-bold tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl">
-            About Color Palette Manager
+            About ChromaLockr
           </h2>
           <p className="mx-auto max-w-3xl text-center text-lg leading-relaxed text-gray-600 dark:text-gray-300">
             A powerful web application that allows you to create, manage, and

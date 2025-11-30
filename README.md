@@ -1,4 +1,4 @@
-# 🎨 Color Palette Manager
+# 🎨 ChromaLockr
 
 A modern, offline-first color palette management application built with React, TypeScript, and Tailwind CSS. Create, edit, and export beautiful color palettes for your design projects.
 
@@ -6,7 +6,7 @@ This project is currently in development and is not yet ready for production use
 
 
 ![Version Badge](https://img.shields.io/badge/version-0.0.1-green)
-![Color Palette Manager](https://img.shields.io/badge/React-18.x-blue?logo=react)
+![ChromaLockr](https://img.shields.io/badge/React-18.x-blue?logo=react)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?logo=typescript)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.x-blue?logo=tailwindcss)
 ![Vite](https://img.shields.io/badge/Vite-5.x-purple?logo=vite)

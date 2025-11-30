@@ -11,7 +11,7 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="hero-gradient relative min-h-[calc(100vh-3.5rem)] pb-20 pt-24 lg:pb-24 lg:pt-28"
+      className="hero-gradient relative min-h-[calc(100vh-3.5rem)] pb-20 pt-24 lg:pt-28"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center">
@@ -37,10 +37,9 @@ export default function Hero() {
             projects.
           </p>
           <p className="mx-auto mb-12 max-w-4xl text-lg text-gray-500 dark:text-gray-400">
-            Built with React, TypeScript, and Tailwind CSS, Color Palette
-            Manager is a powerful tool for designers and developers who need
-            professional color palettes. Work completely offline and export to
-            multiple formats.
+            ChromaLockr is a powerful tool for designers and developers who need
+            professional color schemes and accessibility tools. Works completely
+            offline and exports to multiple formats.
           </p>
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
             <a

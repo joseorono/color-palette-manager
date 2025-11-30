@@ -70,7 +70,7 @@ export default function Features() {
       ),
       title: "Works Completely Offline",
       description:
-        "No internet required, no data collection, no server dependencies. Your palettes are stored locally and always accessible.",
+        "No internet required, no data collection, no telemetry. Your palettes are stored locally and always accessible.",
     },
     {
       icon: (

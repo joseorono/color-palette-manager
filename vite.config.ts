@@ -30,9 +30,10 @@ export default defineConfig({
       },
       includeAssets: ["favicon.ico", "apple-touch-icon.png", "masked-icon.svg"],
       manifest: {
-        name: "Color Palette Manager",
-        short_name: "ColorPalette",
-        description: "A modern color palette management application",
+        name: "ChromaLockr",
+        short_name: "ChromaLockr",
+        description:
+          "A modern color palette application for designers and developers.",
         theme_color: "#ffffff",
         background_color: "#ffffff",
         display: "standalone",
@@ -77,7 +78,11 @@ export default defineConfig({
       output: {
         manualChunks: {
           "vendor-react": ["react", "react-dom"],
-          "vendor-ui": ["@radix-ui/react-dialog", "@radix-ui/react-dropdown-menu", "@radix-ui/react-select"],
+          "vendor-ui": [
+            "@radix-ui/react-dialog",
+            "@radix-ui/react-dropdown-menu",
+            "@radix-ui/react-select",
+          ],
           "vendor-utils": ["react-router-dom", "zustand", "dexie"],
         },
       },

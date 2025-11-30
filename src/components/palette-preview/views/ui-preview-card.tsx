@@ -52,7 +52,7 @@ export function UIPreviewCard({ currentColors }: PreviewComponentProps) {
                 </span>
               </div>
               <span className="font-bold dark:text-[var(--preview-primary-foreground)]">
-                Color Palette Manager
+                ChromaLockr
               </span>
             </div>
             <nav className="hidden items-center gap-4 dark:text-[var(--preview-card)] md:flex">
@@ -280,11 +280,11 @@ export function UIPreviewCard({ currentColors }: PreviewComponentProps) {
                   </span>
                 </div>
                 <span className="preview-text-card-foreground font-bold">
-                  Color Palette Manager
+                  ChromaLockr
                 </span>
               </div>
               <p className="preview-text-muted-foreground mx-auto max-w-lg">
-                2025 Color Palette Manager. All rights reserved.
+                2025 ChromaLockr. All rights reserved.
               </p>
               <div className="flex gap-4">
                 <button className="rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-[var(--preview-primary)] hover:text-[var(--preview-primary-foreground)] dark:text-[var(--preview-primary-foreground)]">

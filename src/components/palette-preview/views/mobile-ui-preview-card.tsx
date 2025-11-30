@@ -191,12 +191,12 @@ export function MobileUIPreviewCard({
                   </span>
                 </div>
                 <span className="font-bold text-[var(--preview-card-foreground)]">
-                  Color Palette Manager
+                  ChromaLockr
                 </span>
               </div>
 
               <p className="text-sm text-[var(--preview-muted-foreground)]">
-                2025 Color Palette Manager. All rights reserved.
+                2025 ChromaLockr. All rights reserved.
               </p>
 
               <div className="flex w-full flex-col gap-2">

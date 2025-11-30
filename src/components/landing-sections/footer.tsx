@@ -1,24 +1,27 @@
 export default function Footer() {
   return (
-    <footer id="footer" className="bg-gray-900 dark:bg-slate-950 py-12 text-white">
+    <footer
+      id="footer"
+      className="bg-gray-900 py-12 text-white dark:bg-slate-950"
+    >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center justify-between md:flex-row">
           <div className="mb-6 flex items-center space-x-3 md:mb-0">
             <img
               src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo-v2-r4LSQvlSDwWnidwWccNvlEwol5kVsn.png"
-              alt="Color Palette Manager Logo"
+              alt="ChromaLockr Logo"
               width={32}
               height={32}
               className="h-8 w-8"
             />
-            <span className="text-xl font-semibold">Color Palette Manager</span>
+            <span className="text-xl font-semibold">ChromaLockr</span>
           </div>
           <div className="flex flex-col items-center space-y-4 sm:flex-row sm:space-x-8 sm:space-y-0">
             <a
-                href="https://github.com/joseorono/color-palette-manager/blob/main/LICENSE.md"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-300 transition-colors duration-200 hover:text-white"
+              href="https://github.com/joseorono/color-palette-manager/blob/main/LICENSE.md"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-300 transition-colors duration-200 hover:text-white"
             >
               GPL v3 License
             </a>
@@ -47,9 +50,14 @@ export default function Footer() {
         <div className="mt-8 border-t border-gray-700 pt-8 text-center">
           <p className="text-gray-400">
             Open source color palette management tool. Built with ❤️ by&nbsp;
-            <a href="https://exologic.agency/" target="_blank" className="text-gray-300 transition-colors duration-200 hover:text-white">
+            <a
+              href="https://exologic.agency/"
+              target="_blank"
+              className="text-gray-300 transition-colors duration-200 hover:text-white"
+            >
               The Exologic Team
-            </a>.
+            </a>
+            .
           </p>
         </div>
       </div>

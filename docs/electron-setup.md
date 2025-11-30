@@ -1,6 +1,6 @@
 # 🖥️ Electron Desktop App Setup
 
-Your Color Palette Manager can now be run as a desktop application using Electron!
+ChromaLockr can also be compiled as a desktop application using Electron! But I haven't thoroughly tested it yet, so there might be bugs.
 
 ## 📋 Prerequisites
 

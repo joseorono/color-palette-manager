@@ -45,13 +45,13 @@ export default function AppNavbar() {
           >
             <img
               src="/logo-32x32.png"
-              alt="Color Palette Manager Logo"
+              alt="ChromaLockr Logo"
               width={32}
               height={32}
               className="h-8 w-8"
             />
             <span className="text-xl font-semibold text-foreground">
-              Color Palette Manager
+              ChromaLockr
             </span>
           </Link>
         </div>
@@ -98,12 +98,12 @@ export default function AppNavbar() {
                 >
                   <img
                     src="/logo-32x32.png"
-                    alt="Color Palette Manager Logo"
+                    alt="ChromaLockr Logo"
                     width={24}
                     height={24}
                     className="h-6 w-6"
                   />
-                  <span>Color Palette Manager</span>
+                  <span>ChromaLockr</span>
                 </Link>
               </div>
               <nav className="flex flex-grow flex-col space-y-4 pt-4">

@@ -37,13 +37,13 @@ export default function LandingNavbar() {
             >
               <img
                 src="/logo-32x32.png"
-                alt="Color Palette Manager Logo"
+                alt="ChromaLockr Logo"
                 width={32}
                 height={32}
                 className="h-8 w-8"
               />
               <span className="hidden text-lg font-semibold text-gray-900 dark:text-gray-100 sm:block">
-                Color Palette Manager
+                ChromaLockr
               </span>
             </button>
           </div>

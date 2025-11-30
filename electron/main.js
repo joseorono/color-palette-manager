@@ -24,16 +24,16 @@ function createWindow() {
   });
 
   // Load the app
-  const startUrl = isDev 
-    ? 'http://localhost:5173' 
-    : `file://${path.join(__dirname, '../dist/index.html')}`;
-  
+  const startUrl = isDev
+    ? "http://localhost:5173"
+    : `file://${path.join(__dirname, "../dist/index.html")}`;
+
   mainWindow.loadURL(startUrl);
 
   // Show window when ready to prevent visual flash
-  mainWindow.once('ready-to-show', () => {
+  mainWindow.once("ready-to-show", () => {
     mainWindow.show();
-    
+
     // Focus on window creation
     if (isDev) {
       mainWindow.webContents.openDevTools();
@@ -56,80 +56,78 @@ function createWindow() {
 function createMenu() {
   const template = [
     {
-      label: 'File',
+      label: "File",
       submenu: [
         {
-          label: 'New Palette',
-          accelerator: 'CmdOrCtrl+N',
+          label: "New Palette",
+          accelerator: "CmdOrCtrl+N",
           click: () => {
-            mainWindow.webContents.send('menu-new-palette');
-          }
+            mainWindow.webContents.send("menu-new-palette");
+          },
         },
         {
-          label: 'Export Palette',
-          accelerator: 'CmdOrCtrl+E',
+          label: "Export Palette",
+          accelerator: "CmdOrCtrl+E",
           click: () => {
-            mainWindow.webContents.send('menu-export-palette');
-          }
+            mainWindow.webContents.send("menu-export-palette");
+          },
         },
-        { type: 'separator' },
+        { type: "separator" },
         {
-          label: 'Quit',
-          accelerator: process.platform === 'darwin' ? 'Cmd+Q' : 'Ctrl+Q',
+          label: "Quit",
+          accelerator: process.platform === "darwin" ? "Cmd+Q" : "Ctrl+Q",
           click: () => {
             app.quit();
-          }
-        }
-      ]
+          },
+        },
+      ],
     },
     {
-      label: 'Edit',
+      label: "Edit",
       submenu: [
-        { role: 'undo' },
-        { role: 'redo' },
-        { type: 'separator' },
-        { role: 'cut' },
-        { role: 'copy' },
-        { role: 'paste' }
-      ]
+        { role: "undo" },
+        { role: "redo" },
+        { type: "separator" },
+        { role: "cut" },
+        { role: "copy" },
+        { role: "paste" },
+      ],
     },
     {
-      label: 'View',
+      label: "View",
       submenu: [
-        { role: 'reload' },
-        { role: 'forceReload' },
-        { role: 'toggleDevTools' },
-        { type: 'separator' },
-        { role: 'resetZoom' },
-        { role: 'zoomIn' },
-        { role: 'zoomOut' },
-        { type: 'separator' },
-        { role: 'togglefullscreen' }
-      ]
+        { role: "reload" },
+        { role: "forceReload" },
+        { role: "toggleDevTools" },
+        { type: "separator" },
+        { role: "resetZoom" },
+        { role: "zoomIn" },
+        { role: "zoomOut" },
+        { type: "separator" },
+        { role: "togglefullscreen" },
+      ],
     },
     {
-      label: 'Window',
-      submenu: [
-        { role: 'minimize' },
-        { role: 'close' }
-      ]
+      label: "Window",
+      submenu: [{ role: "minimize" }, { role: "close" }],
     },
     {
-      label: 'Help',
+      label: "Help",
       submenu: [
         {
-          label: 'About Color Palette Manager',
+          label: "About ChromaLockr",
           click: () => {
             dialog.showMessageBox(mainWindow, {
-              type: 'info',
-              title: 'About',
-              message: 'Color Palette Manager',
-              detail: 'A beautiful color palette generator for designers and developers.\n\nPress spacebar to generate new palettes!'
+              type: "info",
+              title: "About",
+              message: "ChromaLockr",
+              detail:
+                "A beautiful color palette generator for designers and developers.\n\nPress spacebar to generate new palettes!",
             });
-          }
-        }
-      ]
-    }
+          },
+        },
+      ],
+    },
   ];
 
   // macOS specific menu adjustments
