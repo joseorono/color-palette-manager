@@ -11,13 +11,13 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="hero-gradient relative min-h-[calc(100vh-3.5rem)] pb-20 pt-24 lg:pt-28"
+      className="hero-gradient min-h-100dvh relative pb-16 pt-20 lg:pt-24"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <div>
             <svg
-              className="mx-auto mb-8 h-48 w-48"
+              className="mx-auto mb-6 h-40 w-40"
               viewBox="0 0 512 512"
               preserveAspectRatio="xMidYMid meet"
             >
@@ -31,15 +31,14 @@ export default function Hero() {
               Color Palettes
             </span>
           </h1>
-          <p className="mx-auto mb-8 max-w-3xl text-xl leading-relaxed text-gray-600 dark:text-gray-300 sm:text-2xl">
+          <p className="mx-auto mb-4 max-w-3xl text-xl leading-relaxed text-gray-600 dark:text-gray-300 sm:text-2xl">
             A modern, offline-first color palette management application.
             Generate, edit, and export stunning color schemes for your design
             projects.
           </p>
-          <p className="mx-auto mb-12 max-w-4xl text-lg text-gray-500 dark:text-gray-400">
-            ChromaLockr is a powerful tool for designers and developers who need
-            professional color schemes and accessibility tools. Works completely
-            offline and exports to multiple formats.
+          <p className="mx-auto mb-8 max-w-4xl text-lg text-gray-500 dark:text-gray-400">
+            For designers and developers to manage beautiful, accessible color
+            schemes.
           </p>
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
             <a
@@ -79,7 +78,7 @@ export default function Hero() {
         id="scroll-down-button"
         type="button"
         onClick={handleScrollToFeatures}
-        className="group absolute bottom-8 right-6 inline-flex h-14 w-14 items-center justify-center rounded-full border border-slate-200/70 bg-white/90 text-slate-700 shadow-lg ring-0 transition-all duration-300 hover:-translate-y-0.5 hover:bg-white dark:border-slate-700/70 dark:bg-slate-900/80 dark:text-slate-100"
+        className="group absolute bottom-16 right-6 inline-flex h-14 w-14 items-center justify-center rounded-full border border-slate-200/70 bg-white/90 text-slate-700 shadow-lg ring-0 transition-all duration-300 hover:-translate-y-0.5 hover:bg-white dark:border-slate-700/70 dark:bg-slate-900/80 dark:text-slate-100"
         aria-label="Scroll down to features"
       >
         <ChevronDown className="h-6 w-6 transition-all duration-300 group-hover:scale-110 group-hover:opacity-90" />
