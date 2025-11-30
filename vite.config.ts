@@ -14,6 +14,10 @@ export default defineConfig({
       strategies: "injectManifest",
       srcDir: "public",
       filename: "sw.js",
+      injectManifest: {
+        swSrc: "public/sw.js",
+        swDest: "dist/sw.js",
+      },
       workbox: {
         globPatterns: ["**/*.{js,css,html,ico,png,svg}"],
         runtimeCaching: [
