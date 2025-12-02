@@ -44,7 +44,7 @@ export default function AppNavbar() {
             className="flex items-center space-x-2 p-1 text-2xl font-bold"
           >
             <img
-              src="/logo-32x32.png"
+              src="/logo-32x32.webp"
               alt="ChromaLockr Logo"
               width={32}
               height={32}
@@ -97,7 +97,7 @@ export default function AppNavbar() {
                   className="flex items-center space-x-2 p-1 text-2xl font-bold"
                 >
                   <img
-                    src="/logo-32x32.png"
+                    src="/logo-32x32.webp"
                     alt="ChromaLockr Logo"
                     width={24}
                     height={24}

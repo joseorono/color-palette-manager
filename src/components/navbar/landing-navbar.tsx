@@ -36,7 +36,7 @@ export default function LandingNavbar() {
               className="flex items-center transition-opacity hover:opacity-80"
             >
               <img
-                src="/logo-32x32.png"
+                src="/logo-32x32.webp"
                 alt="ChromaLockr Logo"
                 width={32}
                 height={32}

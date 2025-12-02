@@ -16,5 +16,5 @@ export default defineConfig({
       sizes: [180],
     },
   },
-  images: ["public/logo-32x32.png"], // Your source image
+  images: ["public/logo-32x32.webp"], // Your source image
 });
